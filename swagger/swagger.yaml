@@ -14,14 +14,14 @@ consumes:
 produces:
 - "application/json"
 paths:
-  /pubs:
+  /pub:
     get:
       tags:
       - "default"
       summary: "Scientific publications associated with sites or occurrences"
       description: "Uses unique site IDs or occurrence IDs to return the set of publications\
         \ associated with a query to enable citation"
-      operationId: "controllers.default_controller.pubs"
+      operationId: "controllers.default_controller.pub"
       produces:
       - "application/json"
       - "application/xml"
@@ -54,6 +54,92 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/publication"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/errorModel"
+      x-tags:
+      - tag: "default"
+  /site:
+    get:
+      tags:
+      - "default"
+      summary: "Sample sites or localities."
+      description: "Return sampling locations in space and time, excluding occurrence\
+        \ records. This may return multiple stes from a common spatial location if\
+        \ the samples from the synthetic sites represent unique collections. This\
+        \ terminology is similar to the the datasets concept in Neotoma"
+      operationId: "controllers.default_controller.site"
+      produces:
+      - "application/json"
+      - "application/xml"
+      - "text/xml"
+      - "text/html"
+      parameters:
+      - name: "occ_id"
+        in: "query"
+        description: "Unique numeric ID, or vector of IDs for occurrences"
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "bbox"
+        in: "query"
+        description: "Bounding box definition, either as a numeric vector of form\
+          \ [lonW, latS, lonE, latN] or as structured WKT text"
+        required: false
+        type: "string"
+      - name: "min_age"
+        in: "query"
+        description: "The most recent age for the temporal search window. By default\
+          \ the min_age is  present, or not used in queries. Units are millions of\
+          \ years ago, unless defined using age_scale"
+        required: false
+        type: "number"
+        format: "double"
+      - name: "max_age"
+        in: "query"
+        description: "The oldest age for the temporal search window. Units are millions\
+          \ of years ago, unless defined using age_scale"
+        required: false
+        type: "number"
+        format: "double"
+      - name: "age_scale"
+        in: "query"
+        description: "The units for max_age and min_age. allowable values are yr,\
+          \ kyr or Myr"
+        required: false
+        type: "string"
+      - name: "time_rule"
+        in: "query"
+        description: "Control the application of the temporal bounding box. May choose\
+          \ one of three rules, contain, all samples must be fully within the temporal\
+          \ bounding box; major, more than half of an occurrences temporal uncertainty\
+          \ must be within the bounding box; overlap, any portion of an occurrence\
+          \ may be withing the bounding box"
+        required: false
+        type: "string"
+      - name: "taxon"
+        in: "query"
+        description: "Taxonomic name. May be truncated, a list of taxa or use wildcards.\
+          \ If a specific taxon ID or a vector of IDs is known that parameter can\
+          \ be passed through taxon. Taxon lists must be passed using JSON formating.\
+          \ By default, returns only taxa named in the query. Use include_lower if\
+          \ all lower taxa are desired"
+        required: false
+        type: "string"
+      - name: "include_lower"
+        in: "query"
+        description: "A boolean, if TRUE, all species and subspecies lower taxa of\
+          \ a named genera will be included in the response"
+        required: false
+        type: "boolean"
+      responses:
+        200:
+          description: "site response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/site"
         default:
           description: "unexpected error"
           schema:
@@ -141,6 +227,10 @@ definitions:
     type: "array"
     items:
       $ref: "#/definitions/taxonomy_inner"
+  site:
+    type: "array"
+    items:
+      $ref: "#/definitions/site_inner"
   errorModel:
     type: "object"
     required:
@@ -160,3 +250,23 @@ definitions:
       hierarchy:
         type: "string"
         description: "A JSON formatted object providing the taxon hierarchy"
+  site_inner_sites:
+    properties:
+      site_id:
+        type: "integer"
+        format: "int32"
+        description: "Unique identifier for a specific site from the respective databases"
+      lat:
+        type: "number"
+        format: "double"
+        description: "Site latitude"
+      lon:
+        type: "number"
+        format: "double"
+      site_name:
+        type: "string"
+        description: "Site name"
+  site_inner:
+    properties:
+      sites:
+        $ref: "#/definitions/site_inner_sites"

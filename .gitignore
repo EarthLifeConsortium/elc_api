@@ -6,6 +6,7 @@ __pycache__/
 # macOS, zsh and vim specific
 .DS_Store
 *~
+*.bak
 
 # C extensions
 *.so
