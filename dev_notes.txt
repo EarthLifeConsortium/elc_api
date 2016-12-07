@@ -1,0 +1,7 @@
+1. codegen will reformat the openAPI spec file upon consuming it
+2. codegen will re-target parameters containing an underscore to a camel case eqivalent
+3. Must remove or rename default_controller.py when adding or changing endpoints.
+4. How to use separate files for each endpoint? RestyResolver or can this be handled by
+   default.
+5. Additional includes go in the controller not in the flask app.
+

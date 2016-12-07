@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# macOS, zsh and vim specific
+.DS_Store
+*~
+
 # C extensions
 *.so
 
