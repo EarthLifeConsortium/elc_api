@@ -8,3 +8,6 @@
    implemented. We should start with less complicated singletons.
 7. Make sure "number" "integer" "int32" "double" and possibly "float" are used correctly.
 8. Could better describe vectors as arrays of floats or integers than strings.
+9. Watch the use of the same variable name as parameter and again in endpoint. Probably
+   doesnt matter but for clarity this would be nice.
+10. Do we really want kyr and Myr instead of Ka and Ma?

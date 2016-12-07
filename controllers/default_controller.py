@@ -1,4 +1,7 @@
 
+def age(occId = None, siteId = None) -> str:
+    return 'do some magic!'
+
 def pub(occId = None, siteId = None, format = None) -> str:
     return 'do some magic!'
 

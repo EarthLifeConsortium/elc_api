@@ -14,6 +14,46 @@ consumes:
 produces:
 - "application/json"
 paths:
+  /age:
+    get:
+      tags:
+      - "default"
+      summary: "Generation method of age estimates for the occurrence or site"
+      description: "Samples often have assigned temporal uncertainty estimates, whether\
+        \ from C-14 dates, stratigraphic uncertainty, or other dating techniques.\
+        \  This endpoint returns the basis for the age uncertainty estimate"
+      operationId: "controllers.default_controller.age"
+      produces:
+      - "application/json"
+      - "application/xml"
+      - "text/xml"
+      - "text/html"
+      parameters:
+      - name: "occ_id"
+        in: "query"
+        description: "Unique numeric ID, or vector of IDs for occurrences"
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "site_id"
+        in: "query"
+        description: "Unique numeric ID, or vector of IDs for sites"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "age basis response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/age_basis"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/errorModel"
+      x-tags:
+      - tag: "default"
   /pub:
     get:
       tags:
@@ -105,8 +145,8 @@ paths:
         format: "double"
       - name: "age_scale"
         in: "query"
-        description: "The units for max_age and min_age. allowable values are yr,\
-          \ kyr or Myr"
+        description: "The units for max_age and min_age. Allowable units are yr, kyr\
+          \ or Myr"
         required: false
         type: "string"
       - name: "time_rule"
@@ -231,6 +271,9 @@ definitions:
     type: "array"
     items:
       $ref: "#/definitions/site_inner"
+  age_basis:
+    type: "string"
+    description: "Basis of age estimate for the given site or occurence"
   errorModel:
     type: "object"
     required:
