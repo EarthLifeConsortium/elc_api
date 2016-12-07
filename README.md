@@ -1,1 +1,1 @@
-# elc_api
+# EarthLife Consortium composite API
