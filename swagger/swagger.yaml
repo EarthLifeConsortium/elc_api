@@ -54,6 +54,67 @@ paths:
             $ref: "#/definitions/errorModel"
       x-tags:
       - tag: "default"
+  /grid:
+    get:
+      tags:
+      - "default"
+      summary: "Gridded assemblage data"
+      description: "Returns assemblage data at pre-built grid sizes for faster returns"
+      operationId: "controllers.default_controller.grid"
+      produces:
+      - "application/json"
+      - "application/xml"
+      - "text/xml"
+      - "text/html"
+      parameters:
+      - name: "age_bound"
+        in: "query"
+        description: "netsi"
+        required: false
+        type: "string"
+      - name: "age_bin"
+        in: "query"
+        description: "netsi"
+        required: false
+        type: "string"
+      - name: "age_unit"
+        in: "query"
+        description: "netsi"
+        required: false
+        type: "string"
+      - name: "bbox"
+        in: "query"
+        description: "netsi"
+        required: false
+        type: "string"
+      - name: "spatial_bin"
+        in: "query"
+        description: "netsi"
+        required: false
+        type: "string"
+      - name: "var_unit"
+        in: "query"
+        description: "netsi"
+        required: false
+        type: "string"
+      - name: "presence"
+        in: "query"
+        description: "netsi"
+        required: false
+        type: "boolean"
+      responses:
+        200:
+          description: "grid response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/assemblage"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/errorModel"
+      x-tags:
+      - tag: "default"
   /occ:
     get:
       tags:
@@ -376,6 +437,10 @@ definitions:
       taxon:
         type: "string"
         description: "Taxonomic name"
+  assemblage:
+    type: "array"
+    items:
+      $ref: "#/definitions/assemblage_inner"
   errorModel:
     type: "object"
     required:
@@ -415,3 +480,39 @@ definitions:
     properties:
       sites:
         $ref: "#/definitions/site_inner_sites"
+  assemblage_inner_table:
+    properties:
+      taxon:
+        type: "string"
+        description: "netsi"
+      element:
+        type: "string"
+        description: "netsi"
+      value:
+        type: "integer"
+        format: "int32"
+        description: "netsi"
+    description: "netsi"
+  assemblage_inner:
+    properties:
+      sp_grid:
+        type: "array"
+        description: "netsi"
+        items:
+          type: "string"
+      tm_grid:
+        type: "array"
+        description: "netsi"
+        items:
+          type: "string"
+      var_unit:
+        type: "string"
+        description: "netsi"
+      site_count:
+        type: "integer"
+        format: "int32"
+        description: "netsi"
+      table:
+        type: "array"
+        items:
+          $ref: "#/definitions/assemblage_inner_table"
