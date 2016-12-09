@@ -20,7 +20,7 @@ Development team:
 * [Simon Goring](http://github.com/SimonGoring)
 * Mike Anderson
 
-For more infomation about the EarthLife Consortium and it's members visit [EarthLifeConsortium](http://earthlifeconsortium.org).
+For more infomation about the EarthLife Consortium and it's members visit [EarthLifeConsortium.org](http://earthlifeconsortium.org).
 
 
 ## Technical Description
