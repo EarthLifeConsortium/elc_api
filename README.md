@@ -32,3 +32,25 @@ The API is being developed with the following modern open source tools:
 * [swagger-codegen](http://swagger.io/swagger-codegen) (a Java based templating engine which can use Flask+Connexion to generate the server)
 * [git](https://git-scm.com) (for version control) and [GitHub](http://github.com) (for repository hosting and issue tracking)
 * optionally, [swagger-edit](https://github.com/swagger-api/swagger-editor) (a Node.js based editor and validator for OpenAPI spec YAML files)
+
+
+## Starting and Building the API
+
+The API requires Python 3.4 or greater. To run the server, first install Connexion from the Cheese Shop (PyPI). This also installs Flask if it is not already installed:
+```
+sudo pip3 install -U connexion
+python3 app.py
+```
+The api documentation and user interface will be available at:
+```
+http://127.0.0.1:8080/api_v1/ui
+```
+The raw OpenAPI definition is at:
+
+```
+http://localhost:8080/api_v1/swagger.json
+```
+If you make a change to the api schema, install codegen and run:
+```
+swagger-codegen generate -i swagger/swagger.yaml -l python-flask
+```
