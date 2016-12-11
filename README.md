@@ -50,7 +50,8 @@ The raw OpenAPI definition is at:
 ```
 http://localhost:8080/api_v1/swagger.json
 ```
-If you make a change to the api schema, install [swagger-codegen](http://swagger.io/swagger-codegen) and from the top level of the api spurce code directory run:
+If you make a change to the api schema, install [swagger-codegen](http://swagger.io/swagger-codegen) and from the top level  
+of the api source code directory run:
 ```
 swagger-codegen generate -i swagger/swagger.yaml -l python-flask
 ```
