@@ -31,4 +31,4 @@ The API is being developed with the following modern open source tools:
 * [Flask](http://flask.pocoo.org) (a python micro web framework)
 * [swagger-codegen](http://swagger.io/swagger-codegen) (a Java based templating engine which can use Flask+Connexion to generate the server)
 * optionally, [swagger-edit](https://github.com/swagger-api/swagger-editor) (a Node.js based editor and validator for OpenAPI spec YAML files)
-* [git](https://git-scm.com) (for version control) and [GitHub](http://github.com) (for repository hosting).
+* [git](https://git-scm.com) (for version control) and [GitHub](http://github.com) (for repository hosting and issue tracking)
