@@ -196,7 +196,7 @@ paths:
         format: "int32"
       responses:
         200:
-          description: "publication response"
+          description: "occurrence response"
           schema:
             type: "array"
             items:
@@ -343,7 +343,7 @@ paths:
     get:
       tags:
       - "default"
-      summary: "Taxonomic information, or hierarchy, for a given taxa"
+      summary: "Taxonomic information, or hierarchy"
       description: "Returns detailed taxonomic information for the given query. Queries\
         \ may include partial matches, and may request lower taxa using the boolean\
         \ include_lower parameter. In cases where hierarchy is also requested the\
