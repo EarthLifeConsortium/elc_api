@@ -27,7 +27,7 @@ For more infomation about the EarthLife Consortium and it's members visit [Earth
 
 The API is being developed with the following modern open source tools:
 * [Python 3](https://www.python.org)
-* [Connexion](http://connexion.readthedocs.io/en/latest) (a Flask based HTTP routing framework that is complient with OpenAPI 2.0)
+* [Connexion](http://connexion.readthedocs.io/en/latest) (a Flask based HTTP routing library that is complient with OpenAPI 2.0)
 * [Flask](http://flask.pocoo.org) (a python micro web framework)
 * [swagger-codegen](http://swagger.io/swagger-codegen) (a Java based templating engine which can use Flask+Connexion to generate the server)
 * [git](https://git-scm.com) (for version control) and [GitHub](http://github.com) (for repository hosting and issue tracking)
