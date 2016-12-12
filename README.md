@@ -18,7 +18,7 @@ This project is currently under development.
 Development team:
 * [Julian Jenkins](http://github.com/jpjenk)
 * [Simon Goring](http://github.com/SimonGoring)
-* Mike Anderson
+* with Mike Anderson (Neotoma) and Michael McClennen (PBDB)
 
 For more infomation about the EarthLife Consortium and it's members visit [EarthLifeConsortium.org](http://earthlifeconsortium.org).
 
