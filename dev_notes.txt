@@ -10,3 +10,8 @@
 8. Could better describe vectors as arrays of floats or integers than strings.
 9. Watch the use of the same variable name as parameter and again in endpoint. Probably
    doesnt matter but for clarity this would be nice.
+10. Should we use api.neotoma.org or apidev.neotoma.org
+11. Use the new asyncio() routines (or use Celery with RabbitMQ).
+12. Deploy with Green Unicorn WSGI app server and Nginx.
+13. Do we need a YAML based config file.
+14. Resolve mixed case of parameters.

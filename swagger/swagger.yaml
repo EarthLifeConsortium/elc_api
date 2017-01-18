@@ -200,7 +200,7 @@ paths:
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/publication"
+              $ref: "#/definitions/occurrence"
         default:
           description: "unexpected error"
           schema:

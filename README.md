@@ -26,17 +26,18 @@ For more infomation about the EarthLife Consortium and it's members visit [Earth
 ## Technical Description
 
 The API is being developed with the following modern open source tools:
-* [Python 3](https://www.python.org)
-* [Connexion](http://connexion.readthedocs.io/en/latest) (a Flask based HTTP routing library that is complient with OpenAPI 2.0)
-* [Flask](http://flask.pocoo.org) (a python micro web framework)
-* [swagger-codegen](http://swagger.io/swagger-codegen) (a Java based templating engine which can use Flask+Connexion to generate the server)
+* [Python](https://www.python.org)
+* [Flask](http://flask.pocoo.org) (Python micro web framework)
+* [Connexion](http://connexion.readthedocs.io/en/latest) (Flask based routing library that is complient with OpenAPI 2.0)
+* [Requests](http://docs.python-requests.org) (HTTP library for Python)
+* [swagger-codegen](http://swagger.io/swagger-codegen) (Java based templating engine which can use Flask+Connexion to generate the server)
 * [git](https://git-scm.com) (for version control) and [GitHub](http://github.com) (for repository hosting and issue tracking)
 * optionally, [swagger-edit](https://github.com/swagger-api/swagger-editor) (a Node.js based editor and validator for OpenAPI spec YAML files)
 
 
 ## Starting and Building the API
 
-The API requires Python 3.4 or greater. To run the server, first install Connexion from the Cheese Shop (PyPI). This also installs Flask if it is not already installed:
+The API requires Python 3.5 or greater. To run the server, first install Connexion from the Cheese Shop (PyPI). This also installs Flask if it is not already installed:
 ```
 sudo pip3 install -U connexion
 python3 app.py
@@ -56,3 +57,6 @@ of the api source code directory run:
 swagger-codegen generate -i swagger/swagger.yaml -l python-flask
 ```
 
+## Production Environment
+
+The REST API should be deployed with the Green Unicorn WSGI app server in combination with Nginx on the front end in place of the Werkzeng development server included with Flask.
