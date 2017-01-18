@@ -51,12 +51,11 @@ The raw OpenAPI definition is at:
 ```
 http://127.0.0.1:8080/api_v1/swagger.json
 ```
-If you make a change to the api schema, install [swagger-codegen](http://swagger.io/swagger-codegen) and from the top level  
-of the api source code directory run:
+While not needed to run the API or develop the backend, if you make a change to the api schema, install [swagger-codegen](http://swagger.io/swagger-codegen) and from the top level of the api source code directory run:
 ```
 swagger-codegen generate -i swagger/swagger.yaml -l python-flask
 ```
 
 ## Production Environment
 
-The REST API should be deployed with the Green Unicorn WSGI app server in combination with Nginx on the front end in place of the Werkzeng development server included with Flask.
+The REST API should be deployed with the [Green Unicorn](http://gunicorn.org) WSGI app server in combination with [Nginx](http://nginx.org) on the front end in place of the [Werkzeng](http://werkzeug.pocoo.org) development server included with Flask.
