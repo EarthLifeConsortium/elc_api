@@ -1,35 +1,40 @@
-'''
+"""
 RESTful API primary controller.
-Dispatch layer uses the OpenAPI Connexion library (https://connexion.readthedocs.io).
 
-author: jpjenk@icloud.com
-data:   Jan. 2017
+Dispatch layer uses the OpenAPI Connexion library
+(https://connexion.readthedocs.io) for routing.
 
-'''
+Start the development server with:
+    python3 app.py
+
+The Swagger user interface and documentaion will be available at:
+    http://localhost:8080/api_v1/ui
+"""
+
 # Flask web microframework (http://flask.pocoo.org)
-from flask import request, jsonify, json, Response
+from flask import request, jsonify
 
 # Requests HTTP library (http://docs.python-requests.org)
 import requests
 
+# Wall and system timing functions (from standard library)
 import time
 
-#
-# Return the Age Calculation Basis
-#
-def age(occid = None, siteid = None) -> str:
+
+def age(occid=None, siteid=None) -> str:
+    """Return the Age Calculation Basis."""
     return 'age basis endpoint'
 
-#
-# Return Data as Gridded Assemblages
-#
-def grid(agebound = None, agebin = None, ageunit = None, bbox = None, spatialbin = None, varunit = None, presence = None) -> str:
+
+def grid(agebound=None, agebin=None, ageunit=None, bbox=None, spatialbin=None,
+         varunit=None, presence=None) -> str:
+    """Return Data as Gridded Assemblages."""
     return 'gridded assemblage endpoint'
 
-#
-# Return Occurrence Data
-#
-def occ(bbox = None, minage = None, maxage = None, agescale = None, timerule = None, taxon = None, includelower = None, limit = None, offset = None) -> str: 
+
+def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
+        taxon=None, includelower=None, limit=None, offset=None) -> str:
+    """Return Occurrence Data."""
     t0 = time.time()
     occ_return = list()
     desc_obj = dict()
@@ -38,7 +43,7 @@ def occ(bbox = None, minage = None, maxage = None, agescale = None, timerule = N
     # Query the Neotoma Database (Occurrences)
     #
     neotoma_base = 'http://apidev.neotomadb.org/v1/data/occurrences'
-    payload=dict()
+    payload = dict()
 
     if 'bbox' in request.args:
         payload.update(loc=request.args.get('bbox'))
@@ -81,13 +86,13 @@ def occ(bbox = None, minage = None, maxage = None, agescale = None, timerule = N
             db_occ_id = 'neot:occ:' + str(occ['OccurID'])
             occ_return.append({'occ_id': db_occ_id, 'taxon': occ['TaxonName']})
         desc_obj.update(neotoma_url=neotoma_res.url)
-        desc_obj.update(neot_occs = occ_cnt)
+        desc_obj.update(neot_occs=occ_cnt)
 
     #
     # Query the Paleobiology Database (Occurrences)
     #
     pbdb_base = 'http://paleobiodb.org/data1.2/occs/list.json'
-    payload=dict()
+    payload = dict()
     payload.update(show='loc,coords,coll')
     payload.update(vocab='pbdb')
 
@@ -132,40 +137,25 @@ def occ(bbox = None, minage = None, maxage = None, agescale = None, timerule = N
             db_occ_id = 'pbdb:occ:' + str(occ['occurrence_no'])
             occ_return.append({'occ_id': db_occ_id, 'taxon': occ['identified_name']})
         t1 = round(time.time() - t0, 5)
-        desc_obj.update(time = t1)
-        desc_obj.update(pbdb_url = pbdb_res.url)
-        desc_obj.update(pbdb_occs = occ_cnt)
-        return jsonify(description = desc_obj, data = occ_return)
+        desc_obj.update(time=t1)
+        desc_obj.update(pbdb_url=pbdb_res.url)
+        desc_obj.update(pbdb_occs=occ_cnt)
+        return jsonify(description=desc_obj, data=occ_return)
     else:
-        return 'Error code ' + str(pbdb_res.status_code) 
-#
-# Return Publication Data
-#
-def pub(occid = None, siteid = None, format = None) -> str:
+        return 'Error code ' + str(pbdb_res.status_code)
+
+
+def pub(occid=None, siteid=None, format=None) -> str:
+    """Return Publication Data."""
     return 'publications endpoint'
 
-#
-# Return Site Data
-#
-def site(occid = None, bbox = None, minage = None, maxage = None, agescale = None, timerule = None, taxon = None, includelower = None) -> str:
+
+def site(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
+         timerule=None, taxon=None, includelower=None) -> str:
+    """Return Site Data."""
     return 'site endpoint'
 
-#
-# Return Taxonomic Data
-#
-def taxon(taxon = None, includelower = None, hierarchy = None) -> str:
-    t0 = time.time()
-    occ_return = list()
-    desc_obj = dict()
 
-    #
-    # Query the Neotoma Database (Taxonomy)
-    #
-    neotoma_base = 'http://apidev.neotomadb.org/v1/data/taxa'
-    payload=dict()
-
-
-
-
-
+def taxon(taxon=None, includelower=None, hierarchy=None) -> str:
+    """Return Taxonomic Data."""
     return 'taxonomy endpoint'
