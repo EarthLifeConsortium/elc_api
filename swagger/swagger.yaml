@@ -17,25 +17,25 @@ paths:
   /age:
     get:
       tags:
-      - "default"
+      - "info"
       summary: "Generation method of age estimates for the occurrence or site"
       description: "Samples often have assigned temporal uncertainty estimates, whether\
         \ from C-14 dates, stratigraphic uncertainty, or other dating techniques.\
         \  This endpoint returns the basis for the age uncertainty estimate"
-      operationId: "controllers.default_controller.age"
+      operationId: "controllers.age_basis_controller.age"
       produces:
       - "application/json"
       - "application/xml"
       - "text/xml"
       - "text/html"
       parameters:
-      - name: "occ_id"
+      - name: "occid"
         in: "query"
         description: "Unique numeric ID, or vector of IDs for occurrences"
         required: false
         type: "integer"
         format: "int32"
-      - name: "site_id"
+      - name: "siteid"
         in: "query"
         description: "Unique numeric ID, or vector of IDs for sites"
         required: false
@@ -53,31 +53,31 @@ paths:
           schema:
             $ref: "#/definitions/errorModel"
       x-tags:
-      - tag: "default"
+      - tag: "info"
   /grid:
     get:
       tags:
-      - "default"
+      - "primary"
       summary: "Gridded assemblage data"
       description: "Returns assemblage data at pre-built grid sizes for faster returns"
-      operationId: "controllers.default_controller.grid"
+      operationId: "controllers.gridded_assemblage_controller.grid"
       produces:
       - "application/json"
       - "application/xml"
       - "text/xml"
       - "text/html"
       parameters:
-      - name: "age_bound"
+      - name: "agebound"
         in: "query"
         description: "netsi"
         required: false
         type: "string"
-      - name: "age_bin"
+      - name: "agebin"
         in: "query"
         description: "netsi"
         required: false
         type: "string"
-      - name: "age_unit"
+      - name: "ageunit"
         in: "query"
         description: "netsi"
         required: false
@@ -87,12 +87,12 @@ paths:
         description: "netsi"
         required: false
         type: "string"
-      - name: "spatial_bin"
+      - name: "spatialbin"
         in: "query"
         description: "netsi"
         required: false
         type: "string"
-      - name: "var_unit"
+      - name: "varunit"
         in: "query"
         description: "netsi"
         required: false
@@ -114,15 +114,15 @@ paths:
           schema:
             $ref: "#/definitions/errorModel"
       x-tags:
-      - tag: "default"
+      - tag: "primary"
   /occ:
     get:
       tags:
-      - "default"
+      - "primary"
       summary: "Fossil occurrences in a specific place and time"
       description: "Return fossil occurrences from the Paleobiology (PBDB) and Neotoma\
         \ Databases."
-      operationId: "controllers.default_controller.occ"
+      operationId: "controllers.taxonomic_occurrence_controller.occ"
       produces:
       - "application/json"
       - "application/xml"
@@ -135,28 +135,28 @@ paths:
           \ [lonW, latS, lonE, latN] or as structured WKT text"
         required: false
         type: "string"
-      - name: "min_age"
+      - name: "minage"
         in: "query"
         description: "The most recent age for the temporal search window. By default\
-          \ the min_age is  present, or not used in queries. Units are millions of\
-          \ years ago, unless defined using age_scale"
+          \ the minage is  present, or not used in queries. Units are millions of\
+          \ years ago, unless defined using agescale"
         required: false
         type: "number"
         format: "double"
-      - name: "max_age"
+      - name: "maxage"
         in: "query"
         description: "The oldest age for the temporal search window. Units are millions\
-          \ of years ago, unless defined using age_scale"
+          \ of years ago, unless defined using agescale"
         required: false
         type: "number"
         format: "double"
-      - name: "age_scale"
+      - name: "agescale"
         in: "query"
-        description: "The units for max_age and min_age. Allowable units are yr, kyr\
+        description: "The units for maxage and minage. Allowable units are yr, kyr\
           \ or Myr"
         required: false
         type: "string"
-      - name: "time_rule"
+      - name: "timerule"
         in: "query"
         description: "Control the application of the temporal bounding box. May choose\
           \ one of three rules, contain, all samples must be fully within the temporal\
@@ -170,11 +170,11 @@ paths:
         description: "Taxonomic name. May be truncated, a list of taxa or use wildcards.\
           \ If a specific taxon ID or a vector of IDs is known that parameter can\
           \ be passed through taxon. Taxon lists must be passed using JSON formating.\
-          \ By default, returns only taxa named in the query. Use include_lower if\
+          \ By default, returns only taxa named in the query. Use includelower if\
           \ all lower taxa are desired"
         required: false
         type: "string"
-      - name: "include_lower"
+      - name: "includelower"
         in: "query"
         description: "Retrieve lower taxa. A boolean. If TRUE, all species and subspecies\
           \ of a named genera will be included in the response"
@@ -206,28 +206,28 @@ paths:
           schema:
             $ref: "#/definitions/errorModel"
       x-tags:
-      - tag: "default"
+      - tag: "primary"
   /pub:
     get:
       tags:
-      - "default"
+      - "info"
       summary: "Scientific publications associated with sites or occurrences"
       description: "Uses unique site IDs or occurrence IDs to return the set of publications\
         \ associated with a query to enable citation"
-      operationId: "controllers.default_controller.pub"
+      operationId: "controllers.publication_controller.pub"
       produces:
       - "application/json"
       - "application/xml"
       - "text/xml"
       - "text/html"
       parameters:
-      - name: "occ_id"
+      - name: "occid"
         in: "query"
         description: "Unique numeric ID, or vector of IDs for occurrences"
         required: false
         type: "integer"
         format: "int32"
-      - name: "site_id"
+      - name: "siteid"
         in: "query"
         description: "Unique numeric ID, or vector of IDs for sites"
         required: false
@@ -252,24 +252,24 @@ paths:
           schema:
             $ref: "#/definitions/errorModel"
       x-tags:
-      - tag: "default"
+      - tag: "info"
   /site:
     get:
       tags:
-      - "default"
+      - "primary"
       summary: "Sample sites or localities"
       description: "Return sampling locations in space and time, excluding occurrence\
         \ records. This may return multiple stes from a common spatial location if\
         \ the samples from the synthetic sites represent unique collections. This\
         \ terminology is similar to the the datasets concept in Neotoma"
-      operationId: "controllers.default_controller.site"
+      operationId: "controllers.geoloc_site_controller.site"
       produces:
       - "application/json"
       - "application/xml"
       - "text/xml"
       - "text/html"
       parameters:
-      - name: "occ_id"
+      - name: "occid"
         in: "query"
         description: "Unique numeric ID, or vector of IDs for occurrences"
         required: false
@@ -281,28 +281,28 @@ paths:
           \ [lonW, latS, lonE, latN] or as structured WKT text"
         required: false
         type: "string"
-      - name: "min_age"
+      - name: "minage"
         in: "query"
         description: "The most recent age for the temporal search window. By default\
-          \ the min_age is  present, or not used in queries. Units are millions of\
-          \ years ago, unless defined using age_scale"
+          \ the minage is  present, or not used in queries. Units are millions of\
+          \ years ago, unless defined using agescale"
         required: false
         type: "number"
         format: "double"
-      - name: "max_age"
+      - name: "maxage"
         in: "query"
         description: "The oldest age for the temporal search window. Units are millions\
-          \ of years ago, unless defined using age_scale"
+          \ of years ago, unless defined using agescale"
         required: false
         type: "number"
         format: "double"
-      - name: "age_scale"
+      - name: "agescale"
         in: "query"
-        description: "The units for max_age and min_age. Allowable units are yr, kyr\
+        description: "The units for maxage and minage. Allowable units are yr, kyr\
           \ or Myr"
         required: false
         type: "string"
-      - name: "time_rule"
+      - name: "timerule"
         in: "query"
         description: "Control the application of the temporal bounding box. May choose\
           \ one of three rules, contain, all samples must be fully within the temporal\
@@ -316,11 +316,11 @@ paths:
         description: "Taxonomic name. May be truncated, a list of taxa or use wildcards.\
           \ If a specific taxon ID or a vector of IDs is known that parameter can\
           \ be passed through taxon. Taxon lists must be passed using JSON formating.\
-          \ By default, returns only taxa named in the query. Use include_lower if\
+          \ By default, returns only taxa named in the query. Use includelower if\
           \ all lower taxa are desired"
         required: false
         type: "string"
-      - name: "include_lower"
+      - name: "includelower"
         in: "query"
         description: "A boolean, if TRUE, all species and subspecies lower taxa of\
           \ a named genera will be included in the response"
@@ -338,17 +338,17 @@ paths:
           schema:
             $ref: "#/definitions/errorModel"
       x-tags:
-      - tag: "default"
+      - tag: "primary"
   /taxon:
     get:
       tags:
-      - "default"
+      - "info"
       summary: "Taxonomic information, or hierarchy"
       description: "Returns detailed taxonomic information for the given query. Queries\
         \ may include partial matches, and may request lower taxa using the boolean\
-        \ include_lower parameter. In cases where hierarchy is also requested the\
-        \ user may set hierarchy to TRUE"
-      operationId: "controllers.default_controller.taxon"
+        \ includelower parameter. In cases where hierarchy is also requested the user\
+        \ may set hierarchy to TRUE"
+      operationId: "controllers.taxonomic_hierarchy_controller.taxon"
       produces:
       - "application/json"
       - "application/xml"
@@ -361,10 +361,10 @@ paths:
           \ If a specific taxon ID or a vector of IDs is known that parameter can\
           \ be passed through taxon. Taxon lists must be passed using JSON formating.\
           \ By default, returns only taxa named in the query. If all lower taxa are\
-          \ desired in the return, use include_lower"
+          \ desired in the return, use includelower"
         required: false
         type: "string"
-      - name: "include_lower"
+      - name: "includelower"
         in: "query"
         description: "If TRUE, all species and subspecies of a named genera will be\
           \ included in the response"
@@ -388,7 +388,7 @@ paths:
           schema:
             $ref: "#/definitions/errorModel"
       x-tags:
-      - tag: "default"
+      - tag: "info"
 definitions:
   publication:
     type: "object"
