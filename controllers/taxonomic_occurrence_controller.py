@@ -14,6 +14,9 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     occ_return = list()
     desc_obj = dict()
 
+    if request.args == {}:
+        return jsonify(status_code=400, error='No parameters provided.')
+
     # Query the Neotoma Database (Occurrences)
 
     t0 = time.time()
@@ -21,7 +24,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     payload = dict()
 
     if 'bbox' in request.args:
-        payload.update(loc=request.args.get('bbox'))
+        payload.update(bbox=request.args.get('bbox'))
 
     if 'minage' in request.args:
         payload.update(ageyoung=request.args.get('minage'))
@@ -76,13 +79,20 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     payload.update(vocab='pbdb')
 
     if 'bbox' in request.args:
-        payload.update(XXX=request.args.get('bbox'))
+        bbox_str = request.args.get('bbox')
+        bbox_list = bbox_str.split(',')
+        payload.update(lngmin=bbox_list[0],
+                       latmin=bbox_list[1],
+                       lngmax=bbox_list[2],
+                       latmax=bbox_list[3])
 
     if 'minage' in request.args:
-        payload.update(minage=request.args.get('minage'))
+        min_age_ma = int(request.args.get('minage')) / 1000000
+        payload.update(min_ma=str(min_age_ma))
 
     if 'maxage' in request.args:
-        payload.update(maxage=request.args.get('maxage'))
+        max_age_ma = int(request.args.get('maxage')) / 1000000
+        payload.update(max_ma=str(max_age_ma))
 
     if 'agescale' in request.args:
         payload.update(XXX=request.args.get('agescale'))
@@ -111,10 +121,10 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     if pbdb_res.status_code == 200:
         pbdb_json = pbdb_res.json()
         if 'records' in pbdb_json:
-        for occ in pbdb_json['records']:
-            db_occ_id = 'pbdb:occ:' + str(occ['occurrence_no'])
-            occ_return.append({'occ_id': db_occ_id,
-                               'taxon': occ['identified_name']})
+            for occ in pbdb_json['records']:
+                db_occ_id = 'pbdb:occ:' + str(occ['occurrence_no'])
+                occ_return.append({'occ_id': db_occ_id,
+                                   'taxon': occ['accepted_name']})
             t1 = round(time.time() - t0, 5)
             desc_obj.update(pbdb_time=t1)
             desc_obj.update(pbdb_url=pbdb_res.url)
