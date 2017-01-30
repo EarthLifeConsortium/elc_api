@@ -22,6 +22,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     t0 = time.time()
     neotoma_base = 'http://apidev.neotomadb.org/v1/data/occurrences'
     payload = dict()
+    age_scaler = 1
 
     if 'bbox' in request.args:
         payload.update(bbox=request.args.get('bbox'))
@@ -33,10 +34,16 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         payload.update(ageold=request.args.get('maxage'))
 
     if 'agescale' in request.args:
-        payload.update(XXX=request.args.get('agescale'))
+        if request.args.get('agescale').lower() == 'myr':
+            age_scaler = 1e06
+        elif request.args.get('agescale').lower() == 'kyr':
+            age_scaler = 1000
 
     if 'timerule' in request.args:
-        payload.update(XXX=request.args.get('timerule'))
+        if request.args.get('timerule') == 'major':
+            payload.update(agedocontain=0)
+        elif request.args.get('timerule') == 'overlap':
+            payload.update(agedocontain=1)
 
     if 'includelower' in request.args:
         if request.args.get('includelower').lower() == 'false':
@@ -77,6 +84,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     payload = dict()
     # payload.update(show='loc,coords,coll')
     payload.update(vocab='pbdb')
+    age_scaler = 1e-06
 
     if 'bbox' in request.args:
         bbox_str = request.args.get('bbox')
@@ -95,7 +103,10 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         payload.update(max_ma=str(max_age_ma))
 
     if 'agescale' in request.args:
-        payload.update(XXX=request.args.get('agescale'))
+        if request.args.get('agescale').lower() == 'myr':
+            age_scaler = 1
+        elif request.args.get('agescale').lower() == 'kyr':
+            age_scaler = .001
 
     if 'timerule' in request.args:
         payload.update(timerule=request.args.get('timerule'))
