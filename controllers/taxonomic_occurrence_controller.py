@@ -61,7 +61,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         payload.update(limit='999999')
 
     if 'offset' in request.args:
-        payload.update(XXX=request.args.get('offset'))
+        payload.update(offset=request.args.get('offset'))
 
     neotoma_res = requests.get(neotoma_base, params=payload, timeout=None)
 
@@ -125,7 +125,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         payload.update(limit='999999')
 
     if 'offset' in request.args:
-        payload.update(XXX=request.args.get('offset'))
+        payload.update(offset=request.args.get('offset'))
 
     pbdb_res = requests.get(pbdb_base, params=payload, timeout=None)
 

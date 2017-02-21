@@ -44,14 +44,6 @@ def site(occid = None, bbox = None, minage = None, maxage = None, agescale = Non
     else:
         payload.update(nametype='base', taxonname=request.args.get('taxon'))
 
-    if 'limit' in request.args:
-        payload.update(limit=request.args.get('limit'))
-    else:
-        payload.update(limit='999999')
-
-    if 'offset' in request.args:
-        payload.update(XXX=request.args.get('offset'))
-
     neotoma_res = requests.get(neotoma_base, params=payload, timeout=None)
 
     if neotoma_res.status_code == 200:
