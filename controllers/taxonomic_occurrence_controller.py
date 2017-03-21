@@ -6,16 +6,28 @@ Endpoint for queries on taxonomic occurrences in time and space.
 from flask import request, jsonify
 import requests
 import time
+from statistics import mean
 
 
 def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         taxon=None, includelower=None, limit=None, offset=None) -> str:
     """Return occurrence identifiers from Neotoma and PBDB."""
+
+    # Initialization and parameter checks
+
     occ_return = list()
     desc_obj = dict()
+    age_units = 'yr'
+    geog_units = 'dec_deg_modern'
 
     if request.args == {}:
         return jsonify(status_code=400, error='No parameters provided.')
+
+    if 'show' in request.args:
+        if request.args.get('show') == 'all':
+            full_return = True
+        else
+            full_return = False
 
     # Query the Neotoma Database (Occurrences)
 
@@ -34,10 +46,12 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         payload.update(ageold=request.args.get('maxage'))
 
     if 'agescale' in request.args:
-        if request.args.get('agescale').lower() == 'myr':
+        if request.args.get('agescale').lower() == 'ma':
             age_scaler = 1e06
-        elif request.args.get('agescale').lower() == 'kyr':
+            age_units = 'ma'
+        elif request.args.get('agescale').lower() == 'ka':
             age_scaler = 1000
+            age_units = 'ka'
 
     if 'timerule' in request.args:
         if request.args.get('timerule') == 'major':
@@ -69,9 +83,24 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         neotoma_json = neotoma_res.json()
         if 'data' in neotoma_json:
             for occ in neotoma_json['data']:
-                db_occ_id = 'neot:occ:' + str(occ['OccurID'])
-                occ_return.append({'occ_id': db_occ_id,
+                occ_id = 'neot:occ:' + str(occ['OccurID'])
+                occ_return.append({'occ_id': occ_id,
                                    'taxon': occ['TaxonName']})
+                if full_return:
+                    taxon_id = 'neot:txn' + str(occ['TaxonID'])
+                    max_age = occ['AgeOlder'] * age_scaler
+                    min_age = occ['AgeYounger'] * age_scaler
+                    lat = str(mean([float(occ['LatitudeNorth']),
+                                   [float(occ['LatitudeSouth'])))
+                    lon = str(mean([float(occ['LongitudeEast']),
+                                   [float(occ['LongitudeWest'])))
+                    occ_return.append({'taxon_id': taxon_id,
+                                       'max_age': occ['AgeOlder'],
+                                       'min_age': occ['AgeYounger'],
+                                       'age_units': age_units,
+                                       'lat': lat,
+                                       'lon': lon,
+                                       'geog_units': geog_units})
             t1 = round(time.time() - t0, 5)
             desc_obj.update(neot_time=t1)
             desc_obj.update(neot_url=neotoma_res.url)
@@ -82,7 +111,8 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     t0 = time.time()
     pbdb_base = 'http://paleobiodb.org/data1.2/occs/list.json'
     payload = dict()
-    # payload.update(show='loc,coords,coll')
+    if full_return:
+        payload.update(show='loc,coords,coll')
     payload.update(vocab='pbdb')
     age_scaler = 1e-06
 
@@ -103,10 +133,12 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         payload.update(max_ma=str(max_age_ma))
 
     if 'agescale' in request.args:
-        if request.args.get('agescale').lower() == 'myr':
+        if request.args.get('agescale').lower() == 'ma':
             age_scaler = 1
-        elif request.args.get('agescale').lower() == 'kyr':
+            age_units = 'ma'
+        elif request.args.get('agescale').lower() == 'ka':
             age_scaler = .001
+            age_units = 'ka'
 
     if 'timerule' in request.args:
         payload.update(timerule=request.args.get('timerule'))
@@ -133,9 +165,24 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         pbdb_json = pbdb_res.json()
         if 'records' in pbdb_json:
             for occ in pbdb_json['records']:
-                db_occ_id = 'pbdb:occ:' + str(occ['occurrence_no'])
-                occ_return.append({'occ_id': db_occ_id,
+                occ_id = 'pbdb:occ:' + str(occ['occurrence_no'])
+                occ_return.append({'occ_id': occ_id,
                                    'taxon': occ['accepted_name']})
+                if full_return:
+                    taxon_id = 'pbdb:txn' + str(occ['accepted_nojj'])
+                    max_age = occ['max_ma'] * age_scaler
+                    min_age = occ['min_ma'] * age_scaler
+                    lat = str(mean([float(occ['LatitudeNorth']),
+                                   [float(occ['LatitudeSouth'])))
+                    lon = str(mean([float(occ['LongitudeEast']),
+                                   [float(occ['LongitudeWest'])))
+                    occ_return.append({'taxon_id': taxon_id,
+                                       'max_age': max_ma,
+                                       'min_age': min_ma,
+                                       'age_units': age_units,
+                                       'lat': occ['lat'],
+                                       'lon': occ['lng'],
+                                       'geog_units': geog_units})
             t1 = round(time.time() - t0, 5)
             desc_obj.update(pbdb_time=t1)
             desc_obj.update(pbdb_url=pbdb_res.url)

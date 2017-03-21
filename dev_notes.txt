@@ -15,3 +15,18 @@
 12. Deploy with Green Unicorn WSGI app server and Nginx.
 13. Do we need a YAML based config file.
 14. Resolve mixed case of parameters.
+
+
+
+- "occurrence_no" occ_id      db:occ: +
+"dataset_no"    
+- "accepted_name" taxon
+- "accepted_no"   taxon_id    db:txn: +
+- "max_age"       max_age
+- "min_age"       min_age
+- "age_unit"      age_units
+"collection_no" 
+"collection_name"
+- "lng"           lon
+- "lat"           lat
+- created         geog_units
