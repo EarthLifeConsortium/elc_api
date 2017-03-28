@@ -99,9 +99,9 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                         max_age = None
                         min_age = None
                     lat = mean([float(occ['LatitudeNorth']),
-                                    float(occ['LatitudeSouth'])])
+                                float(occ['LatitudeSouth'])])
                     lon = mean([float(occ['LongitudeEast']),
-                                    float(occ['LongitudeWest'])])
+                                float(occ['LongitudeWest'])])
                     occ_return.append({'taxon_id': taxon_id,
                                        'max_age': max_age,
                                        'min_age': min_age,
@@ -114,6 +114,87 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
             desc_obj.update(neot_time=t1)
             desc_obj.update(neot_url=neotoma_res.url)
             desc_obj.update(neot_occs=len(neotoma_json['data']))
+
+    # Query the Paleobiology Database (Occurrences)
+
+    t0 = time.time()
+    pbdb_base = 'http://paleobiodb.org/data1.2/occs/list.json'
+    payload = dict()
+    age_scaler = 1e-06
+    if full_return:
+        payload.update(show='loc,coords,coll')
+    payload.update(vocab='pbdb')
+
+    if bbox:
+        bbox_list = bbox.split(',')
+        payload.update(lngmin=bbox_list[0],
+                       latmin=bbox_list[1],
+                       lngmax=bbox_list[2],
+                       latmax=bbox_list[3])
+
+    if minage:
+        min_age_ma = int(minage) / 1000000
+        payload.update(min_ma=str(min_age_ma))
+
+    if maxage:
+        max_age_ma = int(maxage) / 1000000
+        payload.update(max_ma=str(max_age_ma))
+
+    if agescale and agescale.lower() == 'ma':
+        age_scaler = 1
+        age_units = 'ma'
+    elif agescale and agescale.lower() == 'ka':
+        age_scaler = .001
+        age_units = 'ka'
+
+    if timerule:
+        payload.update(timerule=timerule)
+
+    if includelower and includelower.lower() == 'false':
+        payload.update(taxon_name=taxon)
+    else:
+        payload.update(base_name=taxon)
+
+    if limit:
+        payload.update(limit=limit)
+    else:
+        payload.update(limit='999999')
+
+    if offset:
+        payload.update(offset=offset)
+
+    pbdb_res = requests.get(pbdb_base, params=payload, timeout=None)
+
+    if pbdb_res.status_code == 200:
+        pbdb_json = pbdb_res.json()
+        if 'records' in pbdb_json:
+            for occ in pbdb_json['records']:
+                occ_id = 'pbdb:occ:' + str(occ['occurrence_no'])
+                occ_return.append({'occ_id': occ_id,
+                                   'taxon': occ['accepted_name']})
+
+                if full_return:
+                    taxon_id = 'pbdb:txn:' + str(occ['accepted_no'])
+                    if occ['max_ma'] and occ['min_ma']:
+                        max_age = float(occ['max_ma']) * age_scaler
+                        min_age = float(occ['min_ma']) * age_scaler
+                    else:
+                        max_age = None
+                        min_age = None
+                    lat = float(occ['lat'])
+                    lon = float(occ['lng'])
+                    occ_return.append({'taxon_id': taxon_id,
+                                       'max_age': max_age,
+                                       'min_age': min_age,
+                                       'age_units': age_units,
+                                       'lat': lat,
+                                       'lon': lon,
+                                       'geog_units': geog_units})
+
+            t1 = round(time.time()-t0, 5)
+            desc_obj.update(pbdb_time=t1)
+            desc_obj.update(pbdb_url=pbdb_res.url)
+            desc_obj.update(pbdb_occs=len(pbdb_json['records']))
 
     # Composite response
 
