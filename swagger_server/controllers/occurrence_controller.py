@@ -4,13 +4,13 @@ RESTful API controller.
 Endpoint for queries on taxonomic occurrences in time and space.
 """
 
-import connexion
-from swagger_server.models.error_model import ErrorModel
-from swagger_server.models.occurrence import Occurrence
-from datetime import date, datetime
-from typing import List, Dict
-from six import iteritems
-from ..util import deserialize_date, deserialize_datetime
+# import connexion
+# from swagger_server.models.error_model import ErrorModel
+# from swagger_server.models.occurrence import Occurrence
+# from datetime import date, datetime
+# from typing import List, Dict
+# from six import iteritems
+# from ..util import deserialize_date, deserialize_datetime
 from flask import request, jsonify
 import requests
 import time
@@ -27,11 +27,10 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     # Initialization and parameter checks
 
     if request.args == {}:
-        return jsonify(status_code=400,
-                       error='No parameters provided.')
+        return jsonify(status_code=400, error='No parameters provided.')
 
-    occ_return = list()
     desc_obj = dict()
+    occ_return = list()
     age_units = 'yr'
     geog_units = 'dec_deg_modern'
     full_return = False
@@ -86,9 +85,9 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         neotoma_json = neotoma_res.json()
         if 'data' in neotoma_json:
             for occ in neotoma_json['data']:
+                occ_obj = dict()
                 occ_id = 'neot:occ:' + str(occ['OccurID'])
-                occ_return.append({'occ_id': occ_id,
-                                   'taxon': occ['TaxonName']})
+                occ_obj.update(occ_id=occ_id, taxon=occ['TaxonName'])
 
                 if full_return:
                     taxon_id = 'neot:txn:' + str(occ['TaxonID'])
@@ -100,15 +99,15 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                         min_age = None
                     lat = mean([float(occ['LatitudeNorth']),
                                 float(occ['LatitudeSouth'])])
+                    lat = round(lat, 4)
                     lon = mean([float(occ['LongitudeEast']),
                                 float(occ['LongitudeWest'])])
-                    occ_return.append({'taxon_id': taxon_id,
-                                       'max_age': max_age,
-                                       'min_age': min_age,
-                                       'age_units': age_units,
-                                       'lat': lat,
-                                       'lon': lon,
-                                       'geog_units': geog_units})
+                    lon = round(lon, 4)
+                    occ_obj.update(taxon_id=taxon_id, max_age=max_age,
+                                   min_age=min_age, age_units=age_units,
+                                   lat=lat, lon=lon, geog_units=geog_units)
+
+                occ_return.append(occ_obj)
 
             t1 = round(time.time()-t0, 5)
             desc_obj.update(neot_time=t1)
@@ -127,10 +126,8 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
 
     if bbox:
         bbox_list = bbox.split(',')
-        payload.update(lngmin=bbox_list[0],
-                       latmin=bbox_list[1],
-                       lngmax=bbox_list[2],
-                       latmax=bbox_list[3])
+        payload.update(lngmin=bbox_list[0], latmin=bbox_list[1],
+                       lngmax=bbox_list[2], latmax=bbox_list[3])
 
     if minage:
         min_age_ma = int(minage) / 1000000
@@ -169,9 +166,9 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         pbdb_json = pbdb_res.json()
         if 'records' in pbdb_json:
             for occ in pbdb_json['records']:
+                occ_obj = dict()
                 occ_id = 'pbdb:occ:' + str(occ['occurrence_no'])
-                occ_return.append({'occ_id': occ_id,
-                                   'taxon': occ['accepted_name']})
+                occ_obj.update(occ_id=occ_id, taxon=occ['accepted_name'])
 
                 if full_return:
                     taxon_id = 'pbdb:txn:' + str(occ['accepted_no'])
@@ -182,14 +179,14 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                         max_age = None
                         min_age = None
                     lat = float(occ['lat'])
+                    lat = round(lat, 4)
                     lon = float(occ['lng'])
-                    occ_return.append({'taxon_id': taxon_id,
-                                       'max_age': max_age,
-                                       'min_age': min_age,
-                                       'age_units': age_units,
-                                       'lat': lat,
-                                       'lon': lon,
-                                       'geog_units': geog_units})
+                    lon = round(lon, 4)
+                    occ_obj.update(taxon_id=taxon_id, max_age=max_age,
+                                   min_age=min_age, age_units=age_units,
+                                   lat=lat, lon=lon, geog_units=geog_units)
+
+                occ_return.append(occ_obj)
 
             t1 = round(time.time()-t0, 5)
             desc_obj.update(pbdb_time=t1)
