@@ -43,23 +43,36 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     t0 = time.time()
     neotoma_base = 'http://apidev.neotomadb.org/v1/data/occurrences'
     payload = dict()
-    age_scaler = 1
 
     if bbox:
         payload.update(bbox=bbox)
 
-    if minage:
-        payload.update(ageyoung=minage)
-
-    if maxage:
-        payload.update(ageold=maxage)
-
+    print('got a0')
     if agescale and agescale.lower() == 'ma':
+        print('got a1')
         age_scaler = 1e-06
         age_units = 'ma'
+        if minage:
+            payload.update(ageyoung=int(minage/age_scaler))
+        if maxage:
+            payload.update(ageold=int(maxage/age_scaler))
     elif agescale and agescale.lower() == 'ka':
+        print('got a2')
         age_scaler = 1e-03
         age_units = 'ka'
+        if minage:
+            payload.update(ageyoung=int(minage/age_scaler))
+        if maxage:
+            payload.update(ageold=int(maxage/age_scaler))
+    else:
+        print('got a3')
+        age_scaler = 1
+        age_units = 'yr'
+        if minage:
+            payload.update(ageyoung=int(minage))
+            print(int(minage))
+        if maxage:
+            payload.update(ageold=int(maxage))
 
     if timerule and timerule.lower() == 'major':
         payload.update(agedocontain=0)
@@ -119,7 +132,6 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     t0 = time.time()
     pbdb_base = 'http://paleobiodb.org/data1.2/occs/list.json'
     payload = dict()
-    age_scaler = 1e-06
     if full_return:
         payload.update(show='loc,coords,coll')
     payload.update(vocab='pbdb')
@@ -129,20 +141,32 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         payload.update(lngmin=bbox_list[0], latmin=bbox_list[1],
                        lngmax=bbox_list[2], latmax=bbox_list[3])
 
-    if minage:
-        min_age_ma = int(minage) / 1000000
-        payload.update(min_ma=str(min_age_ma))
-
-    if maxage:
-        max_age_ma = int(maxage) / 1000000
-        payload.update(max_ma=str(max_age_ma))
-
+    print('got b0')
     if agescale and agescale.lower() == 'ma':
+        print('got b1')
         age_scaler = 1
         age_units = 'ma'
+        if minage:
+            payload.update(min_ma=minage)
+        if maxage:
+            payload.update(max_ma=maxage)
     elif agescale and agescale.lower() == 'ka':
-        age_scaler = .001
+        print('got b2')
+        age_scaler = 1e03
         age_units = 'ka'
+        if minage:
+            payload.update(min_ma=float(minage)/age_scaler)
+        if maxage:
+            payload.update(max_ma=float(maxage)/age_scaler)
+    else:
+        print('got b3')
+        age_scaler = 1e06
+        age_units = 'yr'
+        if minage:
+            payload.update(min_ma=float(minage)/age_scaler)
+            print(float(minage)/age_scaler)
+        if maxage:
+            payload.update(max_ma=float(maxage)/age_scaler)
 
     if timerule:
         payload.update(timerule=timerule)
