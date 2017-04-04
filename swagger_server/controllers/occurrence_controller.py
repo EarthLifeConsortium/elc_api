@@ -31,7 +31,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
 
     desc_obj = dict()
     occ_return = list()
-    age_units = 'yr'
+    age_units = 'ma'
     geog_units = 'dec_deg_modern'
     full_return = False
 
@@ -47,17 +47,14 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     if bbox:
         payload.update(bbox=bbox)
 
-    print('got a0')
-    if agescale and agescale.lower() == 'ma':
-        print('got a1')
-        age_scaler = 1e-06
-        age_units = 'ma'
+    if agescale and agescale.lower() == 'yr':
+        age_scaler = 1
+        age_units = 'yr'
         if minage:
-            payload.update(ageyoung=int(minage/age_scaler))
+            payload.update(ageyoung=int(minage))
         if maxage:
-            payload.update(ageold=int(maxage/age_scaler))
+            payload.update(ageold=int(maxage))
     elif agescale and agescale.lower() == 'ka':
-        print('got a2')
         age_scaler = 1e-03
         age_units = 'ka'
         if minage:
@@ -65,14 +62,12 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         if maxage:
             payload.update(ageold=int(maxage/age_scaler))
     else:
-        print('got a3')
-        age_scaler = 1
-        age_units = 'yr'
+        age_scaler = 1e-06
+        age_units = 'ma'
         if minage:
-            payload.update(ageyoung=int(minage))
-            print(int(minage))
+            payload.update(ageyoung=int(minage/age_scaler))
         if maxage:
-            payload.update(ageold=int(maxage))
+            payload.update(ageold=int(maxage/age_scaler))
 
     if timerule and timerule.lower() == 'major':
         payload.update(agedocontain=0)
@@ -105,17 +100,17 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                 if full_return:
                     taxon_id = 'neot:txn:' + str(occ['TaxonID'])
                     if occ['AgeOlder'] and occ['AgeYounger']:
-                        max_age = float(occ['AgeOlder']) * age_scaler
-                        min_age = float(occ['AgeYounger']) * age_scaler
+                        max_age = occ['AgeOlder'] * age_scaler
+                        min_age = occ['AgeYounger'] * age_scaler
                     else:
                         max_age = None
                         min_age = None
-                    lat = mean([float(occ['LatitudeNorth']),
-                                float(occ['LatitudeSouth'])])
-                    lat = round(lat, 4)
-                    lon = mean([float(occ['LongitudeEast']),
-                                float(occ['LongitudeWest'])])
-                    lon = round(lon, 4)
+                    lat = mean([occ['LatitudeNorth'],
+                                occ['LatitudeSouth']])
+                    # lat = round(lat, 4)
+                    lon = mean([occ['LongitudeEast'],
+                                occ['LongitudeWest']])
+                    # lon = round(lon, 4)
                     occ_obj.update(taxon_id=taxon_id, max_age=max_age,
                                    min_age=min_age, age_units=age_units,
                                    lat=lat, lon=lon, geog_units=geog_units)
@@ -141,17 +136,14 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         payload.update(lngmin=bbox_list[0], latmin=bbox_list[1],
                        lngmax=bbox_list[2], latmax=bbox_list[3])
 
-    print('got b0')
-    if agescale and agescale.lower() == 'ma':
-        print('got b1')
-        age_scaler = 1
-        age_units = 'ma'
+    if agescale and agescale.lower() == 'yr':
+        age_scaler = 1e06
+        age_units = 'yr'
         if minage:
-            payload.update(min_ma=minage)
+            payload.update(min_ma=float(minage)/age_scaler)
         if maxage:
-            payload.update(max_ma=maxage)
+            payload.update(max_ma=float(maxage)/age_scaler)
     elif agescale and agescale.lower() == 'ka':
-        print('got b2')
         age_scaler = 1e03
         age_units = 'ka'
         if minage:
@@ -159,14 +151,12 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         if maxage:
             payload.update(max_ma=float(maxage)/age_scaler)
     else:
-        print('got b3')
-        age_scaler = 1e06
-        age_units = 'yr'
+        age_scaler = 1
+        age_units = 'ma'
         if minage:
-            payload.update(min_ma=float(minage)/age_scaler)
-            print(float(minage)/age_scaler)
+            payload.update(min_ma=minage)
         if maxage:
-            payload.update(max_ma=float(maxage)/age_scaler)
+            payload.update(max_ma=maxage)
 
     if timerule:
         payload.update(timerule=timerule)
