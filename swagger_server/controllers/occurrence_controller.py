@@ -209,4 +209,4 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
 
     # Composite response
 
-    return jsonify(description=desc_obj, data=occ_return)
+    return jsonify(description=desc_obj, records=occ_return)
