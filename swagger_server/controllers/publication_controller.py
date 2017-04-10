@@ -39,6 +39,15 @@ def pub(occid=None, siteid=None, format=None):
         ris_format = True
 
     # Query the Neotoma Database (Publications)
+    t0 = time.time()
+    payload = dict()
+
+
+
+
+
+
+
 
     # Query the Paleobiology Database (Publications)
     t0 = time.time()
