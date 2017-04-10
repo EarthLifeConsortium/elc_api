@@ -14,7 +14,7 @@ Endpoint for queries on occurrence and site reference publications.
 from flask import request, jsonify
 import requests
 import time
-from statistics import mean
+import re
 
 
 def pub(occid=None, siteid=None, format=None):
@@ -65,7 +65,7 @@ def pub(occid=None, siteid=None, format=None):
 
                 bibjson = dict()
                 (kind,title,year,journal,vol,pages,doi,
-                 author1,author2,editors) = [None]*10
+                            author1,author2,editors) = [None]*10
                 other_authors = list()
 
                 if 'publication_type' in pub:
@@ -102,7 +102,10 @@ def pub(occid=None, siteid=None, format=None):
                 if author2:
                     bibjson['author'].append({'name':author2})
                 for next_author in other_authors:
-                    bibjson['author'].append({'name':next_author})
+                    surname = re.search('[A-Z][a-z]+', next_author)
+                    fullname = surname.group() + ', ' + \
+                               next_author[0:surname.start()-1]
+                    bibjson['author'].append({'name':fullname})
                 bibjson.update(journal=[{'name':journal,'volume':vol,
                                          'pages':pages,'editors':editors}])
                 bibjson.update(identifier=[{'type':'doi', 'id':doi},

@@ -25,9 +25,6 @@ paths:
       operationId: "age"
       produces:
       - "application/json"
-      - "application/xml"
-      - "text/xml"
-      - "text/html"
       parameters:
       - name: "occid"
         in: "query"
@@ -64,9 +61,6 @@ paths:
       operationId: "grid"
       produces:
       - "application/json"
-      - "application/xml"
-      - "text/xml"
-      - "text/html"
       parameters:
       - name: "agebound"
         in: "query"
@@ -127,9 +121,6 @@ paths:
       operationId: "occ"
       produces:
       - "application/json"
-      - "application/xml"
-      - "text/xml"
-      - "text/html"
       parameters:
       - name: "bbox"
         in: "query"
@@ -225,22 +216,17 @@ paths:
       operationId: "pub"
       produces:
       - "application/json"
-      - "application/xml"
-      - "text/xml"
-      - "text/html"
       parameters:
       - name: "occid"
         in: "query"
         description: "Unique numeric ID, or vector of IDs for occurrences"
         required: false
-        type: "integer"
-        format: "int32"
+        type: "string"
       - name: "siteid"
         in: "query"
         description: "Unique numeric ID, or vector of IDs for sites"
         required: false
-        type: "integer"
-        format: "int32"
+        type: "string"
       - name: "format"
         in: "query"
         description: "Output format for publications. Default response is BibJSON,\
@@ -274,9 +260,6 @@ paths:
       operationId: "site"
       produces:
       - "application/json"
-      - "application/xml"
-      - "text/xml"
-      - "text/html"
       parameters:
       - name: "occid"
         in: "query"
@@ -361,9 +344,6 @@ paths:
       operationId: "taxon"
       produces:
       - "application/json"
-      - "application/xml"
-      - "text/xml"
-      - "text/html"
       parameters:
       - name: "taxon"
         in: "query"
