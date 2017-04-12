@@ -40,50 +40,50 @@ def site(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerul
 
     # Query the Neotoma Database (Sites)
 
-    t0 = time.time()
-    neotoma_base = 'http://apidev.neotomadb.org/v1/data/datasets'
-    payload = dict()
+    # t0 = time.time()
+    # neotoma_base = 'http://apidev.neotomadb.org/v1/data/datasets'
+    # payload = dict()
 
-    ### if occid:
+    # ### if occid:
 
-    if bbox:
-        payload.update(bbox=bbox)
+    # if bbox:
+    #     payload.update(bbox=bbox)
 
-    if agescale and agescale.lower() == 'yr':
-        age_scaler = 1
-        age_units = 'yr'
-        if minage:
-            payload.update(ageyoung=int(minage))
-        if maxage:
-            payload.update(ageold=int(maxage))
-    elif agescale and agescale.lower() == 'ka':
-        age_scaler = 1e-03
-        age_units = 'ka'
-        if minage:
-            payload.update(ageyoung=int(minage/age_scaler))
-        if maxage:
-            payload.update(ageold=int(maxage/age_scaler))
-    else:
-        age_scaler = 1e-06
-        age_units = 'ma'
-        if minage:
-            payload.update(ageyoung=int(minage/age_scaler))
-        if maxage:
-            payload.update(ageold=int(maxage/age_scaler))
+    # if agescale and agescale.lower() == 'yr':
+    #     age_scaler = 1
+    #     age_units = 'yr'
+    #     if minage:
+    #         payload.update(ageyoung=int(minage))
+    #     if maxage:
+    #         payload.update(ageold=int(maxage))
+    # elif agescale and agescale.lower() == 'ka':
+    #     age_scaler = 1e-03
+    #     age_units = 'ka'
+    #     if minage:
+    #         payload.update(ageyoung=int(minage/age_scaler))
+    #     if maxage:
+    #         payload.update(ageold=int(maxage/age_scaler))
+    # else:
+    #     age_scaler = 1e-06
+    #     age_units = 'ma'
+    #     if minage:
+    #         payload.update(ageyoung=int(minage/age_scaler))
+    #     if maxage:
+    #         payload.update(ageold=int(maxage/age_scaler))
 
-    if timerule and timerule.lower() == 'major':
-        payload.update(agedocontain=0)
-    elif timerule and timerule.lower() == 'overlap':
-        payload.update(agedocontain=1)
+    # if timerule and timerule.lower() == 'major':
+    #     payload.update(agedocontain=0)
+    # elif timerule and timerule.lower() == 'overlap':
+    #     payload.update(agedocontain=1)
 
-    if includelower and includelower.lower() == 'false':
-        payload.update(nametype='tax', taxonname=taxon)
-    else:
-        payload.update(nametype='base', taxonname=taxon)
+    # if includelower and includelower.lower() == 'false':
+    #     payload.update(nametype='tax', taxonname=taxon)
+    # else:
+    #     payload.update(nametype='base', taxonname=taxon)
 
-    neotoma_res = requests.get(neotoma_base, params=payload, timeout=None)
+    # neotoma_res = requests.get(neotoma_base, params=payload, timeout=None)
     
-    ### Parse neotoma response
+    # ### Parse neotoma response
 
     # Query the Paleobiology Database (Sites)
 
