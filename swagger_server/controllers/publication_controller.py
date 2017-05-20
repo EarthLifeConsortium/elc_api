@@ -24,7 +24,6 @@ def pub(occid=None, siteid=None, format=None):
     Format= bibjson or ris.
     """
     # Initialization and parameter checks
-
     if request.args == {}:
         return jsonify(status_code=400, error='No parameters provided.')
     if occid and siteid:
@@ -42,12 +41,83 @@ def pub(occid=None, siteid=None, format=None):
     t0 = time.time()
     payload = dict()
 
+    neot_base = 'http://api.neotomadb.org/v1/data/publications'
 
+    if occid:
+        # Warning: Neotoma does not yet allow searching by occurrence so
+        # artificialy set this equal to the datasetid for now.
+        payload.update(datasetid=occid)
+    elif siteid:
+        payload.update(datasetid=siteid)
+    else:
+        return jsonify(status_code=400,
+                       error='Specify occurrence ID or site ID.')
 
+    neot_res = requests.get(neot_base, params=payload, timeout=None)
 
+    if neot_res.status_code == 200:
+        neot_json = neot_res.json()
+        if 'data' in neot_json:
+            for pub in neot_json['data']:
+                pub_id = 'neot:pub:' + str(pub['reference_no'])
 
+                bibjson = dict()
+                (kind,title,year,journal,vol,pages,doi,
+                            author1,author2,editors) = [None]*10
+                other_authors = list()
 
+                if 'PubType' in pub:
+                    kind = pub['PubType']
+                # if 'reftitle' in pub:
+                #     title = pub['reftitle']
+                if 'Year' in pub:
+                    year = pub['Year']
+                # if 'pubtitle' in pub:
+                #     journal = pub['pubtitle']
+                # if 'pubvol' in pub:
+                #     vol = pub['pubvol']
+                #     if 'pubno' in pub:
+                #         vol = pub['pubno'] + ' (' + vol + ')'
+                # if 'editors' in pub:
+                #     editors = pub['editors']
+                # if 'firstpage' in pub and 'lastpage' in pub:
+                #     pages = pub['firstpage'] + '-' + pub['lastpage']
+                # if 'doi' in pub:
+                #     doi = pub['doi']
+                # if 'author1last' in pub:
+                #     author1 = pub['author1last']
+                #     if 'author1init' in pub:
+                #         author1 += ', ' + pub['author1init']
+                # if 'author2last' in pub:
+                #     author2 = pub['author2last']
+                #     if 'author2init' in pub:
+                #         author2 += ', ' + pub['author2init']
+                # if 'otherauthors' in pub:
+                #     other_authors = pub['otherauthors'].split(', ')
 
+                # bibjson.update(type=kind, year=year, title=title)
+                # bibjson.update(author=[{'name':author1}])
+                # if author2:
+                #     bibjson['author'].append({'name':author2})
+                # for next_author in other_authors:
+                #     surname = re.search('[A-Z][a-z]+', next_author)
+                #     fullname = surname.group() + ', ' + \
+                #                next_author[0:surname.start()-1]
+                #     bibjson['author'].append({'name':fullname})
+                # bibjson.update(journal=[{'name':journal,'volume':vol,
+                #                          'pages':pages,'editors':editors}])
+                # bibjson.update(identifier=[{'type':'doi', 'id':doi},
+                #                            {'type':'database', 'id':pub_id}])
+
+                if 'Citation' in pub:
+                    bibjson.update(citation=pub['Citation'])
+
+                pub_return.append(bibjson)
+
+            t1 = round(time.time()-t0, 5)
+            desc_obj.update(pbdb_time=t1)
+            desc_obj.update(pbdb_url=pbdb_res.url)
+            desc_obj.update(pbdb_pubs=len(pbdb_json['records']))
 
     # Query the Paleobiology Database (Publications)
     t0 = time.time()
