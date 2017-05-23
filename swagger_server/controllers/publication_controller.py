@@ -37,165 +37,97 @@ def pub(occid=None, siteid=None, format=None):
     if format and format.lower() == 'ris':
         ris_format = True
 
+    #
     # Query the Neotoma Database (Publications)
-    t0 = time.time()
-    payload = dict()
+    #
 
-    neot_base = 'http://api.neotomadb.org/v1/data/publications'
-
-    if occid:
-        # Warning: Neotoma does not yet allow searching by occurrence so
-        # artificialy set this equal to the datasetid for now.
-        payload.update(datasetid=occid)
-    elif siteid:
-        payload.update(datasetid=siteid)
-    else:
-        return jsonify(status_code=400,
-                       error='Specify occurrence ID or site ID.')
-
-    neot_res = requests.get(neot_base, params=payload, timeout=None)
-
-    if neot_res.status_code == 200:
-        neot_json = neot_res.json()
-        if 'data' in neot_json:
-            for pub in neot_json['data']:
-                pub_id = 'neot:pub:' + str(pub['reference_no'])
-
-                bibjson = dict()
-                (kind,title,year,journal,vol,pages,doi,
-                            author1,author2,editors) = [None]*10
-                other_authors = list()
-
-                if 'PubType' in pub:
-                    kind = pub['PubType']
-                # if 'reftitle' in pub:
-                #     title = pub['reftitle']
-                if 'Year' in pub:
-                    year = pub['Year']
-                # if 'pubtitle' in pub:
-                #     journal = pub['pubtitle']
-                # if 'pubvol' in pub:
-                #     vol = pub['pubvol']
-                #     if 'pubno' in pub:
-                #         vol = pub['pubno'] + ' (' + vol + ')'
-                # if 'editors' in pub:
-                #     editors = pub['editors']
-                # if 'firstpage' in pub and 'lastpage' in pub:
-                #     pages = pub['firstpage'] + '-' + pub['lastpage']
-                # if 'doi' in pub:
-                #     doi = pub['doi']
-                # if 'author1last' in pub:
-                #     author1 = pub['author1last']
-                #     if 'author1init' in pub:
-                #         author1 += ', ' + pub['author1init']
-                # if 'author2last' in pub:
-                #     author2 = pub['author2last']
-                #     if 'author2init' in pub:
-                #         author2 += ', ' + pub['author2init']
-                # if 'otherauthors' in pub:
-                #     other_authors = pub['otherauthors'].split(', ')
-
-                # bibjson.update(type=kind, year=year, title=title)
-                # bibjson.update(author=[{'name':author1}])
-                # if author2:
-                #     bibjson['author'].append({'name':author2})
-                # for next_author in other_authors:
-                #     surname = re.search('[A-Z][a-z]+', next_author)
-                #     fullname = surname.group() + ', ' + \
-                #                next_author[0:surname.start()-1]
-                #     bibjson['author'].append({'name':fullname})
-                # bibjson.update(journal=[{'name':journal,'volume':vol,
-                #                          'pages':pages,'editors':editors}])
-                # bibjson.update(identifier=[{'type':'doi', 'id':doi},
-                #                            {'type':'database', 'id':pub_id}])
-
-                if 'Citation' in pub:
-                    bibjson.update(citation=pub['Citation'])
-
-                pub_return.append(bibjson)
-
-            t1 = round(time.time()-t0, 5)
-            desc_obj.update(pbdb_time=t1)
-            desc_obj.update(pbdb_url=pbdb_res.url)
-            desc_obj.update(pbdb_pubs=len(pbdb_json['records']))
-
+    #
     # Query the Paleobiology Database (Publications)
+    #
     t0 = time.time()
     payload = dict()
-    payload.update(vocab='pbdb')
+    payload.update(vocab='pbdb', show='both')
 
+    # Select the appropriate URI for occs or sites/colls
     if occid:
-        pbdb_base = 'http://paleobiodb.org/data1.2/occs/refs.json'
+        base_url = 'http://paleobiodb.org/data1.2/occs/refs.json'
         payload.update(occ_id=occid)
     elif siteid:
-        pbdb_base = 'http://paleobiodb.org/data1.2/colls/refs.json'
+        base_url = 'http://paleobiodb.org/data1.2/colls/refs.json'
         payload.update(coll_id=siteid)
     else:
         return jsonify(status_code=400,
                        error='Specify occurrence ID or site ID.')
 
-    pbdb_res = requests.get(pbdb_base, params=payload, timeout=None)
+    # Issue GET request to database API
+    res = requests.get(base_url, params=payload, timeout=None)
 
-    if pbdb_res.status_code == 200:
-        pbdb_json = pbdb_res.json()
-        if 'records' in pbdb_json:
-            for pub in pbdb_json['records']:
+    if res.status_code == 200:
+        res_json = res.json()
+        if 'records' in res_json:
+            for rec in res_json['records']:
+
+                # Format publication "volume(issue)"
+                if 'pubvol' in rec:
+                    vol_no = rec['pubvol']
+                    if 'pubno' in rec:
+                        vol_no = rec['pubno'] + ' (' + vol_no + ')'
+                else:
+                    vol_no = None
+
+                # Format publication "first-last" page range
+                if 'firstpage' in rec:
+                    page_range = rec['firstpage']
+                    if 'lastpage' in rec:
+                        page_range = page_range + '-' + rec['lastpage']
+                else:
+                    page_range = None
+
+                # Format author fields
+                if 'author1last' in rec:
+                    author_1 = rec['author1last']
+                    if 'author1init' in rec:
+                        author_1 += ', ' + rec['author1init']
+                else:
+                    author_1 = None
+                if 'author2last' in rec:
+                    author_2 = rec['author2last']
+                    if 'author2init' in rec:
+                        author_2 += ', ' + rec['author2init']
+                else:
+                    author_2 = None
+                if 'otherauthors' in rec:
+                    author_other = rec['otherauthors'].split(', ')
+                else:
+                    author_other = None
+
+                # Format the unique database identifier
                 pub_id = 'pbdb:pub:' + str(pub['reference_no'])
 
-                bibjson = dict()
-                (kind,title,year,journal,vol,pages,doi,
-                            author1,author2,editors) = [None]*10
-                other_authors = list()
+                # Build dictionary of bibliographic fields
+                pub = dict()
+                pub.update(kind=rec.get('publication_type'),
+                           title=rec.get('reftitle'),
+                           year=rec.get('pubyr'),
+                           journal=rec.get('pubtitle'),
+                           vol=vol_no,
+                           editors=rec.get('editors'),
+                           pages=page_range,
+                           doi=rec.get('doi'),
+                           auth1=author_1,
+                           auth2=author_2,
+                           auth3=author_other,
+                           ident=pub_id,
+                           cite=bibliographicCitation)
 
-                if 'publication_type' in pub:
-                    kind = pub['publication_type']
-                if 'reftitle' in pub:
-                    title = pub['reftitle']
-                if 'pubyr' in pub:
-                    year = pub['pubyr']
-                if 'pubtitle' in pub:
-                    journal = pub['pubtitle']
-                if 'pubvol' in pub:
-                    vol = pub['pubvol']
-                    if 'pubno' in pub:
-                        vol = pub['pubno'] + ' (' + vol + ')'
-                if 'editors' in pub:
-                    editors = pub['editors']
-                if 'firstpage' in pub and 'lastpage' in pub:
-                    pages = pub['firstpage'] + '-' + pub['lastpage']
-                if 'doi' in pub:
-                    doi = pub['doi']
-                if 'author1last' in pub:
-                    author1 = pub['author1last']
-                    if 'author1init' in pub:
-                        author1 += ', ' + pub['author1init']
-                if 'author2last' in pub:
-                    author2 = pub['author2last']
-                    if 'author2init' in pub:
-                        author2 += ', ' + pub['author2init']
-                if 'otherauthors' in pub:
-                    other_authors = pub['otherauthors'].split(', ')
-
-                bibjson.update(type=kind, year=year, title=title)
-                bibjson.update(author=[{'name':author1}])
-                if author2:
-                    bibjson['author'].append({'name':author2})
-                for next_author in other_authors:
-                    surname = re.search('[A-Z][a-z]+', next_author)
-                    fullname = surname.group() + ', ' + \
-                               next_author[0:surname.start()-1]
-                    bibjson['author'].append({'name':fullname})
-                bibjson.update(journal=[{'name':journal,'volume':vol,
-                                         'pages':pages,'editors':editors}])
-                bibjson.update(identifier=[{'type':'doi', 'id':doi},
-                                           {'type':'database', 'id':pub_id}])
-
+                # Format the bibliographic refernce and add it to the return 
+                bib_obj = format_bibjson(pub)
                 pub_return.append(bibjson)
 
             t1 = round(time.time()-t0, 5)
             desc_obj.update(pbdb_time=t1)
-            desc_obj.update(pbdb_url=pbdb_res.url)
-            desc_obj.update(pbdb_pubs=len(pbdb_json['records']))
+            desc_obj.update(pbdb_url=res.url)
+            desc_obj.update(pbdb_pubs=len(res_json['records']))
 
     # Composite response
     return jsonify(description=desc_obj, records=pub_return)
