@@ -1,41 +1,73 @@
 """
 RESTful API controller.
 
-Endpoint for queries on occurrence and site reference publications.
+Endpoint for scientific publications (also refered to as references).
 """
 
-# import connexion
-# from swagger_server.models.error_model import ErrorModel
-# from swagger_server.models.publication import Publication
-# from datetime import date, datetime
-# from typing import List, Dict
-# from six import iteritems
-# from ..util import deserialize_date, deserialize_datetime
 from flask import request, jsonify
 import requests
 import time
 import re
 
 
-def pub(occid=None, siteid=None, format=None):
-    """
-    Return occurrence identifiers from Neotoma and PBDB.
+def format_bibjson(ref):
+    """Format BibJSON object."""
+    print(ref)
+    bib = dict()
 
-    Format= bibjson or ris.
-    """
+    # Add basic reference info
+    bib.update(type=ref['kind'], year=ref['year'],
+               title=ref['title'], citation=ref['cite'])
+
+    # Add info specific to the journal or book
+    bib.update(journal=[{'name': ref['journal'], 'volume': ref['vol'],
+                         'pages': ref['pages'], 'editors': ref['editor']}])
+
+    # Add reference locator IDs
+    bib.update(identifier=[{'type': 'doi', 'id': ref['doi']},
+                           {'type': 'database', 'id': ref['ident']}])
+
+    # Sequentially add authors to the authors block
+    bib.update(author=[{'name': ref['auth1']}])
+    if ref['auth2']:
+        bib['author'].append({'name': ref['auth2']})
+    # Parse other authors and reverse the initials and surname
+    if ref['auth3']:
+        print('-----> ', ref['auth3'])
+        other_authors = ref['auth3'].split(', ')
+        for next_author in other_authors:
+            surname = re.search('[A-Z][a-z]+', next_author)
+            name = surname.group() + ', ' + next_author[0: surname.start()-1]
+            bib['author'].append({'name': name})
+
+    # End subroutine: format_bibjson
+    return bib
+
+
+def format_csv(ref):
+    """Format tabular CSV object."""
+    bib = dict()
+    # End subroutine: format_csv
+    return bib
+
+
+def format_ris(ref):
+    """Format RIS object."""
+    bib = dict()
+    # End subroutine: format_ris
+    return bib
+
+
+def pub(occid=None, siteid=None, format=None):
+    """Return primary reference data in BibJSON, CSV or RIS format."""
     # Initialization and parameter checks
+    desc_obj = dict()
+    pub_return = list()
     if request.args == {}:
         return jsonify(status_code=400, error='No parameters provided.')
     if occid and siteid:
         return jsonify(status_code=400,
                        error='Specify only occurrence ID or site ID not both.')
-
-    desc_obj = dict()
-    pub_return = list()
-    ris_format = False
-
-    if format and format.lower() == 'ris':
-        ris_format = True
 
     #
     # Query the Neotoma Database (Publications)
@@ -102,28 +134,36 @@ def pub(occid=None, siteid=None, format=None):
                     author_other = None
 
                 # Format the unique database identifier
-                pub_id = 'pbdb:pub:' + str(pub['reference_no'])
+                pub_id = 'pbdb:pub:' + str(rec['reference_no'])
 
                 # Build dictionary of bibliographic fields
-                pub = dict()
-                pub.update(kind=rec.get('publication_type'),
+                ref = dict()
+                ref.update(kind=rec.get('publication_type'),
                            title=rec.get('reftitle'),
                            year=rec.get('pubyr'),
                            journal=rec.get('pubtitle'),
                            vol=vol_no,
-                           editors=rec.get('editors'),
+                           editor=rec.get('editors'),
                            pages=page_range,
                            doi=rec.get('doi'),
                            auth1=author_1,
                            auth2=author_2,
                            auth3=author_other,
                            ident=pub_id,
-                           cite=bibliographicCitation)
+                           cite=rec.get('bibliographicCitation'))
 
-                # Format the bibliographic refernce and add it to the return 
-                bib_obj = format_bibjson(pub)
-                pub_return.append(bibjson)
+                # Call the appropriate bibliographic formatter
+                if format and format.lower() == 'ris':
+                    bib_obj = format_ris(ref)
+                elif format and format.lower() == 'csv':
+                    bib_obj = format_csv(ref)
+                else:
+                    bib_obj = format_bibjson(ref)
 
+                # Add the fomatted bibliographic reference to the return
+                pub_return.append(bib_obj)
+
+            # Build the JSON description object
             t1 = round(time.time()-t0, 5)
             desc_obj.update(pbdb_time=t1)
             desc_obj.update(pbdb_url=res.url)
