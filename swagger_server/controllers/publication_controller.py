@@ -83,12 +83,12 @@ def pub(occid=None, siteid=None, format=None):
                        error='Specify occurrence ID or site ID.')
 
     # Issue GET request to database API
-    res = requests.get(base_url, params=payload, timeout=None)
+    resp = requests.get(base_url, params=payload, timeout=None)
 
-    if res.status_code == 200:
-        res_json = res.json()
-        if 'records' in res_json:
-            for rec in res_json['records']:
+    if resp.status_code == 200:
+        resp_json = resp.json()
+        if 'records' in resp_json:
+            for rec in resp_json['records']:
 
                 # Format publication "volume(issue)"
                 if 'pubvol' in rec:
@@ -109,12 +109,12 @@ def pub(occid=None, siteid=None, format=None):
                 # Format author fields
                 author_list = list()
                 if 'author1last' in rec:
-                    author1 = rec['author1last']
+                    author1 = rec['author1last'].replace(',', '')
                     if 'author1init' in rec:
                         author1 += ', ' + rec['author1init']
                     author_list.append(author1)
                 if 'author2last' in rec:
-                    author2 = rec['author2last']
+                    author2 = rec['author2last'].replace(',', '')
                     if 'author2init' in rec:
                         author2 += ', ' + rec['author2init']
                     author_list.append(author2)
@@ -123,7 +123,7 @@ def pub(occid=None, siteid=None, format=None):
                     for next_author in more_authors:
                         surname = re.search('[A-Z][a-z]+', next_author)
                         name = surname.group() + ', ' + \
-                               next_author[0: surname.start()-1]
+                            next_author[0: surname.start()-1]
                         name = name.replace(', and', ', ')
                         author_list.append(name)
 
@@ -156,10 +156,10 @@ def pub(occid=None, siteid=None, format=None):
                 pub_return.append(bib_obj)
 
             # Build the JSON description object
-            t1 = round(time.time()-t0, 5)
-            desc_obj.update(pbdb_time=t1)
-            desc_obj.update(pbdb_url=res.url)
-            desc_obj.update(pbdb_pubs=len(res_json['records']))
+            t1 = round(time.time()-t0, 3)
+            desc_obj.update(pbdb={'response_time': t1,
+                                  'subqueries': resp.url,
+                                  'record_count': len(resp_json['records'])})
 
     # Composite response
     return jsonify(description=desc_obj, records=pub_return)
