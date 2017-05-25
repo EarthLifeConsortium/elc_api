@@ -86,7 +86,6 @@ def pub(occid=None, siteid=None, format=None):
     res = requests.get(base_url, params=payload, timeout=None)
 
     if res.status_code == 200:
-        print('--->', res.content)
         res_json = res.json()
         if 'records' in res_json:
             for rec in res_json['records']:
@@ -128,7 +127,6 @@ def pub(occid=None, siteid=None, format=None):
                         name = name.replace(', and', ', ')
                         author_list.append(name)
 
-                print('--->', author_list)
                 # Format the unique database identifier
                 pub_id = 'pbdb:pub:' + str(rec['reference_no'])
 
