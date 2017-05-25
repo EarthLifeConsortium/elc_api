@@ -10,15 +10,34 @@ import time
 from statistics import mean
 
 
+def format_json(occ):
+    """Format the occurrence data as a JSON return."""
+    fmt_occ = dict()
+
+    for key in occ:
+        fmt_occ.update({key: occ[key]})
+
+    # End subroutine: format_json
+    return fmt_occ
+
+
+def format_csv(occ):
+    """Format the occurrence data as a tabular CSV file."""
+    fmt_occ = dict()
+
+    # End subroutine: format_csv
+    return fmt_occ
+
+
 def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
-        taxon=None, includelower=None, limit=None, offset=None, show=None):
+        taxon=None, includelower=None, limit=None, offset=None, show=None,
+        format=None):
     """
     Return occurrence identifiers from Neotoma and PBDB.
 
-    With show=all, return expanded geography and age data for each occurrence.
+    With show=full, return expanded geography and age data for each occurrence.
     """
     # Initialization and parameter checks
-
     if request.args == {}:
         return jsonify(status_code=400, error='No parameters provided.')
 
@@ -28,15 +47,17 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     geog_units = 'dec_deg_modern'
     full_return = False
 
-    if show and show.lower() == 'all':
+    if show and show.lower() == 'full':
         full_return = True
 
+    #
     # Query the Neotoma Database (Occurrences)
-
+    #
     t0 = time.time()
     base_url = 'http://apidev.neotomadb.org/v1/data/occurrences'
     payload = dict()
 
+    # Initialization and parameter mapping
     if bbox:
         payload.update(bbox=bbox)
 
@@ -80,43 +101,60 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     if offset:
         payload.update(offset=offset)
 
+    # Issue GET request to database API
     resp = requests.get(base_url, params=payload, timeout=None)
 
     if resp.status_code == 200:
         resp_json = resp.json()
         if 'data' in resp_json:
-            for occ in resp_json['data']:
-                occ_obj = dict()
-                occ_id = 'neot:occ:' + str(occ['OccurID'])
-                occ_obj.update(occ_id=occ_id, taxon=occ['TaxonName'])
+            for rec in resp_json['data']:
+                occ_id = 'neot:occ:' + str(rec['OccurID'])
+
+                occ = dict()
+                occ.update(occ_id=occ_id,
+                           taxon=rec.get('TaxonName'))
 
                 if full_return:
-                    taxon_id = 'neot:txn:' + str(occ['TaxonID'])
-                    if occ['AgeOlder'] and occ['AgeYounger']:
-                        max_age = occ['AgeOlder'] * age_scaler
-                        min_age = occ['AgeYounger'] * age_scaler
+                    taxon_id = 'neot:txn:' + str(rec['TaxonID'])
+
+                    if rec['AgeOlder'] and rec['AgeYounger']:
+                        max_age = rec['AgeOlder'] * age_scaler
+                        min_age = rec['AgeYounger'] * age_scaler
                     else:
                         max_age = None
                         min_age = None
-                    lat = mean([occ['LatitudeNorth'],
-                                occ['LatitudeSouth']])
-                    # lat = round(lat, 4)
-                    lon = mean([occ['LongitudeEast'],
-                                occ['LongitudeWest']])
-                    # lon = round(lon, 4)
-                    occ_obj.update(taxon_id=taxon_id, max_age=max_age,
-                                   min_age=min_age, age_units=age_units,
-                                   lat=lat, lon=lon, geog_units=geog_units)
 
+                    lat = mean([rec['LatitudeNorth'],
+                                rec['LatitudeSouth']])
+                    lon = mean([rec['LongitudeEast'],
+                                rec['LongitudeWest']])
+
+                    occ.update(taxon_id=taxon_id,
+                               max_age=max_age,
+                               min_age=min_age,
+                               age_units=age_units,
+                               lat=lat,
+                               lon=lon,
+                               geog_units=geog_units)
+
+                # Call the appropriate output formatter
+                if format and format.lower() == 'csv':
+                    occ_obj = format_csv(occ)
+                else:
+                    occ_obj = format_json(occ)
+
+                # Add the fomatted occurrence to the return
                 occ_return.append(occ_obj)
 
+            # Build the JSON description object
             t1 = round(time.time()-t0, 3)
             desc_obj.update(neotoma={'response_time': t1,
                                      'subqueries': resp.url,
                                      'record_count': len(resp_json['data'])})
 
+    #
     # Query the Paleobiology Database (Occurrences)
-
+    #
     t0 = time.time()
     base_url = 'http://paleobiodb.org/data1.2/occs/list.json'
     payload = dict()
@@ -172,34 +210,47 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     if resp.status_code == 200:
         resp_json = resp.json()
         if 'records' in resp_json:
-            for occ in resp_json['records']:
-                occ_obj = dict()
-                occ_id = 'pbdb:occ:' + str(occ['occurrence_no'])
-                occ_obj.update(occ_id=occ_id, taxon=occ['accepted_name'])
+            for rec in resp_json['records']:
+                occ = dict()
+                occ_id = 'pbdb:occ:' + str(rec['occurrence_no'])
+                occ.update(occ_id=occ_id,
+                           taxon=rec.get('accepted_name'))
 
                 if full_return:
-                    taxon_id = 'pbdb:txn:' + str(occ['accepted_no'])
-                    if occ['max_ma'] and occ['min_ma']:
-                        max_age = float(occ['max_ma']) * age_scaler
-                        min_age = float(occ['min_ma']) * age_scaler
+                    taxon_id = 'pbdb:txn:' + str(rec['accepted_no'])
+
+                    if rec['max_ma'] and rec['min_ma']:
+                        max_age = float(rec['max_ma']) * age_scaler
+                        min_age = float(rec['min_ma']) * age_scaler
                     else:
                         max_age = None
                         min_age = None
-                    lat = float(occ['lat'])
-                    lat = round(lat, 4)
-                    lon = float(occ['lng'])
-                    lon = round(lon, 4)
-                    occ_obj.update(taxon_id=taxon_id, max_age=max_age,
-                                   min_age=min_age, age_units=age_units,
-                                   lat=lat, lon=lon, geog_units=geog_units)
 
+                    lat = float(rec['lat'])
+                    lon = float(rec['lng'])
+
+                    occ.update(taxon_id=taxon_id,
+                               max_age=max_age,
+                               min_age=min_age,
+                               age_units=age_units,
+                               lat=lat,
+                               lon=lon,
+                               geog_units=geog_units)
+
+                # Call the appropriate output formatter
+                if format and format.lower() == 'csv':
+                    occ_obj = format_csv(occ)
+                else:
+                    occ_obj = format_json(occ)
+
+                # Add the fomatted occurrence to the return
                 occ_return.append(occ_obj)
 
+            # Build the JSON description object
             t1 = round(time.time()-t0, 3)
             desc_obj.update(pbdb={'response_time': t1,
                                   'subqueries': resp.url,
                                   'record_count': len(resp_json['records'])})
 
     # Composite response
-
     return jsonify(description=desc_obj, records=occ_return)
