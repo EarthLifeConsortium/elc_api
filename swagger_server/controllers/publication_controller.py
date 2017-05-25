@@ -12,7 +12,6 @@ import re
 
 def format_bibjson(ref):
     """Format BibJSON object."""
-    print(ref)
     bib = dict()
 
     # Add basic reference info
@@ -25,20 +24,12 @@ def format_bibjson(ref):
 
     # Add reference locator IDs
     bib.update(identifier=[{'type': 'doi', 'id': ref['doi']},
-                           {'type': 'database', 'id': ref['ident']}])
+                           {'type': 'db_index', 'id': ref['ident']}])
 
     # Sequentially add authors to the authors block
-    bib.update(author=[{'name': ref['auth1']}])
-    if ref['auth2']:
-        bib['author'].append({'name': ref['auth2']})
-    # Parse other authors and reverse the initials and surname
-    if ref['auth3']:
-        print('-----> ', ref['auth3'])
-        other_authors = ref['auth3'].split(', ')
-        for next_author in other_authors:
-            surname = re.search('[A-Z][a-z]+', next_author)
-            name = surname.group() + ', ' + next_author[0: surname.start()-1]
-            bib['author'].append({'name': name})
+    bib.update(author=[])
+    for author in ref['authors']:
+        bib['author'].append({'name': author})
 
     # End subroutine: format_bibjson
     return bib
@@ -95,6 +86,7 @@ def pub(occid=None, siteid=None, format=None):
     res = requests.get(base_url, params=payload, timeout=None)
 
     if res.status_code == 200:
+        print('--->', res.content)
         res_json = res.json()
         if 'records' in res_json:
             for rec in res_json['records']:
@@ -116,23 +108,27 @@ def pub(occid=None, siteid=None, format=None):
                     page_range = None
 
                 # Format author fields
+                author_list = list()
                 if 'author1last' in rec:
-                    author_1 = rec['author1last']
+                    author1 = rec['author1last']
                     if 'author1init' in rec:
-                        author_1 += ', ' + rec['author1init']
-                else:
-                    author_1 = None
+                        author1 += ', ' + rec['author1init']
+                    author_list.append(author1)
                 if 'author2last' in rec:
-                    author_2 = rec['author2last']
+                    author2 = rec['author2last']
                     if 'author2init' in rec:
-                        author_2 += ', ' + rec['author2init']
-                else:
-                    author_2 = None
+                        author2 += ', ' + rec['author2init']
+                    author_list.append(author2)
                 if 'otherauthors' in rec:
-                    author_other = rec['otherauthors'].split(', ')
-                else:
-                    author_other = None
+                    more_authors = rec['otherauthors'].split(', ')
+                    for next_author in more_authors:
+                        surname = re.search('[A-Z][a-z]+', next_author)
+                        name = surname.group() + ', ' + \
+                               next_author[0: surname.start()-1]
+                        name = name.replace(', and', ', ')
+                        author_list.append(name)
 
+                print('--->', author_list)
                 # Format the unique database identifier
                 pub_id = 'pbdb:pub:' + str(rec['reference_no'])
 
@@ -146,11 +142,9 @@ def pub(occid=None, siteid=None, format=None):
                            editor=rec.get('editors'),
                            pages=page_range,
                            doi=rec.get('doi'),
-                           auth1=author_1,
-                           auth2=author_2,
-                           auth3=author_other,
+                           authors=author_list,
                            ident=pub_id,
-                           cite=rec.get('bibliographicCitation'))
+                           cite=rec.get('formatted'))
 
                 # Call the appropriate bibliographic formatter
                 if format and format.lower() == 'ris':
