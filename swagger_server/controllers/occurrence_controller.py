@@ -4,13 +4,6 @@ RESTful API controller.
 Endpoint for queries on taxonomic occurrences in time and space.
 """
 
-# import connexion
-# from swagger_server.models.error_model import ErrorModel
-# from swagger_server.models.occurrence import Occurrence
-# from datetime import date, datetime
-# from typing import List, Dict
-# from six import iteritems
-# from ..util import deserialize_date, deserialize_datetime
 from flask import request, jsonify
 import requests
 import time
@@ -41,7 +34,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     # Query the Neotoma Database (Occurrences)
 
     t0 = time.time()
-    neotoma_base = 'http://apidev.neotomadb.org/v1/data/occurrences'
+    base_url = 'http://apidev.neotomadb.org/v1/data/occurrences'
     payload = dict()
 
     if bbox:
@@ -87,12 +80,12 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     if offset:
         payload.update(offset=offset)
 
-    neotoma_res = requests.get(neotoma_base, params=payload, timeout=None)
+    resp = requests.get(base_url, params=payload, timeout=None)
 
-    if neotoma_res.status_code == 200:
-        neotoma_json = neotoma_res.json()
-        if 'data' in neotoma_json:
-            for occ in neotoma_json['data']:
+    if resp.status_code == 200:
+        resp_json = resp.json()
+        if 'data' in resp_json:
+            for occ in resp_json['data']:
                 occ_obj = dict()
                 occ_id = 'neot:occ:' + str(occ['OccurID'])
                 occ_obj.update(occ_id=occ_id, taxon=occ['TaxonName'])
@@ -117,15 +110,15 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
 
                 occ_return.append(occ_obj)
 
-            t1 = round(time.time()-t0, 5)
-            desc_obj.update(neot_time=t1)
-            desc_obj.update(neot_url=neotoma_res.url)
-            desc_obj.update(neot_occs=len(neotoma_json['data']))
+            t1 = round(time.time()-t0, 3)
+            desc_obj.update(neotoma={'response_time': t1,
+                                     'subqueries': resp.url,
+                                     'record_count': len(resp_json['data'])})
 
     # Query the Paleobiology Database (Occurrences)
 
     t0 = time.time()
-    pbdb_base = 'http://paleobiodb.org/data1.2/occs/list.json'
+    base_url = 'http://paleobiodb.org/data1.2/occs/list.json'
     payload = dict()
     if full_return:
         payload.update(show='loc,coords,coll')
@@ -174,12 +167,12 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     if offset:
         payload.update(offset=offset)
 
-    pbdb_res = requests.get(pbdb_base, params=payload, timeout=None)
+    resp = requests.get(base_url, params=payload, timeout=None)
 
-    if pbdb_res.status_code == 200:
-        pbdb_json = pbdb_res.json()
-        if 'records' in pbdb_json:
-            for occ in pbdb_json['records']:
+    if resp.status_code == 200:
+        resp_json = resp.json()
+        if 'records' in resp_json:
+            for occ in resp_json['records']:
                 occ_obj = dict()
                 occ_id = 'pbdb:occ:' + str(occ['occurrence_no'])
                 occ_obj.update(occ_id=occ_id, taxon=occ['accepted_name'])
@@ -202,10 +195,10 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
 
                 occ_return.append(occ_obj)
 
-            t1 = round(time.time()-t0, 5)
-            desc_obj.update(pbdb_time=t1)
-            desc_obj.update(pbdb_url=pbdb_res.url)
-            desc_obj.update(pbdb_occs=len(pbdb_json['records']))
+            t1 = round(time.time()-t0, 3)
+            desc_obj.update(pbdb={'response_time': t1,
+                                  'subqueries': resp.url,
+                                  'record_count': len(resp_json['records'])})
 
     # Composite response
 
