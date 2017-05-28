@@ -1,16 +1,9 @@
 """
 RESTful API controller.
 
-Endpoint for queries on geolocated sites.
+Endpoint for queries on geolocated sites (locales)
 """
 
-# import connexion
-# from swagger_server.models.error_model import ErrorModel
-# from swagger_server.models.site import Site
-# from datetime import date, datetime
-# from typing import List, Dict
-# from six import iteritems
-# from ..util import deserialize_date, deserialize_datetime
 from flask import request, jsonify
 import requests
 import time
@@ -19,10 +12,10 @@ from statistics import mean
 
 def site(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerule=None, taxon=None, includelower=None):
     """
-    Return site identifiers from Neotoma and PBDB.
+    Return locale identifiers from Neotoma and PBDB.
 
-    For this API, a site is considered to be a geolocated group of 
-    Neotoma datasets and PBDB collections.
+    A locale in PBDB is a collection, in Neotoma it it every individual
+    dataset in a site.
     """
     # Initialization and parameter checks
 
@@ -30,16 +23,14 @@ def site(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerul
         return jsonify(status_code=400, error='No parameters provided.')
 
     desc_obj = dict()
-    occ_return = list()
+    loc_return = list()
     age_units = 'ma'
     geog_units = 'dec_deg_modern'
     full_return = False
 
-    if show and show.lower() == 'all':
-        full_return = True
-
+    #
     # Query the Neotoma Database (Sites)
-
+    #
     # t0 = time.time()
     # neotoma_base = 'http://apidev.neotomadb.org/v1/data/datasets'
     # payload = dict()
@@ -85,13 +76,20 @@ def site(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerul
     
     # ### Parse neotoma response
 
+
+
+
+
+    #
     # Query the Paleobiology Database (Sites)
+    #
 
     t0 = time.time()
-    pbdb_base = 'http://paleobiodb.org/data1.2/colls/list.json'
+    base_url = 'http://paleobiodb.org/data1.2/colls/list.json'
     payload = dict()
-    payload.update(show='loc,coords,coll')
-    payload.update(vocab='pbdb')
+    payload.update(vocab='pbdb', show='loc')
+
+    # Parse arguments and format database api parameters
 
     if occid:
         payload.update(occ_id=occid)
@@ -131,24 +129,33 @@ def site(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerul
     else:
         payload.update(base_name=taxon)
 
-    pbdb_res = requests.get(pbdb_base, params=payload, timeout=None)
+    # Issue GET request to database API
+    resp = requests.get(base_url, params=payload, timeout=5)
 
-    if pbdb_res.status_code == 200:
-        pbdb_json = pbdb_res.json()
-        if 'records' in pbdb_json:
-            for site in pbdb_json['records']:
-                site_obj = dict()
-                site_id = 'pbdb:sit:' + str(site['collection_no'])
-                site_obj.update(site_id=site_id,
-                                site_name=site['collection_name'],
-                                lat=site['lat'],
-                                lon=site['lng'])
+    if resp.status_code == 200:
+        resp_json = resp.json()
+        if 'records' in resp_json:
+            for rec in resp_json['records']:
+                loc_obj = dict()
+                loc_id = 'pbdb:loc:' + str(rec.get('collection_no'))
+                loc_obj.update(lat=rec.get('lat'),
+                                lon=rec.get('lng'),
+                                name=rec.get('collection_name'),
+                                dataset_type='faunal',
+                                min_age=min_age,
+                                max_age=max_age,
+                                age_basis=None,
+                                loc_id=loc_id,
+                                occurrences=occ_list)
 
-            t1 = round(time.time()-t0, 5)
-            desc_obj.update(pbdb_time=t1)
-            desc_obj.update(pbdb_url=pbdb_res.url)
-            desc_obj.update(pbdb_occs=len(pbdb_json['records']))
+                # Add the fomatted locale data to the return
+                loc_return.append(loc_obj)
 
+            # Build the JSON description object
+            t1 = round(time.time()-t0, 3)
+            desc_obj.update(pbdb={'response_time': t1,
+                                  'subqueries': resp.url,
+                                  'record_count': len(resp_json['records'])})
     # Composite response
 
-    return jsonify(description=desc_obj, records=occ_return)
+    return jsonify(description=desc_obj, records=loc_return)
