@@ -83,7 +83,7 @@ def pub(occid=None, siteid=None, format=None):
                        error='Specify occurrence ID or site ID.')
 
     # Issue GET request to database API
-    resp = requests.get(base_url, params=payload, timeout=None)
+    resp = requests.get(base_url, params=payload, timeout=5)
 
     if resp.status_code == 200:
         resp_json = resp.json()
