@@ -1,33 +1,161 @@
-import connexion
-from swagger_server.models.error_model import ErrorModel
-from swagger_server.models.site import Site
-from datetime import date, datetime
-from typing import List, Dict
-from six import iteritems
-from ..util import deserialize_date, deserialize_datetime
+"""
+RESTful API controller.
+
+Endpoint for queries on geolocated sites (locales)
+"""
+
+from flask import request, jsonify
+import requests
+import time
+from statistics import mean
 
 
 def site(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerule=None, taxon=None, includelower=None):
     """
-    Sample sites or localities
-    Return sampling locations in space and time, excluding occurrence records. This may return multiple stes from a common spatial location if the samples from the synthetic sites represent unique collections. This terminology is similar to the the datasets concept in Neotoma
-    :param occid: Unique numeric ID, or vector of IDs for occurrences
-    :type occid: int
-    :param bbox: Bounding box definition, either as a numeric vector of form [lonW, latS, lonE, latN] or as structured WKT text
-    :type bbox: str
-    :param minage: The most recent age for the temporal search window. By default the minage is  present, or not used in queries. Units are millions of years ago, unless defined using agescale
-    :type minage: float
-    :param maxage: The oldest age for the temporal search window. Units are millions of years ago, unless defined using agescale
-    :type maxage: float
-    :param agescale: The units for maxage and minage. Allowable units are yr, ka or ma
-    :type agescale: str
-    :param timerule: Control the application of the temporal bounding box. May choose one of three rules, contain, all samples must be fully within the temporal bounding box; major, more than half of an occurrences temporal uncertainty must be within the bounding box; overlap, any portion of an occurrence may be withing the bounding box
-    :type timerule: str
-    :param taxon: Taxonomic name. May be truncated, a list of taxa or use wildcards. If a specific taxon ID or a vector of IDs is known that parameter can be passed through taxon. Taxon lists must be passed using JSON formating. By default, returns only taxa named in the query. Use includelower if all lower taxa are desired
-    :type taxon: str
-    :param includelower: A boolean, if TRUE, all species and subspecies lower taxa of a named genera will be included in the response
-    :type includelower: bool
+    Return locale identifiers from Neotoma and PBDB.
 
-    :rtype: List[Site]
+    A locale in PBDB is a collection, in Neotoma it it every individual
+    dataset in a site.
     """
-    return 'do some magic!'
+    # Initialization and parameter checks
+
+    if request.args == {}:
+        return jsonify(status_code=400, error='No parameters provided.')
+
+    desc_obj = dict()
+    loc_return = list()
+    age_units = 'ma'
+    geog_units = 'dec_deg_modern'
+    full_return = False
+
+    #
+    # Query the Neotoma Database (Sites)
+    #
+    # t0 = time.time()
+    # neotoma_base = 'http://apidev.neotomadb.org/v1/data/datasets'
+    # payload = dict()
+
+    # ### if occid:
+
+    # if bbox:
+    #     payload.update(bbox=bbox)
+
+    # if agescale and agescale.lower() == 'yr':
+    #     age_scaler = 1
+    #     age_units = 'yr'
+    #     if minage:
+    #         payload.update(ageyoung=int(minage))
+    #     if maxage:
+    #         payload.update(ageold=int(maxage))
+    # elif agescale and agescale.lower() == 'ka':
+    #     age_scaler = 1e-03
+    #     age_units = 'ka'
+    #     if minage:
+    #         payload.update(ageyoung=int(minage/age_scaler))
+    #     if maxage:
+    #         payload.update(ageold=int(maxage/age_scaler))
+    # else:
+    #     age_scaler = 1e-06
+    #     age_units = 'ma'
+    #     if minage:
+    #         payload.update(ageyoung=int(minage/age_scaler))
+    #     if maxage:
+    #         payload.update(ageold=int(maxage/age_scaler))
+
+    # if timerule and timerule.lower() == 'major':
+    #     payload.update(agedocontain=0)
+    # elif timerule and timerule.lower() == 'overlap':
+    #     payload.update(agedocontain=1)
+
+    # if includelower and includelower.lower() == 'false':
+    #     payload.update(nametype='tax', taxonname=taxon)
+    # else:
+    #     payload.update(nametype='base', taxonname=taxon)
+
+    # neotoma_res = requests.get(neotoma_base, params=payload, timeout=None)
+    
+    # ### Parse neotoma response
+
+
+
+
+
+    #
+    # Query the Paleobiology Database (Sites)
+    #
+
+    t0 = time.time()
+    base_url = 'http://paleobiodb.org/data1.2/colls/list.json'
+    payload = dict()
+    payload.update(vocab='pbdb', show='loc')
+
+    # Parse arguments and format database api parameters
+
+    if occid:
+        payload.update(occ_id=occid)
+
+    if bbox:
+        bbox_list = bbox.split(',')
+        payload.update(lngmin=bbox_list[0], latmin=bbox_list[1],
+                       lngmax=bbox_list[2], latmax=bbox_list[3])
+
+    if agescale and agescale.lower() == 'yr':
+        age_scaler = 1e06
+        age_units = 'yr'
+        if minage:
+            payload.update(min_ma=float(minage)/age_scaler)
+        if maxage:
+            payload.update(max_ma=float(maxage)/age_scaler)
+    elif agescale and agescale.lower() == 'ka':
+        age_scaler = 1e03
+        age_units = 'ka'
+        if minage:
+            payload.update(min_ma=float(minage)/age_scaler)
+        if maxage:
+            payload.update(max_ma=float(maxage)/age_scaler)
+    else:
+        age_scaler = 1
+        age_units = 'ma'
+        if minage:
+            payload.update(min_ma=minage)
+        if maxage:
+            payload.update(max_ma=maxage)
+
+    if timerule:
+        payload.update(timerule=timerule)
+
+    if includelower and includelower.lower() == 'false':
+        payload.update(taxon_name=taxon)
+    else:
+        payload.update(base_name=taxon)
+
+    # Issue GET request to database API
+    resp = requests.get(base_url, params=payload, timeout=5)
+
+    if resp.status_code == 200:
+        resp_json = resp.json()
+        if 'records' in resp_json:
+            for rec in resp_json['records']:
+                loc_obj = dict()
+                loc_id = 'pbdb:loc:' + str(rec.get('collection_no'))
+                loc_obj.update(lat=rec.get('lat'),
+                                lon=rec.get('lng'),
+                                name=rec.get('collection_name'),
+                                dataset_type='faunal',
+                                min_age=min_age,
+                                max_age=max_age,
+                                age_basis=None,
+                                loc_id=loc_id,
+                                occurrences=occ_list)
+
+                # Add the fomatted locale data to the return
+                loc_return.append(loc_obj)
+
+            # Build the JSON description object
+            t1 = round(time.time()-t0, 3)
+            desc_obj.update(pbdb={'response_time': t1,
+                                  'subqueries': resp.url,
+                                  'record_count': len(resp_json['records'])})
+    # Composite response
+
+    return jsonify(description=desc_obj, records=loc_return)
