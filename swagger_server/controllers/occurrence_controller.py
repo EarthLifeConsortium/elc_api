@@ -44,7 +44,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     desc_obj = dict()
     occ_return = list()
     age_units = 'ma'
-    geog_units = 'dec_deg_modern'
+    geog_coords = 'modern'
     full_return = False
 
     if show and show.lower() == 'full':
@@ -135,7 +135,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                                age_units=age_units,
                                lat=lat,
                                lon=lon,
-                               geog_units=geog_units)
+                               geog_coords=geog_coords)
 
                 # Call the appropriate output formatter
                 if format and format.lower() == 'csv':
@@ -235,7 +235,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                                age_units=age_units,
                                lat=lat,
                                lon=lon,
-                               geog_units=geog_units)
+                               geog_coords=geog_coords)
 
                 # Call the appropriate output formatter
                 if format and format.lower() == 'csv':

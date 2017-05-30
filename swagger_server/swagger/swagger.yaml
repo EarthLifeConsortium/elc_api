@@ -13,15 +13,18 @@ consumes:
 - "application/json"
 produces:
 - "application/json"
+- "text/csv"
+- "text/plain"
 paths:
   /age:
     get:
       tags:
       - "Age_Basis"
       summary: "Generation method of age estimates for the occurrence or site"
-      description: "Samples often have assigned temporal uncertainty estimates, whether\
-        \ from C-14 dates, stratigraphic uncertainty, or other dating techniques.\
-        \  This endpoint returns the basis for the age uncertainty estimate"
+      description: "Samples often have assigned temporal uncertainty\
+        \ estimates, whether from C-14 dates, stratigraphic uncertainty, or\
+        \ other dating techniques. This endpoint returns the basis for the age\
+        \ uncertainty estimate"
       operationId: "age"
       produces:
       - "application/json"
@@ -57,7 +60,8 @@ paths:
       tags:
       - "Grid_Assemblage"
       summary: "Gridded assemblage data"
-      description: "Returns assemblage data at pre-built grid sizes for faster returns"
+      description: "Returns assemblage data at pre-built grid sizes for\
+        \ faster returns"
       operationId: "grid"
       produces:
       - "application/json"
@@ -116,80 +120,85 @@ paths:
       tags:
       - "Occurrence"
       summary: "Fossil occurrences in a specific place and time"
-      description: "Return fossil occurrences from the Paleobiology (PBDB) and Neotoma\
-        \ Databases."
+      description: "Return fossil occurrences from the Paleobiology (PBDB)\
+        \ and Neotoma Databases."
       operationId: "occ"
       produces:
       - "application/json"
+      - "text/csv"
       parameters:
       - name: "bbox"
         in: "query"
-        description: "Bounding box definition, either as a numeric vector of form\
-          \ [lonW, latS, lonE, latN] or as structured WKT text"
+        description: "Bounding box definition, either as a numeric vector of\
+          \ form [lonW, latS, lonE, latN] or as structured WKT text"
         required: false
         type: "string"
       - name: "minage"
         in: "query"
-        description: "The most recent age for the temporal search window. By default\
-          \ the minage is  present, or not used in queries. Units are millions of\
-          \ years ago, unless defined using agescale"
+        description: "The most recent age for the temporal search window. By\
+          \ default the minage is  present, or not used in queries. Units are\
+          \ millions of years ago, unless defined using agescale"
         required: false
         type: "number"
         format: "double"
       - name: "maxage"
         in: "query"
-        description: "The oldest age for the temporal search window. Units are millions\
-          \ of years ago, unless defined using agescale"
+        description: "The oldest age for the temporal search window. Units\
+          \ are millions of years ago, unless defined using agescale"
         required: false
         type: "number"
         format: "double"
       - name: "agescale"
         in: "query"
-        description: "The units for maxage and minage. Allowable units are yr, ka\
-          \ or ma"
+        description: "The units for maxage and minage. Allowable units are yr,\
+          \ ka or ma"
         required: false
         type: "string"
       - name: "timerule"
         in: "query"
-        description: "Control the application of the temporal bounding box. May choose\
-          \ one of three rules, contain, all samples must be fully within the temporal\
-          \ bounding box; major, more than half of an occurrences temporal uncertainty\
-          \ must be within the bounding box; overlap, any portion of an occurrence\
-          \ may be withing the bounding box"
+        description: "Control the application of the temporal bounding box.\
+          \ May choose one of three rules, contain, all samples must be fully\
+          \ within the temporal bounding box; major, more than half of an\
+          \ occurrences temporal uncertainty must be within the bounding box;\
+          \ overlap, any portion of an occurrence may be withing the bounding\
+          \ box"
         required: false
         type: "string"
       - name: "taxon"
         in: "query"
-        description: "Taxonomic name. May be truncated, a list of taxa or use wildcards.\
-          \ If a specific taxon ID or a vector of IDs is known that parameter can\
-          \ be passed through taxon. Taxon lists must be passed using JSON formating.\
-          \ By default, returns only taxa named in the query. Use includelower if\
-          \ all lower taxa are desired"
+        description: "Taxonomic name. May be truncated, a list of taxa or use\
+          \ wildcards. If a specific taxon ID or a vector of IDs is known that\
+          \ parameter can be passed through taxon. Taxon lists must be passed\
+          \ using JSON formating. By default, returns only taxa named in the\
+          \ query. Use includelower if all lower taxa are desired"
         required: false
         type: "string"
       - name: "includelower"
         in: "query"
-        description: "Retrieve lower taxa. A boolean. If TRUE, all species and subspecies\
-          \ of a named genera will be included in the response"
+        description: "Retrieve lower taxa. A boolean. If TRUE, all species\
+          \ and subspecies of a named genera will be included in the response"
         required: false
         type: "boolean"
       - name: "limit"
         in: "query"
-        description: "Limit the number of records in the response for large queries"
+        description: "Limit the number of records in the response for large\
+          \ queries"
         required: false
         type: "integer"
         format: "int32"
       - name: "offset"
         in: "query"
-        description: "Begin the response from a designated point within the larger\
-          \ query. In this way, <i>limit</i> and <i>offset</i> can be used to produce\
-          \ serial queries to the API to avoid issues with larger responses"
+        description: "Begin the response from a designated point within the\
+          \ larger query. In this way, <i>limit</i> and <i>offset</i> can be\
+          \ used to produce serial queries to the API to avoid issues with\
+          \ larger responses"
         required: false
         type: "integer"
         format: "int32"
       - name: "show"
         in: "query"
-        description: "Return extended data objects. Currently the only option is show=all"
+        description: "Return extended data objects. Currently the only option\
+          \ is show=full"
         required: false
         type: "string"
       responses:
@@ -211,11 +220,13 @@ paths:
       tags:
       - "Publication"
       summary: "Scientific publications associated with sites or occurrences"
-      description: "Uses unique site IDs or occurrence IDs to return the set of publications\
-        \ associated with a query to enable citation"
+      description: "Uses unique site IDs or occurrence IDs to return the set\
+        \ of publications associated with a query to enable citation"
       operationId: "pub"
       produces:
       - "application/json"
+      - "text/csv"
+      - "text/plain"
       parameters:
       - name: "occid"
         in: "query"
@@ -252,13 +263,15 @@ paths:
       tags:
       - "Site"
       summary: "Sample sites or localities"
-      description: "Return sampling locations in space and time, excluding occurrence\
-        \ records. This may return multiple stes from a common spatial location if\
-        \ the samples from the synthetic sites represent unique collections. This\
-        \ terminology is similar to the the datasets concept in Neotoma"
+      description: "Return sampling locations in space and time, excluding\
+        \ occurrence records. This may return multiple stes from a common\
+        \ spatial location if the samples from the synthetic sites represent\
+        \ unique collections. This terminology is similar to the the datasets\
+        \ concept in Neotoma"
       operationId: "site"
       produces:
       - "application/json"
+      - "text/csv"
       parameters:
       - name: "occid"
         in: "query"
@@ -268,53 +281,54 @@ paths:
         format: "int32"
       - name: "bbox"
         in: "query"
-        description: "Bounding box definition, either as a numeric vector of form\
-          \ [lonW, latS, lonE, latN] or as structured WKT text"
+        description: "Bounding box definition, either as a numeric vector of\
+          \ form [lonW, latS, lonE, latN] or as structured WKT text"
         required: false
         type: "string"
       - name: "minage"
         in: "query"
-        description: "The most recent age for the temporal search window. By default\
-          \ the minage is  present, or not used in queries. Units are millions of\
-          \ years ago, unless defined using agescale"
+        description: "The most recent age for the temporal search window. By\
+          \ default the minage is  present, or not used in queries. Units are\
+          \ millions of years ago, unless defined using agescale"
         required: false
         type: "number"
         format: "double"
       - name: "maxage"
         in: "query"
-        description: "The oldest age for the temporal search window. Units are millions\
-          \ of years ago, unless defined using agescale"
+        description: "The oldest age for the temporal search window. Units\
+          \ are millions of years ago, unless defined using agescale"
         required: false
         type: "number"
         format: "double"
       - name: "agescale"
         in: "query"
-        description: "The units for maxage and minage. Allowable units are yr, ka\
-          \ or ma"
+        description: "The units for maxage and minage. Allowable units are\ 
+          \ yr, ka or ma"
         required: false
         type: "string"
       - name: "timerule"
         in: "query"
-        description: "Control the application of the temporal bounding box. May choose\
-          \ one of three rules, contain, all samples must be fully within the temporal\
-          \ bounding box; major, more than half of an occurrences temporal uncertainty\
-          \ must be within the bounding box; overlap, any portion of an occurrence\
-          \ may be withing the bounding box"
+        description: "Control the application of the temporal bounding box.\
+          \ May choose one of three rules, contain, all samples must be fully\
+          \ within the temporal bounding box; major, more than half of an\
+          \ occurrences temporal uncertainty must be within the bounding box;\
+          \ overlap, any portion of an occurrence may be withing the bounding\
+          \ box"
         required: false
         type: "string"
       - name: "taxon"
         in: "query"
-        description: "Taxonomic name. May be truncated, a list of taxa or use wildcards.\
-          \ If a specific taxon ID or a vector of IDs is known that parameter can\
-          \ be passed through taxon. Taxon lists must be passed using JSON formating.\
-          \ By default, returns only taxa named in the query. Use includelower if\
-          \ all lower taxa are desired"
+        description: "Taxonomic name. May be truncated, a list of taxa or use\
+          \ wildcards. If a specific taxon ID or a vector of IDs is known that\
+          \ parameter can be passed through taxon. Taxon lists must be passed\
+          \ using JSON formating. By default, returns only taxa named in the\
+          \ query. Use includelower if all lower taxa are desired"
         required: false
         type: "string"
       - name: "includelower"
         in: "query"
-        description: "A boolean, if TRUE, all species and subspecies lower taxa of\
-          \ a named genera will be included in the response"
+        description: "A boolean, if TRUE, all species and subspecies lower\
+          \ taxa of a named genera will be included in the response"
         required: false
         type: "boolean"
       responses:
@@ -336,33 +350,35 @@ paths:
       tags:
       - "Taxonomy"
       summary: "Taxonomic information, or hierarchy"
-      description: "Returns detailed taxonomic information for the given query. Queries\
-        \ may include partial matches, and may request lower taxa using the boolean\
-        \ includelower parameter. In cases where hierarchy is also requested the user\
-        \ may set hierarchy to TRUE"
+      description: "Returns detailed taxonomic information for the given\
+        \ query. Queries may include partial matches, and may request lower\
+        \ taxa using the boolean includelower parameter. In cases where\
+        \ hierarchy is also requested the user may set hierarchy to TRUE"
       operationId: "taxon"
       produces:
       - "application/json"
+      - "text/csv"
       parameters:
       - name: "taxon"
         in: "query"
-        description: "Taxonomic name. May be truncated, a list of taxa or use wildcards.\
-          \ If a specific taxon ID or a vector of IDs is known that parameter can\
-          \ be passed through taxon. Taxon lists must be passed using JSON formating.\
-          \ By default, returns only taxa named in the query. If all lower taxa are\
-          \ desired in the return, use includelower"
+        description: "Taxonomic name. May be truncated, a list of taxa or use\
+          \ wildcards. If a specific taxon ID or a vector of IDs is known\
+          \ that parameter can be passed through taxon. Taxon lists must be\
+          \ passed using JSON formating. By default, returns only taxa named\
+          \ in the query. If all lower taxa are desired in the return, use\
+          \ includelower"
         required: false
         type: "string"
       - name: "includelower"
         in: "query"
-        description: "If TRUE, all species and subspecies of a named genera will be\
-          \ included in the response"
+        description: "If TRUE, all species and subspecies of a named genera\
+          \ will be included in the response"
         required: false
         type: "boolean"
       - name: "hierarchy"
         in: "query"
-        description: "If TRUE, the full hierarchy for the taxon will be included in\
-          \ the response, otherwise just the unique entry for a match"
+        description: "If TRUE, the full hierarchy for the taxon will be\
+          \ included in the response, otherwise just the unique entry for a match"
         required: false
         type: "boolean"
       responses:
@@ -386,23 +402,25 @@ definitions:
       pub_id:
         type: "integer"
         format: "int32"
-        description: "Unique identifier for a specific publication from the respective\
-          \ databases. Neotoma publications are prepended with ndb and PBDB publications\
-          \ are prepended with pdb"
+        description: "Unique identifier for a specific publication from the\
+          \ respective databases. Neotoma publications are prepended with neot\
+          \ and PBDB publications are prepended with pbdb"
       pub:
         type: "string"
         description: "Publication data, either as bibJSON or text string"
       sites:
         type: "array"
-        description: "If a vector of sites is passed to the query then the sites associated\
-          \ with this publication are listed here as a vector"
+        description: "If a vector of sites is passed to the query then the\
+          \ sites associated with this publication are listed here as a\
+          \ vector"
         items:
           type: "integer"
           format: "int32"
       occs:
         type: "array"
-        description: "If a vector of occurrences is passed to the query then the occurrences\
-          \ associated with this publication are listed here as a vector"
+        description: "If a vector of occurrences is passed to the query then\
+          \ the occurrences associated with this publication are listed here\
+          \ as a vector"
         items:
           type: "integer"
           format: "int32"
@@ -421,8 +439,7 @@ definitions:
     type: "object"
     properties:
       occ_id:
-        type: "integer"
-        format: "int32"
+        type: "string"
         description: "Unique occurrence ID"
       taxon:
         type: "string"
@@ -431,23 +448,27 @@ definitions:
         type: "string"
         description: "Unique taxonomic ID"
       max_age:
-        type: "string"
+        type: "number"
+        format: "double"
         description: "Oldest age of the occurrence"
       min_age:
-        type: "string"
+        type: "number"
+        format: "double"
         description: "Youngest age of the occurrence"
       age_units:
         type: "string"
         description: "Units of min and max age as yr, ka or ma"
       lat:
-        type: "string"
+        type: "number"
+        format: "double"
         description: "Occurrence latitude in decimal degrees"
       lon:
-        type: "string"
+        type: "number"
+        format: "double"
         description: "Occurrence longitude in decimal degrees"
-      geog_units:
+      geog_coords:
         type: "string"
-        description: "Geographic coordinate units as modern or paleo"
+        description: "Geographic coordinate type as modern or paleo"
   assemblage:
     type: "array"
     items:
@@ -476,7 +497,8 @@ definitions:
       site_id:
         type: "integer"
         format: "int32"
-        description: "Unique identifier for a specific site from the respective databases"
+        description: "Unique identifier for a specific site from the\ 
+          \ respective databases"
       lat:
         type: "number"
         format: "double"
