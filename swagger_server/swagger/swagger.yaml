@@ -233,9 +233,9 @@ paths:
         description: "Unique numeric ID, or vector of IDs for occurrences"
         required: false
         type: "string"
-      - name: "siteid"
+      - name: "locid"
         in: "query"
-        description: "Unique numeric ID, or vector of IDs for sites"
+        description: "Unique numeric ID, or vector of IDs for locale"
         required: false
         type: "string"
       - name: "format"
