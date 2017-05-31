@@ -399,31 +399,35 @@ definitions:
   publication:
     type: "object"
     properties:
-      pub_id:
-        type: "integer"
-        format: "int32"
-        description: "Unique identifier for a specific publication from the\
-          \ respective databases. Neotoma publications are prepended with neot\
-          \ and PBDB publications are prepended with pbdb"
-      pub:
+      author:
+        type: "array"
+        description: "Parsed list of author names"
+        items:
+          type: "string"
+      citation:
         type: "string"
-        description: "Publication data, either as bibJSON or text string"
-      sites:
+        description: "Formated APA citation. For legacy reasons, this is all\
+          \ that is currently available for Neotoma references"
+      identifier:
         type: "array"
-        description: "If a vector of sites is passed to the query then the\
-          \ sites associated with this publication are listed here as a\
-          \ vector"
+        description: "Container for DOI and unique database reference index"
         items:
-          type: "integer"
-          format: "int32"
-      occs:
+          type: "string"
+      journal:
         type: "array"
-        description: "If a vector of occurrences is passed to the query then\
-          \ the occurrences associated with this publication are listed here\
-          \ as a vector"
+        description: "Container for journal or book name, editors, pages and\
+          \ volume"
         items:
-          type: "integer"
-          format: "int32"
+          type: "string"
+      title:
+        type: "string"
+        description: "Title of the reference material"
+      type:
+        type: "string"
+        description: "Nature of the reference publication. Journal, book etc."
+      year:
+        type: "string"
+        description: "Publication year of the reference material"
   taxonomy:
     type: "array"
     items:
