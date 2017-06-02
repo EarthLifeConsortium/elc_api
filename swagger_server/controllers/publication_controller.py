@@ -49,38 +49,7 @@ def format_ris(ref):
     return bib
 
 
-def pub(occid=None, locid=None, format=None):
-    """Return primary reference data in BibJSON, CSV or RIS format."""
-    # Initialization and parameter checks
-    desc_obj = dict()
-    pub_return = list()
-    if request.args == {}:
-        return jsonify(status_code=400, error='No parameters provided.')
-    if occid and locid:
-        return jsonify(status_code=400,
-                       error='Specify only occurrence ID or site ID not both.')
-
-    #
-    # Query the Neotoma Database (Publications)
-    #
-
-    t0 = time.time()
-    payload = dict()
-
-    # Select the appropriate URI for occs or sites/colls
-    if occid:
-        base_url = ''
-        payload.update(occ_id='')
-    elif locid:
-        base_url = 'http://api.neotomadb.org/v1/data/publications'
-        payload.update(datasetid=locid)
-    else:
-        return jsonify(status_code=400,
-                       error='Specify occurrence ID or locale ID.')
-
-    # Issue GET request to database API
-    resp = requests.get(base_url, params=payload, timeout=5)
-
+def parse_neotoma_resp(pub_return, desc_obj):
     if resp.status_code == 200:
         resp_json = resp.json()
         if 'data' in resp_json:
@@ -123,33 +92,14 @@ def pub(occid=None, locid=None, format=None):
                 # Add the fomatted bibliographic reference to the return
                 pub_return.append(bib_obj)
 
-            # Build the JSON description object
-            t1 = round(time.time()-t0, 3)
-            desc_obj.update(neot={'response_time': t1,
-                                  'subqueries': resp.url,
-                                  'record_count': len(resp_json['data'])})
-    #
-    # Query the Paleobiology Database (Publications)
-    #
+            # Count number of records
+            rec_count += len(resp_json['records'])
 
-    t0 = time.time()
-    payload = dict()
-    payload.update(vocab='pbdb', show='both')
+    # End subroutine: parse_neotoma_resp
+    return pub_return, desc_obj, rec_count
 
-    # Select the appropriate URI for occs or sites/colls
-    if occid:
-        base_url = 'http://paleobiodb.org/data1.2/occs/refs.json'
-        payload.update(occ_id=occid)
-    elif locid:
-        base_url = 'http://paleobiodb.org/data1.2/colls/refs.json'
-        payload.update(coll_id=locid)
-    else:
-        return jsonify(status_code=400,
-                       error='Specify occurrence ID or locale ID.')
 
-    # Issue GET request to database API
-    resp = requests.get(base_url, params=payload, timeout=5)
-
+def parse_pbdb_resp(resp, pub_return, desc_obj):
     if resp.status_code == 200:
         resp_json = resp.json()
         if 'records' in resp_json:
@@ -220,11 +170,125 @@ def pub(occid=None, locid=None, format=None):
                 # Add the fomatted bibliographic reference to the return
                 pub_return.append(bib_obj)
 
-            # Build the JSON description object
-            t1 = round(time.time()-t0, 3)
-            desc_obj.update(pbdb={'response_time': t1,
-                                  'subqueries': resp.url,
-                                  'record_count': len(resp_json['records'])})
+            # Count number of records
+            rec_count += len(resp_json['records'])
+
+    # End subroutine: parse_pbdb_resp
+    return pub_return, desc_object, rec_count
+
+
+def pub(occid=None, locid=None, format=None):
+    """Return primary reference data in BibJSON, CSV or RIS format."""
+    # Initialization and parameter checks
+    if request.args == {}:
+        return jsonify(status_code=400, error='No parameters provided.')
+    desc_obj = dict()
+    pub_return = list()
+    pbdb_occs = list()
+    pbdb_locs = list()
+    neot_occs = list()
+    neot_locs = list()
+
+    # Parse database and dataset id numbers
+    if idnumbers:
+        for id in idnumbers:
+            database= re.search('^\w+(?=:)', id).group()
+            datatype = re.search('(?<=:).+(?=:)', id).group()
+            id_num = int(re.search('\d+$', id).group())
+
+            if database.lower() == 'neot':
+                if datatype.lower() == 'occ':
+                    neot_occs.append(id_num)
+                elif datatype.lower() == 'loc':
+                    neot_locs.append(id_num)
+                else:
+                    return jsonify(status_code=400,
+                                   error='ID error: datatype.')
+            elif database.lower() == 'pbdb':
+                if datatype.lower() == 'occ':
+                    pbdb_occs.append(id_num)
+                elif datatype.lower() == 'loc':
+                    pbdb_locs.append(id_num)
+                else:
+                    return jsonify(status_code=400,
+                                   error='ID error: Datatype syntax.')
+            else:
+                return jsonify(status_code=400,
+                               error='ID error: Database name syntax.')
+    else:
+        return jsonify(status_code=400,
+                       error='ID error: Missing ID number.')
+
+    #
+    # Query the Neotoma Database (Publications)
+    #
+    t0 = time.time()
+    payload = dict()
+    api_calls = list()
+    rec_count = 0
+
+    # Issue a GET request for references associated with occurrences
+    if neot_occs:
+        base_url = ''
+        payload.update(occid='')
+        resp = requests.get(base_url, params=payload, timeout=5)
+        api_calls.append(resp.url)
+        pub_return, desc_obj, rec_count = parse_neotoma_resp(resp,
+                                                             pub_return,
+                                                             desc_obj)
+
+    # Issue a GET request for references associated with locales
+    if neot_locs:
+        base_url = 'http://api.neotomadb.org/v1/data/publications'
+        payload.update(datasetid=neot_locs)
+        resp = requests.get(base_url, params=payload, timeout=5)
+        api_calls.append(resp.url)
+        pub_return, desc_obj, rec_count = parse_neotoma_resp(resp,
+                                                             pub_return,
+                                                             desc_obj)
+
+    # Build the JSON description object
+    t1 = round(time.time()-t0, 3)
+    desc_obj.update(neotoma={'response_time': t1,
+                             'status_code': resp.status_code()
+                             'subqueries': api_calls,
+                             'record_count': rec_count})
+
+    #
+    # Query the Paleobiology Database (Publications)
+    #
+    t0 = time.time()
+    payload = dict()
+    payload.update(vocab='pbdb', show='both')
+    api_calls = list()
+    rec_count = 0
+
+    # Issue a GET request for references associated with occurrences
+    if pbdb_occs:
+        base_url = 'http://paleobiodb.org/data1.2/occs/refs.json'
+        payload.update(occ_id=pbdb_occs)
+        resp = requests.get(base_url, params=payload, timeout=5)
+        api_calls.append(resp.url)
+        pub_return, desc_obj, rec_count = parse_pbdb_resp(resp,
+                                                          pub_return,
+                                                          desc_obj)
+    
+    # Issue a GET request for references associated with locales
+    if pbdb_locs:
+        base_url = 'http://paleobiodb.org/data1.2/colls/refs.json'
+        payload.update(coll_id=pbdb_locs)
+        resp = requests.get(base_url, params=payload, timeout=5)
+        api_calls.append(resp.url)
+        pub_return, desc_obj, rec_count = parse_pbdb_resp(resp,
+                                                          pub_return,
+                                                          desc_obj)
+
+    # Build the JSON description object
+    t1 = round(time.time()-t0, 3)
+    desc_obj.update(pbdb={'response_time': t1,
+                          'status_code': resp.status_code()
+                          'subqueries': api_calls,
+                          'record_count': rec_count})
 
     # Composite response
     return jsonify(description=desc_obj, records=pub_return)
