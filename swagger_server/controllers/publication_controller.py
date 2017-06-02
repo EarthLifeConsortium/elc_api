@@ -49,7 +49,7 @@ def format_ris(ref):
     return bib
 
 
-def parse_neotoma_resp(pub_return, desc_obj):
+def parse_neot_resp(resp, pub_return, desc_obj):
     if resp.status_code == 200:
         resp_json = resp.json()
         if 'data' in resp_json:
@@ -92,11 +92,9 @@ def parse_neotoma_resp(pub_return, desc_obj):
                 # Add the fomatted bibliographic reference to the return
                 pub_return.append(bib_obj)
 
-            # Count number of records
-            rec_count += len(resp_json['records'])
+    # End subroutine: parse_neot_resp
+    return pub_return, desc_obj, len(resp_json['records'])
 
-    # End subroutine: parse_neotoma_resp
-    return pub_return, desc_obj, rec_count
 
 
 def parse_pbdb_resp(resp, pub_return, desc_obj):
@@ -170,14 +168,11 @@ def parse_pbdb_resp(resp, pub_return, desc_obj):
                 # Add the fomatted bibliographic reference to the return
                 pub_return.append(bib_obj)
 
-            # Count number of records
-            rec_count += len(resp_json['records'])
-
     # End subroutine: parse_pbdb_resp
-    return pub_return, desc_object, rec_count
+    return pub_return, desc_obj, len(resp_json['records'])
 
 
-def pub(occid=None, locid=None, format=None):
+def pub(idnumbers=None, format=None):
     """Return primary reference data in BibJSON, CSV or RIS format."""
     # Initialization and parameter checks
     if request.args == {}:
@@ -190,8 +185,10 @@ def pub(occid=None, locid=None, format=None):
     neot_locs = list()
 
     # Parse database and dataset id numbers
+    print(idnumbers)
     if idnumbers:
         for id in idnumbers:
+            print(id)
             database= re.search('^\w+(?=:)', id).group()
             datatype = re.search('(?<=:).+(?=:)', id).group()
             id_num = int(re.search('\d+$', id).group())
@@ -233,9 +230,8 @@ def pub(occid=None, locid=None, format=None):
         payload.update(occid='')
         resp = requests.get(base_url, params=payload, timeout=5)
         api_calls.append(resp.url)
-        pub_return, desc_obj, rec_count = parse_neotoma_resp(resp,
-                                                             pub_return,
-                                                             desc_obj)
+        pub_return, desc_obj, cnt = parse_neot_resp(resp, pub_return, desc_obj)
+        rec_count = rec_count + cnt
 
     # Issue a GET request for references associated with locales
     if neot_locs:
@@ -243,14 +239,13 @@ def pub(occid=None, locid=None, format=None):
         payload.update(datasetid=neot_locs)
         resp = requests.get(base_url, params=payload, timeout=5)
         api_calls.append(resp.url)
-        pub_return, desc_obj, rec_count = parse_neotoma_resp(resp,
-                                                             pub_return,
-                                                             desc_obj)
+        pub_return, desc_obj, cnt = parse_neot_resp(resp, pub_return, desc_obj)
+        rec_count = rec_count + cnt
 
     # Build the JSON description object
     t1 = round(time.time()-t0, 3)
     desc_obj.update(neotoma={'response_time': t1,
-                             'status_code': resp.status_code()
+                             'status_code': resp.status_code,
                              'subqueries': api_calls,
                              'record_count': rec_count})
 
@@ -269,9 +264,8 @@ def pub(occid=None, locid=None, format=None):
         payload.update(occ_id=pbdb_occs)
         resp = requests.get(base_url, params=payload, timeout=5)
         api_calls.append(resp.url)
-        pub_return, desc_obj, rec_count = parse_pbdb_resp(resp,
-                                                          pub_return,
-                                                          desc_obj)
+        pub_return, desc_obj, cnt = parse_pbdb_resp(resp, pub_return, desc_obj)
+        rec_count = rec_count + cnt
     
     # Issue a GET request for references associated with locales
     if pbdb_locs:
@@ -279,14 +273,13 @@ def pub(occid=None, locid=None, format=None):
         payload.update(coll_id=pbdb_locs)
         resp = requests.get(base_url, params=payload, timeout=5)
         api_calls.append(resp.url)
-        pub_return, desc_obj, rec_count = parse_pbdb_resp(resp,
-                                                          pub_return,
-                                                          desc_obj)
+        pub_return, desc_obj, cnt = parse_pbdb_resp(resp, pub_return, desc_obj)
+        rec_count = rec_count + cnt
 
     # Build the JSON description object
     t1 = round(time.time()-t0, 3)
     desc_obj.update(pbdb={'response_time': t1,
-                          'status_code': resp.status_code()
+                          'status_code': resp.status_code,
                           'subqueries': api_calls,
                           'record_count': rec_count})
 

@@ -228,20 +228,16 @@ paths:
       - "text/csv"
       - "text/plain"
       parameters:
-      - name: "occid"
+      - name: "idnumbers"
         in: "query"
-        description: "Unique numeric ID, or vector of IDs for occurrences"
-        required: false
-        type: "string"
-      - name: "locid"
-        in: "query"
-        description: "Unique numeric ID, or vector of IDs for locale"
+        description: "Unique numeric ID, or vector of IDs for occurrences\
+          \ or locales"
         required: false
         type: "string"
       - name: "format"
         in: "query"
         description: "Output format for publications. Response is BibJSON\
-          \ (default), CSV or RIS."
+          \ (default), CSV or RIS"
         required: false
         type: "string"
       responses:
