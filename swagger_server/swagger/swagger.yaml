@@ -499,8 +499,7 @@ definitions:
   site_inner_sites:
     properties:
       site_id:
-        type: "integer"
-        format: "int32"
+        type: "string"
         description: "Unique identifier for a specific site from the\ 
           \ respective databases"
       lat:
