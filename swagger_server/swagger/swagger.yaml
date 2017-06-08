@@ -233,7 +233,9 @@ paths:
         description: "Unique numeric ID, or vector of IDs for occurrences\
           \ or locales"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
       - name: "format"
         in: "query"
         description: "Output format for publications. Response is BibJSON\
