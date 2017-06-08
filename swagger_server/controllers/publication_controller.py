@@ -111,10 +111,10 @@ def parse_pbdb_resp(resp, pub_return, format):
             for rec in resp_json['records']:
 
                 # Format publication "volume(issue)"
-                if 'pubvol' in rec:
-                    vol_no = rec['pubvol']
-                    if 'pubno' in rec:
-                        vol_no = rec['pubno'] + ' (' + vol_no + ')'
+                if 'pubno' in rec:
+                    vol_no = rec['pubno']
+                    if 'pubvol' in rec:
+                        vol_no = rec['pubvol'] + ' (' + vol_no + ')'
                 else:
                     vol_no = None
 
@@ -217,7 +217,6 @@ def pub(idnumbers=None, format=None):
     # Query the Neotoma Database (Publications)
     #
     t0 = time.time()
-    payload = dict()
     api_calls = list()
     status_codes = list()
     tot_count = 0
@@ -225,8 +224,10 @@ def pub(idnumbers=None, format=None):
 
     # Issue a GET request for references associated with occurrences
     if neot_occs:
+        payload = dict()
         base_url = ''
-        payload.update(occid='')
+        id_list = ','.join(str(element) for element in neot_occs)
+        payload.update(occid=id_list)
         resp = requests.get(base_url, params=payload, timeout=5)
         api_calls.append(resp.url)
         status_codes.append(resp.status_code)
@@ -236,8 +237,10 @@ def pub(idnumbers=None, format=None):
 
     # Issue a GET request for references associated with locales
     if neot_locs:
+        payload = dict()
         base_url = 'http://api.neotomadb.org/v1/data/publications'
-        payload.update(datasetid=neot_locs)
+        id_list = ','.join(str(element) for element in neot_locs)
+        payload.update(datasetid=id_list)
         resp = requests.get(base_url, params=payload, timeout=5)
         api_calls.append(resp.url)
         status_codes.append(resp.status_code)
@@ -256,16 +259,17 @@ def pub(idnumbers=None, format=None):
     # Query the Paleobiology Database (Publications)
     #
     t0 = time.time()
-    payload = dict()
-    payload.update(vocab='pbdb', show='both')
     api_calls = list()
     status_codes = list()
     tot_count = 0
 
     # Issue a GET request for references associated with occurrences
     if pbdb_occs:
+        payload = dict()
+        payload.update(vocab='pbdb', show='both')
         base_url = 'http://paleobiodb.org/data1.2/occs/refs.json'
-        payload.update(occ_id=pbdb_occs)
+        id_list = ','.join(str(element) for element in pbdb_occs)
+        payload.update(occ_id=id_list)
         resp = requests.get(base_url, params=payload, timeout=5)
         api_calls.append(resp.url)
         status_codes.append(resp.status_code)
@@ -275,13 +279,16 @@ def pub(idnumbers=None, format=None):
     
     # Issue a GET request for references associated with locales
     if pbdb_locs:
+        payload = dict()
+        payload.update(vocab='pbdb', show='both')
         base_url = 'http://paleobiodb.org/data1.2/colls/refs.json'
-        payload.update(coll_id=pbdb_locs)
+        id_list = ','.join(str(element) for element in pbdb_locs)
+        payload.update(coll_id=id_list)
         resp = requests.get(base_url, params=payload, timeout=5)
         api_calls.append(resp.url)
         status_codes.append(resp.status_code)
 
-        count = parse_pbdb_resp(resp, pub_return, desc_obj)
+        count = parse_pbdb_resp(resp, pub_return, format)
         tot_count = tot_count + count
 
     # Build the JSON description object
