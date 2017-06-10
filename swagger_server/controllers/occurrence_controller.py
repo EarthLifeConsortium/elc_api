@@ -35,10 +35,17 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     """
     Return occurrence identifiers from Neotoma and PBDB.
 
-    With show=full, return expanded geography and age data for each occurrence.
+    :show=full: return expanded geography and age data for each occurrence
+    :show=idx:  return indicies list as a json object (possibly a long string)
+    :show=poll: return only the description object
+
+    :format=bibjson: return nested BibJSON formatting (default)
+    :format=ris:     return RIS bibliographic interchance text format
+    :format=csv:     return tabular comma separated table
+
     """
     # Initialization and parameter checks
-    if request.args == {}:
+    if not bool(request.args):
         return jsonify(status_code=400, error='No parameters provided.')
 
     desc_obj = dict()
@@ -46,10 +53,11 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     occ_return = list()
     age_units = 'ma'
     geog_coords = 'modern'
-    full_return = False
 
-    if show and show.lower() == 'full':
-        full_return = True
+    if show:
+        show_params = show.lower().split(',')
+    else:
+        show_params = list()
 
     #
     # Query the Neotoma Database (Occurrences)
@@ -115,7 +123,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                 occ.update(occ_id=occ_id,
                            taxon=rec.get('TaxonName'))
 
-                if full_return:
+                if 'full' in show_params:
                     taxon_id = 'neot:txn:' + str(rec['TaxonID'])
 
                     if rec['AgeOlder'] and rec['AgeYounger']:
@@ -153,6 +161,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
             # Build the JSON description object
             t1 = round(time.time()-t0, 3)
             desc_obj.update(neotoma={'response_time': t1,
+                                     'status_codes': resp.status_code,
                                      'subqueries': resp.url,
                                      'record_count': len(resp_json['data'])})
 
@@ -162,7 +171,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     t0 = time.time()
     base_url = 'http://paleobiodb.org/data1.2/occs/list.json'
     payload = dict()
-    if full_return:
+    if 'full' in show_params:
         payload.update(show='loc,coords,coll')
     payload.update(vocab='pbdb')
 
@@ -220,7 +229,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                 occ.update(occ_id=occ_id,
                            taxon=rec.get('accepted_name'))
 
-                if full_return:
+                if 'full' in show_params:
                     taxon_id = 'pbdb:txn:' + str(rec['accepted_no'])
 
                     if rec['max_ma'] and rec['min_ma']:
@@ -256,9 +265,25 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
             # Build the JSON description object
             t1 = round(time.time()-t0, 3)
             desc_obj.update(pbdb={'response_time': t1,
+                                  'status_codes': resp.status_code,
                                   'subqueries': resp.url,
                                   'record_count': len(resp_json['records'])})
 
-    # Composite response
+    # Reformat set of all retured ID numbers as a string
     id_str = ','.join(indicies)
-    return jsonify(description=desc_obj, indicies=id_str, records=occ_return)
+
+    # Composite response
+    if 'poll' in show_params:
+        if 'idx' in show_params:
+            return jsonify(description=desc_obj,
+                           indicies=id_str)
+        else:
+            return jsonify(description=desc_obj)
+
+    if 'idx' in show_params:
+        return jsonify(description=desc_obj,
+                       indicies=id_str,
+                       records=occ_return)
+    else:
+        return jsonify(description=desc_obj,
+                       records=occ_return)
