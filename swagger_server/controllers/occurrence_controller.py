@@ -42,6 +42,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         return jsonify(status_code=400, error='No parameters provided.')
 
     desc_obj = dict()
+    indicies = set()
     occ_return = list()
     age_units = 'ma'
     geog_coords = 'modern'
@@ -143,8 +144,11 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                 else:
                     occ_obj = format_json(occ)
 
-                # Add the fomatted occurrence to the return
+                # Add the formatted occurrence to the return
                 occ_return.append(occ_obj)
+
+                # Add the unique database ID to the returned string
+                indicies.add(occ_id)
 
             # Build the JSON description object
             t1 = round(time.time()-t0, 3)
@@ -243,8 +247,11 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                 else:
                     occ_obj = format_json(occ)
 
-                # Add the fomatted occurrence to the return
+                # Add the formatted occurrence to the return
                 occ_return.append(occ_obj)
+
+                # Add the unique database ID to the returned string
+                indicies.add(occ_id) 
 
             # Build the JSON description object
             t1 = round(time.time()-t0, 3)
@@ -253,4 +260,5 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                                   'record_count': len(resp_json['records'])})
 
     # Composite response
-    return jsonify(description=desc_obj, records=occ_return)
+    id_str = ','.join(indicies)
+    return jsonify(description=desc_obj, indicies=id_str, records=occ_return)
