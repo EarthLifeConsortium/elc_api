@@ -19,8 +19,10 @@ def format_bibjson(ref):
                title=ref.get('title'), citation=ref.get('cite'))
 
     # Add info specific to the journal or book
-    bib.update(journal=[{'name': ref.get('journal'), 'volume': ref.get('vol'),
-                         'pages': ref.get('pages'), 'editors': ref.get('editor')}])
+    bib.update(journal=[{'name': ref.get('journal'),
+                         'volume': ref.get('vol'),
+                         'pages': ref.get('pages'),
+                         'editors': ref.get('editor')}])
 
     # Add reference locator IDs
     bib.update(identifier=[{'type': 'doi', 'id': ref.get('doi')},
@@ -66,6 +68,7 @@ def format_handler(ref, pub_return, format):
 
 
 def parse_neot_resp(resp, pub_return, format):
+    """Reformat data from the Neotoma API call."""
     if resp.status_code == 200:
         resp_json = resp.json()
         if 'data' in resp_json:
@@ -105,6 +108,7 @@ def parse_neot_resp(resp, pub_return, format):
 
 
 def parse_pbdb_resp(resp, pub_return, format):
+    """Reformat data from the Neotoma API call."""
     if resp.status_code == 200:
         resp_json = resp.json()
         if 'records' in resp_json:
@@ -233,7 +237,7 @@ def pub(idnumbers=None, format=None):
         status_codes.append(resp.status_code)
 
         count = parse_neot_resp(resp, pub_return, format)
-        tot_count = tot_count + count 
+        tot_count = tot_count + count
 
     # Issue a GET request for references associated with locales
     if neot_locs:
@@ -276,7 +280,7 @@ def pub(idnumbers=None, format=None):
 
         count = parse_pbdb_resp(resp, pub_return, format)
         tot_count = tot_count + count
-    
+
     # Issue a GET request for references associated with locales
     if pbdb_locs:
         payload = dict()
