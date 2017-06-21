@@ -20,7 +20,7 @@ paths:
     get:
       tags:
       - "Age_Basis"
-      summary: "Generation method of age estimates for the occurrence or site"
+      summary: "Generation method of age estimates for the occurrence or locale"
       description: "Samples often have assigned temporal uncertainty\
         \ estimates, whether from C-14 dates, stratigraphic uncertainty, or\
         \ other dating techniques. This endpoint returns the basis for the age\
@@ -219,8 +219,9 @@ paths:
     get:
       tags:
       - "Publication"
-      summary: "Scientific publications associated with sites or occurrences"
-      description: "Uses unique site IDs or occurrence IDs to return the set\
+      summary: "Scientific publications associated with locales (datasets or\
+        \ collections) and occurrences"
+      description: "Uses unique locale IDs or occurrence IDs to return the set\
         \ of publications associated with a query to enable citation"
       operationId: "pub"
       produces:
@@ -256,17 +257,15 @@ paths:
       x-tags:
       - tag: "Publication"
       x-swagger-router-controller: "swagger_server.controllers.publication_controller"
-  /site:
+  /loc:
     get:
       tags:
-      - "Site"
-      summary: "Sample sites or localities"
-      description: "Return sampling locations in space and time, excluding\
-        \ occurrence records. This may return multiple stes from a common\
-        \ spatial location if the samples from the synthetic sites represent\
-        \ unique collections. This terminology is similar to the the datasets\
-        \ concept in Neotoma"
-      operationId: "site"
+      - "Locale"
+      summary: "Sample localities"
+      description: "Return sampling locations in space and time. Sampling locations\
+        \ may include multiple taxon. Utilizes the dataset model from Neotoman and\
+        \ the collections data model from the PBDB"
+      operationId: "loc"
       produces:
       - "application/json"
       - "text/csv"
@@ -331,18 +330,18 @@ paths:
         type: "boolean"
       responses:
         200:
-          description: "site response"
+          description: "Locale response"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/site"
+              $ref: "#/definitions/locale"
         default:
           description: "unexpected error"
           schema:
             $ref: "#/definitions/errorModel"
       x-tags:
-      - tag: "Site"
-      x-swagger-router-controller: "swagger_server.controllers.site_controller"
+      - tag: "Locale"
+      x-swagger-router-controller: "swagger_server.controllers.loc_controller"
   /taxon:
     get:
       tags:
@@ -430,10 +429,6 @@ definitions:
     type: "array"
     items:
       $ref: "#/definitions/taxonomy_inner"
-  site:
-    type: "array"
-    items:
-      $ref: "#/definitions/site_inner"
   agebasis:
     type: "string"
     description: "Basis of age estimate for the given site or occurence"
@@ -494,12 +489,9 @@ definitions:
       hierarchy:
         type: "string"
         description: "A JSON formatted object providing the taxon hierarchy"
-  site_inner_sites:
+  locale:
+    type: "object"
     properties:
-      site_id:
-        type: "string"
-        description: "Unique identifier for a specific site from the\ 
-          \ respective databases"
       lat:
         type: "number"
         format: "double"
@@ -507,13 +499,33 @@ definitions:
       lon:
         type: "number"
         format: "double"
-      site_name:
+      locale_name:
         type: "string"
-        description: "Site name"
-  site_inner:
-    properties:
-      sites:
-        $ref: "#/definitions/site_inner_sites"
+        description: "Site or collection name"
+      dataset_type:
+        type: "string"
+        description: "Type of paleoecological or paleontological data"
+      min_age:
+        type: "number"
+        format: "double"
+        description: "Youngest possible age of the dataset"
+      max_age:
+        type: "number"
+        format: "Oldest possible age of the dataset"
+      age_units:
+        type: "string"
+        description: "Time units (yr, ka or  ma)"
+      age_basis:
+        type: "string"
+        description: "Scientific basis of age determination"
+      locale_id:
+        type: "string"
+        description: "DB specific index from dataset (neot) or coll (pbdb)"
+      occurences:
+        type: "array"
+        description: "List of occurences found within this locale (PBDB only)"
+        items:
+          type: "string"
   assemblage_inner_table:
     properties:
       taxon:

@@ -1,7 +1,7 @@
 """
 RESTful API controller.
 
-Endpoint for queries on geolocated sites (locales)
+Endpoint for queries on geolocated locales (datasets and collections)
 """
 
 from flask import request, jsonify
@@ -10,7 +10,7 @@ import time
 from statistics import mean
 
 
-def site(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerule=None, taxon=None, includelower=None):
+def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerule=None, taxon=None, includelower=None):
     """
     Return locale identifiers from Neotoma and PBDB.
 
