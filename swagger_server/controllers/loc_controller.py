@@ -1,7 +1,9 @@
 """
 RESTful API controller.
 
-Endpoint for queries on geolocated locales (datasets and collections)
+Endpoint for queries on geolocated locales.
+Dataset identifiers are returned for Neotoma and collection identifiers
+for the PBDB.
 """
 
 from flask import request, jsonify
@@ -14,7 +16,7 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerule
     """
     Return locale identifiers from Neotoma and PBDB.
 
-    A locale in PBDB is a collection, in Neotoma it it every individual
+    A locale in PBDB is a collection, in Neotoma it is every individual
     dataset in a site.
     """
     # Initialization and parameter checks
@@ -29,7 +31,7 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerule
     full_return = False
 
     #
-    # Query the Neotoma Database (Sites)
+    # Query the Neotoma Database (Datasets)
     #
     # t0 = time.time()
     # neotoma_base = 'http://apidev.neotomadb.org/v1/data/datasets'
@@ -81,7 +83,7 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerule
 
 
     #
-    # Query the Paleobiology Database (Sites)
+    # Query the Paleobiology Database (Collections)
     #
 
     t0 = time.time()
