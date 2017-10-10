@@ -4,9 +4,9 @@ RESTful API controller.
 Endpoint for queries on taxonomic occurrences in time and space.
 """
 
-from flask import request, jsonify
 import requests
 import time
+from flask import request, jsonify
 from statistics import mean
 
 
@@ -59,17 +59,18 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     else:
         show_params = list()
 
-    #
+    ##########################################
     # Query the Neotoma Database (Occurrences)
-    #
+    ##########################################
     t0 = time.time()
     base_url = 'http://apidev.neotomadb.org/v1/data/occurrences'
     payload = dict()
 
-    # Initialization and parameter mapping
+    # Set geographical constraints (can be WKT)
     if bbox:
         payload.update(bbox=bbox)
 
+    # Set all age parameters to year, kilo-year or mega-annum
     if agescale and agescale.lower() == 'yr':
         age_scaler = 1
         age_units = 'yr'
@@ -92,27 +93,32 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         if maxage:
             payload.update(ageold=int(maxage/age_scaler))
 
+    # Set timescale bounding rules
     if timerule and timerule.lower() == 'major':
         payload.update(agedocontain=0)
     elif timerule and timerule.lower() == 'overlap':
         payload.update(agedocontain=1)
 
+    # Set specific taxon search or allow lower taxa as well
     if includelower and includelower.lower() == 'false':
         payload.update(nametype='tax', taxonname=taxon)
     else:
         payload.update(nametype='base', taxonname=taxon)
 
+    # Set constraints on the data return
     if limit:
         payload.update(limit=limit)
     else:
         payload.update(limit='999999')
 
+    # Offset the returned records, used with limit for large returns
     if offset:
         payload.update(offset=offset)
 
-    # Issue GET request to database API
+    # Issue GET request to Neotoma
     resp = requests.get(base_url, params=payload, timeout=None)
 
+    # Parse PBDB and add to the response object
     if resp.status_code == 200:
         resp_json = resp.json()
         if 'data' in resp_json:
@@ -165,9 +171,9 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                                      'subqueries': resp.url,
                                      'record_count': len(resp_json['data'])})
 
-    #
+    ###############################################
     # Query the Paleobiology Database (Occurrences)
-    #
+    ###############################################
     t0 = time.time()
     base_url = 'http://paleobiodb.org/data1.2/occs/list.json'
     payload = dict()
@@ -175,11 +181,16 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         payload.update(show='loc,coords,coll')
     payload.update(vocab='pbdb')
 
+    # Test if geography is lat/lon rectangle or WKT
     if bbox:
-        bbox_list = bbox.split(',')
-        payload.update(lngmin=bbox_list[0], latmin=bbox_list[1],
-                       lngmax=bbox_list[2], latmax=bbox_list[3])
+        if len(bbox) == 4:
+            bbox_list = bbox.split(',')
+            payload.update(lngmin=bbox_list[0], latmin=bbox_list[1],
+                           lngmax=bbox_list[2], latmax=bbox_list[3])
+        else:
+            payload.update(loc=box)
 
+    # Set all age parameters to year, kilo-year or mega-annum
     if agescale and agescale.lower() == 'yr':
         age_scaler = 1e06
         age_units = 'yr'
@@ -202,24 +213,30 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         if maxage:
             payload.update(max_ma=maxage)
 
+    # Set the timescale bounding rules
     if timerule:
         payload.update(timerule=timerule)
 
+    # Set specific taxon search or allow lower taxa as well
     if includelower and includelower.lower() == 'false':
         payload.update(taxon_name=taxon)
     else:
         payload.update(base_name=taxon)
 
+    # Set constraints on the data return
     if limit:
         payload.update(limit=limit)
     else:
         payload.update(limit='999999')
 
+    # Offset the returned records, used with limit for large returns
     if offset:
         payload.update(offset=offset)
 
+    # Issue GET request to PBDB
     resp = requests.get(base_url, params=payload, timeout=None)
 
+    # Parse PBDB and add to the response object
     if resp.status_code == 200:
         resp_json = resp.json()
         if 'records' in resp_json:
@@ -272,7 +289,9 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     # Reformat set of all retured ID numbers as a string
     id_str = ','.join(indicies)
 
+    ####################
     # Composite response
+    ####################
     if 'poll' in show_params:
         if 'idx' in show_params:
             return jsonify(description=desc_obj,
