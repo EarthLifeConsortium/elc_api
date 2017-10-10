@@ -6,6 +6,7 @@ Endpoint for queries on taxonomic occurrences in time and space.
 
 import requests
 import time
+import connexion
 from flask import request, jsonify
 from statistics import mean
 
@@ -46,7 +47,10 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     """
     # Initialization and parameter checks
     if not bool(request.args):
-        return jsonify(status_code=400, error='No parameters provided.')
+        return connexion.problem(status=400,
+                                 title='Bad Request',
+                                 detail='No parameters provide',
+                                 type='about:blank')
 
     desc_obj = dict()
     indicies = set()
@@ -99,11 +103,14 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     elif timerule and timerule.lower() == 'overlap':
         payload.update(agedocontain=1)
 
-    # Set specific taxon search or allow lower taxa as well
-    if includelower and includelower.lower() == 'false':
-        payload.update(nametype='tax', taxonname=taxon)
-    else:
+    # Set specific taxon search or allow lower taxa as well,
+    # default if parameter omitted is True
+    if includelower or includelower == None:
+        print('Including Neotoma subtaxa')
         payload.update(nametype='base', taxonname=taxon)
+    else:
+        print('NOT Including Neotoma subtaxa')
+        payload.update(nametype='tax', taxonname=taxon)
 
     # Set constraints on the data return
     if limit:
@@ -217,11 +224,14 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     if timerule:
         payload.update(timerule=timerule)
 
-    # Set specific taxon search or allow lower taxa as well
-    if includelower and includelower.lower() == 'false':
-        payload.update(taxon_name=taxon)
-    else:
+    # Set specific taxon search or allow lower taxa as well,
+    # default if parameter omitted is True
+    if includelower or includelower == None:
+        print('Including PBDB subtaxa')
         payload.update(base_name=taxon)
+    else:
+        print('NOT Including PBDB subtaxa')
+        payload.update(taxon_name=taxon)
 
     # Set constraints on the data return
     if limit:
