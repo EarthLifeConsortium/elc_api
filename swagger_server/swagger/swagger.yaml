@@ -175,8 +175,9 @@ paths:
         type: "string"
       - name: "includelower"
         in: "query"
-        description: "Retrieve lower taxa. A boolean. If TRUE, all species\
-          \ and subspecies of a named genera will be included in the response"
+        description: "Retrieve lower taxa. A boolean. If True, all species\
+          \ and subspecies of a named genera will be included in the response.\
+          \ default is True"
         required: false
         type: "boolean"
       - name: "limit"
@@ -197,8 +198,9 @@ paths:
         format: "int32"
       - name: "show"
         in: "query"
-        description: "Return extended data objects. Currently the only option\
-          \ is show=full"
+        description: "If 'full', show extended data objects. If 'poll' return\
+          \ only summary statistics. Default is return taxon ID and scientific\
+          \ name only"
         required: false
         type: "string"
       responses:
