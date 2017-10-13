@@ -6,9 +6,10 @@ Dataset identifiers are returned for Neotoma and collection identifiers
 for the PBDB.
 """
 
-from flask import request, jsonify
 import requests
 import time
+import connexion
+from flask import request, jsonify
 from statistics import mean
 
 
@@ -20,9 +21,11 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerule
     dataset in a site.
     """
     # Initialization and parameter checks
-
-    if request.args == {}:
-        return jsonify(status_code=400, error='No parameters provided.')
+    if not bool(request.args):
+        return connexion.problem(status=400,
+                                 title='Bad Request',
+                                 detail='No parameters provided.',
+                                 type='about:blank')
 
     desc_obj = dict()
     loc_return = list()
@@ -30,9 +33,9 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerule
     geog_units = 'dec_deg_modern'
     full_return = False
 
-    #
+    #######################################
     # Query the Neotoma Database (Datasets)
-    #
+    #######################################
     # t0 = time.time()
     # neotoma_base = 'http://apidev.neotomadb.org/v1/data/datasets'
     # payload = dict()
@@ -82,17 +85,15 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerule
 
 
 
-    #
+    ###############################################
     # Query the Paleobiology Database (Collections)
-    #
-
+    ###############################################
     t0 = time.time()
     base_url = 'http://paleobiodb.org/data1.2/colls/list.json'
     payload = dict()
     payload.update(vocab='pbdb', show='loc')
 
     # Parse arguments and format database api parameters
-
     if occid:
         payload.update(occ_id=occid)
 

@@ -49,7 +49,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     if not bool(request.args):
         return connexion.problem(status=400,
                                  title='Bad Request',
-                                 detail='No parameters provide',
+                                 detail='No parameters provided.',
                                  type='about:blank')
 
     desc_obj = dict()

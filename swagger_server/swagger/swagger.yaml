@@ -177,7 +177,7 @@ paths:
         in: "query"
         description: "Retrieve lower taxa. A boolean. If True, all species\
           \ and subspecies of a named genera will be included in the response.\
-          \ default is True"
+          \ Default is True"
         required: false
         type: "boolean"
       - name: "limit"
