@@ -106,10 +106,8 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     # Set specific taxon search or allow lower taxa as well,
     # default if parameter omitted is True
     if includelower or includelower == None:
-        print('Including Neotoma subtaxa')
         payload.update(nametype='base', taxonname=taxon)
     else:
-        print('NOT Including Neotoma subtaxa')
         payload.update(nametype='tax', taxonname=taxon)
 
     # Set constraints on the data return
@@ -125,7 +123,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     # Issue GET request to Neotoma
     resp = requests.get(base_url, params=payload, timeout=None)
 
-    # Parse PBDB and add to the response object
+    # Parse Neotoma return and add to the response object
     if resp.status_code == 200:
         resp_json = resp.json()
         if 'data' in resp_json:
@@ -227,10 +225,8 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     # Set specific taxon search or allow lower taxa as well,
     # default if parameter omitted is True
     if includelower or includelower == None:
-        print('Including PBDB subtaxa')
         payload.update(base_name=taxon)
     else:
-        print('NOT Including PBDB subtaxa')
         payload.update(taxon_name=taxon)
 
     # Set constraints on the data return
@@ -246,7 +242,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     # Issue GET request to PBDB
     resp = requests.get(base_url, params=payload, timeout=None)
 
-    # Parse PBDB and add to the response object
+    # Parse PBDB return and add to the response object
     if resp.status_code == 200:
         resp_json = resp.json()
         if 'records' in resp_json:

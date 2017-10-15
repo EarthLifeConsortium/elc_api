@@ -475,14 +475,24 @@ definitions:
   errorModel:
     type: "object"
     required:
-    - "code"
-    - "message"
+    - "type"
+    - "title"
+    - "detail"
+    - "status"
     properties:
-      code:
+      type:
+        type: "string"
+        description: "MIME type, usuall about:blank"
+      title:
+        type: "string"
+        description: "HTTP status code description"
+      detail:
+        type: "string"
+        description: "Brief description of the error"
+      status:
         type: "integer"
         format: "int32"
-      message:
-        type: "string"
+        description: "HTTP numeric status code"
   taxonomy_inner:
     properties:
       taxon:

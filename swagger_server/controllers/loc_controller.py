@@ -13,7 +13,8 @@ from flask import request, jsonify
 from statistics import mean
 
 
-def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerule=None, taxon=None, includelower=None):
+def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
+        timerule=None, taxon=None, includelower=None):
     """
     Return locale identifiers from Neotoma and PBDB.
 
@@ -30,7 +31,7 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerule
     desc_obj = dict()
     loc_return = list()
     age_units = 'ma'
-    geog_units = 'dec_deg_modern'
+    geog_coords = 'modern'
     full_return = False
 
     #######################################
@@ -97,11 +98,16 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerule
     if occid:
         payload.update(occ_id=occid)
 
+    # Test if geography is lat/lon rectangle or WKT
     if bbox:
-        bbox_list = bbox.split(',')
-        payload.update(lngmin=bbox_list[0], latmin=bbox_list[1],
-                       lngmax=bbox_list[2], latmax=bbox_list[3])
+        if len(bbox) == 4:
+            bbox_list = bbox.split(',')
+            payload.update(lngmin=bbox_list[0], latmin=bbox_list[1],
+                           lngmax=bbox_list[2], latmax=bbox_list[3])
+        else:
+            payload.update(loc=box)
 
+    # Set all age parameters to year, kilo-year or mega-annum
     if agescale and agescale.lower() == 'yr':
         age_scaler = 1e06
         age_units = 'yr'
@@ -124,32 +130,46 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None, timerule
         if maxage:
             payload.update(max_ma=maxage)
 
+    # Set the timescale bounding rules
     if timerule:
         payload.update(timerule=timerule)
 
-    if includelower and includelower.lower() == 'false':
-        payload.update(taxon_name=taxon)
-    else:
+    # Set specific taxon search or allow lower taxa as well,
+    # default if parameter omitted is True
+    if includelower or includelower == None:
         payload.update(base_name=taxon)
+    else:
+        payload.update(taxon_name=taxon)
 
     # Issue GET request to database API
-    resp = requests.get(base_url, params=payload, timeout=5)
+    resp = requests.get(base_url, params=payload, timeout=None)
 
     if resp.status_code == 200:
         resp_json = resp.json()
         if 'records' in resp_json:
             for rec in resp_json['records']:
                 loc_obj = dict()
-                loc_id = 'pbdb:loc:' + str(rec.get('collection_no'))
-                loc_obj.update(lat=rec.get('lat'),
-                                lon=rec.get('lng'),
-                                name=rec.get('collection_name'),
-                                dataset_type='faunal',
-                                min_age=min_age,
-                                max_age=max_age,
-                                age_basis=None,
-                                loc_id=loc_id,
-                                occurrences=occ_list)
+                loc_id = 'pbdb:col:' + str(rec.get('collection_no'))
+                
+                if rec['max_ma'] and rec['min_ma']:
+                    max_age = float(rec['max_ma']) * age_scaler
+                    min_age = float(rec['min_ma']) * age_scaler
+                else:
+                    max_age = None
+                    min_age = None
+                
+                lat = float(rec['lat'])
+                lon = float(rec['lng'])
+ 
+                loc_obj.update(lat=lat,
+                               lon=lng,
+                               locale_name=rec.get('collection_name'),
+                               dataset_type='faunal',
+                               min_age=min_age,
+                               max_age=max_age,
+                               age_basis='stratigraphy',
+                               locale_id=loc_id,
+                               occurrences=occ_list)
 
                 # Add the fomatted locale data to the return
                 loc_return.append(loc_obj)
