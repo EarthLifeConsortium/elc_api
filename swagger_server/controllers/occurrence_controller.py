@@ -128,26 +128,26 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         resp_json = resp.json()
         if 'data' in resp_json:
             for rec in resp_json['data']:
-                occ_id = 'neot:occ:' + str(rec['OccurID'])
+                occ_id = 'neot:occ:' + str(rec.get('OccurID'))
 
                 occ = dict()
                 occ.update(occ_id=occ_id,
                            taxon=rec.get('TaxonName'))
 
                 if 'full' in show_params:
-                    taxon_id = 'neot:txn:' + str(rec['TaxonID'])
+                    taxon_id = 'neot:txn:' + str(rec.get('TaxonID'))
 
-                    if rec['AgeOlder'] and rec['AgeYounger']:
-                        max_age = rec['AgeOlder'] * age_scaler
-                        min_age = rec['AgeYounger'] * age_scaler
+                    if rec.get('AgeOlder') and rec.get('AgeYounger'):
+                        max_age = rec.get('AgeOlder') * age_scaler
+                        min_age = rec.get('AgeYounger') * age_scaler
                     else:
                         max_age = None
                         min_age = None
 
-                    lat = mean([rec['LatitudeNorth'],
-                                rec['LatitudeSouth']])
-                    lon = mean([rec['LongitudeEast'],
-                                rec['LongitudeWest']])
+                    lat = mean([rec.get('LatitudeNorth'),
+                                rec.get('LatitudeSouth')])
+                    lon = mean([rec.get('LongitudeEast'),
+                                rec.get('LongitudeWest')])
 
                     occ.update(taxon_id=taxon_id,
                                max_age=max_age,
@@ -248,22 +248,22 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         if 'records' in resp_json:
             for rec in resp_json['records']:
                 occ = dict()
-                occ_id = 'pbdb:occ:' + str(rec['occurrence_no'])
+                occ_id = 'pbdb:occ:' + str(rec.get('occurrence_no'))
                 occ.update(occ_id=occ_id,
                            taxon=rec.get('accepted_name'))
 
                 if 'full' in show_params:
-                    taxon_id = 'pbdb:txn:' + str(rec['accepted_no'])
+                    taxon_id = 'pbdb:txn:' + str(rec.get('accepted_no'))
 
-                    if rec['max_ma'] and rec['min_ma']:
-                        max_age = float(rec['max_ma']) * age_scaler
-                        min_age = float(rec['min_ma']) * age_scaler
+                    if rec.get('max_ma') and rec.get('min_ma'):
+                        max_age = float(rec.get('max_ma')) * age_scaler
+                        min_age = float(rec.get('min_ma')) * age_scaler
                     else:
                         max_age = None
                         min_age = None
 
-                    lat = float(rec['lat'])
-                    lon = float(rec['lng'])
+                    lat = float(rec.get('lat'))
+                    lon = float(rec.get('lng'))
 
                     occ.update(taxon_id=taxon_id,
                                max_age=max_age,
