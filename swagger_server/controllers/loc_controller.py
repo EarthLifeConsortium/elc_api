@@ -151,15 +151,15 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
                 loc_obj = dict()
                 loc_id = 'pbdb:col:' + str(rec.get('collection_no'))
                 
-                if rec['max_ma'] and rec['min_ma']:
-                    max_age = float(rec['max_ma']) * age_scaler
-                    min_age = float(rec['min_ma']) * age_scaler
+                if rec.get('max_ma') and rec.get('min_ma'):
+                    max_age = float(rec.get('max_ma')) * age_scaler
+                    min_age = float(rec.get('min_ma')) * age_scaler
                 else:
                     max_age = None
                     min_age = None
                 
-                lat = float(rec['lat'])
-                lon = float(rec['lng'])
+                lat = float(rec.get('lat'))
+                lon = float(rec.get('lng'))
  
                 loc_obj.update(lat=lat,
                                lon=lng,
