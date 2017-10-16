@@ -14,7 +14,8 @@ from statistics import mean
 
 
 def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
-        timerule=None, taxon=None, includelower=None):
+        timerule=None, taxon=None, includelower=None, limit=None,
+        offset=None):
     """
     Return locale identifiers from Neotoma and PBDB.
 
@@ -36,47 +37,64 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
     #######################################
     # Query the Neotoma Database (Datasets)
     #######################################
-    # t0 = time.time()
-    # neotoma_base = 'http://apidev.neotomadb.org/v1/data/datasets'
-    # payload = dict()
-    # geog_coords = 'modern'
+    t0 = time.time()
+    neotoma_base = 'http://apidev.neotomadb.org/v1/data/datasets'
+    payload = dict()
+    geog_coords = 'modern'
 
-    # ### if occid:
+    # Set geographical constraints (can be WKT)
+    if bbox:
+       payload.update(bbox=bbox)
 
-    # if bbox:
-    #     payload.update(bbox=bbox)
+    # Set all age parameters to year, kilo-year or mega-annum
+    if agescale and agescale.lower() == 'yr':
+        age_scaler = 1
+        age_units = 'yr'
+        if minage:
+            payload.update(ageyoung=int(minage))
+        if maxage:
+            payload.update(ageold=int(maxage))
+    elif agescale and agescale.lower() == 'ka':
+        age_scaler = 1e-03
+        age_units = 'ka'
+        if minage:
+            payload.update(ageyoung=int(minage/age_scaler))
+        if maxage:
+            payload.update(ageold=int(maxage/age_scaler))
+    else:
+        age_scaler = 1e-06
+        age_units = 'ma'
+        if minage:
+            payload.update(ageyoung=int(minage/age_scaler))
+        if maxage:
+            payload.update(ageold=int(maxage/age_scaler))
 
-    # if agescale and agescale.lower() == 'yr':
-    #     age_scaler = 1
-    #     age_units = 'yr'
-    #     if minage:
-    #         payload.update(ageyoung=int(minage))
-    #     if maxage:
-    #         payload.update(ageold=int(maxage))
-    # elif agescale and agescale.lower() == 'ka':
-    #     age_scaler = 1e-03
-    #     age_units = 'ka'
-    #     if minage:
-    #         payload.update(ageyoung=int(minage/age_scaler))
-    #     if maxage:
-    #         payload.update(ageold=int(maxage/age_scaler))
-    # else:
-    #     age_scaler = 1e-06
-    #     age_units = 'ma'
-    #     if minage:
-    #         payload.update(ageyoung=int(minage/age_scaler))
-    #     if maxage:
-    #         payload.update(ageold=int(maxage/age_scaler))
+    # Set timescale bounding rules
+    if timerule and timerule.lower() == 'major':
+       payload.update(agedocontain=0)
+    elif timerule and timerule.lower() == 'overlap':
+       payload.update(agedocontain=1)
 
-    # if timerule and timerule.lower() == 'major':
-    #     payload.update(agedocontain=0)
-    # elif timerule and timerule.lower() == 'overlap':
-    #     payload.update(agedocontain=1)
+    # Set specific taxon search or allow lower taxa as well,
+    # default if parameter omitted is True
+    if includelower or includelower == None:
+        payload.update(nametype='base', taxonname=taxon)
+    else:
+        payload.update(nametype='tax', taxonname=taxon)
 
-    # if includelower and includelower.lower() == 'false':
-    #     payload.update(nametype='tax', taxonname=taxon)
-    # else:
-    #     payload.update(nametype='base', taxonname=taxon)
+    # Set constraints on the data return
+    if limit:
+        payload.update(limit=limit)
+    else:
+        payload.update(limit='999999')
+
+    # Offset the returned records, used with limit for large returns
+    if offset:
+        payload.update(offset=offset)
+
+    # Issue GET request to Neotoma
+    resp = requests.get(base_url, params=payload, timeout=None)
+
 
     # neotoma_res = requests.get(neotoma_base, params=payload, timeout=None)
     

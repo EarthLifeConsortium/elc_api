@@ -330,6 +330,22 @@ paths:
           \ taxa of a named genera will be included in the response"
         required: false
         type: "boolean"
+      - name: "limit"
+        in: "query"
+        description: "Limit the number of records in the response for large\
+          \ queries"
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "offset"
+        in: "query"
+        description: "Begin the response from a designated point within the\
+          \ larger query. In this way, <i>limit</i> and <i>offset</i> can be\
+          \ used to produce serial queries to the API to avoid issues with\
+          \ larger responses"
+        required: false
+        type: "integer"
+        format: "int32"
       responses:
         200:
           description: "Locale response"
