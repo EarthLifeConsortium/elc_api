@@ -31,7 +31,6 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
     desc_obj = dict()
     loc_return = list()
     age_units = 'ma'
-    geog_coords = 'modern'
     full_return = False
 
     #######################################
@@ -40,6 +39,7 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
     # t0 = time.time()
     # neotoma_base = 'http://apidev.neotomadb.org/v1/data/datasets'
     # payload = dict()
+    # geog_coords = 'modern'
 
     # ### if occid:
 
@@ -92,6 +92,7 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
     t0 = time.time()
     base_url = 'http://paleobiodb.org/data1.2/colls/list.json'
     payload = dict()
+    geog_coords = 'paleo'
     payload.update(vocab='pbdb', show='loc')
 
     # Parse arguments and format database api parameters
@@ -151,25 +152,28 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
                 loc_obj = dict()
                 loc_id = 'pbdb:col:' + str(rec.get('collection_no'))
                 
-                if rec.get('max_ma') and rec.get('min_ma'):
-                    max_age = float(rec.get('max_ma')) * age_scaler
-                    min_age = float(rec.get('min_ma')) * age_scaler
-                else:
-                    max_age = None
-                    min_age = None
+                max_age = float(rec.get('max_ma')) * age_scaler
+                min_age = float(rec.get('min_ma')) * age_scaler
+                #  if rec.get('max_ma') and rec.get('min_ma'):
+                    #  max_age = float(rec.get('max_ma')) * age_scaler
+                    #  min_age = float(rec.get('min_ma')) * age_scaler
+                #  else:
+                    #  max_age = None
+                    #  min_age = None
                 
                 lat = float(rec.get('lat'))
                 lon = float(rec.get('lng'))
  
                 loc_obj.update(lat=lat,
-                               lon=lng,
+                               lon=lon,
                                locale_name=rec.get('collection_name'),
                                dataset_type='faunal',
                                min_age=min_age,
                                max_age=max_age,
                                age_basis='stratigraphy',
                                locale_id=loc_id,
-                               occurrences=occ_list)
+                               geog_coords=geog_coords)
+                               #  occurrences=occ_list)
 
                 # Add the fomatted locale data to the return
                 loc_return.append(loc_obj)

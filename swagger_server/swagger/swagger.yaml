@@ -234,7 +234,7 @@ paths:
       - name: "idnumbers"
         in: "query"
         description: "Unique numeric ID, or vector of IDs for occurrences\
-                      \ or locales in the form [pbdb,neot]:[occ,col,dst]:id_num"
+          \ or locales in the form [pbdb,neot]:[occ,col,dst]:id_num"
         required: false
         type: "array"
         items:
@@ -507,23 +507,27 @@ definitions:
       lat:
         type: "number"
         format: "double"
-        description: "Site latitude"
+        description: "Locale latitude"
       lon:
         type: "number"
         format: "double"
+        description: "Locale longitude"
+      geog_coords:
+        type: "string"
+        description: "Geographic coordinate type as modern or paleo"
       locale_name:
         type: "string"
-        description: "Site or collection name"
+        description: "Dataset or collection name"
       dataset_type:
         type: "string"
         description: "Type of paleoecological or paleontological data"
       min_age:
         type: "number"
         format: "double"
-        description: "Youngest possible age of the dataset"
+        description: "Youngest possible age of the locale"
       max_age:
         type: "number"
-        format: "Oldest possible age of the dataset"
+        format: "Oldest possible age of the locale"
       age_units:
         type: "string"
         description: "Time units (yr, ka or  ma)"
@@ -533,11 +537,11 @@ definitions:
       locale_id:
         type: "string"
         description: "DB specific index from dataset (neot) or coll (pbdb)"
-      occurences:
-        type: "array"
-        description: "List of occurences found within this locale (PBDB only)"
-        items:
-          type: "string"
+      # occurences:
+        # type: "array"
+        # description: "List of occurences found within this locale (PBDB only)"
+        # items:
+          # type: "string"
   # assemblage_inner_table:
     # properties:
       # taxon:
