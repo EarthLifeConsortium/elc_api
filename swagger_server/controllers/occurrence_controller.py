@@ -135,12 +135,9 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         resp_json = resp.json()
         if 'data' in resp_json:
             for rec in resp_json['data']:
-                occ_id = 'neot:occ:' + str(rec.get('OccurID'))
-
                 occ = dict()
-                occ.update(occ_id=occ_id,
-                           taxon=rec.get('TaxonName'))
 
+                occ_id = 'neot:occ:' + str(rec.get('OccurID'))
                 taxon_id = 'neot:txn:' + str(rec.get('TaxonID'))
 
                 if rec.get('AgeOlder') and rec.get('AgeYounger'):
@@ -155,7 +152,9 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                 lon = mean([rec.get('LongitudeEast'),
                             rec.get('LongitudeWest')])
 
-                occ.update(taxon_id=taxon_id,
+                occ.update(occ_id=occ_id,
+                           taxon=rec.get('TaxonName'),
+                           taxon_id=taxon_id,
                            max_age=max_age,
                            min_age=min_age,
                            age_units=age_units,
@@ -254,10 +253,8 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         if 'records' in resp_json:
             for rec in resp_json['records']:
                 occ = dict()
-                occ_id = 'pbdb:occ:' + str(rec.get('occurrence_no'))
-                occ.update(occ_id=occ_id,
-                           taxon=rec.get('accepted_name'))
 
+                occ_id = 'pbdb:occ:' + str(rec.get('occurrence_no'))
                 taxon_id = 'pbdb:txn:' + str(rec.get('accepted_no'))
 
                 if rec.get('max_ma') and rec.get('min_ma'):
@@ -270,7 +267,9 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                 lat = float(rec.get('lat'))
                 lon = float(rec.get('lng'))
 
-                occ.update(taxon_id=taxon_id,
+                occ.update(occ_id=occ_id,
+                           taxon=rec.get('accepted_name'),
+                           taxon_id=taxon_id,
                            max_age=max_age,
                            min_age=min_age,
                            age_units=age_units,
