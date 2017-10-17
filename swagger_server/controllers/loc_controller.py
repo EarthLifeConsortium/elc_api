@@ -44,6 +44,18 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
     else:
         show_params = list()
 
+    desc_obj.update(query={'endpoint': 'loc',
+                           'occid': occid,
+                           'bbox': bbox,
+                           'minage': minage,
+                           'maxage': maxage,
+                           'agescale': agescale,
+                           'timerule': timerule,
+                           'taxon': taxon,
+                           'limit': limit,
+                           'offset': offset,
+                           'show': show})
+
     #######################################
     # Query the Neotoma Database (Datasets)
     #######################################
@@ -247,19 +259,9 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
     ####################
     # Composite response
     ####################
-
-    print(show_params)
     if 'poll' in show_params:
-        if 'idx' in show_params:
-            return jsonify(description=desc_obj,
-                           records=loc_return)
-        else:
-            return jsonify(description=desc_obj)
-
+        return jsonify(description=desc_obj)
     if 'idx' in show_params:
-        return jsonify(description=desc_obj,
-                       indicies=id_str,
-                       records=loc_return)
+        return jsonify(indicies=id_str)
     else:
-        return jsonify(description=desc_obj,
-                       records=loc_return)
+        return jsonify(description=desc_obj, records=occ_return)

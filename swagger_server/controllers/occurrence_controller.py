@@ -57,17 +57,18 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     else:
         show_params = list()
 
-    desc_obj.update(query_params={'bbox': bbox,
-                                'minage': minage,
-                                'maxage': maxage,
-                                'agescale': agescale,
-                                'timerule': timerule,
-                                'taxon': taxon,
-                                'includelower': includelower,
-                                'limit': limit,
-                                'offset': offset,
-                                'show': show,
-                                'format': format})
+    desc_obj.update(query={'endpoint': 'occ',
+                           'bbox': bbox,
+                           'minage': minage,
+                           'maxage': maxage,
+                           'agescale': agescale,
+                           'timerule': timerule,
+                           'taxon': taxon,
+                           'includelower': includelower,
+                           'limit': limit,
+                           'offset': offset,
+                           'show': show,
+                           'format': format})
 
     ##########################################
     # Query the Neotoma Database (Occurrences)
@@ -176,7 +177,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
 
             # Build the JSON description object
             t1 = round(time.time()-t0, 3)
-            desc_obj.update(db_neotoma={'response_time': t1,
+            desc_obj.update(neotoma={'response_time': t1,
                                      'status_codes': resp.status_code,
                                      'subqueries': resp.url,
                                      'record_count': len(resp_json['data'])})
@@ -290,7 +291,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
 
             # Build the JSON description object
             t1 = round(time.time()-t0, 3)
-            desc_obj.update(db_pbdb={'response_time': t1,
+            desc_obj.update(pbdb={'response_time': t1,
                                   'status_codes': resp.status_code,
                                   'subqueries': resp.url,
                                   'record_count': len(resp_json['records'])})
