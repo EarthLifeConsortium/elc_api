@@ -50,7 +50,6 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     indicies = set()
     occ_return = list()
     age_units = 'ma'
-    geog_coords = 'modern'
 
     if show:
         show_params = show.lower().split(',')
@@ -76,6 +75,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     t0 = time.time()
     base_url = 'http://apidev.neotomadb.org/v1/data/occurrences'
     payload = dict()
+    geog_coords = 'modern'
 
     # Set geographical constraints (can be WKT)
     if bbox:
@@ -188,6 +188,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     t0 = time.time()
     base_url = 'http://paleobiodb.org/data1.2/occs/list.json'
     payload = dict()
+    geog_coords = 'paleo'
     payload.update(show='loc,coords,coll')
     payload.update(vocab='pbdb')
 
