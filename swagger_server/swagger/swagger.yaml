@@ -346,6 +346,11 @@ paths:
         required: false
         type: "integer"
         format: "int32"
+      - name: "show"
+        in: "query"
+        description: "idx: loc indicies only, poll: statistics only"
+        required: false
+        type: "string"
       responses:
         200:
           description: "Locale response"

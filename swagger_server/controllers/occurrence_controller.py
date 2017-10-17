@@ -39,11 +39,6 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     :show=full: return expanded geography and age data for each occurrence
     :show=idx:  return indicies list as a json object (possibly a long string)
     :show=poll: return only the description object
-
-    :format=bibjson: return nested BibJSON formatting (default)
-    :format=ris:     return RIS bibliographic interchance text format
-    :format=csv:     return tabular comma separated table
-
     """
     # Initialization and parameter checks
     if not bool(request.args):

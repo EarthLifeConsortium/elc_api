@@ -15,12 +15,16 @@ from statistics import mean
 
 def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
         timerule=None, taxon=None, includelower=None, limit=None,
-        offset=None):
+        offset=None, show=None):
     """
     Return locale identifiers from Neotoma and PBDB.
 
     A locale in PBDB is a collection, in Neotoma it is every individual
     dataset in a site.
+
+    :show=full: expanded return
+    :show=idx:  return indicies list as a json object (possibly a long string)
+    :show=poll: return only the description object
     """
     # Initialization and parameter checks
     if not bool(request.args):
@@ -30,17 +34,27 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
                                  type='about:blank')
 
     desc_obj = dict()
+    indicies = set()
     loc_return = list()
     age_units = 'ma'
     full_return = False
+
+    if show:
+        show_params = show.lower().split(',')
+    else:
+        show_params = list()
 
     #######################################
     # Query the Neotoma Database (Datasets)
     #######################################
     t0 = time.time()
-    neotoma_base = 'http://apidev.neotomadb.org/v1/data/datasets'
+    base_url = 'http://api.neotomadb.org/v1/data/datasets'
     payload = dict()
     geog_coords = 'modern'
+
+    # Parse arguments and format database api parameters
+    if occid:
+        payload.update(neotoma_occ_identifier=occid)
 
     # Set geographical constraints (can be WKT)
     if bbox:
@@ -77,32 +91,48 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
 
     # Set specific taxon search or allow lower taxa as well,
     # default if parameter omitted is True
-    if includelower or includelower == None:
-        payload.update(nametype='base', taxonname=taxon)
-    else:
-        payload.update(nametype='tax', taxonname=taxon)
+    #  if includelower or includelower == None:
+        #  payload.update(nametype='base', taxonname=taxon)
+    #  else:
+        #  payload.update(nametype='tax', taxonname=taxon)
+    if taxon:
+        payload.update(taxonname=taxon)
 
     # Set constraints on the data return
-    if limit:
-        payload.update(limit=limit)
-    else:
-        payload.update(limit='999999')
+    #   Note: Not currently supported in Neotoma API
+    #  if limit:
+        #  payload.update(limit=limit)
+    #  else:
+        #  payload.update(limit='999999')
 
     # Offset the returned records, used with limit for large returns
-    if offset:
-        payload.update(offset=offset)
+    #   Note: Not currently supported in Neotoma API
+    #  if offset:
+        #  payload.update(offset=offset)
 
     # Issue GET request to Neotoma
-    resp = requests.get(base_url, params=payload, timeout=None)
+    #   Note: The Neotoma API does not currently support searching by
+    #   occurrence so disable the request entirely if this parameter
+    #   is specified
+    if occid:
+        resp = None
+    else:
+        resp = requests.get(base_url, params=payload, timeout=None)
 
+    # Parse Neotoma return and add to the response object
+    if resp.status_code == 200:
+        resp_json = resp.json()
+        if 'data' in resp_json:
+            for rec in resp_json['data']:
+                loc_obj = dict()
+                #  loc_id = 'neot:dst:' + str(rec.get('collection_no'))
 
-    # neotoma_res = requests.get(neotoma_base, params=payload, timeout=None)
-    
-    # ### Parse neotoma response
-
-
-
-
+            # Build the JSON description object
+            t1 = round(time.time()-t0, 3)
+            desc_obj.update(neotoma={'response_time': t1,
+                                     'status_codes': resp.status_code,
+                                     'subqueries': resp.url,
+                                     'record_count': len(resp_json['data'])})
 
     ###############################################
     # Query the Paleobiology Database (Collections)
@@ -160,6 +190,12 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
     else:
         payload.update(taxon_name=taxon)
 
+    # Set constraints on the data return
+    if limit:
+        payload.update(limit=limit)
+    else:
+        payload.update(limit='999999')
+
     # Issue GET request to database API
     resp = requests.get(base_url, params=payload, timeout=None)
 
@@ -196,11 +232,30 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
                 # Add the fomatted locale data to the return
                 loc_return.append(loc_obj)
 
+                # Add the unique database ID to the returned string
+                indicies.add(loc_id)
+
             # Build the JSON description object
             t1 = round(time.time()-t0, 3)
             desc_obj.update(pbdb={'response_time': t1,
+                                  'status_codes': resp.status_code,
                                   'subqueries': resp.url,
                                   'record_count': len(resp_json['records'])})
+    ####################
     # Composite response
+    ####################
 
-    return jsonify(description=desc_obj, records=loc_return)
+    if 'poll' in show_params:
+        if 'idx' in show_params:
+            return jsonify(description=desc_obj,
+                           records=loc_return)
+        else:
+            return jsonify(description=desc_obj)
+
+    if 'idx' in show_params:
+        return jsonify(description=desc_obj,
+                       indicies=id_str,
+                       records=loc_return)
+    else:
+        return jsonify(description=desc_obj,
+                       records=loc_return)
