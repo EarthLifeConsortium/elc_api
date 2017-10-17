@@ -304,7 +304,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     ####################
     if 'poll' in show_params:
         return jsonify(description=desc_obj)
-    if 'idx' in show_params:
+    elif 'idx' in show_params:
         return jsonify(indicies=id_str)
     else:
         return jsonify(description=desc_obj, records=occ_return)
