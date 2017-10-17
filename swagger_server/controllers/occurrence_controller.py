@@ -29,7 +29,7 @@ def format_csv(occ):
     # End subroutine: format_csv
     return fmt_occ
 
-
+                            
 def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         taxon=None, includelower=None, limit=None, offset=None, show=None,
         format=None):
@@ -56,6 +56,18 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         show_params = show.lower().split(',')
     else:
         show_params = list()
+
+    desc_obj.update(query_params={'bbox': bbox,
+                                'minage': minage,
+                                'maxage': maxage,
+                                'agescale': agescale,
+                                'timerule': timerule,
+                                'taxon': taxon,
+                                'includelower': includelower,
+                                'limit': limit,
+                                'offset': offset,
+                                'show': show,
+                                'format': format})
 
     ##########################################
     # Query the Neotoma Database (Occurrences)
@@ -164,7 +176,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
 
             # Build the JSON description object
             t1 = round(time.time()-t0, 3)
-            desc_obj.update(neotoma={'response_time': t1,
+            desc_obj.update(db_neotoma={'response_time': t1,
                                      'status_codes': resp.status_code,
                                      'subqueries': resp.url,
                                      'record_count': len(resp_json['data'])})
@@ -278,7 +290,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
 
             # Build the JSON description object
             t1 = round(time.time()-t0, 3)
-            desc_obj.update(pbdb={'response_time': t1,
+            desc_obj.update(db_pbdb={'response_time': t1,
                                   'status_codes': resp.status_code,
                                   'subqueries': resp.url,
                                   'record_count': len(resp_json['records'])})
@@ -290,16 +302,8 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     # Composite response
     ####################
     if 'poll' in show_params:
-        if 'idx' in show_params:
-            return jsonify(description=desc_obj,
-                           indicies=id_str)
-        else:
-            return jsonify(description=desc_obj)
-
+        return jsonify(description=desc_obj)
     if 'idx' in show_params:
-        return jsonify(description=desc_obj,
-                       indicies=id_str,
-                       records=occ_return)
+        return jsonify(indicies=id_str)
     else:
-        return jsonify(description=desc_obj,
-                       records=occ_return)
+        return jsonify(description=desc_obj, records=occ_return)
