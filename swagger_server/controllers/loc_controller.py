@@ -241,10 +241,14 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
                                   'status_codes': resp.status_code,
                                   'subqueries': resp.url,
                                   'record_count': len(resp_json['records'])})
+    # Reformat set of all retured ID numbers as a string
+    id_str = ','.join(indicies)
+
     ####################
     # Composite response
     ####################
 
+    print(show_params)
     if 'poll' in show_params:
         if 'idx' in show_params:
             return jsonify(description=desc_obj,

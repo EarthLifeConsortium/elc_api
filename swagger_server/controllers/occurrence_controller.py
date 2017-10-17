@@ -36,7 +36,6 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     """
     Return occurrence identifiers from Neotoma and PBDB.
 
-    :show=full: return expanded geography and age data for each occurrence
     :show=idx:  return indicies list as a json object (possibly a long string)
     :show=poll: return only the description object
     """
@@ -129,28 +128,27 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                 occ.update(occ_id=occ_id,
                            taxon=rec.get('TaxonName'))
 
-                if 'full' in show_params:
-                    taxon_id = 'neot:txn:' + str(rec.get('TaxonID'))
+                taxon_id = 'neot:txn:' + str(rec.get('TaxonID'))
 
-                    if rec.get('AgeOlder') and rec.get('AgeYounger'):
-                        max_age = rec.get('AgeOlder') * age_scaler
-                        min_age = rec.get('AgeYounger') * age_scaler
-                    else:
-                        max_age = None
-                        min_age = None
+                if rec.get('AgeOlder') and rec.get('AgeYounger'):
+                    max_age = rec.get('AgeOlder') * age_scaler
+                    min_age = rec.get('AgeYounger') * age_scaler
+                else:
+                    max_age = None
+                    min_age = None
 
-                    lat = mean([rec.get('LatitudeNorth'),
-                                rec.get('LatitudeSouth')])
-                    lon = mean([rec.get('LongitudeEast'),
-                                rec.get('LongitudeWest')])
+                lat = mean([rec.get('LatitudeNorth'),
+                            rec.get('LatitudeSouth')])
+                lon = mean([rec.get('LongitudeEast'),
+                            rec.get('LongitudeWest')])
 
-                    occ.update(taxon_id=taxon_id,
-                               max_age=max_age,
-                               min_age=min_age,
-                               age_units=age_units,
-                               lat=lat,
-                               lon=lon,
-                               geog_coords=geog_coords)
+                occ.update(taxon_id=taxon_id,
+                           max_age=max_age,
+                           min_age=min_age,
+                           age_units=age_units,
+                           lat=lat,
+                           lon=lon,
+                           geog_coords=geog_coords)
 
                 # Call the appropriate output formatter
                 if format and format.lower() == 'csv':
@@ -177,8 +175,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     t0 = time.time()
     base_url = 'http://paleobiodb.org/data1.2/occs/list.json'
     payload = dict()
-    if 'full' in show_params:
-        payload.update(show='loc,coords,coll')
+    payload.update(show='loc,coords,coll')
     payload.update(vocab='pbdb')
 
     # Test if geography is lat/lon rectangle or WKT
@@ -247,26 +244,25 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                 occ.update(occ_id=occ_id,
                            taxon=rec.get('accepted_name'))
 
-                if 'full' in show_params:
-                    taxon_id = 'pbdb:txn:' + str(rec.get('accepted_no'))
+                taxon_id = 'pbdb:txn:' + str(rec.get('accepted_no'))
 
-                    if rec.get('max_ma') and rec.get('min_ma'):
-                        max_age = float(rec.get('max_ma')) * age_scaler
-                        min_age = float(rec.get('min_ma')) * age_scaler
-                    else:
-                        max_age = None
-                        min_age = None
+                if rec.get('max_ma') and rec.get('min_ma'):
+                    max_age = float(rec.get('max_ma')) * age_scaler
+                    min_age = float(rec.get('min_ma')) * age_scaler
+                else:
+                    max_age = None
+                    min_age = None
 
-                    lat = float(rec.get('lat'))
-                    lon = float(rec.get('lng'))
+                lat = float(rec.get('lat'))
+                lon = float(rec.get('lng'))
 
-                    occ.update(taxon_id=taxon_id,
-                               max_age=max_age,
-                               min_age=min_age,
-                               age_units=age_units,
-                               lat=lat,
-                               lon=lon,
-                               geog_coords=geog_coords)
+                occ.update(taxon_id=taxon_id,
+                           max_age=max_age,
+                           min_age=min_age,
+                           age_units=age_units,
+                           lat=lat,
+                           lon=lon,
+                           geog_coords=geog_coords)
 
                 # Call the appropriate output formatter
                 if format and format.lower() == 'csv':
