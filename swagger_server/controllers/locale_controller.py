@@ -6,7 +6,7 @@ Dataset identifiers are returned for Neotoma and collection identifiers
 for the PBDB.
 """
 
-#  import pdb
+import pdb
 import requests
 import time
 import connexion
@@ -143,30 +143,36 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
                 loc_obj = dict()
                 loc_id = 'neot:dst:' + str(rec.get('DatasetID'))
 
-                if rec.get('AgeOldest') and rec.get('AgeYoungest'):
+                try:
+                    loc_name = rec['Site']['SiteName']
+                except:
+                    loc_name = None
+
+                try:
                     max_age = float(rec.get('AgeOldest')) * age_scaler
                     min_age = float(rec.get('AgeYoungest')) * age_scaler
-                else:
+                except:
                     max_age = None
                     min_age = None
 
-                #  lat = float(rec.get('lat'))
-                #  lon = float(rec.get('lng'))
+                try:
+                    lat = mean([rec['Site']['LatitudeNorth'],
+                                rec['Site']['LatitudeSouth']])
+                    lon = mean([rec['Site']['LongitudeEast'],
+                                rec['Site']['LongitudeWest']])
+                except:
+                    lat = None
+                    lon = None
 
-                loc_obj.update(locale_id=loc_id,
+                loc_obj.update(lat=round(lat,5),
+                               lon=round(lon,5),
+                               locale_name=loc_name,
+                               dataset_type=rec.get('DatasetType'),
+                               min_age=min_age,
                                max_age=max_age,
-                               min_age=min_age)
-
-                #  loc_obj.update(lat=lat,
-                               #  lon=lon,
-                               #  locale_name=rec.get('collection_name'),
-                               #  dataset_type='faunal',
-                               #  min_age=min_age,
-                               #  max_age=max_age,
-                               #  age_basis='stratigraphy',
-                               #  locale_id=loc_id,
-                               #  geog_coords=geog_coords)
-                               #  #  occurrences=occ_list)
+                               age_basis=rec.get('CollUnitType'),
+                               locale_id=loc_id,
+                               geog_coords=geog_coords)
 
                 # Add the fomatted locale data to the return
                 loc_return.append(loc_obj)
@@ -263,8 +269,8 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
                 lat = float(rec.get('lat'))
                 lon = float(rec.get('lng'))
  
-                loc_obj.update(lat=lat,
-                               lon=lon,
+                loc_obj.update(lat=round(lat,5),
+                               lon=round(lon,5),
                                locale_name=rec.get('collection_name'),
                                dataset_type='faunal',
                                min_age=min_age,

@@ -158,8 +158,8 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                            max_age=max_age,
                            min_age=min_age,
                            age_units=age_units,
-                           lat=lat,
-                           lon=lon,
+                           lat=round(lat,5),
+                           lon=round(lon,5),
                            geog_coords=geog_coords)
 
                 # Call the appropriate output formatter
@@ -273,8 +273,8 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                            max_age=max_age,
                            min_age=min_age,
                            age_units=age_units,
-                           lat=lat,
-                           lon=lon,
+                           lat=round(lat,5),
+                           lon=round(lon,5),
                            geog_coords=geog_coords)
 
                 # Call the appropriate output formatter
