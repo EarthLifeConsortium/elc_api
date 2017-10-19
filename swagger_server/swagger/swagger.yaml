@@ -1,7 +1,7 @@
 ---
 swagger: "2.0"
 info:
-  description: "Composite interface to the Neotoma and PBDB databases"
+  description: "Composite interface to the Neotoma and PBDB databases. WARNING: This API is currently under active development. Functionality is being added and errors corrected on a continuous basis."
   version: "1.0"
   title: "EarthLife Consortium Public API"
   contact:
