@@ -32,6 +32,11 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
                                  title='Bad Request',
                                  detail='No parameters provided.',
                                  type='about:blank')
+    if occid and taxon:
+        return connexion.problem(status=400,
+                                 title='Bad Request',
+                                 detail='Specify either occurence ID or taxon, not both.',
+                                 type='about:blank')
 
     desc_obj = dict()
     indicies = set()
