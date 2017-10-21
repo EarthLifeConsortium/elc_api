@@ -112,10 +112,11 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
 
     # Set specific taxon search or allow lower taxa as well,
     # default if parameter omitted is True
-    if includelower or includelower == None:
-        payload.update(nametype='base', taxonname=taxon)
-    else:
-        payload.update(nametype='tax', taxonname=taxon)
+    if taxon:
+        if includelower or includelower == None:
+            payload.update(nametype='base', taxonname=taxon)
+        else:
+            payload.update(nametype='tax', taxonname=taxon)
 
     # Set constraints on the data return
     if limit:
@@ -229,10 +230,11 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
 
     # Set specific taxon search or allow lower taxa as well,
     # default if parameter omitted is True
-    if includelower or includelower == None:
-        payload.update(base_name=taxon)
-    else:
-        payload.update(taxon_name=taxon)
+    if taxon:
+        if includelower or includelower == None:
+            payload.update(base_name=taxon)
+        else:
+            payload.update(taxon_name=taxon)
 
     # Set constraints on the data return
     if limit:

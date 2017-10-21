@@ -52,6 +52,7 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
                            'agescale': agescale,
                            'timerule': timerule,
                            'taxon': taxon,
+                           'includelower': includelower,
                            'limit': limit,
                            'offset': offset,
                            'show': show})
@@ -104,16 +105,15 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
     # Set specific taxon search or allow lower taxa as well,
     # default if parameter omitted is True
     #   Note: Including subtaxa is dataset searches is not currently
-    #   supported by the Neotoma API
-    #  if includelower or includelower == None:
-        #  payload.update(nametype='base', taxonname=taxon)
-    #  else:
-        #  payload.update(nametype='tax', taxonname=taxon)
-    
-    # Instead set explicit taxon
+    #   supported by the Neotoma API. Wildcard completion is a
+    #   workaround.
     if taxon:
-        payload.update(taxonname=taxon)
-
+        if includelower or includelower == None:
+            subtaxa = taxon + '%'
+            payload.update(taxonname=subtaxa)
+        else:
+            payload.update(taxonname=taxon)
+    
     # Set constraints on the data return
     #   Note: Not currently supported in Neotoma API
     #  if limit:
@@ -238,10 +238,11 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
 
     # Set specific taxon search or allow lower taxa as well,
     # default if parameter omitted is True
-    if includelower or includelower == None:
-        payload.update(base_name=taxon)
-    else:
-        payload.update(taxon_name=taxon)
+    if taxon:
+        if includelower or includelower == None:
+            payload.update(base_name=taxon)
+        else:
+            payload.update(taxon_name=taxon)
 
     # Set constraints on the data return
     if limit:
