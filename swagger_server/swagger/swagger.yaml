@@ -198,9 +198,8 @@ paths:
         format: "int32"
       - name: "show"
         in: "query"
-        description: "If 'full', show extended data objects. If 'poll' return\
-          \ only summary statistics. Default is return taxon ID and scientific\
-          \ name only"
+        description: "Set to idx for occurrence id's only. Set to poll for\
+          \ statistics only. Otherwise, full return"
         required: false
         type: "string"
       responses:
@@ -348,7 +347,8 @@ paths:
         format: "int32"
       - name: "show"
         in: "query"
-        description: "idx: loc indicies only, poll: statistics only"
+        description: "Set to idx for locale id's only. Set to poll for\
+          \ statistics only. Otherwise, full return"
         required: false
         type: "string"
       responses:
