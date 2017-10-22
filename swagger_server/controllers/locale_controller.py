@@ -102,6 +102,8 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
             payload.update(ageold=int(maxage/age_scaler))
 
     # Set timescale bounding rules
+    #   Note: Timerules are not currently supported by the
+    #   Neotoma API. 
     if timerule and timerule.lower() == 'major':
        payload.update(agedocontain=0)
     elif timerule and timerule.lower() == 'overlap':
@@ -110,8 +112,8 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
     # Set specific taxon search or allow lower taxa as well,
     # default if parameter omitted is True
     #   Note: Including subtaxa is dataset searches is not currently
-    #   supported by the Neotoma API. Wildcard completion is a
-    #   workaround.
+    #   supported by the Neotoma API. Wildcard completion is an
+    #   imperfect workaround.
     if taxon:
         if includelower or includelower == None:
             subtaxa = taxon + '%'
