@@ -12,6 +12,7 @@ import time
 import connexion
 from flask import request, jsonify
 from statistics import mean
+from ControllerCommon import params
 
 
 def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
@@ -72,6 +73,7 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
 
     # Parse arguments and format database api parameters
     if occid:
+        id = 
         payload.update(neotoma_occ_identifier=occid)
 
     # Set geographical constraints (can be WKT)
