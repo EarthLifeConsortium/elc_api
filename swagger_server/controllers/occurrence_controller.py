@@ -9,6 +9,7 @@ import time
 import connexion
 from flask import request, jsonify
 from statistics import mean
+from ControllerCommon import params
 
 
 def format_json(occ):
@@ -79,7 +80,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
 
     # Set geographical constraints (can be WKT)
     if bbox:
-        payload.update(bbox=bbox)
+        set_georaphy(payload, bbox, 'neot'):
 
     # Set all age parameters to year, kilo-year or mega-annum
     if agescale and agescale.lower() == 'yr':
@@ -105,10 +106,8 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
             payload.update(ageold=int(maxage/age_scaler))
 
     # Set timescale bounding rules
-    if timerule and timerule.lower() == 'major':
-        payload.update(agedocontain=0)
-    elif timerule and timerule.lower() == 'overlap':
-        payload.update(agedocontain=1)
+    if timerule:
+        params.set_timebound(payload, timerule, 'neot')
 
     # Set specific taxon search or allow lower taxa as well,
     # default if parameter omitted is True
@@ -194,12 +193,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
 
     # Test if geography is lat/lon rectangle or WKT
     if bbox:
-        if len(bbox) == 4:
-            bbox_list = bbox.split(',')
-            payload.update(lngmin=bbox_list[0], latmin=bbox_list[1],
-                           lngmax=bbox_list[2], latmax=bbox_list[3])
-        else:
-            payload.update(loc=box)
+        set_georaphy(payload, bbox, 'pbdb'):
 
     # Set all age parameters to year, kilo-year or mega-annum
     if agescale and agescale.lower() == 'yr':
@@ -226,7 +220,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
 
     # Set the timescale bounding rules
     if timerule:
-        payload.update(timerule=timerule)
+        params.set_timebound(payload, timerule, 'pbdb')
 
     # Set specific taxon search or allow lower taxa as well,
     # default if parameter omitted is True
