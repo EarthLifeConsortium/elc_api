@@ -37,7 +37,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     """
     Return occurrence identifiers from Neotoma and PBDB.
 
-    :show=idx:  return indicies list as a json object (possibly a long string)
+    :show=idx: return indicies list as a json object (possibly a long string)
     :show=poll: return only the description object
     """
     # Initialization and parameter checks
@@ -83,6 +83,9 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         set_georaphy(payload, bbox, 'neot'):
 
     # Set all age parameters to year, kilo-year or mega-annum
+    if agescale:
+
+
     if agescale and agescale.lower() == 'yr':
         age_scaler = 1
         age_units = 'yr'

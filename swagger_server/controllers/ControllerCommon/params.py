@@ -6,6 +6,7 @@ def id_parse(id_list, db_name):
     Separate database:datatype:id_number from a list.
     
     :arg db_name: Name of DB to search for in list
+    :return e: Badly formatted data in id_list
     """
     import re
 
@@ -26,8 +27,7 @@ def id_parse(id_list, db_name):
             elif datatype.lower() == 'txn':
                 id_obj['txn'].append(id_num)
             else:
-                error = 'Incorrect datatype in ID list: ' + datatype
-                return error
+                return 'Incorrect datatype in ID list: ' + str(datatype)
 
     return id_obj
 
@@ -41,29 +41,34 @@ def set_age(payload, agescale, minage, maxage, db_name):
     :arg maxage: Oldest age of the record bound
     :arg db_name: Name of the database for which to convert units
     """
-    if agescale and agescale.lower() == 'yr':
-        age_scaler = 1
-        age_units = 'yr'
+
+    # Native DB age format conversion dict
+    age = {'neot':{'yr':1, 'ka':1e-03, 'ma':1e-06},
+           'pbdb':{'yr':1e06, 'ka':1e03, 'ma':1}}
+    units = agescale.lower()
+
+    if units == 'yr':
+        age_scaler = age[db_name][units]
         if minage:
             payload.update(ageyoung=int(minage))
         if maxage:
             payload.update(ageold=int(maxage))
-    elif agescale and agescale.lower() == 'ka':
-        age_scaler = 1e-03
-        age_units = 'ka'
+    elif units == 'ka':
+        age_scaler = age[db_name][units]
+        if minage:
+            payload.update(ageyoung=int(minage/age_scaler))
+        if maxage:
+            payload.update(ageold=int(maxage/age_scaler))
+    elif units == 'ma':
+        age_scaler = age[db_name][units]
         if minage:
             payload.update(ageyoung=int(minage/age_scaler))
         if maxage:
             payload.update(ageold=int(maxage/age_scaler))
     else:
-        age_scaler = 1e-06
-        age_units = 'ma'
-        if minage:
-            payload.update(ageyoung=int(minage/age_scaler))
-        if maxage:
-            payload.update(ageold=int(maxage/age_scaler))
+        return 'Incorrect age scaler: ' + str(agescale)
 
-    return age_scaler, age_units
+    return age_scaler
 
 
 def set_timebound(payload, timerule, db_name):
@@ -90,9 +95,12 @@ def set_georaphy(payload, bbox, db_name):
     :arg bbox: A list containing geographic parameters
     :arg db_name: Database to parameterize
     """
-    if len(bbox) == 4:
-        bbox_list = bbox.split(',')
-        payload.update(lngmin=bbox_list[0], latmin=bbox_list[1],
-                       lngmax=bbox_list[2], latmax=bbox_list[3])
-    else:
-        payload.update(loc=box)
+    if db_name == 'neot':
+        payload.update(bbox=bbox)
+    elif db_name == 'pbdb':
+        if len(bbox) == 4:
+            bbox_list = bbox.split(',')
+            payload.update(lngmin=bbox_list[0], latmin=bbox_list[1],
+                           lngmax=bbox_list[2], latmax=bbox_list[3])
+        else:
+            payload.update(loc=box)
