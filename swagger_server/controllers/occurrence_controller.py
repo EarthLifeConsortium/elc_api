@@ -37,8 +37,8 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     """
     Return occurrence identifiers from Neotoma and PBDB.
 
-    :show=idx: return indicies list as a json object (possibly a long string)
-    :show=poll: return only the description object
+    :param show=idx: return indicies list as a json object (possibly a long string)
+    :param show=poll: return only the description object
     """
     # Initialization and parameter checks
     if not bool(request.args):
@@ -80,33 +80,11 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
 
     # Set geographical constraints (can be WKT)
     if bbox:
-        set_georaphy(payload, bbox, 'neot'):
+        params.set_georaphy(payload, bbox, 'neot')
 
     # Set all age parameters to year, kilo-year or mega-annum
     if agescale:
-
-
-    if agescale and agescale.lower() == 'yr':
-        age_scaler = 1
-        age_units = 'yr'
-        if minage:
-            payload.update(ageyoung=int(minage))
-        if maxage:
-            payload.update(ageold=int(maxage))
-    elif agescale and agescale.lower() == 'ka':
-        age_scaler = 1e-03
-        age_units = 'ka'
-        if minage:
-            payload.update(ageyoung=int(minage/age_scaler))
-        if maxage:
-            payload.update(ageold=int(maxage/age_scaler))
-    else:
-        age_scaler = 1e-06
-        age_units = 'ma'
-        if minage:
-            payload.update(ageyoung=int(minage/age_scaler))
-        if maxage:
-            payload.update(ageold=int(maxage/age_scaler))
+        age_scaler = params.set_age(payload, agescale, minage, maxage, 'neot')
 
     # Set timescale bounding rules
     if timerule:
@@ -196,30 +174,11 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
 
     # Test if geography is lat/lon rectangle or WKT
     if bbox:
-        set_georaphy(payload, bbox, 'pbdb'):
+        params.set_georaphy(payload, bbox, 'pbdb'):
 
     # Set all age parameters to year, kilo-year or mega-annum
-    if agescale and agescale.lower() == 'yr':
-        age_scaler = 1e06
-        age_units = 'yr'
-        if minage:
-            payload.update(min_ma=float(minage)/age_scaler)
-        if maxage:
-            payload.update(max_ma=float(maxage)/age_scaler)
-    elif agescale and agescale.lower() == 'ka':
-        age_scaler = 1e03
-        age_units = 'ka'
-        if minage:
-            payload.update(min_ma=float(minage)/age_scaler)
-        if maxage:
-            payload.update(max_ma=float(maxage)/age_scaler)
-    else:
-        age_scaler = 1
-        age_units = 'ma'
-        if minage:
-            payload.update(min_ma=minage)
-        if maxage:
-            payload.update(max_ma=maxage)
+    if agescale:
+        age_scaler = params.set_age(payload, agescale, minage, maxage, 'pbdb')
 
     # Set the timescale bounding rules
     if timerule:
