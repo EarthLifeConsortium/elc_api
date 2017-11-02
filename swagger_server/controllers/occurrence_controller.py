@@ -12,25 +12,6 @@ from statistics import mean
 from ControllerCommon import params
 
 
-def format_json(occ):
-    """Format the occurrence data as a JSON return."""
-    fmt_occ = dict()
-
-    for key in occ:
-        fmt_occ.update({key: occ[key]})
-
-    # End subroutine: format_json
-    return fmt_occ
-
-
-def format_csv(occ):
-    """Format the occurrence data as a tabular CSV file."""
-    fmt_occ = dict()
-
-    # End subroutine: format_csv
-    return fmt_occ
-
-                            
 def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         taxon=None, includelower=None, limit=None, offset=None, show=None,
         format=None):
