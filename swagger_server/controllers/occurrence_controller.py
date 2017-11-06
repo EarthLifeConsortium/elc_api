@@ -9,7 +9,7 @@ import time
 import connexion
 from flask import request, jsonify
 from statistics import mean
-from ControllerCommon import params
+from .ControllerCommon import params
 
 
 def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
@@ -155,7 +155,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
 
     # Test if geography is lat/lon rectangle or WKT
     if bbox:
-        params.set_georaphy(payload, bbox, 'pbdb'):
+        params.set_georaphy(payload, bbox, 'pbdb')
 
     # Set all age parameters to year, kilo-year or mega-annum
     if agescale:
