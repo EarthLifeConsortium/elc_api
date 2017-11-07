@@ -24,10 +24,10 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
     A locale in PBDB is a collection, in Neotoma it is every individual
     dataset in a site.
 
-    :show=idx:  return indicies list as a json object (possibly a long string)
-    :show=poll: return only the description object
+    :arg show=idx:  return indicies list as a json object (possibly a long string)
+    :arg show=poll: return only the description object
     """
-    # Initialization and parameter checks
+    # Parameter checks
     if not bool(request.args):
         return connexion.problem(status=400,
                                  title='Bad Request',
@@ -39,6 +39,7 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
                                  detail='Specify either occurence ID or taxon, not both.',
                                  type='about:blank')
 
+    # Init core returned objects
     desc_obj = dict()
     indicies = set()
     loc_return = list()

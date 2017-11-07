@@ -18,10 +18,10 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     """
     Return occurrence identifiers from Neotoma and PBDB.
 
-    :param show=idx: return indicies list as a json object (possibly a long string)
-    :param show=poll: return only the description object
+    :arg show=idx: return indicies list as a json object (possibly a long string)
+    :arg show=poll: return only the description object
     """
-    # Initialization and parameter checks
+    # Parameter checks
     if not bool(request.args):
         return connexion.problem(status=400,
                                  title='Bad Request',
