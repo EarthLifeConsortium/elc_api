@@ -1,17 +1,35 @@
 """Common output generators functions for the API controllers."""
 
-def format_json(occ):
-    """Format the occurrence data as a JSON return."""
-    fmt_occ = dict()
 
-    for key in occ:
-        fmt_occ.update({key: occ[key]})
+def type_json(obj):
+    """Format the objurrence data as a JSON return."""
+    fmt_obj = dict()
 
-    return fmt_occ
+    for key in obj:
+        fmt_obj.update({key: obj[key]})
+
+    return fmt_obj
 
 
-def format_csv(occ):
-    """Format the occurrence data as a tabular CSV file."""
-    fmt_occ = dict()
+def type_csv(obj):
+    """Format the objurrence data as a tabular CSV file."""
+    fmt_obj = dict()
 
-    return fmt_occ
+    return fmt_obj
+
+
+def type_bibjson(obj):
+    fmt_obj = dict()
+
+    return fmt_obj
+
+
+def type_ris(ojb):
+    fmt_obj = dict()
+
+    return fmt_obj
+
+
+def type_itis(obj):
+
+    return fmt_obj

@@ -9,7 +9,7 @@ import time
 import connexion
 from flask import request, jsonify
 from statistics import mean
-from .ControllerCommon import params
+from .ControllerCommon import params, settings, formatters
 
 
 def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
@@ -28,16 +28,22 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                                  detail='No parameters provided.',
                                  type='about:blank')
 
+    # Init core returned objects
     desc_obj = dict()
     indicies = set()
     occ_return = list()
-    age_units = 'ma'
 
+    # Parse return type
     if show:
         show_params = show.lower().split(',')
     else:
         show_params = list()
 
+    # Set default age units if not specified
+    if not agescale:
+        agescale = 'ma'
+
+    # Generate query summary object
     desc_obj.update(query={'endpoint': 'occ',
                            'bbox': bbox,
                            'minage': minage,
@@ -55,7 +61,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     # Query the Neotoma Database (Occurrences)
     ##########################################
     t0 = time.time()
-    base_url = 'http://apidev.neotomadb.org/v1/data/occurrences'
+    base_url = settings.config('db_api', 'neot') + 'occurrences'
     payload = dict()
     geog_coords = 'modern'
 
@@ -64,8 +70,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         params.set_georaphy(payload, bbox, 'neot')
 
     # Set all age parameters to year, kilo-year or mega-annum
-    if agescale:
-        age_scaler = params.set_age(payload, agescale, minage, maxage, 'neot')
+    age_scaler = params.set_age(payload, agescale, minage, maxage, 'neot')
 
     # Set timescale bounding rules
     if timerule:
@@ -90,7 +95,9 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         payload.update(offset=offset)
 
     # Issue GET request to Neotoma
-    resp = requests.get(base_url, params=payload, timeout=None)
+    resp = requests.get(base_url,
+                        params=payload,
+                        timeout=settings.config('timeout', 'neot'))
 
     # Parse Neotoma return and add to the response object
     if resp.status_code == 200:
@@ -119,16 +126,16 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                            taxon_id=taxon_id,
                            max_age=max_age,
                            min_age=min_age,
-                           age_units=age_units,
+                           age_units=agescale,
                            lat=round(lat,5),
                            lon=round(lon,5),
                            geog_coords=geog_coords)
 
                 # Call the appropriate output formatter
                 if format and format.lower() == 'csv':
-                    occ_obj = format_csv(occ)
+                    occ_obj = formatters.type_csv(occ)
                 else:
-                    occ_obj = format_json(occ)
+                    occ_obj = formatters.type_json(occ)
 
                 # Add the formatted occurrence to the return
                 occ_return.append(occ_obj)
@@ -147,7 +154,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     # Query the Paleobiology Database (Occurrences)
     ###############################################
     t0 = time.time()
-    base_url = 'http://paleobiodb.org/data1.2/occs/list.json'
+    base_url = settings.config('db_api', 'pbdb') + 'occs/list.json'
     payload = dict()
     geog_coords = 'paleo'
     payload.update(show='loc,coords,coll')
@@ -158,8 +165,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         params.set_georaphy(payload, bbox, 'pbdb')
 
     # Set all age parameters to year, kilo-year or mega-annum
-    if agescale:
-        age_scaler = params.set_age(payload, agescale, minage, maxage, 'pbdb')
+    age_scaler = params.set_age(payload, agescale, minage, maxage, 'pbdb')
 
     # Set the timescale bounding rules
     if timerule:
@@ -184,7 +190,9 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
         payload.update(offset=offset)
 
     # Issue GET request to PBDB
-    resp = requests.get(base_url, params=payload, timeout=None)
+    resp = requests.get(base_url,
+                        params=payload,
+                        timeout=settings.config('timeout', 'pbdb'))
 
     # Parse PBDB return and add to the response object
     if resp.status_code == 200:
@@ -211,16 +219,16 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                            taxon_id=taxon_id,
                            max_age=max_age,
                            min_age=min_age,
-                           age_units=age_units,
+                           age_units=agescale,
                            lat=round(lat,5),
                            lon=round(lon,5),
                            geog_coords=geog_coords)
 
                 # Call the appropriate output formatter
                 if format and format.lower() == 'csv':
-                    occ_obj = format_csv(occ)
+                    occ_obj = formatters.type_csv(occ)
                 else:
-                    occ_obj = format_json(occ)
+                    occ_obj = formatters.type_json(occ)
 
                 # Add the formatted occurrence to the return
                 occ_return.append(occ_obj)

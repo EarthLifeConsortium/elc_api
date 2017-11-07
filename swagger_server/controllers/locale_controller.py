@@ -12,7 +12,7 @@ import time
 import connexion
 from flask import request, jsonify
 from statistics import mean
-from ControllerCommon import params
+from .ControllerCommon import params
 
 
 def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
@@ -72,44 +72,22 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
     geog_coords = 'modern'
 
     # Parse arguments and format database api parameters
-    if occid:
-        id = 
-        payload.update(neotoma_occ_identifier=occid)
+    #  if occid:
+        #  id = 
+        #  payload.update(neotoma_occ_identifier=occid)
 
     # Set geographical constraints (can be WKT)
     if bbox:
-       payload.update(loc=bbox)
+        params.set_geography(payload, bbox, 'neot')
 
     # Set all age parameters to year, kilo-year or mega-annum
-    if agescale and agescale.lower() == 'yr':
-        age_scaler = 1
-        age_units = 'yr'
-        if minage:
-            payload.update(ageyoung=int(minage))
-        if maxage:
-            payload.update(ageold=int(maxage))
-    elif agescale and agescale.lower() == 'ka':
-        age_scaler = 1e-03
-        age_units = 'ka'
-        if minage:
-            payload.update(ageyoung=int(minage/age_scaler))
-        if maxage:
-            payload.update(ageold=int(maxage/age_scaler))
-    else:
-        age_scaler = 1e-06
-        age_units = 'ma'
-        if minage:
-            payload.update(ageyoung=int(minage/age_scaler))
-        if maxage:
-            payload.update(ageold=int(maxage/age_scaler))
+    if agescale:
+        age_scaler = params.set_age(payload, agescale, minage, maxage, 'neot')
 
     # Set timescale bounding rules
-    #   Note: Timerules are not currently supported by the
-    #   Neotoma API. 
-    if timerule and timerule.lower() == 'major':
-       payload.update(agedocontain=0)
-    elif timerule and timerule.lower() == 'overlap':
-       payload.update(agedocontain=1)
+    # Note: Timerules are not currently supported by the Neotoma API.
+    #  if timerule:
+        #  params.set_timebound(payload, timerule, 'neot')
 
     # Set specific taxon search or allow lower taxa as well,
     # default if parameter omitted is True

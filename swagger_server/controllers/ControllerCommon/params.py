@@ -4,7 +4,7 @@
 def id_parse(id_list, db_name):
     """
     Separate database:datatype:id_number from a list.
-    
+
     :arg db_name: Name of DB to search for in list
     :return e: Badly formatted data in id_list
     """
@@ -34,17 +34,18 @@ def id_parse(id_list, db_name):
 
 def set_age(payload, agescale, minage, maxage, db_name):
     """
-    Convert relative ages for each database query
+    Convert relative ages for each database query.
 
     :arg agescale: Age units to use for search and return
     :arg minage: Most recent age of the record bound
     :arg maxage: Oldest age of the record bound
     :arg db_name: Name of the database for which to convert units
-    """
 
+    :return age_scaler: Factor for scaling age returned by DB subquery
+    """
     # Native DB age format conversion dict
-    age = {'neot':{'yr':1, 'ka':1e-03, 'ma':1e-06},
-           'pbdb':{'yr':1e06, 'ka':1e03, 'ma':1}}
+    age = {'neot': {'yr': 1, 'ka': 1e-03, 'ma': 1e-06},
+           'pbdb': {'yr': 1e06, 'ka': 1e03, 'ma': 1}}
     units = agescale.lower()
 
     if units == 'yr':
@@ -89,8 +90,7 @@ def set_timebound(payload, timerule, db_name):
 
 def set_georaphy(payload, bbox, db_name):
     """
-    Test if geography is lat/lon rectangle or WKT
-    and set parameter accordingly.
+    Test if geography is lat/lon rectangle or WKT then set parameter.
 
     :arg bbox: A list containing geographic parameters
     :arg db_name: Database to parameterize
@@ -103,4 +103,4 @@ def set_georaphy(payload, bbox, db_name):
             payload.update(lngmin=bbox_list[0], latmin=bbox_list[1],
                            lngmax=bbox_list[2], latmax=bbox_list[3])
         else:
-            payload.update(loc=box)
+            payload.update(loc=bbox)

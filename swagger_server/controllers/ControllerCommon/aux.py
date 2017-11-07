@@ -4,7 +4,7 @@
 def get_subtaxa(taxon, inc_syn=True):
     """
     Query PBDB for all lower order relatives of a specified taxa.
-    
+
     :arg taxon: Taxonmic name to query
     :arg inc_syn: Boolean, include recognized synonyms in the return
     """
