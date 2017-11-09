@@ -27,7 +27,7 @@ def taxon(taxon=None, includelower=None, hierarchy=None):
     # Init core returned objects
     desc_obj = dict()
     indicies = set()
-    occ_return = list()
+    #  ret_obj  = list()
 
     # Parse return type
     if show:
@@ -46,3 +46,22 @@ def taxon(taxon=None, includelower=None, hierarchy=None):
         resp = requests.get(base_url,
                             params=payload,
                             timeout=settings.config('timeout', 'pbdb'))
+
+        if resp.status_code == 200:
+            resp_json = resp.json()
+            tax_up = dict()
+            try:
+                rec = resp.json['records']
+            except:
+                return connexion.problem(status=400,
+                                         title='Bad Request',
+                                         detail=taxon + ' not found.',
+                                         type='about:blank')
+            if rec.get('kingdom'):
+                tax_up.append(
+            if rec.get('phylum'):
+            if rec.get('class'):
+            if rec.get('order'):
+            if rec.get('family'):
+            if rec.get('genus'):
+            if rec.get('species'):
