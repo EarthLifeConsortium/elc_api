@@ -202,6 +202,12 @@ paths:
           \ statistics only. Otherwise, full return"
         required: false
         type: "string"
+      - name: "output"
+        in: "query"
+        description: "Output format for occurrences. Response is JSON\
+          \ (default) or  CSV"
+        required: false
+        type: "string"
       responses:
         200:
           description: "occurrence response"
@@ -238,7 +244,7 @@ paths:
         type: "array"
         items:
           type: "string"
-      - name: "format"
+      - name: "output"
         in: "query"
         description: "Output format for references. Response is BibJSON\
           \ (default), CSV or RIS"

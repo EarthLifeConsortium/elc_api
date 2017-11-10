@@ -9,90 +9,13 @@ import time
 import connexion
 from flask import request, jsonify
 from statistics import mean
-from .ControllerCommon import params, settings, formatters
+from .ControllerCommon import params, settings, formatters, aux
+import pdb
 
 
-def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
-        taxon=None, includelower=None, limit=None, offset=None, show=None,
-        format=None):
-    """
-    Return occurrence identifiers from Neotoma and PBDB.
-
-    :arg show=idx: return indicies list as a json object (possibly a long string)
-    :arg show=poll: return only the description object
-    """
-    # Parameter checks
-    if not bool(request.args):
-        return connexion.problem(status=400,
-                                 title='Bad Request',
-                                 detail='No parameters provided.',
-                                 type='about:blank')
-
-    # Init core returned objects
-    desc_obj = dict()
-    indicies = set()
-    occ_return = list()
-
-    # Parse return type
-    if show:
-        show_params = show.lower().split(',')
-    else:
-        show_params = list()
-
-    # Set default age units if not specified
-    if not agescale:
-        agescale = 'ma'
-
-    # Generate query summary object
-    desc_obj.update(query={'endpoint': 'occ',
-                           'bbox': bbox,
-                           'minage': minage,
-                           'maxage': maxage,
-                           'agescale': agescale,
-                           'timerule': timerule,
-                           'taxon': taxon,
-                           'includelower': includelower,
-                           'limit': limit,
-                           'offset': offset,
-                           'show': show,
-                           'format': format})
-
-    ##########################################
-    # Query the Neotoma Database (Occurrences)
-    ##########################################
-    t0 = time.time()
-    base_url = settings.config('db_api', 'neot') + 'occurrences'
-    payload = dict()
-    geog_coords = 'modern'
-
-    # Set geographical constraints (can be WKT)
-    if bbox:
-        params.set_georaphy(payload, bbox, 'neot')
-
-    # Set all age parameters to year, kilo-year or mega-annum
-    age_scaler = params.set_age(payload, agescale, minage, maxage, 'neot')
-
-    # Set timescale bounding rules
-    if timerule:
-        params.set_timebound(payload, timerule, 'neot')
-
-    # Set specific taxon search or allow lower taxa as well,
-    # default if parameter omitted is True
-    if taxon:
-        if includelower or includelower == None:
-            payload.update(nametype='base', taxonname=taxon)
-        else:
-            payload.update(nametype='tax', taxonname=taxon)
-
-    # Set constraints on the data return
-    if limit:
-        payload.update(limit=limit)
-    else:
-        payload.update(limit='999999')
-
-    # Offset the returned records, used with limit for large returns
-    if offset:
-        payload.update(offset=offset)
+def query_neotoma(base_url, payload, age_scaler, agescale,
+                  output, desc_obj, indicies, ret_obj):
+    """Retrieve records from Neotoma following PBDB taxonomy."""
 
     # Issue GET request to Neotoma
     resp = requests.get(base_url,
@@ -129,26 +52,130 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                            age_units=agescale,
                            lat=round(lat,5),
                            lon=round(lon,5),
-                           geog_coords=geog_coords)
+                           geog_coords='modern')
 
                 # Call the appropriate output formatter
-                if format and format.lower() == 'csv':
+                if output and output.lower() == 'csv':
                     occ_obj = formatters.type_csv(occ)
                 else:
                     occ_obj = formatters.type_json(occ)
 
                 # Add the formatted occurrence to the return
-                occ_return.append(occ_obj)
+                ret_obj.append(occ_obj)
 
                 # Add the unique database ID to the returned string
                 indicies.add(occ_id)
 
-            # Build the JSON description object
-            t1 = round(time.time()-t0, 3)
-            desc_obj.update(neotoma={'response_time': t1,
-                                     'status_codes': resp.status_code,
-                                     'subqueries': resp.url,
-                                     'record_count': len(resp_json['data'])})
+    return resp.url, resp.status_code
+
+
+def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
+        taxon=None, includelower=None, limit=None, offset=None, show=None,
+        output=None):
+    """
+    Return occurrence identifiers from Neotoma and PBDB.
+
+    :arg show=idx: return indicies list as a json object (possibly a long string)
+    :arg show=poll: return only the description object
+    """
+    # Parameter checks
+    if not bool(request.args):
+        return connexion.problem(status=400,
+                                 title='Bad Request',
+                                 detail='No parameters provided.',
+                                 type='about:blank')
+
+    # Init core returned objects
+    desc_obj = dict()
+    indicies = set()
+    ret_obj = list()
+
+    # Parse return type
+    if show:
+        show_params = show.lower().split(',')
+    else:
+        show_params = list()
+
+    # Set default age units if not specified
+    if not agescale:
+        agescale = 'ma'
+
+    # Generate query summary object
+    desc_obj.update(query={'endpoint': 'occ',
+                           'bbox': bbox,
+                           'minage': minage,
+                           'maxage': maxage,
+                           'agescale': agescale,
+                           'timerule': timerule,
+                           'taxon': taxon,
+                           'includelower': includelower,
+                           'limit': limit,
+                           'offset': offset,
+                           'show': show,
+                           'output': output})
+
+    ##########################################
+    # Query the Neotoma Database (Occurrences)
+    ##########################################
+    t0 = time.time()
+    base_url = settings.config('db_api', 'neot') + 'occurrences'
+    payload = dict()
+
+    # Set geographical constraints (can be WKT)
+    if bbox:
+        params.set_georaphy(payload, bbox, 'neot')
+
+    # Set all age parameters to year, kilo-year or mega-annum
+    age_scaler = params.set_age(payload, agescale, minage, maxage, 'neot')
+
+    # Set timescale bounding rules
+    if timerule:
+        params.set_timebound(payload, timerule, 'neot')
+
+    # Set specific taxon search or allow lower taxa as well,
+    # default if parameter omitted is True
+    #  if taxon:
+        #  if includelower or includelower == None:
+            #  payload.update(nametype='base', taxonname=taxon)
+        #  else:
+            #  payload.update(nametype='tax', taxonname=taxon)
+
+    # Set constraints on the data return
+    if limit:
+        payload.update(limit=limit)
+    else:
+        payload.update(limit='999999')
+
+    # Offset the returned records, used with limit for large returns
+    if offset:
+        payload.update(offset=offset)
+
+    #  pdb.set_trace()
+    # Query PBDB for sub-taxa if required
+    if taxon:
+        if includelower or includelower == None:
+            subtaxa = aux.get_subtaxa(taxon, inc_syn=True)
+            for subtaxon_name in subtaxa:
+                payload.update(nametype='tax', taxonname=subtaxon_name)
+                subq, code = query_neotoma(base_url, payload, age_scaler,
+                                           agescale, output, desc_obj,
+                                           indicies, ret_obj)
+        else:
+            payload.update(nametype='tax', taxonname=taxon)
+            subq, code = query_neotoma(base_url, payload, age_scaler,
+                                       agescale, output, desc_obj,
+                                       indicies, ret_obj)
+    else:
+        subq, code = query_neotoma(base_url, payload, age_scaler,
+                                   agescale, output, desc_obj,
+                                   indicies, ret_obj)
+
+    # Build the JSON description object
+    t1 = round(time.time()-t0, 3)
+    desc_obj.update(neotoma={'response_time': t1,
+                             'status_codes': code,
+                             'subqueries': subq,
+                             'record_count': len(ret_obj)})
 
     ###############################################
     # Query the Paleobiology Database (Occurrences)
@@ -156,7 +183,6 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     t0 = time.time()
     base_url = settings.config('db_api', 'pbdb') + 'occs/list.json'
     payload = dict()
-    geog_coords = 'paleo'
     payload.update(show='loc,coords,coll')
     payload.update(vocab='pbdb')
 
@@ -222,16 +248,16 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
                            age_units=agescale,
                            lat=round(lat,5),
                            lon=round(lon,5),
-                           geog_coords=geog_coords)
+                           geog_coords='paleo')
 
                 # Call the appropriate output formatter
-                if format and format.lower() == 'csv':
+                if output and output.lower() == 'csv':
                     occ_obj = formatters.type_csv(occ)
                 else:
                     occ_obj = formatters.type_json(occ)
 
                 # Add the formatted occurrence to the return
-                occ_return.append(occ_obj)
+                ret_obj.append(occ_obj)
 
                 # Add the unique database ID to the returned string
                 indicies.add(occ_id) 
@@ -254,4 +280,4 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None, timerule=None,
     elif 'idx' in show_params:
         return jsonify(indicies=id_str)
     else:
-        return jsonify(description=desc_obj, records=occ_return)
+        return jsonify(description=desc_obj, records=ret_obj)

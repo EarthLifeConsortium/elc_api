@@ -42,7 +42,7 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
     # Init core returned objects
     desc_obj = dict()
     indicies = set()
-    loc_return = list()
+    ret_obj = list()
     age_units = 'ma'
     full_return = False
 
@@ -163,7 +163,7 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
                                geog_coords=geog_coords)
 
                 # Add the fomatted locale data to the return
-                loc_return.append(loc_obj)
+                ret_obj.append(loc_obj)
 
                 # Add the unique database ID to the returned string
                 indicies.add(loc_id)
@@ -270,7 +270,7 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
                                #  occurrences=occ_list)
 
                 # Add the fomatted locale data to the return
-                loc_return.append(loc_obj)
+                ret_obj.append(loc_obj)
 
                 # Add the unique database ID to the returned string
                 indicies.add(loc_id)
@@ -292,4 +292,4 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
     elif 'idx' in show_params:
         return jsonify(indicies=id_str)
     else:
-        return jsonify(description=desc_obj, records=loc_return)
+        return jsonify(description=desc_obj, records=ret_obj)

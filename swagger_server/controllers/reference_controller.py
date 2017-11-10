@@ -54,7 +54,7 @@ def format_ris(reference):
     return bib
 
 
-def format_handler(reference, pub_return, format):
+def format_handler(reference, ret_obj, format):
     """Call the appropriate bibliographic formatter."""
     if format and format.lower() is 'ris':
         bib_obj = format_ris(reference)
@@ -64,13 +64,13 @@ def format_handler(reference, pub_return, format):
         bib_obj = format_bibjson(reference)
 
     # Add the fomatted bibliographic reference to the return
-    pub_return.append(bib_obj)
+    ret_obj.append(bib_obj)
 
     # End subroutine: format_handler
-    return pub_return
+    return ret_obj
 
 
-def parse_neot_resp(resp, pub_return, format):
+def parse_neot_resp(resp, ret_obj, format):
     """Reformat data from the Neotoma API call."""
     if resp.status_code == 200:
         resp_json = resp.json()
@@ -104,13 +104,13 @@ def parse_neot_resp(resp, pub_return, format):
                                  cite=rec.get('Citation'))
 
                 # Format and append parsed record
-                pub_return = format_handler(reference, pub_return, format)
+                ret_obj = format_handler(reference, ret_obj, format)
 
     # End subroutine: parse_neot_resp
     return len(resp_json['data'])
 
 
-def parse_pbdb_resp(resp, pub_return, format):
+def parse_pbdb_resp(resp, ret_obj, format):
     """Reformat data from the Neotoma API call."""
     if resp.status_code == 200:
         resp_json = resp.json()
@@ -172,7 +172,7 @@ def parse_pbdb_resp(resp, pub_return, format):
                                  cite=rec.get('formatted'))
 
                 # Format and append parsed record
-                pub_return = format_handler(reference, pub_return, format)
+                ret_obj = format_handler(reference, ret_obj, format)
 
     # End subroutine: parse_pbdb_resp
     return len(resp_json['records'])
@@ -187,7 +187,7 @@ def ref(idnumbers=None, format=None):
                                  detail='No parameters provided.',
                                  type='about:blank')
     desc_obj = dict()
-    pub_return = list()
+    ret_obj = list()
     pbdb_occs = list()
     pbdb_locs = list()
     neot_occs = list()
@@ -242,7 +242,7 @@ def ref(idnumbers=None, format=None):
         api_calls.append(resp.url)
         status_codes.append(resp.status_code)
 
-        count = parse_neot_resp(resp, pub_return, format)
+        count = parse_neot_resp(resp, ret_obj, format)
         tot_count = tot_count + count
 
     # Issue a GET request for references associated with locales
@@ -255,7 +255,7 @@ def ref(idnumbers=None, format=None):
         api_calls.append(resp.url)
         status_codes.append(resp.status_code)
 
-        count = parse_neot_resp(resp, pub_return, format)
+        count = parse_neot_resp(resp, ret_obj, format)
         tot_count = tot_count + count
 
     # Build the JSON description object
@@ -284,7 +284,7 @@ def ref(idnumbers=None, format=None):
         api_calls.append(resp.url)
         status_codes.append(resp.status_code)
 
-        count = parse_pbdb_resp(resp, pub_return, format)
+        count = parse_pbdb_resp(resp, ret_obj, format)
         tot_count = tot_count + count
 
     # Issue a GET request for references associated with locales
@@ -298,7 +298,7 @@ def ref(idnumbers=None, format=None):
         api_calls.append(resp.url)
         status_codes.append(resp.status_code)
 
-        count = parse_pbdb_resp(resp, pub_return, format)
+        count = parse_pbdb_resp(resp, ret_obj, format)
         tot_count = tot_count + count
 
     # Build the JSON description object
@@ -309,4 +309,4 @@ def ref(idnumbers=None, format=None):
                           'record_count': tot_count})
 
     # Composite response
-    return jsonify(description=desc_obj, records=pub_return)
+    return jsonify(description=desc_obj, records=ret_obj)
