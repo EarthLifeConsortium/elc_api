@@ -371,56 +371,56 @@ paths:
       x-tags:
       - tag: "Locale"
       x-swagger-router-controller: "swagger_server.controllers.locale_controller"
-  # /taxon:
-    # get:
-      # tags:
-      # - "Taxonomy"
-      # summary: "Taxonomic information, or hierarchy"
-      # description: "Returns detailed taxonomic information for the given\
-        # \ query. Queries may include partial matches, and may request lower\
-        # \ taxa using the boolean includelower parameter. In cases where\
-        # \ hierarchy is also requested the user may set hierarchy to TRUE"
-      # operationId: "taxon"
-      # produces:
-      # - "application/json"
-      # - "text/csv"
-      # parameters:
-      # - name: "taxon"
-        # in: "query"
-        # description: "Taxonomic name. May be truncated, a list of taxa or use\
-          # \ wildcards. If a specific taxon ID or a vector of IDs is known\
-          # \ that parameter can be passed through taxon. Taxon lists must be\
-          # \ passed using JSON formating. By default, returns only taxa named\
-          # \ in the query. If all lower taxa are desired in the return, use\
-          # \ includelower"
-        # required: false
-        # type: "string"
-      # - name: "includelower"
-        # in: "query"
-        # description: "If TRUE, all species and subspecies of a named genera\
-          # \ will be included in the response"
-        # required: false
-        # type: "boolean"
-      # - name: "hierarchy"
-        # in: "query"
-        # description: "If TRUE, the full hierarchy for the taxon will be\
-          # \ included in the response, otherwise just the unique entry for a match"
-        # required: false
-        # type: "boolean"
-      # responses:
-        # 200:
-          # description: "taxon response"
-          # schema:
-            # type: "array"
-            # items:
-              # $ref: "#/definitions/taxonomy"
-        # default:
-          # description: "unexpected error"
-          # schema:
-            # $ref: "#/definitions/errorModel"
-      # x-tags:
-      # - tag: "Taxonomy"
-      # x-swagger-router-controller: "swagger_server.controllers.taxonomy_controller"
+  /tax:
+    get:
+      tags:
+      - "Taxonomy"
+      summary: "Taxonomic information, or hierarchy"
+      description: "Returns detailed taxonomic information for the given\
+        \ query. Queries may include partial matches, and may request lower\
+        \ taxa using the boolean includelower parameter. In cases where\
+        \ hierarchy is also requested the user may set hierarchy to TRUE"
+      operationId: "tax"
+      produces:
+      - "application/json"
+      - "text/csv"
+      parameters:
+      - name: "taxon"
+        in: "query"
+        description: "Taxonomic name. May be truncated, a list of taxa or use\
+          \ wildcards. If a specific taxon ID or a vector of IDs is known\
+          \ that parameter can be passed through taxon. Taxon lists must be\
+          \ passed using JSON formating. By default, returns only taxa named\
+          \ in the query. If all lower taxa are desired in the return, use\
+          \ includelower"
+        required: false
+        type: "string"
+      - name: "includelower"
+        in: "query"
+        description: "If TRUE, all species and subspecies of a named genera\
+          \ will be included in the response"
+        required: false
+        type: "boolean"
+      - name: "hierarchy"
+        in: "query"
+        description: "If TRUE, the full hierarchy for the taxon will be\
+          \ included in the response, otherwise just the unique entry for a match"
+        required: false
+        type: "boolean"
+      responses:
+        200:
+          description: "taxon response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/taxonomy"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/errorModel"
+      x-tags:
+      - tag: "Taxonomy"
+      x-swagger-router-controller: "swagger_server.controllers.taxonomy_controller"
 definitions:
   reference:
     type: "object"
@@ -454,13 +454,13 @@ definitions:
       year:
         type: "string"
         description: "Publication year of the reference material"
-  # taxonomy:
-    # type: "array"
-    # items:
-      # $ref: "#/definitions/taxonomy_inner"
-  # agebasis:
-    # type: "string"
-    # description: "Basis of age estimate for the given site or occurence"
+  taxonomy:
+    type: "array"
+    items:
+      $ref: "#/definitions/taxonomy_inner"
+  agebasis:
+    type: "string"
+    description: "Basis of age estimate for the given site or occurence"
   occurrence:
     type: "object"
     properties:
@@ -509,7 +509,7 @@ definitions:
     properties:
       type:
         type: "string"
-        description: "MIME type, usuall about:blank"
+        description: "MIME type or about:blank"
       title:
         type: "string"
         description: "HTTP status code description"
@@ -520,14 +520,14 @@ definitions:
         type: "integer"
         format: "int32"
         description: "HTTP numeric status code"
-  # taxonomy_inner:
-    # properties:
-      # taxon:
-        # type: "string"
-        # description: "Taxonomic name"
-      # hierarchy:
-        # type: "string"
-        # description: "A JSON formatted object providing the taxon hierarchy"
+  taxonomy_inner:
+    properties:
+      taxon:
+        type: "string"
+        description: "Taxonomic name"
+      hierarchy:
+        type: "string"
+        description: "A JSON formatted object providing the taxon hierarchy"
   locale:
     type: "object"
     properties:
