@@ -10,7 +10,6 @@ import connexion
 from flask import request, jsonify
 from statistics import mean
 from .ControllerCommon import params, settings, formatters, aux
-import pdb
 
 
 def query_neotoma(base_url, payload, age_scaler, agescale,
