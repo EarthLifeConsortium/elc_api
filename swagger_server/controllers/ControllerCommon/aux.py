@@ -9,22 +9,73 @@ def get_subtaxa(taxon, inc_syn=True):
     :arg inc_syn: Boolean, include recognized synonyms in the return
     """
     import requests
+    from ControllerCommon import settings
 
     subtaxa = set()
-    base_url = 'http://localhost/data1.2/taxa/list.json'
+    base_url = settings.config('db_api', 'pbdb') + 'taxa/list.json'
 
     payload = dict()
     payload.update(rel='all_children', name=taxon)
 
     resp = requests.get(base_url, params=payload, timeout=None)
-    resp_json = resp.json()
 
-    if resp.status_code == 200 and 'records' in resp_json:
-        for rec in resp_json['records']:
+    if resp.status_code == 200:
+        resp_json = resp.json()
 
-            if rec.get('tdf') and not inc_syn:
-                subtaxa.add(rec.get('acn'))
-            else:
-                subtaxa.add(rec.get('nam'))
+        if 'warnings' in resp_json:
+            raise ValueError('400', 'Bad Request',
+                             str(resp_json['warnings'][0]))
 
-        return subtaxa
+        else:
+            for rec in resp_json['records']:
+                if rec.get('tdf') and not inc_syn:
+                    subtaxa.add(rec.get('acn'))
+                else:
+                    subtaxa.add(rec.get('nam'))
+            return subtaxa
+
+    else:
+        raise ValueError(resp.status_code, resp.reason,
+                         'Server error or bad URL')
+
+
+def get_parents(taxon):
+    """
+    Query PBDB for parent taxonomic groups.
+
+    :arg taxon: Taxonomic name to query
+    """
+    import requests
+    from collections import OrderedDict
+    from ..ControllerCommon import settings
+
+    parents = dict()
+    base_url = settings.config('db_api', 'pbdb') + 'taxa/list.json'
+    tax_sys = ['phylum', 'class', 'order', 'family', 'genus']
+
+    payload = dict()
+    payload.update(vocab='pbdb', show='full', order='hierarchy', name=taxon)
+
+    resp = requests.get(base_url, params=payload, timeout=None)
+
+    if resp.status_code == 200:
+        resp_json = resp.json()
+
+        if 'warnings' in resp_json:
+            raise ValueError('400', 'Bad Request',
+                             str(resp_json['warnings'][0]))
+
+        else:
+            rec = resp_json['records'][0]
+            if rec.get('taxon_rank') == 'kingdom':
+                parents.update({'kingdom': rec.get('taxon_name')})
+            for rank in tax_sys:
+                if rec.get(rank):
+                    parents.update({rank: rec.get(rank)})
+            if rec.get('taxon_rank') == 'species':
+                parents.update({'species': rec.get('taxon_name')})
+            return OrderedDict(parents)
+
+    else:
+        raise ValueError(resp.status_code, resp.reason,
+                         'Server error or bad URL')
