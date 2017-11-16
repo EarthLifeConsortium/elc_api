@@ -9,7 +9,7 @@ def get_subtaxa(taxon, inc_syn=True):
     :arg inc_syn: Boolean, include recognized synonyms in the return
     """
     import requests
-    from ControllerCommon import settings
+    from ..ControllerCommon import settings
 
     subtaxa = set()
     base_url = settings.config('db_api', 'pbdb') + 'taxa/list.json'
@@ -23,7 +23,7 @@ def get_subtaxa(taxon, inc_syn=True):
         resp_json = resp.json()
 
         if 'warnings' in resp_json:
-            raise ValueError('400', 'Bad Request',
+            raise ValueError(400, 'Bad Request',
                              str(resp_json['warnings'][0]))
 
         else:
@@ -62,7 +62,7 @@ def get_parents(taxon):
         resp_json = resp.json()
 
         if 'warnings' in resp_json:
-            raise ValueError('400', 'Bad Request',
+            raise ValueError(400, 'Bad Request',
                              str(resp_json['warnings'][0]))
 
         else:

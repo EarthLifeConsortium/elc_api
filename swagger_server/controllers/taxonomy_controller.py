@@ -40,8 +40,13 @@ def tax(taxon=None, includelower=None, hierarchy=None):
                        type='about:blank')
 
     # Build subtaxa list
-    #  try:
-        #  subtaxa = aux.get_subtaxa(taxon)
+    try:
+        subtaxa = aux.get_subtaxa(taxon)
+    except ValueError as err:
+        return problem(status=err.args[0],
+                       title=err.args[1],
+                       detail=err.args[2],
+                       type='about:blank')
 
-
-    #  return json.dumps(parents)
+    return Response('\n'.join(subtaxa),
+                    content_type='text/plain; charset=utf-8')
