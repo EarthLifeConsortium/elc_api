@@ -51,10 +51,12 @@ def get_parents(taxon):
 
     parents = dict()
     base_url = settings.config('db_api', 'pbdb') + 'taxa/list.json'
-    tax_sys = ['phylum', 'class', 'order', 'family', 'genus']
+    tax_sys = ['kingdom', 'phylum', 'class', 'order',
+               'family', 'genus', 'species']
 
     payload = dict()
-    payload.update(vocab='pbdb', show='full', order='hierarchy', name=taxon)
+    payload.update(vocab='pbdb', rel='all_parents',
+                   order='hierarchy', name=taxon)
 
     resp = requests.get(base_url, params=payload, timeout=None)
 
@@ -66,14 +68,10 @@ def get_parents(taxon):
                              str(resp_json['warnings'][0]))
 
         else:
-            rec = resp_json['records'][0]
-            if rec.get('taxon_rank') == 'kingdom':
-                parents.update({'kingdom': rec.get('taxon_name')})
-            for rank in tax_sys:
-                if rec.get(rank):
-                    parents.update({rank: rec.get(rank)})
-            if rec.get('taxon_rank') == 'species':
-                parents.update({'species': rec.get('taxon_name')})
+            for rec in resp_json['records']:
+                for rank in tax_sys:
+                    if rec.get('taxon_rank') == rank:
+                        parents.update({rank: rec.get('taxon_name')})
             return OrderedDict(parents)
 
     else:
