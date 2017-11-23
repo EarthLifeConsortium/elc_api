@@ -39,8 +39,6 @@ def tax(taxon=None, includelower=None, hierarchy=None):
                        detail=err.args[2],
                        type='about:blank')
 
-    return json.dumps(parents)
-
     # Build subtaxa list
     try:
         subtaxa = aux.get_subtaxa(taxon)
@@ -50,4 +48,4 @@ def tax(taxon=None, includelower=None, hierarchy=None):
                        detail=err.args[2],
                        type='about:blank')
 
-    #  return formatters.type_plain(subtaxa)
+    return formatters.type_itis(parents, subtaxa)
