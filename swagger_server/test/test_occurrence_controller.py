@@ -27,7 +27,8 @@ class TestOccurrenceController(BaseTestCase):
                         ('includelower', true),
                         ('limit', 56),
                         ('offset', 56),
-                        ('show', 'show_example')]
+                        ('show', 'show_example'),
+                        ('output', 'output_example')]
         response = self.client.open('/api_v1/occ',
                                     method='GET',
                                     content_type='application/json',

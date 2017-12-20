@@ -1,5 +1,5 @@
-connexion == 1.0.129
-python_dateutil == 2.6.0
+connexion == 1.2
+python_dateutil == 2.6.1
 setuptools >= 21.0.0
 requests >= 2.13.0
 flask-csv >= 1.0.1

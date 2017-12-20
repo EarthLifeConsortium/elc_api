@@ -12,16 +12,16 @@ from flask import json
 class TestTaxonomyController(BaseTestCase):
     """ TaxonomyController integration test stubs """
 
-    def test_taxon(self):
+    def test_tax(self):
         """
-        Test case for taxon
+        Test case for tax
 
         Taxonomic information, or hierarchy
         """
         query_string = [('taxon', 'taxon_example'),
                         ('includelower', true),
                         ('hierarchy', true)]
-        response = self.client.open('/api_v1/taxon',
+        response = self.client.open('/api_v1/tax',
                                     method='GET',
                                     content_type='application/json',
                                     query_string=query_string)
