@@ -1,18 +1,50 @@
 """Auxilary functions for the API controllers."""
 
 
+def set_taxon(db, taxon, inc_sub_taxa):
+    """
+    Return a database specific key-val pair for taxon paramaterization.
+
+    :arg db: Database name
+    :type db: str
+    :arg taxon: User input taxon name
+    :type taxon: str
+    :arg inc_sub_taxa: Include lower taxonomy switch
+    :type inc_sub_taxa: bool
+
+    :rtype: Dict[n=1]
+
+    """
+    if db == 'neotoma':
+        if inc_sub_taxa:
+            wildcard = '{0:s}%'.format(taxon)
+            taxon_kv = {'taxonname': wildcard}
+        else:
+            taxon_kv = {'taxonname': taxon}
+    elif db == 'pbdb':
+        if inc_sub_taxa:
+            taxon_kv = {'base_name': taxon}
+        else:
+            taxon_kv = {'taxon_name': taxon}
+
+    return taxon_kv
+
+
 def get_subtaxa(taxon, inc_syn=True):
     """
     Query PBDB for all lower order relatives of a specified taxa.
 
     :arg taxon: Taxonmic name to query
-    :arg inc_syn: Boolean, include recognized synonyms in the return
+    :type taxon: str
+    :arg inc_syn: Include recognized synonyms in the return
+    :type inc_syn: bool
+
     """
     import requests
-    from ..ControllerCommon import settings
+    from ..elc import config
 
     subtaxa = set()
-    base_url = settings.config('db_api', 'pbdb') + 'taxa/list.json'
+    base_url = config.get('resource_api', 'pbdb') + 'taxa/list.json'
 
     payload = dict()
     payload.update(rel='all_children', name=taxon)
@@ -44,13 +76,15 @@ def get_parents(taxon):
     Query PBDB for parent taxonomic groups.
 
     :arg taxon: Taxonomic name to query
+    :type taxon: str
+
     """
     import requests
     from collections import OrderedDict
-    from ..ControllerCommon import settings
+    from ..elc import config
 
     parents = dict()
-    base_url = settings.config('db_api', 'pbdb') + 'taxa/list.json'
+    base_url = config.get('resource_api', 'pbdb') + 'taxa/list.json'
     tax_sys = ['kingdom', 'phylum', 'class', 'order',
                'family', 'genus', 'species']
 

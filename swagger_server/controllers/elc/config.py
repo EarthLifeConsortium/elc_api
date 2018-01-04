@@ -11,12 +11,13 @@ def read_file(filename):
 
 def get(group, param):
     """
-    Return specified configurationa parameters.
+    Return specified configuration parameters.
 
-    :arg param: Setting to return
+    :arg group: Setting category
+    :type group: str
+    :arg param: Setting name
     :type param: str
-    :arg db_name: Name of DB to retrieve for
-    :type db_name: str
+
     """
     data_map = read_file('config.yaml')
 

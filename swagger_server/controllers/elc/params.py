@@ -2,18 +2,22 @@
 
 import geojson
 import ast
-from elc import config
+from ..elc import config, aux
 import pdb
 
 
-def parse(req_args, db):
+def parse(req_args, db, endpoint):
     """Return a Requests payload specific to resource target."""
     db_implemented = ['pbdb', 'neotoma']
-    spec = ['bbox', 'minage', 'maxage', 'agescale', 'timerule',
-            'taxon', 'includelower', 'limit', 'offset', 'show',
-            'output']
-
-    payload = dict()
+    spec = dict()
+    spec.update(occ=['bbox', 'minage', 'maxage', 'agescale', 'timerule',
+                     'taxon', 'includelower', 'limit', 'offset', 'show',
+                     'output'])
+    #  spec.update(loc=['occid', 'bbox', 'minage', 'maxage', 'agescale',
+                     #  'timerule', 'taxon', 'includelower', 'limit', 'offset',
+                     #  'show'])
+    #  spec.update(tax=['taxon', 'includelower', 'hierarchy'])
+    #  spec.update(ref=['idnumbers', 'format'])
 
     # Bad or missing parameter checks
 
@@ -22,7 +26,7 @@ def parse(req_args, db):
         raise ValueError(400, msg)
 
     for param in req_args.keys():
-        if param not in spec:
+        if param not in spec[endpoint]:
             msg = 'Unknown parameter \'{0:s}\''.format(param)
             raise ValueError(400, msg)
 
@@ -32,37 +36,33 @@ def parse(req_args, db):
 
     # Set defaults
 
-    if 'includelower' in req_args:
+    if 'includelower' in req_args.keys():
         inc_sub_taxa = ast.literal_eval(req_args.get('includelower'))
     else:
         inc_sub_taxa = config.get('default', 'includelower')
 
-    if 'agescale' in req_args:
+    if 'agescale' in req_args.keys():
         age_units = req_args.get('agescale')
     else:
         age_units = config.get('default', 'agescale')
 
+    if 'limit' in req_args.keys():
+        res_limit = req_args.get('limit')
+    else:
+        res_limit = config.get('default', 'limit')
+
     # Generate sub-query api payload
 
-    for param in req_args.keys():
+    payload = dict()
 
-        if param == 'taxon':
-            if db == 'neotoma':
-                if inc_sub_taxa:
-                    wildcard = '{0:s}%'.format(req_args[param])
-                    payload.update(taxonname=wildcard)
-                else:
-                    payload.update(taxonname=req_args[param])
-            elif db == 'pbdb':
-                if inc_sub_taxa:
-                    payload.update(base_name=req_args[param])
-                else:
-                    payload.update(taxon_name=req_args[param])
+    payload.update(limit=res_limit)
 
-        if param == 'limit':
-            payload.update(limit=req_args[param])
+    if 'taxon' in req_args.keys():
+        payload.update(aux.set_taxon(db=db,
+                                     taxon=req_args.get('taxon'),
+                                     inc_sub_taxa=inc_sub_taxa))
 
-        if param == 'offset':
-            payload.update(offset=req_args[param])
+    if 'offset' in req_args.keys():
+        payload.update(offset=req_args[param])
 
     return payload

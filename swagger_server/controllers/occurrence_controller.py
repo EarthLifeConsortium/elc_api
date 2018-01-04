@@ -50,13 +50,17 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
     """
     for db in config.db_list():
 
+        # Configure parameter payload for api subquery
+
         try:
-            payload = params.parse(req_args=connexion.request.args, db=db)
+            payload = params.parse(req_args=connexion.request.args,
+                                   db=db,
+                                   endpoint='occ')
+
         except ValueError as err:
             return connexion.problem(status=err.args[0],
                                      title=Status(err.args[0]).name,
                                      detail=err.args[1],
                                      type='about:blank')
-        print(payload)
 
     return payload
