@@ -90,7 +90,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
                                      detail=str(err.args[0]),
                                      type='about:blank')
 
-        except requests.exceptions.Timeout:
+        except requests.exceptions.Timeout as err:
             return connexion.problem(status=504,
                                      title=Status(504).name,
                                      detail=str(err.args[0]),
@@ -102,7 +102,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
                                      detail=str(err.args[0]),
                                      type='about:blank')
 
-        if 'application/json' not in r.headers.get('content-type'):
+        if 'application/json' not in resp.headers.get('content-type'):
             msg = '{0:s} response is not of type application/json'.format(db)
             return connexion.problem(status=417,
                                      title=Status(417).name,
