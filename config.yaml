@@ -1,7 +1,7 @@
 ---
 resource_api:
-  neotoma: 'http://api-dev.neotomadb.org/v2/data/'
-  pbdb: 'http://paleobiodb.org/data1.2/'
+  neotoma: 'https://api-dev.neotomadb.org/v2/data/'
+  pbdb: 'https://paleobiodb.org/data1.2/'
 default:
   timeout: Null
   agescale: 'ma'

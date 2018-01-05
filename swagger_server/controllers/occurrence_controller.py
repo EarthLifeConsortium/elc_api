@@ -69,12 +69,28 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
             response = requests.get(config.get('resource_api', db),
                                     params=payload,
                                     timeout=config.get('default', 'timeout'))
+            response.raise_for_status()
+
+        except requests.exceptions.HTTPError as err:
+            return connexion.problem(status=err.response.status_code,
+                                     title=Status(err.response.status_code).name,
+                                     detail='Problem with {0:s}'.format(db),
+                                     type='about:blank')
+
+        except requests.exceptions.Timeout:
+            return connexion.problem(status=504,
+                                     title=Status(504).name,
+                                     detail='Problem with {0:s}'.format(db),
+                                     type='about:blank'
 
         except requests.exceptions.RequestException as err:
-            msg = 'Database request failure: ' + db
-            return connexion.problem(status=err.errno,
-                                     title=Status(err.errno).name,
-                                     detail=msg,
+            return connexion.problem(status=500,
+                                     title=Status(500).name,
+                                     detail=err,
                                      type='about:blank')
+
+
+
+
 
     return payload
