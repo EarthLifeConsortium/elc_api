@@ -1,6 +1,6 @@
 ---
 resource_api:
-  neotoma: 'https://api-dev.neotomadb.org/v2/data/'
+  neotoma: 'http://api-dev.neotomadb.org/v2/data/'
   pbdb: 'https://paleobiodb.org/data1.2/'
 default:
   timeout: Null
