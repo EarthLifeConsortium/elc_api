@@ -47,15 +47,15 @@ def parse(req_args, db, endpoint):
         age_units = config.get('default', 'agescale')
 
     if 'limit' in req_args.keys():
-        res_limit = req_args.get('limit')
+        resp_limit = req_args.get('limit')
     else:
-        res_limit = config.get('default', 'limit')
+        resp_limit = config.get('default', 'limit')
 
     # Generate sub-query api payload
 
     payload = dict()
 
-    payload.update(limit=res_limit)
+    payload.update(limit=resp_limit)
 
     if 'taxon' in req_args.keys():
         payload.update(aux.set_taxon(db=db,

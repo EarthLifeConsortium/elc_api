@@ -63,4 +63,18 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
                                      detail=err.args[1],
                                      type='about:blank')
 
+        # Database API call
+
+        try:
+            response = requests.get(config.get('resource_api', db),
+                                    params=payload,
+                                    timeout=config.get('default', 'timeout'))
+
+        except requests.exceptions.RequestException as err:
+            msg = 'Database request failure: ' + db
+            return connexion.problem(status=err.errno,
+                                     title=Status(err.errno).name,
+                                     detail=msg,
+                                     type='about:blank')
+
     return payload
