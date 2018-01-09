@@ -14,6 +14,7 @@ import connexion
 
 from .elc import config, params
 from http_status import Status
+from flask import jsonify
 import requests
 import pdb
 
@@ -49,6 +50,9 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
 
     :rtype: List[Occurrence]
     """
+    return_obj = list()
+    desc_obj = dict()
+
     for db in config.db_list():
 
         # Configure parameter payload for api subquery
@@ -66,16 +70,21 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
 
         # Database API call
 
+        if db == 'neotoma':
+            url_path = config.get('resource_api', db) + 'occurrence'
+        if db == 'pbdb':
+            url_path = config.get('resource_api', db) + 'occs/list.json'
+
         try:
-            resp = requests.get(config.get('resource_api', db),
+            resp = requests.get(url_path,
                                 params=payload,
                                 timeout=config.get('default', 'timeout'))
             resp.raise_for_status()
 
         except requests.exceptions.HTTPError as err:
-            return connexion.problem(status=err.resp.status_code,
-                                     title=Status(err.resp.status_code).name,
-                                     detail='Problem with {0:s}'.format(db),
+            return connexion.problem(status=resp.status_code,
+                                     title=Status(resp.status_code).name,
+                                     detail=str(err.args[0]),
                                      type='about:blank')
 
         except requests.exceptions.SSLError as err:
@@ -102,6 +111,8 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
                                      detail=str(err.args[0]),
                                      type='about:blank')
 
+        # Check the Content-Type of the return and decode the JSON object
+
         if 'application/json' not in resp.headers.get('content-type'):
             msg = '{0:s} response is not of type application/json'.format(db)
             return connexion.problem(status=417,
@@ -109,4 +120,18 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
                                      detail=msg,
                                      type='about:blank')
 
-    return payload
+        try:
+            resp_json = resp.json()
+        except ValueError as err:
+            msg = '{0:s} JSON decode error: {1:s}'.format(db, err)
+            return connexion.problem(status=500,
+                                     title=Status(500).name,
+                                     detail=msg,
+                                     type='about:blank')
+
+        # Parse database response
+
+
+        return_obj = handlers.occurrence(db=db, resp_json=resp_json)
+
+    return jsonify(records=return_obj)
