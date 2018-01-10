@@ -4,7 +4,7 @@
 def set_db_special(db):
     """Custom payload additions unique to a specific db."""
     if db == 'pbdb':
-        return {'show': 'all', 'vocab': 'pbdb'}
+        return {'show': 'all'}
     else:
         return {}
 

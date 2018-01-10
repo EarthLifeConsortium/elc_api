@@ -53,13 +53,27 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
     return_obj = list()
     desc_obj = dict()
 
+    # Set runtime options
+
+    try:
+        options = params.set_options(req_args=connexion.request.args,
+                                     endpoint='occ')
+
+    except ValueError as err:
+        return connexion.problem(status=err.args[0],
+                                 title=Status(err.args[0]).name,
+                                 detail=err.args[1],
+                                 type='about:blank')
+
+    # Cycle through external databases
+
     for db in config.db_list():
 
         # Configure parameter payload for api subquery
 
         try:
-            payload = params.parse(req_args=connexion.request.args,
-                                   db=db,
+            payload = params.parse(db=db,
+                                   req_args=connexion.request.args,
                                    endpoint='occ')
 
         except ValueError as err:
@@ -67,6 +81,8 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
                                      title=Status(err.args[0]).name,
                                      detail=err.args[1],
                                      type='about:blank')
+
+        #  pdb.set_trace()
 
         # Database API call
 
@@ -131,6 +147,8 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
 
         # Parse database response
 
-        return_obj.append(handlers.occurrence(db=db, resp_json=resp_json))
+        return_obj = handlers.occurrence(db=db,
+                                         resp_json=resp_json,
+                                         return_obj=return_obj)
 
     return jsonify(records=return_obj)

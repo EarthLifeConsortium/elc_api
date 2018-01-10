@@ -6,18 +6,56 @@ from ..elc import config, aux
 import pdb
 
 
-def parse(req_args, db, endpoint):
+def set_options(req_args, endpoint):
+    """Return a dictionary with runtime options and config."""
+    # Add aditional formats and controls below (default is param[0])
+    spec = dict()
+    spec.update(occ=['json', 'csv'])
+    spec.update(loc=['json', 'csv'])
+    spec.update(tax=['json', 'csv'])
+    spec.update(ref=['bibjson', 'ris', 'itis'])
+    spec.update(show=['all', 'poll', 'idx'])
+
+    # Configure options
+
+    options = dict()
+
+    if 'output' in req_args.keys():
+        if req_args.get('output') in spec.get(endpoint):
+            options.update(output=req_args.get('output'))
+        else:
+            msg = 'Allowable formats: {0:s}'.format(str(spec.get(endpoint)))
+            raise ValueError(400, msg)
+    else:
+        options.update(output=spec.get(endpoint)[0])
+
+    if 'show' in req_args.keys():
+        if req_args.get('show') in spec.get('show'):
+            options.update(show=req_args.get('show'))
+        else:
+            msg = 'Allowable show args: {0:s}'.format(str(spec.get('show')))
+            raise ValueError(400, msg)
+    else:
+        options.update(show=spec.get('show')[0])
+
+    return options
+
+
+def parse(db, req_args, endpoint):
     """Return a Requests payload specific to resource target."""
-    db_implemented = ['pbdb', 'neotoma']
     spec = dict()
     spec.update(occ=['bbox', 'minage', 'maxage', 'agescale', 'timerule',
                      'taxon', 'includelower', 'limit', 'offset', 'show',
                      'output'])
-    #  spec.update(loc=['occid', 'bbox', 'minage', 'maxage', 'agescale',
-                     #  'timerule', 'taxon', 'includelower', 'limit', 'offset',
-                     #  'show'])
-    #  spec.update(tax=['taxon', 'includelower', 'hierarchy'])
-    #  spec.update(ref=['idnumbers', 'format'])
+    spec.update(loc=['occid', 'bbox', 'minage', 'maxage', 'agescale',
+                     'timerule', 'taxon', 'includelower', 'limit', 'offset',
+                     'show'])
+    spec.update(tax=['taxon', 'includelower', 'hierarchy'])
+    spec.update(ref=['idnumbers', 'format'])
+
+    # Supported databases (add additional to list)
+
+    db_implemented = ['pbdb', 'neotoma']
 
     # Bad or missing parameter checks
 
@@ -26,7 +64,7 @@ def parse(req_args, db, endpoint):
         raise ValueError(400, msg)
 
     for param in req_args.keys():
-        if param not in spec[endpoint]:
+        if param not in spec.get(endpoint):
             msg = 'Unknown parameter \'{0:s}\''.format(param)
             raise ValueError(400, msg)
 
@@ -65,6 +103,6 @@ def parse(req_args, db, endpoint):
                                      inc_sub_taxa=inc_sub_taxa))
 
     if 'offset' in req_args.keys():
-        payload.update(offset=req_args[param])
+        payload.update(offset=req_args.get('offset'))
 
     return payload
