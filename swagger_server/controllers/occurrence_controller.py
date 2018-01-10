@@ -12,7 +12,7 @@ import connexion
 #  from six import iteritems
 #  from ..util import deserialize_date, deserialize_datetime
 
-from .elc import config, params
+from .elc import config, params, handlers
 from http_status import Status
 from flask import jsonify
 import requests
@@ -131,7 +131,6 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
 
         # Parse database response
 
-
-        return_obj = handlers.occurrence(db=db, resp_json=resp_json)
+        return_obj.append(handlers.occurrence(db=db, resp_json=resp_json))
 
     return jsonify(records=return_obj)

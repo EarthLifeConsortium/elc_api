@@ -57,6 +57,8 @@ def parse(req_args, db, endpoint):
 
     payload.update(limit=resp_limit)
 
+    payload.update(aux.set_db_special(db))
+
     if 'taxon' in req_args.keys():
         payload.update(aux.set_taxon(db=db,
                                      taxon=req_args.get('taxon'),

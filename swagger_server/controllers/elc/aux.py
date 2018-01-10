@@ -1,6 +1,13 @@
 """Auxilary functions for the API controllers."""
 
 
+def set_db_special(db):
+    """Custom payload additions unique to a specific db."""
+    if db == 'pbdb':
+        return {'show': 'all', 'vocab': 'pbdb'}
+    else:
+        return {}
+
 def set_taxon(db, taxon, inc_sub_taxa):
     """
     Return a database specific key-val pair for taxon paramaterization.
@@ -18,16 +25,16 @@ def set_taxon(db, taxon, inc_sub_taxa):
     if db == 'neotoma':
         if inc_sub_taxa:
             wildcard = '{0:s}%'.format(taxon)
-            taxon_kv = {'taxonname': wildcard}
+            return {'taxonname': wildcard}
         else:
-            taxon_kv = {'taxonname': taxon}
+            return {'taxonname': taxon}
     elif db == 'pbdb':
         if inc_sub_taxa:
-            taxon_kv = {'base_name': taxon}
+            return {'base_name': taxon}
         else:
-            taxon_kv = {'taxon_name': taxon}
-
-    return taxon_kv
+            return {'taxon_name': taxon}
+    else:
+        return {}
 
 
 def get_subtaxa(taxon, inc_syn=True):

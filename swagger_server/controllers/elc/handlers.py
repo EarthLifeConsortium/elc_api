@@ -1,47 +1,50 @@
 """Custom handlers for decoding each database return."""
 
+
 def occurrence(db, resp_json):
     """Extract necessary data from the subquery."""
-
     if db == 'neotoma':
 
         return_obj = list()
 
-        if 'data' in resp_json:
-            for rec in resp_json['data']:
-                data = dict()
+        for rec in resp_json.get('data', []):
 
-                occ_id = 'occ:neot:{0:s}'.format(str(rec.get('sampleid')))
+            data = dict()
 
-                taxon = taxon=rec['taxon']['taxonname']
+            data.update(occ_id='occ:neot:{0:d}'
+                        .format(rec.get('sampleid', 0)))
 
-                data.update(occ_id=occ_id,
-                            taxon=taxon)
+            if rec.get('taxon'):
+                data.update(taxon=rec.get('taxon').get('taxonname'))
+                data.update(taxonid=rec.get('taxon').get('taxonid'))
 
-                return_obj.append(data)
+            if rec.get('ages'):
+                if rec.get('ages').get('age'):
+                    data.update(max_age=rec.get('ages')['age'])
+                    data.update(min_age=rec.get('ages')['age'])
+                else:
+                    data.update(max_age=rec.get('ages')['ageolder'])
+                    data.update(min_age=rec.get('ages')['ageyounger'])
 
-        else:
-            msg = 'No data records found: {0:s}'.format(db)
-            raise ValueError(204, msg)
+            return_obj.append(data)
 
         return return_obj
-
-
-
-
 
     elif db == 'pbdb':
 
         return_obj = list()
 
-        if 'records' in resp_json:
-            for rec in resp_json:
-                data = dict()
+        for rec in resp_json.get('records', []):
 
-                occ_id = 'occ:pbdb:{0:s}'.format(str(rec.get(occurrence_no)))
+            data = dict()
+
+            data.update(occ_id='occ:pbdb:{0:d}'
+                        .format(rec.get('occurrence_no', 0)))
+
+            return_obj.append(data)
 
         return return_obj
 
     else:
-    msg = 'Database suport lacking: {0:s}'.format(db)
+        msg = 'Database suport lacking: {0:s}'.format(db)
         raise ValueError(501, msg)
