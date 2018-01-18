@@ -12,8 +12,9 @@ import connexion
 #  from six import iteritems
 #  from ..util import deserialize_date, deserialize_datetime
 
-from .elc import config, params, handlers
+from .elc import config, params, handlers, aux
 from http_status import Status
+from time import time
 from flask import jsonify
 import requests
 import pdb
@@ -69,6 +70,8 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
 
     for db in config.db_list():
 
+        t0 = time()
+
         # Configure parameter payload for api subquery
 
         try:
@@ -81,8 +84,6 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
                                      title=Status(err.args[0]).name,
                                      detail=err.args[1],
                                      type='about:blank')
-
-        #  pdb.set_trace()
 
         # Database API call
 
@@ -145,10 +146,23 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
                                      detail=msg,
                                      type='about:blank')
 
+        # Build returned metadata object
+
+        db_rec_name = config.get('db_rec_obj', db)
+        desc_obj.update(license=config.get('default', 'license'),
+                        retrieval_timestamp=aux.set_timestamp(),
+                        link='http://earthlifeconsortium.org')
+        db_meta = {db: {'subquery': resp.url,
+                        'response_time': round(time()-t0, 3),
+                        'record_count': len(resp_json.get(db_rec_name))}}
+        desc_obj.update(db_meta)
+
         # Parse database response
 
         return_obj = handlers.occurrence(db=db,
                                          resp_json=resp_json,
                                          return_obj=return_obj)
 
-    return jsonify(records=return_obj)
+    # Return composite data structure to client
+
+    return jsonify(status='success', metadata=desc_obj, records=return_obj)

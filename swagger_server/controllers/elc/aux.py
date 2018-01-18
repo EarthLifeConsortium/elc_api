@@ -1,10 +1,19 @@
 """Auxilary functions for the API controllers."""
 
 
+def set_timestamp():
+    """Format POSIX UTC time for metadata."""
+    from time import gmtime
+
+    t = gmtime()
+    return '{0:4d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d} UTC'.format(
+        t.tm_year, t.tm_mon, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec)
+
+
 def set_db_special(db):
     """Custom payload additions unique to a specific db."""
     if db == 'pbdb':
-        return {'show': 'all'}
+        return {'show': 'full'}
     else:
         return {}
 

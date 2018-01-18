@@ -2,8 +2,12 @@
 resource_api:
   neotoma: 'http://api-dev.neotomadb.org/v2/data/'
   pbdb: 'https://paleobiodb.org/data1.2/'
+db_rec_obj:
+  neotoma: 'data'
+  pbdb: 'records'
 default:
   timeout: Null
   agescale: 'ma'
   includelower: True
   limit: 999999
+  license: 'CC BY 4.0 (https://creativecommons.org/licenses/by/4.0)'
