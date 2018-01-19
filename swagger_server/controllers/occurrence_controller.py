@@ -32,21 +32,21 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
     :type minage: float
     :param maxage: Default units as Ma, overridden by agescale
     :type maxage: float
-    :param agescale: Maxage and minage units (def=ma, ka, yr)
+    :param agescale: Maxage and minage units (default=ma, ka, yr)
     :type agescale: str
-    :param timerule: Temporal bound (def=contain, major, overlap)
+    :param timerule: Temporal bound (default=contain, major, overlap)
     :type timerule: str
     :param taxon: Taxonomic name, ASCII encode
     :type taxon: str
-    :param includelower: Include sub-taxa (def=True)
+    :param includelower: Include sub-taxa (defult=True)
     :type includelower: bool
     :param limit: Limit the number of records in the response
     :type limit: int
     :param offset: Begin the response from a designated point
     :type offset: int
-    :param show: Return identifiers or stats (def=full, idx, poll)
+    :param show: Return identifiers or stats (defult=full, idx, poll)
     :type show: str
-    :param output: Response format (def=json, csv)
+    :param output: Response format (defult=json, csv)
     :type output: str
 
     :rtype: List[Occurrence]
@@ -165,4 +165,7 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
 
     # Return composite data structure to client
 
-    return jsonify(status='success', metadata=desc_obj, records=return_obj)
+    if options.get('show') == 'poll':
+        return jsonify(desc_obj)
+    else:
+        return jsonify(status='success', metadata=desc_obj, records=return_obj)
