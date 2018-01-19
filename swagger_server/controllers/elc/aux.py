@@ -14,6 +14,7 @@ def set_db_special(db):
     """Custom payload additions unique to a specific db."""
     if db == 'pbdb':
         return {'show': 'full'}
+    # Add another database specific case here
     else:
         return {}
 
@@ -31,17 +32,28 @@ def set_taxon(db, taxon, inc_sub_taxa):
     :rtype: Dict[n=1]
 
     """
+    taxon = taxon.capitalize()
+    
+    if len(taxon.split()) == 2:
+        genus_species = True
+    elif len(taxon.split()) == 1:
+        genus_species = False
+    else:
+        msg = 'Taxon argument contains too many parameters'
+        raise ValueError(400, msg)
+
     if db == 'neotoma':
-        if inc_sub_taxa:
+        if inc_sub_taxa and not genus_species:
             wildcard = '{0:s}%'.format(taxon)
             return {'taxonname': wildcard}
         else:
             return {'taxonname': taxon}
     elif db == 'pbdb':
-        if inc_sub_taxa:
+        if inc_sub_taxa and not genus_species:
             return {'base_name': taxon}
         else:
             return {'taxon_name': taxon}
+    # Add another databse specific case here
     else:
         return {}
 
@@ -71,7 +83,7 @@ def get_subtaxa(taxon, inc_syn=True):
         resp_json = resp.json()
 
         if 'warnings' in resp_json:
-            raise ValueError(400, 'Bad Request',
+            raise SyntaxError(400, 'Bad Request',
                              str(resp_json['warnings'][0]))
 
         else:

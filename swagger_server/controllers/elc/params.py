@@ -53,10 +53,6 @@ def parse(db, req_args, endpoint):
     spec.update(tax=['taxon', 'includelower', 'hierarchy'])
     spec.update(ref=['idnumbers', 'format'])
 
-    # Supported databases (add additional to list)
-
-    db_implemented = ['pbdb', 'neotoma']
-
     # Bad or missing parameter checks
 
     if not bool(req_args):
@@ -68,7 +64,7 @@ def parse(db, req_args, endpoint):
             msg = 'Unknown parameter \'{0:s}\''.format(param)
             raise ValueError(400, msg)
 
-    if db not in db_implemented:
+    if db not in config.db_list():
         msg = 'Database support lacking: \'{0:s}\''.format(db)
         raise ValueError(501, msg)
 
@@ -98,9 +94,12 @@ def parse(db, req_args, endpoint):
     payload.update(aux.set_db_special(db))
 
     if 'taxon' in req_args.keys():
-        payload.update(aux.set_taxon(db=db,
-                                     taxon=req_args.get('taxon'),
-                                     inc_sub_taxa=inc_sub_taxa))
+        try:
+            payload.update(aux.set_taxon(db=db,
+                                         taxon=req_args.get('taxon'),
+                                         inc_sub_taxa=inc_sub_taxa))
+        except SyntaxError as err:
+            raise ValueError(err[0], err[1])
 
     if 'offset' in req_args.keys():
         payload.update(offset=req_args.get('offset'))
