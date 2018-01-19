@@ -166,6 +166,8 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
     # Return composite data structure to client
 
     if options.get('show') == 'poll':
-        return jsonify(desc_obj)
+        return desc_obj
+    if options.get('show') == 'idx':
+        return aux.get_id_numbers(data=return_obj, endpoint='occ')
     else:
         return jsonify(status='success', metadata=desc_obj, records=return_obj)

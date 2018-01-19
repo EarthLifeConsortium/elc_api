@@ -139,3 +139,17 @@ def get_parents(taxon):
     else:
         raise ValueError(resp.status_code, resp.reason,
                          'Server error or bad URL')
+
+
+def get_id_numbers(data, endpoint):
+    """Return a list of the specified endpoint's primary id numbers."""
+    ids = list()
+    id_field = '{0:s}_id'.format(endpoint)
+
+    for rec in data:
+        ids.append(rec.get(id_field))
+
+    #  import pdb
+    #  pdb.set_trace()
+
+    return ids
