@@ -8,7 +8,7 @@ import time
 from connexion import problem
 import json
 from flask import request, jsonify, Response
-from .elc import params, config, formatters, aux
+from ..elc import params, config, formatters, aux
 
 def tax(taxon=None, includelower=None, hierarchy=None):
     """

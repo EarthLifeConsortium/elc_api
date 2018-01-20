@@ -69,7 +69,7 @@ def get_subtaxa(taxon, inc_syn=True):
 
     """
     import requests
-    from ..elc import config
+    from .elc import config
 
     subtaxa = set()
     base_url = config.get('resource_api', 'pbdb') + 'taxa/list.json'
@@ -109,7 +109,7 @@ def get_parents(taxon):
     """
     import requests
     from collections import OrderedDict
-    from ..elc import config
+    from .elc import config
 
     parents = dict()
     base_url = config.get('resource_api', 'pbdb') + 'taxa/list.json'

@@ -12,7 +12,7 @@ import time
 import connexion
 from flask import request, jsonify
 from statistics import mean
-from .elc import params
+from ..elc import params
 
 
 def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,

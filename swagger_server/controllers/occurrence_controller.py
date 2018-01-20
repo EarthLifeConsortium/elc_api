@@ -12,7 +12,7 @@ import connexion
 #  from six import iteritems
 #  from ..util import deserialize_date, deserialize_datetime
 
-from .elc import config, params, handlers, aux
+from ..elc import config, params, handlers, aux
 from http_status import Status
 from time import time
 from flask import jsonify
