@@ -17,7 +17,6 @@ from http_status import Status
 from time import time
 from flask import jsonify
 import requests
-import pdb
 
 
 def occ(bbox=None, minage=None, maxage=None, ageuits=None,
@@ -75,8 +74,8 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
         # Configure parameter payload for api subquery
 
         try:
-            payload = params.parse(db=db,
-                                   req_args=connexion.request.args,
+            payload = params.parse(req_args=connexion.request.args,
+                                   db=db,
                                    endpoint='occ')
 
         except ValueError as err:
@@ -158,9 +157,9 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
 
         # Parse database response
 
-        return_obj = handlers.occurrence(db=db,
-                                         resp_json=resp_json,
-                                         return_obj=return_obj)
+        return_obj = handlers.occurrence(resp_json=resp_json,
+                                         return_obj=return_obj,
+                                         db=db)
 
     # Return composite data structure to client
 

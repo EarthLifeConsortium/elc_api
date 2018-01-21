@@ -149,7 +149,4 @@ def get_id_numbers(data, endpoint):
     for rec in data:
         ids.append(rec.get(id_field))
 
-    #  import pdb
-    #  pdb.set_trace()
-
     return ids

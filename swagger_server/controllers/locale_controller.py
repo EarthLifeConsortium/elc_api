@@ -6,7 +6,6 @@ Dataset identifiers are returned for Neotoma and collection identifiers
 for the PBDB.
 """
 
-import pdb
 import requests
 import time
 import connexion

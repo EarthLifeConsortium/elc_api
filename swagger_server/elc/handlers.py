@@ -1,7 +1,7 @@
 """Custom handlers for decoding each database return."""
 
 
-def occurrence(db, resp_json, return_obj):
+def occurrence(resp_json, return_obj, db):
     """
     Extract necessary data from the subquery.
 

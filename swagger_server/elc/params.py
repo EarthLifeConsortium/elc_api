@@ -1,10 +1,5 @@
 """Common parameter parsing functions for the API controllers."""
 
-import geojson
-import ast
-from ..elc import config, aux
-import pdb
-
 
 def set_options(req_args, endpoint):
     """Return a dictionary with runtime options and config."""
@@ -41,8 +36,46 @@ def set_options(req_args, endpoint):
     return options
 
 
-def parse(db, req_args, endpoint):
+def id_parse(ids, db, endpoint):
+    """
+    Separate database:datatype:id_number from a list.
+    
+    :arg ids: array of database specific object identifiers in above format
+    :type ids: list (of str)
+    :arg db: database name to parse on
+    :type db: str
+    :arg endpoint: endpoint to parse on 
+    :type endpoint: str
+
+    """
+    import re
+
+    numeric_ids = list()
+    db_tag = db[:4]
+
+    # Add additional db specific locale eqivalents here
+    loc_spec = ['col', 'dst']
+
+    for id in ids:
+        database = re.search('^\w+(?=:)', id).group()
+        datatype = re.search('(?<=:).+(?=:)', id).group()
+        id_num = int(re.search('\d+$', id).group())
+
+        if endpoint == 'loc':
+            if database.lower() == db_tag and datatype.lower() in loc_spec:
+                numeric_ids.append(id_num)
+        elif endpoint not in loc_spec:
+            if database.lower() == db_tag and datatype.lower() == endpoint:
+                numeric_ids.append(id_num)
+
+    return numeric_ids
+
+
+def parse(req_args, db, endpoint):
     """Return a Requests payload specific to resource target."""
+    import ast
+    from ..elc import config, aux
+
     spec = dict()
     spec.update(occ=['bbox', 'minage', 'maxage', 'ageunits', 'timerule',
                      'taxon', 'includelower', 'limit', 'offset', 'show',
