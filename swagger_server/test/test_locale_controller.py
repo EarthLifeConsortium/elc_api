@@ -22,7 +22,7 @@ class TestLocaleController(BaseTestCase):
                         ('bbox', 'bbox_example'),
                         ('minage', 1.2),
                         ('maxage', 1.2),
-                        ('agescale', 'agescale_example'),
+                        ('ageunits', 'ageunits_example'),
                         ('timerule', 'timerule_example'),
                         ('taxon', 'taxon_example'),
                         ('includelower', true),

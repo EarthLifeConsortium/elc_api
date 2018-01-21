@@ -44,10 +44,10 @@ def set_options(req_args, endpoint):
 def parse(db, req_args, endpoint):
     """Return a Requests payload specific to resource target."""
     spec = dict()
-    spec.update(occ=['bbox', 'minage', 'maxage', 'agescale', 'timerule',
+    spec.update(occ=['bbox', 'minage', 'maxage', 'ageunits', 'timerule',
                      'taxon', 'includelower', 'limit', 'offset', 'show',
                      'output'])
-    spec.update(loc=['occid', 'bbox', 'minage', 'maxage', 'agescale',
+    spec.update(loc=['occid', 'bbox', 'minage', 'maxage', 'ageunits',
                      'timerule', 'taxon', 'includelower', 'limit', 'offset',
                      'show'])
     spec.update(tax=['taxon', 'includelower', 'hierarchy'])
@@ -75,10 +75,10 @@ def parse(db, req_args, endpoint):
     else:
         inc_sub_taxa = config.get('default', 'includelower')
 
-    if 'agescale' in req_args.keys():
-        age_units = req_args.get('agescale')
+    if 'ageunits' in req_args.keys():
+        age_units = req_args.get('ageunits')
     else:
-        age_units = config.get('default', 'agescale')
+        age_units = config.get('default', 'ageunits')
 
     if 'limit' in req_args.keys():
         resp_limit = req_args.get('limit')

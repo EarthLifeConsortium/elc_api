@@ -15,7 +15,7 @@ from statistics import mean
 from ..elc import params
 
 
-def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
+def loc(occid=None, bbox=None, minage=None, maxage=None, ageunits=None,
         timerule=None, taxon=None, includelower=None, limit=None,
         offset=None, show=None):
     """
@@ -56,7 +56,7 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
                            'bbox': bbox,
                            'minage': minage,
                            'maxage': maxage,
-                           'agescale': agescale,
+                           'ageunits': ageunits,
                            'timerule': timerule,
                            'taxon': taxon,
                            'includelower': includelower,
@@ -82,8 +82,8 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
         params.set_geography(payload, bbox, 'neot')
 
     # Set all age parameters to year, kilo-year or mega-annum
-    if agescale:
-        age_scaler = params.set_age(payload, agescale, minage, maxage, 'neot')
+    if ageunits:
+        age_scaler = params.set_age(payload, ageunits, minage, maxage, 'neot')
 
     # Set timescale bounding rules
     # Note: Timerules are not currently supported by the Neotoma API.
@@ -198,14 +198,14 @@ def loc(occid=None, bbox=None, minage=None, maxage=None, agescale=None,
             payload.update(loc=box)
 
     # Set all age parameters to year, kilo-year or mega-annum
-    if agescale and agescale.lower() == 'yr':
+    if ageunits and ageunits.lower() == 'yr':
         age_scaler = 1e06
         age_units = 'yr'
         if minage:
             payload.update(min_ma=float(minage)/age_scaler)
         if maxage:
             payload.update(max_ma=float(maxage)/age_scaler)
-    elif agescale and agescale.lower() == 'ka':
+    elif ageunits and ageunits.lower() == 'ka':
         age_scaler = 1e03
         age_units = 'ka'
         if minage:

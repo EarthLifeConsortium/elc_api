@@ -7,7 +7,7 @@ db_rec_obj:
   pbdb: 'records'
 default:
   timeout: Null
-  agescale: 'ma'
+  ageunits: 'ma'
   includelower: True
   limit: 999999
   license: 'CC BY 4.0 (https://creativecommons.org/licenses/by/4.0)'

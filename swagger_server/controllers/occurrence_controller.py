@@ -20,7 +20,7 @@ import requests
 import pdb
 
 
-def occ(bbox=None, minage=None, maxage=None, agescale=None,
+def occ(bbox=None, minage=None, maxage=None, ageuits=None,
         timerule=None, taxon=None, includelower=None, limit=None,
         offset=None, show=None, output=None):
     """
@@ -28,12 +28,12 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
 
     :param bbox: [lonW, latS, lonE, latN] or GeoJSON
     :type bbox: str
-    :param minage: Default units as Ma, overridden by agescale
+    :param minage: Default units as Ma, overridden by ageunits
     :type minage: float
-    :param maxage: Default units as Ma, overridden by agescale
+    :param maxage: Default units as Ma, overridden by ageunits 
     :type maxage: float
-    :param agescale: Maxage and minage units (default=ma, ka, yr)
-    :type agescale: str
+    :param ageunits: Maxage and minage units (default=ma, ka, yr)
+    :type ageunits: str
     :param timerule: Temporal bound (default=contain, major, overlap)
     :type timerule: str
     :param taxon: Taxonomic name, ASCII encode
@@ -84,7 +84,6 @@ def occ(bbox=None, minage=None, maxage=None, agescale=None,
                                      title=Status(err.args[0]).name,
                                      detail=err.args[1],
                                      type='about:blank')
-
         # Database API call
 
         if db == 'neotoma':
