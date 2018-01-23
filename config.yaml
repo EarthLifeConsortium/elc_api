@@ -2,9 +2,24 @@
 resource_api:
   neotoma: 'http://api-dev.neotomadb.org/v2/data/'
   pbdb: 'https://paleobiodb.org/data1.2/'
+native_ageunits:
+  neotoma: 'ka'
+  pbdb: 'ma'
 db_rec_obj:
   neotoma: 'data'
   pbdb: 'records'
+db_occ_endpt:
+  neotoma: 'occurrence'
+  pbdb: 'occs/list.json'
+db_locale_endpt:
+  neotoma: ''
+  pbdb: ''
+db_taxa_endpt:
+  neotoma: ''
+  pbdb: ''
+db_ref_endpt:
+  neotoma: ''
+  pbdb: ''
 default:
   timeout: Null
   ageunits: 'ma'

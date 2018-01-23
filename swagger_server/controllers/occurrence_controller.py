@@ -85,11 +85,8 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
                                      type='about:blank')
         # Database API call
 
-        if db == 'neotoma':
-            url_path = config.get('resource_api', db) + 'occurrence'
-        if db == 'pbdb':
-            url_path = config.get('resource_api', db) + 'occs/list.json'
-
+        url_path = ''.join([config.get('resource_api', db),
+                            config.get('db_occ_endpt', db)])
         try:
             resp = requests.get(url_path,
                                 params=payload,

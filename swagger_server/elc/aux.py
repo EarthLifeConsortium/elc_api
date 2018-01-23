@@ -173,3 +173,49 @@ def build_meta_sub(data, url, t0, db):
     return {db: {'subquery': url,
                  'response_time': round(time()-t0, 3),
                  'record_count': len(data.get(db_rec_name))}}
+
+
+def convert_age():
+    """Switch age units based of database default and parameterization."""
+
+    
+
+
+def set_age_scaler(payload, agescale, minage, maxage, db_name):
+    """
+    Convert relative ages for each database query.
+
+    :arg agescale: Age units to use for search and return
+    :arg minage: Most recent age of the record bound
+    :arg maxage: Oldest age of the record bound
+    :arg db_name: Name of the database for which to convert units
+
+    :return age_scaler: Factor for scaling age returned by DB subquery
+    """
+    # Native DB age format conversion dict
+    age = {'neot': {'yr': 1, 'ka': 1e-03, 'ma': 1e-06},
+           'pbdb': {'yr': 1e06, 'ka': 1e03, 'ma': 1}}
+    units = agescale.lower()
+
+    if units == 'yr':
+        age_scaler = age[db_name][units]
+        if minage:
+            payload.update(ageyoung=int(minage))
+        if maxage:
+            payload.update(ageold=int(maxage))
+    elif units == 'ka':
+        age_scaler = age[db_name][units]
+        if minage:
+            payload.update(ageyoung=int(minage/age_scaler))
+        if maxage:
+            payload.update(ageold=int(maxage/age_scaler))
+    elif units == 'ma':
+        age_scaler = age[db_name][units]
+        if minage:
+            payload.update(ageyoung=int(minage/age_scaler))
+        if maxage:
+            payload.update(ageold=int(maxage/age_scaler))
+    else:
+        return 'Incorrect age scaler: ' + str(agescale)
+
+    return age_scaler
