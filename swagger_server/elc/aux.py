@@ -11,12 +11,13 @@ def set_timestamp():
 
 
 def set_db_special(db):
-    """Custom payload additions unique to a specific db."""
+    """Add custom payload additions unique to a specific db."""
     if db == 'pbdb':
         return {'show': 'full'}
     # Add another database specific case here
     else:
         return {}
+
 
 def set_taxon(db, taxon, inc_sub_taxa):
     """
@@ -33,7 +34,7 @@ def set_taxon(db, taxon, inc_sub_taxa):
 
     """
     taxon = taxon.capitalize()
-    
+
     if len(taxon.split()) == 2:
         genus_species = True
     elif len(taxon.split()) == 1:
@@ -84,7 +85,7 @@ def get_subtaxa(taxon, inc_syn=True):
 
         if 'warnings' in resp_json:
             raise SyntaxError(400, 'Bad Request',
-                             str(resp_json['warnings'][0]))
+                              str(resp_json['warnings'][0]))
 
         else:
             for rec in resp_json['records']:
@@ -175,49 +176,13 @@ def build_meta_sub(data, url, t0, db):
                  'record_count': len(data.get(db_rec_name))}}
 
 
-def convert_age():
-    """Switch age units based of database default and parameterization."""
+def set_age_scaler(options, db):
+    """Return a numerica scale factor for ages."""
+    from ..elc import config
+
     unit = {'yr': 1, 'ka': 1000, 'ma': 1000000}
 
+    elc_age = unit.get(options.get('ageunits'))
+    db_age = unit.get(config.get('native_ageunits', db))
 
-    
-
-
-def set_age_scaler(payload, agescale, minage, maxage, db_name):
-    """
-    Convert relative ages for each database query.
-
-    :arg agescale: Age units to use for search and return
-    :arg minage: Most recent age of the record bound
-    :arg maxage: Oldest age of the record bound
-    :arg db_name: Name of the database for which to convert units
-
-    :return age_scaler: Factor for scaling age returned by DB subquery
-    """
-    # Native DB age format conversion dict
-    age = {'neot': {'yr': 1, 'ka': 1e-03, 'ma': 1e-06},
-           'pbdb': {'yr': 1e06, 'ka': 1e03, 'ma': 1}}
-    units = agescale.lower()
-
-    if units == 'yr':
-        age_scaler = age[db_name][units]
-        if minage:
-            payload.update(ageyoung=int(minage))
-        if maxage:
-            payload.update(ageold=int(maxage))
-    elif units == 'ka':
-        age_scaler = age[db_name][units]
-        if minage:
-            payload.update(ageyoung=int(minage/age_scaler))
-        if maxage:
-            payload.update(ageold=int(maxage/age_scaler))
-    elif units == 'ma':
-        age_scaler = age[db_name][units]
-        if minage:
-            payload.update(ageyoung=int(minage/age_scaler))
-        if maxage:
-            payload.update(ageold=int(maxage/age_scaler))
-    else:
-        return 'Incorrect age scaler: ' + str(agescale)
-
-    return age_scaler
+    return elc_age / db_age

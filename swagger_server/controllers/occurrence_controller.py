@@ -29,7 +29,7 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
     :type bbox: str
     :param minage: Default units as Ma, overridden by ageunits
     :type minage: float
-    :param maxage: Default units as Ma, overridden by ageunits 
+    :param maxage: Default units as Ma, overridden by ageunits
     :type maxage: float
     :param ageunits: Maxage and minage units (default=ma, ka, yr)
     :type ageunits: str
@@ -153,6 +153,7 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
 
         return_obj = handlers.occurrence(resp_json=resp_json,
                                          return_obj=return_obj,
+                                         options=options,
                                          db=db)
 
     # Return composite data structure to client

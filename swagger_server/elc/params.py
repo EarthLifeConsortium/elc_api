@@ -47,7 +47,7 @@ def set_options(req_args, endpoint):
         if config.get('default', 'ageunits') in spec.get('age'):
             options.update(ageunits=config.get('default', 'ageunits'))
         else:
-            msg = 'Config error: ageunits={0:s}'.format(str(spec.get('age')))
+            msg = 'Config: ageunits not in {0:s}'.format(str(spec.get('age')))
             raise ValueError(500, msg)
 
     if 'coords' in req_args.keys():
@@ -60,7 +60,7 @@ def set_options(req_args, endpoint):
         if config.get('default', 'coordinates') in spec.get('geog'):
             options.update(coords=config.get('default', 'coordinates'))
         else:
-            msg = 'Config error: coordinates={0:s}'.format(str(spec.get('geog')))
+            msg = 'Config: coords not in {0:s}'.format(str(spec.get('geog')))
             raise ValueError(500, msg)
 
     return options
@@ -69,12 +69,12 @@ def set_options(req_args, endpoint):
 def id_parse(ids, db, endpoint):
     """
     Separate database:datatype:id_number from a list.
-    
+
     :arg ids: array of database specific object identifiers in above format
     :type ids: list (of str)
     :arg db: database name to parse on
     :type db: str
-    :arg endpoint: endpoint to parse on 
+    :arg endpoint: endpoint to parse on
     :type endpoint: str
 
     """
