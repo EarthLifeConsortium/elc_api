@@ -44,7 +44,11 @@ def set_options(req_args, endpoint):
             msg = 'Allowable age units: {0:s}'.format(str(spec.get('age')))
             raise ValueError(400, msg)
     else:
-        options.update(ageunits=config.get('default', 'ageunits'))
+        if config.get('default', 'ageunits') in spec.get('age'):
+            options.update(ageunits=config.get('default', 'ageunits'))
+        else:
+            msg = 'Config error: ageunits={0:s}'.format(str(spec.get('age')))
+            raise ValueError(500, msg)
 
     if 'coords' in req_args.keys():
         if req_args.get('coords').lower() in spec.get('geog'):
@@ -53,7 +57,11 @@ def set_options(req_args, endpoint):
             msg = 'Allowable coordinates: {0:s}'.format(str(spec.get('geog')))
             raise ValueError(400, msg)
     else:
-        options.update(coords=config.get('default', 'coordinates'))
+        if config.get('default', 'coordinates') in spec.get('geog'):
+            options.update(coords=config.get('default', 'coordinates'))
+        else:
+            msg = 'Config error: coordinates={0:s}'.format(str(spec.get('geog')))
+            raise ValueError(500, msg)
 
     return options
 

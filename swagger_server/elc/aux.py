@@ -177,6 +177,8 @@ def build_meta_sub(data, url, t0, db):
 
 def convert_age():
     """Switch age units based of database default and parameterization."""
+    unit = {'yr': 1, 'ka': 1000, 'ma': 1000000}
+
 
     
 

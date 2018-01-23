@@ -3,7 +3,7 @@ resource_api:
   neotoma: 'http://api-dev.neotomadb.org/v2/data/'
   pbdb: 'https://paleobiodb.org/data1.2/'
 native_ageunits:
-  neotoma: 'ka'
+  neotoma: 'yr'
   pbdb: 'ma'
 db_rec_obj:
   neotoma: 'data'
