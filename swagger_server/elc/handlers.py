@@ -13,8 +13,6 @@ def occurrence(resp_json, return_obj, db):
     :type return_obj: list (of dicts)
 
     """
-    import pdb
-
     # Custom decoder for Neotoma Paleoecology Database response
 
     if db == 'neotoma':

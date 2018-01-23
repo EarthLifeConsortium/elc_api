@@ -146,14 +146,11 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
 
         # Build returned metadata object
 
-        db_rec_name = config.get('db_rec_obj', db)
-        desc_obj.update(license=config.get('default', 'license'),
-                        retrieval_timestamp=aux.set_timestamp(),
-                        link='http://earthlifeconsortium.org')
-        db_meta = {db: {'subquery': resp.url,
-                        'response_time': round(time()-t0, 3),
-                        'record_count': len(resp_json.get(db_rec_name))}}
-        desc_obj.update(db_meta)
+        desc_obj.update(aux.build_meta(options))
+        desc_obj.update(aux.build_meta_sub(data=resp_json,
+                                           url=resp.url,
+                                           t0=t0,
+                                           db=db))
 
         # Parse database response
 

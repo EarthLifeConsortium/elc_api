@@ -3,6 +3,8 @@
 
 def set_options(req_args, endpoint):
     """Return a dictionary with runtime options and config."""
+    from ..elc import config
+
     # Add aditional formats and controls below (default is param[0])
     spec = dict()
     spec.update(occ=['json', 'csv'])
@@ -10,13 +12,15 @@ def set_options(req_args, endpoint):
     spec.update(tax=['json', 'csv'])
     spec.update(ref=['bibjson', 'ris', 'itis'])
     spec.update(show=['all', 'poll', 'idx'])
+    spec.update(age=['ma', 'ka', 'yr'])
+    spec.update(geog=['paleo', 'modern'])
 
     # Configure options
 
     options = dict()
 
     if 'output' in req_args.keys():
-        if req_args.get('output') in spec.get(endpoint):
+        if req_args.get('output').lower() in spec.get(endpoint):
             options.update(output=req_args.get('output'))
         else:
             msg = 'Allowable formats: {0:s}'.format(str(spec.get(endpoint)))
@@ -25,13 +29,31 @@ def set_options(req_args, endpoint):
         options.update(output=spec.get(endpoint)[0])
 
     if 'show' in req_args.keys():
-        if req_args.get('show') in spec.get('show'):
+        if req_args.get('show').lower() in spec.get('show'):
             options.update(show=req_args.get('show'))
         else:
             msg = 'Allowable show args: {0:s}'.format(str(spec.get('show')))
             raise ValueError(400, msg)
     else:
         options.update(show=spec.get('show')[0])
+
+    if 'ageunits' in req_args.keys():
+        if req_args.get('ageunits').lower() in spec.get('age'):
+            options.update(ageunits=req_args.get('ageunits'))
+        else:
+            msg = 'Allowable age units: {0:s}'.format(str(spec.get('age')))
+            raise ValueError(400, msg)
+    else:
+        options.update(ageunits=config.get('default', 'ageunits'))
+
+    if 'coords' in req_args.keys():
+        if req_args.get('coords').lower() in spec.get('geog'):
+            options.update(coords=req_args.get('coords'))
+        else:
+            msg = 'Allowable coordinates: {0:s}'.format(str(spec.get('geog')))
+            raise ValueError(400, msg)
+    else:
+        options.update(coords=config.get('default', 'coordinates'))
 
     return options
 

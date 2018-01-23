@@ -8,6 +8,7 @@ db_rec_obj:
 default:
   timeout: Null
   ageunits: 'ma'
+  coordinates: 'paleo'
   includelower: True
   limit: 999999
   license: 'CC BY 4.0 (https://creativecommons.org/licenses/by/4.0)'

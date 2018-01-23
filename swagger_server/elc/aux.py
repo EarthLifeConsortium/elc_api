@@ -150,3 +150,26 @@ def get_id_numbers(data, endpoint):
         ids.append(rec.get(id_field))
 
     return ids
+
+
+def build_meta(options):
+    """Generate metadata for the composite return."""
+    from ..elc import config, aux
+
+    return {'license': config.get('default', 'license'),
+            'retrieval_timestamp': aux.set_timestamp(),
+            'link': 'http://earthlifeconsortium.org',
+            'age_units': options.get('ageunits'),
+            'coordinates': options.get('coords')}
+
+
+def build_meta_sub(data, url, t0, db):
+    """Generate database specific metadata object for the return."""
+    from time import time
+    from ..elc import config
+
+    db_rec_name = config.get('db_rec_obj', db)
+
+    return {db: {'subquery': url,
+                 'response_time': round(time()-t0, 3),
+                 'record_count': len(data.get(db_rec_name))}}
