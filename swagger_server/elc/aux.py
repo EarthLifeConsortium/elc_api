@@ -40,7 +40,7 @@ def set_taxon(db, taxon, inc_sub_taxa):
         genus_species = False
     else:
         msg = 'Taxon argument contains too many parameters'
-        raise ValueError(400, msg)
+        raise SyntaxError(400, msg)
 
     if db == 'neotoma':
         if inc_sub_taxa and not genus_species:
@@ -56,6 +56,20 @@ def set_taxon(db, taxon, inc_sub_taxa):
     # Add another databse specific case here
     else:
         return {}
+
+
+def set_age(db, age, options):
+    """Scale age parameters."""
+    from ..elc import aux
+
+    if age < 0:
+        msg = 'Age parameter out of bounds'
+        raise SyntaxError(400, msg)
+
+    if db == 'neotoma':
+
+
+
 
 
 def get_subtaxa(taxon, inc_syn=True):

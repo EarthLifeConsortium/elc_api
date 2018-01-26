@@ -75,6 +75,7 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
 
         try:
             payload = params.parse(req_args=connexion.request.args,
+                                   options=options,
                                    db=db,
                                    endpoint='occ')
 

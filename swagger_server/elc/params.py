@@ -100,7 +100,7 @@ def id_parse(ids, db, endpoint):
     return numeric_ids
 
 
-def parse(req_args, db, endpoint):
+def parse(req_args, options, db, endpoint):
     """Return a Requests payload specific to resource target."""
     from ast import literal_eval
     from ..elc import config, aux
@@ -154,6 +154,10 @@ def parse(req_args, db, endpoint):
                                          inc_sub_taxa=inc_sub_taxa))
         except SyntaxError as err:
             raise ValueError(err[0], err[1])
+
+    #  if 'maxage' in req_args.keys():
+    import pdb; pdb.set_trace()
+
 
     if 'offset' in req_args.keys():
         payload.update(offset=req_args.get('offset'))
