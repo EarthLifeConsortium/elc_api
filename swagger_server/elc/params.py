@@ -76,7 +76,6 @@ def id_parse(ids, db, endpoint):
     :type db: str
     :arg endpoint: endpoint to parse on
     :type endpoint: str
-
     """
     import re
 
@@ -103,7 +102,7 @@ def id_parse(ids, db, endpoint):
 
 def parse(req_args, db, endpoint):
     """Return a Requests payload specific to resource target."""
-    import ast
+    from ast import literal_eval
     from ..elc import config, aux
 
     spec = dict()
@@ -133,20 +132,12 @@ def parse(req_args, db, endpoint):
 
     # Set defaults
 
-    if 'includelower' in req_args.keys():
-        inc_sub_taxa = ast.literal_eval(req_args.get('includelower'))
-    else:
-        inc_sub_taxa = config.get('default', 'includelower')
+    switch = req_args.get('includelower',
+                          str(config.get('default', 'includelower')))
+    inc_sub_taxa = literal_eval(switch)
 
-    if 'ageunits' in req_args.keys():
-        age_units = req_args.get('ageunits')
-    else:
-        age_units = config.get('default', 'ageunits')
-
-    if 'limit' in req_args.keys():
-        resp_limit = req_args.get('limit')
-    else:
-        resp_limit = config.get('default', 'limit')
+    resp_limit = req_args.get('limit',
+                              int(config.get('default', 'limit')))
 
     # Generate sub-query api payload
 

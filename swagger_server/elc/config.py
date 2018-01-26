@@ -17,7 +17,6 @@ def get(group, param):
     :type group: str
     :arg param: Setting name
     :type param: str
-
     """
     data_map = read_file('config.yaml')
 

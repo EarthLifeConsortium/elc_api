@@ -11,7 +11,6 @@ def occurrence(resp_json, return_obj, options, db):
     :type resp_json: dict
     :arg return_obj: List of data objects to be appended and returned
     :type return_obj: list (of dicts)
-
     """
     from ..elc import aux
 
@@ -34,15 +33,23 @@ def occurrence(resp_json, return_obj, options, db):
                             .format(rec.get('taxon').get('taxonid', 0)))
 
             if rec.get('ages'):
-                if rec.get('ages').get('ageolder'):
-                    age = rec.get('ages').get('ageolder') / factor
-                    data.update(max_age=round(age, 5))
-                    age = rec.get('ages').get('ageyounger') / factor
-                    data.update(min_age=round(age, 5))
+
+                def choose(x, y): return x or y
+
+                old = choose(rec.get('ages').get('ageolder'),
+                             rec.get('ages').get('age'))
+                if old and old >= 0:
+                    data.update(max_age=round(old / factor, 5))
                 else:
-                    age = rec.get('ages').get('age') / factor
-                    data.update(max_age=round(age, 5))
-                    data.update(min_age=round(age, 5))
+                    import pdb; pdb.set_trace()
+                    data.update(max_age=None)
+
+                yng = choose(rec.get('ages').get('ageyounger'),
+                             rec.get('ages').get('age'))
+                if yng and yng >= 0:
+                    data.update(min_age=round(yng / factor, 5))
+                else:
+                    data.update(min_age=None)
 
             if rec.get('site'):
                 data.update(source=rec.get('site').get('database'))

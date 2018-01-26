@@ -31,7 +31,6 @@ def set_taxon(db, taxon, inc_sub_taxa):
     :type inc_sub_taxa: bool
 
     :rtype: Dict[n=1]
-
     """
     taxon = taxon.capitalize()
 
@@ -67,7 +66,6 @@ def get_subtaxa(taxon, inc_syn=True):
     :type taxon: str
     :arg inc_syn: Include recognized synonyms in the return
     :type inc_syn: bool
-
     """
     import requests
     from .elc import config
@@ -106,7 +104,6 @@ def get_parents(taxon):
 
     :arg taxon: Taxonomic name to query
     :type taxon: str
-
     """
     import requests
     from collections import OrderedDict
