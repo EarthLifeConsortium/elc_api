@@ -19,7 +19,7 @@ def set_db_special(db):
         return {}
 
 
-def set_taxon(db, taxon, inc_sub_taxa):
+def set_taxon(db, taxon, subtax):
     """
     Return a database specific key-val pair for taxon paramaterization.
 
@@ -27,8 +27,8 @@ def set_taxon(db, taxon, inc_sub_taxa):
     :type db: str
     :arg taxon: User input taxon name
     :type taxon: str
-    :arg inc_sub_taxa: Include lower taxonomy switch
-    :type inc_sub_taxa: bool
+    :arg subtax: Include lower taxonomy switch
+    :type subtax: bool
 
     :rtype: Dict[n=1]
     """
@@ -43,13 +43,13 @@ def set_taxon(db, taxon, inc_sub_taxa):
         raise SyntaxError(400, msg)
 
     if db == 'neotoma':
-        if inc_sub_taxa and not genus_species:
+        if subtax and not genus_species:
             wildcard = '{0:s}%'.format(taxon)
             return {'taxonname': wildcard}
         else:
             return {'taxonname': taxon}
     elif db == 'pbdb':
-        if inc_sub_taxa and not genus_species:
+        if subtax and not genus_species:
             return {'base_name': taxon}
         else:
             return {'taxon_name': taxon}
@@ -58,7 +58,7 @@ def set_taxon(db, taxon, inc_sub_taxa):
         return {}
 
 
-def set_age(db, age, options):
+def set_age(db, age, units):
     """Scale age parameters."""
     from ..elc import aux
 
@@ -67,8 +67,11 @@ def set_age(db, age, options):
         raise SyntaxError(400, msg)
 
     if db == 'neotoma':
-
-
+        factor = aux.set_age_scaler(options=options, db='neotoma')
+        if bound == 'max':
+            return {'ageolder': age / factor}
+        else:
+            return {'ageyounger': age / factor}
 
 
 

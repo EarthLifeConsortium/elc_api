@@ -63,6 +63,14 @@ def set_options(req_args, endpoint):
             msg = 'Config: coords not in {0:s}'.format(str(spec.get('geog')))
             raise ValueError(500, msg)
 
+    choice = req_args.get('includelower',
+                          str(config.get('default', 'includelower')))
+    options.update(includelower=literal_eval(choice))
+
+    choice = req_args.get('limit',
+                          int(config.get('default', 'limit')))
+    options.update(limit=int(choice))
+
     return options
 
 
@@ -132,31 +140,31 @@ def parse(req_args, options, db, endpoint):
 
     # Set defaults
 
-    switch = req_args.get('includelower',
-                          str(config.get('default', 'includelower')))
-    inc_sub_taxa = literal_eval(switch)
 
-    resp_limit = req_args.get('limit',
-                              int(config.get('default', 'limit')))
 
     # Generate sub-query api payload
 
     payload = dict()
 
-    payload.update(limit=resp_limit)
-
     payload.update(aux.set_db_special(db))
+
+    payload.update(limit=opinions.get('limit'))
 
     if 'taxon' in req_args.keys():
         try:
             payload.update(aux.set_taxon(db=db,
                                          taxon=req_args.get('taxon'),
-                                         inc_sub_taxa=inc_sub_taxa))
+                                         subtax=options.get('subtax')))
         except SyntaxError as err:
             raise ValueError(err[0], err[1])
 
-    #  if 'maxage' in req_args.keys():
-    import pdb; pdb.set_trace()
+    if 'maxage' in req_args.keys():
+        try:
+            payload.update(aux.set_age(db=db,
+                                       age=req_args.get('maxage'),
+                                       units=options.get('units')))
+
+    #  import pdb; pdb.set_trace()
 
 
     if 'offset' in req_args.keys():
