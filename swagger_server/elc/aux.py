@@ -74,7 +74,6 @@ def set_age(db, age, units):
             return {'ageyounger': age / factor}
 
 
-
 def get_subtaxa(taxon, inc_syn=True):
     """
     Query PBDB for all lower order relatives of a specified taxa.

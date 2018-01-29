@@ -163,9 +163,10 @@ def parse(req_args, options, db, endpoint):
             payload.update(aux.set_age(db=db,
                                        age=req_args.get('maxage'),
                                        units=options.get('units')))
+        except SyntaxError as err:
+            raise ValueError(err[0], err[1])
 
     #  import pdb; pdb.set_trace()
-
 
     if 'offset' in req_args.keys():
         payload.update(offset=req_args.get('offset'))
