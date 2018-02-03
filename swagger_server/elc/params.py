@@ -4,6 +4,7 @@
 def set_options(req_args, endpoint):
     """Return a dictionary with runtime options and config."""
     from ..elc import config
+    from ast import literal_eval
 
     # Add aditional formats and controls below (default is param[0])
     spec = dict()
@@ -110,7 +111,6 @@ def id_parse(ids, db, endpoint):
 
 def parse(req_args, options, db, endpoint):
     """Return a Requests payload specific to resource target."""
-    from ast import literal_eval
     from ..elc import config, aux
 
     spec = dict()
@@ -148,7 +148,7 @@ def parse(req_args, options, db, endpoint):
 
     payload.update(aux.set_db_special(db))
 
-    payload.update(limit=opinions.get('limit'))
+    payload.update(limit=options.get('limit'))
 
     if 'taxon' in req_args.keys():
         try:

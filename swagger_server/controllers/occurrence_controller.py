@@ -12,7 +12,8 @@ import connexion
 #  from six import iteritems
 #  from ..util import deserialize_date, deserialize_datetime
 
-from ..elc import config, params, handlers, aux
+from ..elc import config, params, aux
+from ..handlers import router
 from http_status import Status
 from time import time
 from flask import jsonify
@@ -152,10 +153,10 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
 
         # Parse database response
 
-        return_obj = handlers.occurrence(resp_json=resp_json,
-                                         return_obj=return_obj,
-                                         options=options,
-                                         db=db)
+        return_obj = router.decode_occs(resp_json=resp_json,
+                                        return_obj=return_obj,
+                                        options=options,
+                                        db=db)
 
     # Return composite data structure to client
 
