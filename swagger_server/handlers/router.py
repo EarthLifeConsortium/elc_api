@@ -1,5 +1,6 @@
 """Call approproiate custom response handler for database:endpoint."""
 
+
 def decode_occs(resp_json, return_obj, options, db):
     """
     Extract necessary data from the subquery.
@@ -17,7 +18,7 @@ def decode_occs(resp_json, return_obj, options, db):
         return neotoma.occurrences(resp_json, return_obj, options)
     if db == 'pbdb':
         return pbdb.occurrences(resp_json, return_obj, options)
-    # Add additional database custom handler here 
+    # Add additional database custom handler here
     else:
         msg = 'Database suport lacking: {0:s}'.format(db)
         raise ValueError(501, msg)

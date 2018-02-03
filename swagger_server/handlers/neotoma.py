@@ -37,7 +37,6 @@ def occurrences(resp_json, return_obj, options):
             if old and old >= 0:
                 data.update(max_age=round(old / factor, 5))
             else:
-                #  import pdb; pdb.set_trace()
                 data.update(max_age=None)
 
             yng = choose(rec.get('ages').get('ageyounger'),

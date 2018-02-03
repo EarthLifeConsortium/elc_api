@@ -7,6 +7,7 @@ def set_options(req_args, endpoint):
     from ast import literal_eval
 
     # Add aditional formats and controls below (default is param[0])
+
     spec = dict()
     spec.update(occ=['json', 'csv'])
     spec.update(loc=['json', 'csv'])
@@ -138,10 +139,6 @@ def parse(req_args, options, db, endpoint):
         msg = 'Database support lacking: \'{0:s}\''.format(db)
         raise ValueError(501, msg)
 
-    # Set defaults
-
-
-
     # Generate sub-query api payload
 
     payload = dict()
@@ -165,8 +162,6 @@ def parse(req_args, options, db, endpoint):
                                        units=options.get('units')))
         except SyntaxError as err:
             raise ValueError(err[0], err[1])
-
-    #  import pdb; pdb.set_trace()
 
     if 'offset' in req_args.keys():
         payload.update(offset=req_args.get('offset'))
