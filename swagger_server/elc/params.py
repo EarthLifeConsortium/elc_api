@@ -52,8 +52,9 @@ def set_options(req_args, db, endpoint):
             msg = 'Config: ageunits not in {0:s}'.format(str(spec.get('age')))
             raise ValueError(500, msg)
 
-    options.update(a_fac=aux.set_age_scaler(options.get('ageunits'),
-                                            config.get('native_ageunits', db)))
+    options.update(age_fac=aux.set_age_scaler(options.get('ageunits'),
+                                              config.get('native_ageunits',
+                                                         db)))
 
     if 'coords' in req_args.keys():
         if req_args.get('coords').lower() in spec.get('geog'):
