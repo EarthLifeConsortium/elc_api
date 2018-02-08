@@ -65,9 +65,12 @@ def set_options(req_args, endpoint):
             msg = 'Config: coords not in {0:s}'.format(str(spec.get('geog')))
             raise ValueError(500, msg)
 
+    #  import pdb
+    #  pdb.set_trace()
+
     choice = req_args.get('includelower',
                           str(config.get('default', 'includelower')))
-    options.update(includelower=literal_eval(choice))
+    options.update(includelower=literal_eval(choice.capitalize()))
 
     choice = req_args.get('limit',
                           int(config.get('default', 'limit')))
