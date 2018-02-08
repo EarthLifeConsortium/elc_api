@@ -189,13 +189,9 @@ def build_meta_sub(data, url, t0, db):
                  'record_count': len(data.get(db_rec_name))}}
 
 
-def set_age_scaler(options, db):
-    """Return a numerica scale factor for ages."""
-    from ..elc import config
+def set_age_scaler(ageunits, native_ageunits):
+    """Return a numerical scale factor for ages."""
 
     unit = {'yr': 1, 'ka': 1000, 'ma': 1000000}
 
-    elc_age = unit.get(options.get('ageunits'))
-    db_age = unit.get(config.get('native_ageunits', db))
-
-    return elc_age / db_age
+    return unit.get(ageunits) / unit.get(native_ageunits)

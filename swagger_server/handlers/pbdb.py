@@ -12,9 +12,6 @@ def occurrences(resp_json, return_obj, options):
     :arg return_obj: List of data objects to be appended and returned
     :type return_obj: list (of dicts)
     """
-    from ..elc import aux
-
-    factor = aux.set_age_scaler(options=options, db='pbdb')
 
     for rec in resp_json.get('records', []):
 
@@ -25,8 +22,8 @@ def occurrences(resp_json, return_obj, options):
         data.update(taxon=rec.get('tna'))
         data.update(taxon_id='pbdb:{0:s}'.format(rec.get('tid', 'txn:0')))
 
-        data.update(max_age=round(rec.get('eag') / factor, 4))
-        data.update(min_age=round(rec.get('lag') / factor, 4))
+        data.update(max_age=round(rec.get('eag') / options.age_fac, 4))
+        data.update(min_age=round(rec.get('lag') / options.age_fac, 4))
 
         data.update(source='pbdb:{0:s}'.format(rec.get('rid', 'ref:0')))
         data.update(data_type=rec.get('cct', 'general faunal/floral'))

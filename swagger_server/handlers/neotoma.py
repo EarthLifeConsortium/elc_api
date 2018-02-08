@@ -12,9 +12,6 @@ def occurrences(resp_json, return_obj, options):
     :arg return_obj: List of data objects to be appended and returned
     :type return_obj: list (of dicts)
     """
-    from ..elc import aux
-
-    factor = aux.set_age_scaler(options=options, db='neotoma')
 
     for rec in resp_json.get('data', []):
 
@@ -35,14 +32,14 @@ def occurrences(resp_json, return_obj, options):
             old = choose(rec.get('ages').get('ageolder'),
                          rec.get('ages').get('age'))
             if old and old >= 0:
-                data.update(max_age=round(old / factor, 5))
+                data.update(max_age=round(old / options.age_fac, 5))
             else:
                 data.update(max_age=None)
 
             yng = choose(rec.get('ages').get('ageyounger'),
                          rec.get('ages').get('age'))
             if yng and yng >= 0:
-                data.update(min_age=round(yng / factor, 5))
+                data.update(min_age=round(yng / options.age_fac, 5))
             else:
                 data.update(min_age=None)
 

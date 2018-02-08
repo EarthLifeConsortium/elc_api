@@ -1,9 +1,9 @@
 """Common parameter parsing functions for the API controllers."""
 
 
-def set_options(req_args, endpoint):
+def set_options(req_args, db, endpoint):
     """Return a dictionary with runtime options and config."""
-    from ..elc import config
+    from ..elc import config, aux
     from ast import literal_eval
 
     # Add aditional formats and controls below (default is param[0])
@@ -52,6 +52,9 @@ def set_options(req_args, endpoint):
             msg = 'Config: ageunits not in {0:s}'.format(str(spec.get('age')))
             raise ValueError(500, msg)
 
+    options.update(a_fac=aux.set_age_scaler(options.get('ageunits'),
+                                            config.get('native_ageunits', db)))
+
     if 'coords' in req_args.keys():
         if req_args.get('coords').lower() in spec.get('geog'):
             options.update(coords=req_args.get('coords'))
@@ -72,6 +75,7 @@ def set_options(req_args, endpoint):
     choice = req_args.get('limit',
                           int(config.get('default', 'limit')))
     options.update(limit=int(choice))
+
 
     return options
 
