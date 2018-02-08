@@ -1,12 +1,13 @@
 """Common parameter parsing functions for the API controllers."""
 
 
-def set_options(req_args, db, endpoint):
+def set_options(req_args, endpoint):
     """Return a dictionary with runtime options and config."""
-    from ..elc import config, aux
+    from ..elc import config
     from ast import literal_eval
 
     # Add aditional formats and controls below (default is param[0])
+
     spec = dict()
     spec.update(occ=['json', 'csv'])
     spec.update(loc=['json', 'csv'])
@@ -51,10 +52,6 @@ def set_options(req_args, db, endpoint):
             msg = 'Config: ageunits not in {0:s}'.format(str(spec.get('age')))
             raise ValueError(500, msg)
 
-    options.update(age_fac=aux.set_age_scaler(options.get('ageunits'),
-                                              config.get('native_ageunits',
-                                                         db)))
-
     if 'coords' in req_args.keys():
         if req_args.get('coords').lower() in spec.get('geog'):
             options.update(coords=req_args.get('coords'))
@@ -75,7 +72,6 @@ def set_options(req_args, db, endpoint):
     choice = req_args.get('limit',
                           int(config.get('default', 'limit')))
     options.update(limit=int(choice))
-
 
     return options
 
@@ -143,10 +139,6 @@ def parse(req_args, options, db, endpoint):
         msg = 'Database support lacking: \'{0:s}\''.format(db)
         raise ValueError(501, msg)
 
-    # Set defaults
-
-
-
     # Generate sub-query api payload
 
     payload = dict()
@@ -170,8 +162,6 @@ def parse(req_args, options, db, endpoint):
                                        units=options.get('units')))
         except SyntaxError as err:
             raise ValueError(err[0], err[1])
-
-    #  import pdb; pdb.set_trace()
 
     if 'offset' in req_args.keys():
         payload.update(offset=req_args.get('offset'))
