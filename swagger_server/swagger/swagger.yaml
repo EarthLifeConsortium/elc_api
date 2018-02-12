@@ -422,7 +422,48 @@ paths:
       x-tags:
       - tag: "Taxonomy"
       x-swagger-router-controller: "swagger_server.controllers.taxonomy_controller"
+  /misc/timescale:
+    get:
+      tags:
+      - "Timebound"
+      summary: "Geologic timescale bounds"
+      description: "Returns oldest (maxage) and youngest (minage) given a\
+          \ specified numerical or geologic age name range."
+      operationId: "timebound"
+      produces:
+      - "application/json"
+      - "text/csv"
+      parameters:
+      - name: "agerange"
+        in: "query"
+        description: "Comma separated numerical age range or comma separated\
+          \ geological age names. May be in any order or single named age."
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "timebound response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/timebound"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/errorModel"
+      x-tags:
+      - tag: "Timebound"
+      x-swagger-router-controller: "swagger_server.controllers.timebound_controller"
 definitions:
+  timebound:
+    type: "object"
+    properties:
+      maxage:
+        type: "string"
+        description: "Oldest age in bound"
+      minage:
+        type: "string"
+        description: "Most recent (youngest) age in bound"
   reference:
     type: "object"
     properties:

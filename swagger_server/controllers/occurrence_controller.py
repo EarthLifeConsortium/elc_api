@@ -69,8 +69,8 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
                                  type='about:blank')
 
     # Cycle through external databases
-    import pdb
-    pdb.set_trace()
+    #  import pdb
+    #  pdb.set_trace()
 
     for db in config.db_list():
 
