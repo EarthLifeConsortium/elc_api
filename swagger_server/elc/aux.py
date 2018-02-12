@@ -74,6 +74,61 @@ def set_age(db, age, units):
             return {'ageyounger': age / factor}
 
 
+def set_age(age_range):
+    import sys
+
+    bound = age_range.split(',')
+
+    if len(bound) == 1:
+
+        if bound[0].isalpha():
+            ea1, la1 = resolve_age(bound[0])
+        else:
+            return 'incorrect number of parameters'
+
+        return ea1, la1
+
+    if len(bound) == 2:
+
+        if bound[0].isalpha():
+            ea1, la1  = resolve_age(bound[0])
+        else:
+            ea1 = float(bound[0])
+            la1 = float(bound[0])
+
+        if bound[1].isalpha():
+            ea2, la2 = resolve_age(bound[1])
+        else:
+            ea2 = float(bound[1])
+            la2 = float(bound[1])
+
+        if ea1 < ea2:
+            ea1, ea2, la1, la2 = ea2, ea1, la2, la1
+
+        return ea1, la2
+
+    else:
+        return 'incorrect number of parameters'
+
+
+def resolve_age(geologic_age):
+    import requests
+
+    url = 'https://paleobiodb.org/data1.2/intervals/single.json'
+    payload = {'name': geologic_age}
+
+    try:
+        r = requests.get(url, payload)
+        r.raise_for_status()
+
+    except requests.exceptions.HTTPError as e:
+        print('Status code: ' + str(r.status_code))
+
+    data = r.json().get('records')[0]
+
+    return data.get('eag'), data.get('lag')
+
+
 def get_subtaxa(taxon, inc_syn=True):
     """
     Query PBDB for all lower order relatives of a specified taxa.

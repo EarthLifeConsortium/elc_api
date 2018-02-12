@@ -55,6 +55,8 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
     desc_obj = dict()
 
     # Set runtime options
+    import pdb
+    pdb.set_trace()
 
     try:
         options = params.set_options(req_args=connexion.request.args,
@@ -67,6 +69,8 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
                                  type='about:blank')
 
     # Cycle through external databases
+    import pdb
+    pdb.set_trace()
 
     for db in config.db_list():
 

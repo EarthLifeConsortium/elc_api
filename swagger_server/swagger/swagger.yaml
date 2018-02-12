@@ -139,8 +139,9 @@ paths:
           \ default the minage is  present, or not used in queries. Units are\
           \ millions of years ago, unless defined using ageunits"
         required: false
-        type: "number"
-        format: "double"
+        # type: "number"
+        # format: "double"
+        type: "string"
       - name: "maxage"
         in: "query"
         description: "The oldest age for the temporal search window. Units\
