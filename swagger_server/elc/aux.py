@@ -58,49 +58,47 @@ def set_taxon(db, taxon, subtax):
         return {}
 
 
-def set_age(db, age, units):
-    """Scale age parameters."""
-    from ..elc import aux
-
-    if age < 0:
-        msg = 'Age parameter out of bounds'
-        raise SyntaxError(400, msg)
-
-    if db == 'neotoma':
-        factor = aux.set_age_scaler(options=options, db='neotoma')
-        if bound == 'max':
-            return {'ageolder': age / factor}
-        else:
-            return {'ageyounger': age / factor}
-
-
 def set_age(age_range):
-    import sys
+    """
+    Parse age range parameters.
+
+    :arg age_range: 2 comma separated numerical or text geo age bounds
+    :type age_range: str
+
+    """
+    from ..aux import resolve_age
 
     bound = age_range.split(',')
 
     if len(bound) == 1:
 
+        if bound[0] < 0:
+            msg = 'Age parameter out of bounds'
+            return SyntaxError(400, msg)
+
         if bound[0].isalpha():
             ea1, la1 = resolve_age(bound[0])
         else:
-            return 'incorrect number of parameters'
+            msg = 'Incorrect number of parameters: agerange'
+            return SyntaxError(400, msg)
 
         return ea1, la1
 
     if len(bound) == 2:
 
+        if bound[0] < 0 or bound[1] < 0:
+            msg = 'Age parameter out of bounds'
+            return SyntaxError(400, msg)
+
         if bound[0].isalpha():
-            ea1, la1  = resolve_age(bound[0])
+            ea1, la1 = resolve_age(bound[0])
         else:
-            ea1 = float(bound[0])
-            la1 = float(bound[0])
+            ea1 = la1 = float(bound[0])
 
         if bound[1].isalpha():
             ea2, la2 = resolve_age(bound[1])
         else:
-            ea2 = float(bound[1])
-            la2 = float(bound[1])
+            ea2 = la2 = float(bound[1])
 
         if ea1 < ea2:
             ea1, ea2, la1, la2 = ea2, ea1, la2, la1
@@ -108,10 +106,12 @@ def set_age(age_range):
         return ea1, la2
 
     else:
-        return 'incorrect number of parameters'
+        msg = 'Incorrect number of parameters: agerange'
+        return SyntaxError(400, msg)
 
 
 def resolve_age(geologic_age):
+    """Query PBDB for find early and late bounds for a geologic age."""
     import requests
 
     url = 'https://paleobiodb.org/data1.2/intervals/single.json'
