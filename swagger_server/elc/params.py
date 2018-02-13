@@ -117,6 +117,8 @@ def parse(req_args, options, db, endpoint):
     """Return a Requests payload specific to resource target."""
     from ..elc import config, aux
 
+    # Alowable endpoint parameters (add specification for additional below)
+
     spec = dict()
     spec.update(occ=['bbox', 'minage', 'maxage', 'ageunits', 'timerule',
                      'taxon', 'includelower', 'limit', 'offset', 'show',
@@ -126,6 +128,7 @@ def parse(req_args, options, db, endpoint):
                      'show'])
     spec.update(tax=['taxon', 'includelower', 'hierarchy'])
     spec.update(ref=['idnumbers', 'format'])
+    spec.update(timebound=['agerange', 'ageunits'])
 
     # Bad or missing parameter checks
 
@@ -158,13 +161,13 @@ def parse(req_args, options, db, endpoint):
         except SyntaxError as err:
             raise ValueError(err[0], err[1])
 
-    if 'maxage' in req_args.keys():
-        try:
-            payload.update(aux.set_age(db=db,
-                                       age=req_args.get('maxage'),
-                                       units=options.get('units')))
-        except SyntaxError as err:
-            raise ValueError(err[0], err[1])
+    #  if 'maxage' in req_args.keys():
+        #  try:
+            #  payload.update(aux.set_age(db=db,
+                                       #  age=req_args.get('maxage'),
+                                       #  units=options.get('units')))
+        #  except SyntaxError as err:
+            #  raise ValueError(err[0], err[1])
 
     if 'offset' in req_args.keys():
         payload.update(offset=req_args.get('offset'))

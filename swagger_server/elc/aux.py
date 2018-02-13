@@ -72,15 +72,14 @@ def set_age(age_range):
 
     if len(bound) == 1:
 
-        if bound[0] < 0:
-            msg = 'Age parameter out of bounds'
-            return SyntaxError(400, msg)
-
         if bound[0].isalpha():
             ea1, la1 = aux.resolve_age(bound[0])
+        elif float(bound[0]) < 0:
+            msg = 'Age parameter out of bounds'
+            raise SyntaxError(400, msg)
         else:
             msg = 'Incorrect number of parameters: agerange'
-            return SyntaxError(400, msg)
+            raise SyntaxError(400, msg)
 
         return ea1, la1
 
@@ -90,7 +89,7 @@ def set_age(age_range):
             ea1, la1 = aux.resolve_age(bound[0])
         elif float(bound[0]) < 0:
             msg = 'Age parameter out of bounds'
-            return SyntaxError(400, msg)
+            raise SyntaxError(400, msg)
         else:
             ea1 = la1 = float(bound[0])
 
@@ -98,7 +97,7 @@ def set_age(age_range):
             ea2, la2 = aux.resolve_age(bound[1])
         elif float(bound[1]) < 0:
             msg = 'Age parameter out of bounds'
-            return SyntaxError(400, msg)
+            raise SyntaxError(400, msg)
         else:
             ea2 = la2 = float(bound[1])
 
@@ -109,7 +108,7 @@ def set_age(age_range):
 
     else:
         msg = 'Incorrect number of parameters: agerange'
-        return SyntaxError(400, msg)
+        raise SyntaxError(400, msg)
 
 
 def resolve_age(geologic_age):
@@ -239,10 +238,8 @@ def build_meta_sub(source, t0, sub_tag, data=None):
     from time import time
     from ..elc import config
 
-    db_rec_name = config.get('db_rec_obj', sub_tag)
-
     if data:
-        rec_cnt = len(data.get(db_rec_name))
+        rec_cnt = len(data.get(config.get('db_rec_obj', sub_tag)))
     else:
         rec_cnt = 1
 
