@@ -66,7 +66,7 @@ def set_age(age_range):
     :type age_range: str
 
     """
-    from ..aux import resolve_age
+    from ..elc import aux
 
     bound = age_range.split(',')
 
@@ -77,7 +77,7 @@ def set_age(age_range):
             return SyntaxError(400, msg)
 
         if bound[0].isalpha():
-            ea1, la1 = resolve_age(bound[0])
+            ea1, la1 = aux.resolve_age(bound[0])
         else:
             msg = 'Incorrect number of parameters: agerange'
             return SyntaxError(400, msg)
@@ -86,17 +86,19 @@ def set_age(age_range):
 
     if len(bound) == 2:
 
-        if bound[0] < 0 or bound[1] < 0:
+        if bound[0].isalpha():
+            ea1, la1 = aux.resolve_age(bound[0])
+        elif float(bound[0]) < 0:
             msg = 'Age parameter out of bounds'
             return SyntaxError(400, msg)
-
-        if bound[0].isalpha():
-            ea1, la1 = resolve_age(bound[0])
         else:
             ea1 = la1 = float(bound[0])
 
         if bound[1].isalpha():
-            ea2, la2 = resolve_age(bound[1])
+            ea2, la2 = aux.resolve_age(bound[1])
+        elif float(bound[1]) < 0:
+            msg = 'Age parameter out of bounds'
+            return SyntaxError(400, msg)
         else:
             ea2 = la2 = float(bound[1])
 

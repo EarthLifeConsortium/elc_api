@@ -85,6 +85,7 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
                                      title=Status(err.args[0]).name,
                                      detail=err.args[1],
                                      type='about:blank')
+
         # Database API call
 
         url_path = ''.join([config.get('resource_api', db),
