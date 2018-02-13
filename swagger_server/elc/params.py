@@ -81,7 +81,7 @@ def set_options(req_args, endpoint):
 
 def id_parse(ids, db, endpoint):
     """
-    Separate database:datatype:id_number from a list.
+    Separate [database]:[datatype]:[id_number] from a list.
 
     :arg ids: array of database specific object identifiers in above format
     :type ids: list (of str)

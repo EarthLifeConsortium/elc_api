@@ -221,27 +221,32 @@ def get_id_numbers(data, endpoint):
     return ids
 
 
-def build_meta(options):
+def build_meta(ageunits=None, coords=None):
     """Generate metadata for the composite return."""
     from ..elc import config, aux
 
     return {'license': config.get('default', 'license'),
             'retrieval_timestamp': aux.set_timestamp(),
-            'link': 'http://earthlifeconsortium.org',
-            'age_units': options.get('ageunits'),
-            'coordinates': options.get('coords')}
+            'source': 'http://earthlifeconsortium.org',
+            'age_units': ageunits,
+            'coordinates': coords}
 
 
-def build_meta_sub(data, url, t0, db):
+def build_meta_sub(source, t0, sub_tag, data=None):
     """Generate database specific metadata object for the return."""
     from time import time
     from ..elc import config
 
-    db_rec_name = config.get('db_rec_obj', db)
+    db_rec_name = config.get('db_rec_obj', sub_tag)
 
-    return {db: {'subquery': url,
-                 'response_time': round(time()-t0, 3),
-                 'record_count': len(data.get(db_rec_name))}}
+    if data:
+        rec_cnt = len(data.get(db_rec_name))
+    else:
+        rec_cnt = 1
+
+    return {sub_tag: {'subquery': source,
+                      'response_time': round(time()-t0, 3),
+                      'record_count': rec_cnt}}
 
 
 def set_age_scaler(options, db):

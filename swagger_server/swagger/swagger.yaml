@@ -422,7 +422,7 @@ paths:
       x-tags:
       - tag: "Taxonomy"
       x-swagger-router-controller: "swagger_server.controllers.taxonomy_controller"
-  /misc/timescale:
+  /misc/timebound:
     get:
       tags:
       - "Timebound"

@@ -4,7 +4,6 @@ RESTful API controller.
 Endpoint for queries on taxonomic occurrences in time and space.
 """
 
-import connexion
 #  from swagger_server.models.error_model import ErrorModel
 #  from swagger_server.models.occurrence import Occurrence
 #  from datetime import date, datetime
@@ -12,6 +11,7 @@ import connexion
 #  from six import iteritems
 #  from ..util import deserialize_date, deserialize_datetime
 
+import connexion
 from ..elc import config, params, aux
 from ..handlers import router
 from http_status import Status
@@ -55,8 +55,6 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
     desc_obj = dict()
 
     # Set runtime options
-    import pdb
-    pdb.set_trace()
 
     try:
         options = params.set_options(req_args=connexion.request.args,
@@ -69,8 +67,6 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
                                  type='about:blank')
 
     # Cycle through external databases
-    #  import pdb
-    #  pdb.set_trace()
 
     for db in config.db_list():
 
@@ -149,11 +145,13 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
 
         # Build returned metadata object
 
-        desc_obj.update(aux.build_meta(options))
+        desc_obj.update(aux.build_meta(ageunits=options.get('ageunits'),
+                                       coords=options.get('coords')))
+
         desc_obj.update(aux.build_meta_sub(data=resp_json,
-                                           url=resp.url,
+                                           source=resp.url,
                                            t0=t0,
-                                           db=db))
+                                           sub_tag=db))
 
         # Parse database response
 
@@ -169,4 +167,4 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
     if options.get('show') == 'idx':
         return jsonify(aux.get_id_numbers(data=return_obj, endpoint='occ'))
     else:
-        return jsonify(metadata=desc_obj, records=return_obj)
+        return jsonify(metadata=desc_obj, data=return_obj)
