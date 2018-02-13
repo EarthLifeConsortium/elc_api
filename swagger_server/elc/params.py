@@ -158,8 +158,8 @@ def parse(req_args, options, db, endpoint):
             payload.update(aux.set_taxon(db=db,
                                          taxon=req_args.get('taxon'),
                                          subtax=options.get('subtax')))
-        except SyntaxError as err:
-            raise ValueError(err[0], err[1])
+        except ValueError as err:
+            raise ValueError(err.args[0], err.args[1])
 
     #  if 'maxage' in req_args.keys():
         #  try:

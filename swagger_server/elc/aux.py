@@ -40,7 +40,7 @@ def set_taxon(db, taxon, subtax):
         genus_species = False
     else:
         msg = 'Taxon argument contains too many parameters'
-        raise SyntaxError(400, msg)
+        raise ValueError(400, msg)
 
     if db == 'neotoma':
         if subtax and not genus_species:
@@ -76,10 +76,10 @@ def set_age(age_range):
             ea1, la1 = aux.resolve_age(bound[0])
         elif float(bound[0]) < 0:
             msg = 'Age parameter out of bounds'
-            raise SyntaxError(400, msg)
+            raise ValueError(400, msg)
         else:
             msg = 'Incorrect number of parameters: agerange'
-            raise SyntaxError(400, msg)
+            raise ValueError(400, msg)
 
         return ea1, la1
 
@@ -89,7 +89,7 @@ def set_age(age_range):
             ea1, la1 = aux.resolve_age(bound[0])
         elif float(bound[0]) < 0:
             msg = 'Age parameter out of bounds'
-            raise SyntaxError(400, msg)
+            raise ValueError(400, msg)
         else:
             ea1 = la1 = float(bound[0])
 
@@ -97,7 +97,7 @@ def set_age(age_range):
             ea2, la2 = aux.resolve_age(bound[1])
         elif float(bound[1]) < 0:
             msg = 'Age parameter out of bounds'
-            raise SyntaxError(400, msg)
+            raise ValueError(400, msg)
         else:
             ea2 = la2 = float(bound[1])
 
@@ -108,7 +108,7 @@ def set_age(age_range):
 
     else:
         msg = 'Incorrect number of parameters: agerange'
-        raise SyntaxError(400, msg)
+        raise ValueError(400, msg)
 
 
 def resolve_age(geologic_age):
@@ -154,8 +154,7 @@ def get_subtaxa(taxon, inc_syn=True):
         resp_json = resp.json()
 
         if 'warnings' in resp_json:
-            raise SyntaxError(400, 'Bad Request',
-                              str(resp_json['warnings'][0]))
+            raise ValueError(400, str(resp_json['warnings'][0]))
 
         else:
             for rec in resp_json['records']:
@@ -166,8 +165,7 @@ def get_subtaxa(taxon, inc_syn=True):
             return subtaxa
 
     else:
-        raise ValueError(resp.status_code, resp.reason,
-                         'Server error or bad URL')
+        raise ValueError(resp.status_code, resp.reason)
 
 
 def get_parents(taxon):

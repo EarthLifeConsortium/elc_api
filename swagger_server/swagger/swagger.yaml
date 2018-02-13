@@ -432,12 +432,17 @@ paths:
       operationId: "timebound"
       produces:
       - "application/json"
-      - "text/csv"
       parameters:
       - name: "agerange"
         in: "query"
         description: "Comma separated numerical age range or comma separated\
           \ geological age names. May be in any order or single named age."
+        required: true
+        type: "string"
+      - name: "ageunits"
+        in: "query"
+        description: "The units for maxage and minage. Allowable units are yr,\
+          \ ka or ma"
         required: false
         type: "string"
       responses:
