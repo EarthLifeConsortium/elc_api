@@ -133,22 +133,12 @@ paths:
           \ form [lonW, latS, lonE, latN] or as structured WKT text"
         required: false
         type: "string"
-      - name: "minage"
+      - name: "agerange"
         in: "query"
-        description: "The most recent age for the temporal search window. By\
-          \ default the minage is  present, or not used in queries. Units are\
-          \ millions of years ago, unless defined using ageunits"
+        description: "Comma separated numerical age range or comma separated\
+          \ geological age names. May be in any order or single named age."
         required: false
-        # type: "number"
-        # format: "double"
         type: "string"
-      - name: "maxage"
-        in: "query"
-        description: "The oldest age for the temporal search window. Units\
-          \ are millions of years ago, unless defined using ageunits"
-        required: false
-        type: "number"
-        format: "double"
       - name: "ageunits"
         in: "query"
         description: "The units for maxage and minage. Allowable units are yr,\
@@ -290,21 +280,12 @@ paths:
           \ form [lonW, latS, lonE, latN] or as structured WKT text"
         required: false
         type: "string"
-      - name: "minage"
+      - name: "agerange"
         in: "query"
-        description: "The most recent age for the temporal search window. By\
-          \ default the minage is  present, or not used in queries. Units are\
-          \ millions of years ago, unless defined using ageunits"
+        description: "Comma separated numerical age range or comma separated\
+          \ geological age names. May be in any order or single named age."
         required: false
-        type: "number"
-        format: "double"
-      - name: "maxage"
-        in: "query"
-        description: "The oldest age for the temporal search window. Units\
-          \ are millions of years ago, unless defined using ageunits"
-        required: false
-        type: "number"
-        format: "double"
+        type: "string"
       - name: "ageunits"
         in: "query"
         description: "The units for maxage and minage. Allowable units are\ 

@@ -120,12 +120,10 @@ def parse(req_args, options, db, endpoint):
     # Alowable endpoint parameters (add specification for additional below)
 
     spec = dict()
-    spec.update(occ=['bbox', 'minage', 'maxage', 'ageunits', 'timerule',
-                     'taxon', 'includelower', 'limit', 'offset', 'show',
-                     'output'])
-    spec.update(loc=['occid', 'bbox', 'minage', 'maxage', 'ageunits',
-                     'timerule', 'taxon', 'includelower', 'limit', 'offset',
-                     'show'])
+    spec.update(occ=['bbox', 'agerange', 'ageunits', 'timerule', 'taxon',
+                     'includelower', 'limit', 'offset', 'show', 'output'])
+    spec.update(loc=['occid', 'bbox', 'agerange', 'ageunits', 'timerule',
+                     'taxon', 'includelower', 'limit', 'offset', 'show'])
     spec.update(tax=['taxon', 'includelower', 'hierarchy'])
     spec.update(ref=['idnumbers', 'format'])
     spec.update(timebound=['agerange', 'ageunits'])
