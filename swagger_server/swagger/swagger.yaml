@@ -458,7 +458,7 @@ paths:
             $ref: "#/definitions/errorModel"
       x-tags:
       - tag: "Timebound"
-      x-swagger-router-controller: "swagger_server.controllers.timebound_controller"
+      x-swagger-router-controller: "swagger_server.controllers.misc_controller"
 definitions:
   timebound:
     type: "object"
