@@ -123,7 +123,7 @@ def resolve_age(geologic_age):
         r.raise_for_status()
 
     except requests.exceptions.HTTPError as e:
-        print('Status code: ' + str(r.status_code))
+        raise ValueError(r.status_code, r.json().get('errors')[0])
 
     data = r.json().get('records')[0]
 

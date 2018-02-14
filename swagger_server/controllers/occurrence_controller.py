@@ -168,4 +168,4 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
     if options.get('show') == 'idx':
         return jsonify(aux.get_id_numbers(data=return_obj, endpoint='occ'))
     else:
-        return jsonify(metadata=desc_obj, data=return_obj)
+        return jsonify(metadata=desc_obj, records=return_obj)
