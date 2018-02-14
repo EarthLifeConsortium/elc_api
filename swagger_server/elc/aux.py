@@ -58,45 +58,48 @@ def set_taxon(db, taxon, subtax):
         return {}
 
 
-def set_age(age_range):
+def set_age(age_range, options):
     """
     Parse age range parameters.
 
-    :arg age_range: 2 comma separated numerical or text geo age bounds
+    :arg age_range: one or two comma separated numerical or text geoage bounds
     :type age_range: str
+    :arg age_units: dimension of age parameter
+    :type age_units: str ['yr', 'ka' or 'ma']
 
     """
     from ..elc import aux
 
     bound = age_range.split(',')
+    factor = aux.set_age_scaler(options, 'pbdb')
 
     if len(bound) == 1:
 
         if bound[0].isalpha():
-            ea1, la1 = aux.resolve_age(bound[0])
+            ea1, la1 = [x / factor for x in aux.resolve_age(bound[0])]
         elif float(bound[0]) < 0:
-            msg = 'Age parameter out of bounds'
+            msg = 'Parameter out of bounds: agerange'
             raise ValueError(400, msg)
         else:
             msg = 'Incorrect number of parameters: agerange'
             raise ValueError(400, msg)
 
-        return ea1, la1
+        return round(ea1,2), round(la1,2)
 
     if len(bound) == 2:
 
         if bound[0].isalpha():
-            ea1, la1 = aux.resolve_age(bound[0])
+            ea1, la1 = [x / factor for x in aux.resolve_age(bound[0])]
         elif float(bound[0]) < 0:
-            msg = 'Age parameter out of bounds'
+            msg = 'Parameter out of bounds: agerange'
             raise ValueError(400, msg)
         else:
             ea1 = la1 = float(bound[0])
 
         if bound[1].isalpha():
-            ea2, la2 = aux.resolve_age(bound[1])
+            ea2, la2 = [x / factor for x in aux.resolve_age(bound[1])]
         elif float(bound[1]) < 0:
-            msg = 'Age parameter out of bounds'
+            msg = 'Parameter out of bounds: agerange'
             raise ValueError(400, msg)
         else:
             ea2 = la2 = float(bound[1])
@@ -104,7 +107,7 @@ def set_age(age_range):
         if ea1 < ea2:
             ea1, ea2, la1, la2 = ea2, ea1, la2, la1
 
-        return ea1, la2
+        return round(ea1,2), round(la2,2)
 
     else:
         msg = 'Incorrect number of parameters: agerange'
@@ -247,7 +250,7 @@ def build_meta_sub(source, t0, sub_tag, data=None):
 
 
 def set_age_scaler(options, db):
-    """Return a numerica scale factor for ages."""
+    """Return a numerical scale factor for ages."""
     from ..elc import config
 
     unit = {'yr': 1, 'ka': 1000, 'ma': 1000000}
