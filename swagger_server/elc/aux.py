@@ -59,10 +59,11 @@ def set_taxon(taxon, subtax, db):
 
 
 def set_age(age_range, options, db):
-    """Return key:val ages for identified database subquery payload."""
+    """Return key-val ages for identified database subquery payload."""
+    from ..elc import aux
 
     try:
-        early_age, late_age = aux.get_age(age_range=agerange,
+        early_age, late_age = aux.get_age(age_range=age_range,
                                           options=options)
     except ValueError as err:
         raise ValueError(err.args[0], err.args[1])
@@ -102,7 +103,7 @@ def get_age(age_range, options):
             msg = 'Incorrect number of parameters: agerange'
             raise ValueError(400, msg)
 
-        return round(ea1,2), round(la1,2)
+        return round(ea1, 2), round(la1, 2)
 
     if len(bound) == 2:
 
@@ -125,7 +126,7 @@ def get_age(age_range, options):
         if ea1 < ea2:
             ea1, ea2, la1, la2 = ea2, ea1, la2, la1
 
-        return round(ea1,2), round(la2,2)
+        return round(ea1, 2), round(la2, 2)
 
     else:
         msg = 'Incorrect number of parameters: agerange'

@@ -163,14 +163,18 @@ def parse(req_args, options, db, endpoint):
 
     if 'agerange' in req_args.keys():
         try:
-
-            early_age, late_age = aux.get_age(age_range=agerange,
-                                              options=options)
-            payload.update(
+            payload.update(aux.set_age(age_range=req_args.get('age_range'),
+                                       options=options,
+                                       db=db))
         except ValueError as err:
             raise ValueError(err.args[0], err.args[1])
 
     if 'offset' in req_args.keys():
-        payload.update(offset=req_args.get('offset'))
+        if (req_args.get('offset').isalpha() or
+                bool(req_args.get('offset')[0] == '-')):
+            msg = 'Parameter must be a number: offset'
+            raise ValueError(400, msg)
+        else:
+            payload.update(offset=req_args.get('offset'))
 
     return payload
