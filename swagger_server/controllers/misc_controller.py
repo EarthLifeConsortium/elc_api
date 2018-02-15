@@ -62,7 +62,7 @@ def timebound(agerange=None, ageunits=None):
     # Determin time bounds and resolve geologic age if necessary
 
     try:
-        early_age, late_age = aux.set_age(age_range=agerange,
+        early_age, late_age = aux.get_age(age_range=agerange,
                                           options=options)
 
     except ValueError as err:

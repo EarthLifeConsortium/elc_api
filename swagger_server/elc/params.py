@@ -7,7 +7,6 @@ def set_options(req_args, endpoint):
     from ast import literal_eval
 
     # Add aditional formats and controls below (default is param[0])
-
     spec = dict()
     spec.update(occ=['json', 'csv'])
     spec.update(loc=['json', 'csv'])
@@ -17,10 +16,10 @@ def set_options(req_args, endpoint):
     spec.update(age=['ma', 'ka', 'yr'])
     spec.update(geog=['paleo', 'modern'])
 
-    # Configure options
-
+    # Runtime options
     options = dict()
 
+    # Response format
     if 'output' in req_args.keys():
         if req_args.get('output').lower() in spec.get(endpoint):
             options.update(output=req_args.get('output'))
@@ -30,6 +29,7 @@ def set_options(req_args, endpoint):
     else:
         options.update(output=spec.get(endpoint)[0])
 
+    # Response includes
     if 'show' in req_args.keys():
         if req_args.get('show').lower() in spec.get('show'):
             options.update(show=req_args.get('show'))
@@ -39,6 +39,7 @@ def set_options(req_args, endpoint):
     else:
         options.update(show=spec.get('show')[0])
 
+    # Age measurement units
     if 'ageunits' in req_args.keys():
         if req_args.get('ageunits').lower() in spec.get('age'):
             options.update(ageunits=req_args.get('ageunits'))
@@ -52,6 +53,7 @@ def set_options(req_args, endpoint):
             msg = 'Config: ageunits not in {0:s}'.format(str(spec.get('age')))
             raise ValueError(500, msg)
 
+    # Geographic coodinates type
     if 'coords' in req_args.keys():
         if req_args.get('coords').lower() in spec.get('geog'):
             options.update(coords=req_args.get('coords'))
@@ -65,13 +67,12 @@ def set_options(req_args, endpoint):
             msg = 'Config: coords not in {0:s}'.format(str(spec.get('geog')))
             raise ValueError(500, msg)
 
-    #  import pdb
-    #  pdb.set_trace()
-
+    # Subtaxa inclusion in the query
     choice = req_args.get('includelower',
                           str(config.get('default', 'includelower')))
     options.update(includelower=literal_eval(choice.capitalize()))
 
+    # Limit records in the query
     choice = req_args.get('limit',
                           int(config.get('default', 'limit')))
     options.update(limit=int(choice))
@@ -89,6 +90,7 @@ def id_parse(ids, db, endpoint):
     :type db: str
     :arg endpoint: endpoint to parse on
     :type endpoint: str
+
     """
     import re
 
@@ -153,19 +155,20 @@ def parse(req_args, options, db, endpoint):
 
     if 'taxon' in req_args.keys():
         try:
-            payload.update(aux.set_taxon(db=db,
-                                         taxon=req_args.get('taxon'),
-                                         subtax=options.get('subtax')))
+            payload.update(aux.set_taxon(taxon=req_args.get('taxon'),
+                                         subtax=options.get('subtax'),
+                                         db=db))
         except ValueError as err:
             raise ValueError(err.args[0], err.args[1])
 
-    #  if 'maxage' in req_args.keys():
-        #  try:
-            #  payload.update(aux.set_age(db=db,
-                                       #  age=req_args.get('maxage'),
-                                       #  units=options.get('units')))
-        #  except SyntaxError as err:
-            #  raise ValueError(err[0], err[1])
+    if 'agerange' in req_args.keys():
+        try:
+
+            early_age, late_age = aux.get_age(age_range=agerange,
+                                              options=options)
+            payload.update(
+        except ValueError as err:
+            raise ValueError(err.args[0], err.args[1])
 
     if 'offset' in req_args.keys():
         payload.update(offset=req_args.get('offset'))

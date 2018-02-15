@@ -19,7 +19,7 @@ def set_db_special(db):
         return {}
 
 
-def set_taxon(db, taxon, subtax):
+def set_taxon(taxon, subtax, db):
     """
     Return a database specific key-val pair for taxon paramaterization.
 
@@ -58,7 +58,25 @@ def set_taxon(db, taxon, subtax):
         return {}
 
 
-def set_age(age_range, options):
+def set_age(age_range, options, db):
+    """Return key:val ages for identified database subquery payload."""
+
+    try:
+        early_age, late_age = aux.get_age(age_range=agerange,
+                                          options=options)
+    except ValueError as err:
+        raise ValueError(err.args[0], err.args[1])
+
+    if db == 'neotoma':
+        return {'ageyounger': early_age, 'ageolder': late_age}
+    elif db == 'pbdb':
+        return {'max_ma': early_age, 'min_age': late_age}
+    # Add another databse specific case here
+    else:
+        return {}
+
+
+def get_age(age_range, options):
     """
     Parse age range parameters.
 
