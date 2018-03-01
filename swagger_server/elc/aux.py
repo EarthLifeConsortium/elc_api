@@ -160,6 +160,28 @@ def resolve_age(geologic_age):
     return data.get('eag'), data.get('lag')
 
 
+def resolve_geog(lat, lon, mean_age):
+    """Query GPlates model (hosted by MacroStrat) for paleocoordinates."""
+    import requests
+
+    url = 'https://macrostrat.org/gplates/reconstruct'
+    payload = {'lat': lat, 'lng': lon, 'age': mean_age}
+
+    try:
+        r = requests.get(url, payload)
+        r.raise_for_status()
+
+    except requests.exceptions.HTTPError as e:
+        msg = '{0:s}'.format(r.json().get('error'))
+        raise ValueError(r.status_code, msg)
+
+    if r.json().get('features')[0]['geometry']:
+        return r.json().get('features')[0]['geometry']['coordinates']
+    else:
+        msg = 'Coordinates must range from -180 to 180 decimal degrees'
+        raise ValueError(400, msg)
+
+
 def get_subtaxa(taxon, inc_syn=True):
     """
     Query PBDB for all lower order relatives of a specified taxa.
