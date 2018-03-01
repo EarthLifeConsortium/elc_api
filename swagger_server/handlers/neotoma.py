@@ -20,33 +20,34 @@ def occurrences(resp_json, return_obj, options):
 
         data = dict()
 
-        data.update(occ_id='neot:occ:{0:d}'
-                    .format(rec.get('sampleid', 0)))
+        data.update(occ_id='neot:occ:{0:d}'.format(rec.get('sampleid', 0)))
 
-        if rec.get('taxon'):
-            data.update(taxon=rec.get('taxon').get('taxonname'))
+        if rec.get('sample'):
+
+            data.update(taxon=rec.get('sample').get('taxonname'))
             data.update(taxon_id='neot:txn:{0:d}'
-                        .format(rec.get('taxon').get('taxonid', 0)))
+                        .format(rec.get('sample').get('taxonid', 0)))
 
-        if rec.get('ages'):
+        if rec.get('age'):
 
             def choose(x, y): return x or y
 
-            old = choose(rec.get('ages').get('ageolder'),
-                         rec.get('ages').get('age'))
+            old = choose(rec.get('age').get('ageolder'),
+                         rec.get('age').get('age'))
             if old and old >= 0:
                 data.update(max_age=round(old / factor, 5))
             else:
                 data.update(max_age=None)
 
-            yng = choose(rec.get('ages').get('ageyounger'),
-                         rec.get('ages').get('age'))
+            yng = choose(rec.get('age').get('ageyounger'),
+                         rec.get('age').get('age'))
             if yng and yng >= 0:
                 data.update(min_age=round(yng / factor, 5))
             else:
                 data.update(min_age=None)
 
         if rec.get('site'):
+
             data.update(source=rec.get('site').get('database'))
             data.update(data_type=rec.get('site').get('datasettype'))
             if rec.get('site').get('datasetid'):
