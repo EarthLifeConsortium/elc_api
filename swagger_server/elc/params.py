@@ -138,11 +138,11 @@ def parse(req_args, options, db, endpoint):
 
     for param in req_args.keys():
         if param not in spec.get(endpoint):
-            msg = 'Unknown parameter \'{0:s}\''.format(param)
+            msg = 'Unknown parameter: {0:s}'.format(param)
             raise ValueError(400, msg)
 
     if db not in config.db_list():
-        msg = 'Database support lacking: \'{0:s}\''.format(db)
+        msg = 'Database support lacking: {0:s}'.format(db)
         raise ValueError(501, msg)
 
     # Generate sub-query api payload

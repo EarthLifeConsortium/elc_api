@@ -23,14 +23,13 @@ def set_taxon(taxon, subtax, db):
     """
     Return a database specific key-val pair for taxon paramaterization.
 
-    :arg db: Database name
+    :arg db: database name
     :type db: str
-    :arg taxon: User input taxon name
+    :arg taxon: user input taxon name
     :type taxon: str
-    :arg subtax: Include lower taxonomy switch
+    :arg subtax: include lower taxonomy switch
     :type subtax: bool
 
-    :rtype: Dict[n=1]
     """
     taxon = taxon.capitalize()
 
@@ -68,10 +67,14 @@ def set_age(age_range, options, db):
     except ValueError as err:
         raise ValueError(err.args[0], err.args[1])
 
+    factor = aux.set_age_scaler(options, db)
+
     if db == 'neotoma':
-        return {'ageyounger': early_age, 'ageolder': late_age}
+        return {'ageyounger': early_age * factor,
+                'ageolder': late_age * factor}
     elif db == 'pbdb':
-        return {'max_ma': early_age, 'min_ma': late_age}
+        return {'max_ma': early_age * factor,
+                'min_ma': late_age * factor}
     # Add another databse specific case here
     else:
         return {}
@@ -93,6 +96,7 @@ def get_age(age_range, options):
     if '' in bound:
         msg = 'Incorrectly formatted parameter pair: agerange'
         raise ValueError(400, msg)
+
     factor = aux.set_age_scaler(options, 'pbdb')
 
     if len(bound) == 1:
@@ -164,6 +168,7 @@ def get_subtaxa(taxon, inc_syn=True):
     :type taxon: str
     :arg inc_syn: Include recognized synonyms in the return
     :type inc_syn: bool
+
     """
     import requests
     from .elc import config
@@ -200,6 +205,7 @@ def get_parents(taxon):
 
     :arg taxon: Taxonomic name to query
     :type taxon: str
+
     """
     import requests
     from collections import OrderedDict
