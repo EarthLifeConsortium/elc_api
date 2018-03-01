@@ -71,7 +71,7 @@ def set_age(age_range, options, db):
     if db == 'neotoma':
         return {'ageyounger': early_age, 'ageolder': late_age}
     elif db == 'pbdb':
-        return {'max_ma': early_age, 'min_age': late_age}
+        return {'max_ma': early_age, 'min_ma': late_age}
     # Add another databse specific case here
     else:
         return {}
