@@ -90,6 +90,9 @@ def get_age(age_range, options):
     from ..elc import aux
 
     bound = age_range.split(',')
+    if '' in bound:
+        msg = 'Incorrectly formatted parameter pair: agerange'
+        raise ValueError(400, msg)
     factor = aux.set_age_scaler(options, 'pbdb')
 
     if len(bound) == 1:
@@ -145,7 +148,8 @@ def resolve_age(geologic_age):
         r.raise_for_status()
 
     except requests.exceptions.HTTPError as e:
-        raise ValueError(r.status_code, r.json().get('errors')[0])
+        msg = '{0:s}: {1:s}'.format(r.json().get('errors')[0], geologic_age)
+        raise ValueError(r.status_code, msg)
 
     data = r.json().get('records')[0]
 

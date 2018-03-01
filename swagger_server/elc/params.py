@@ -163,7 +163,7 @@ def parse(req_args, options, db, endpoint):
 
     if 'agerange' in req_args.keys():
         try:
-            payload.update(aux.set_age(age_range=req_args.get('age_range'),
+            payload.update(aux.set_age(age_range=req_args.get('agerange'),
                                        options=options,
                                        db=db))
         except ValueError as err:
