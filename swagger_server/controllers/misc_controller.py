@@ -13,7 +13,7 @@ Endpoint for miscelaneous ELC public functions:
 #  from six import iteritems
 #  from ..util import deserialize_date, deserialize_datetime
 import connexion
-from ..elc import params, aux, ages, taxa
+from ..elc import params, aux, ages, geog
 from http_status import Status
 from time import time
 from flask import jsonify
@@ -64,9 +64,9 @@ def paleocoords(coords=None, age=None, ageunits=None):
     # Determine paleocoordinates and resolve geologic age if necessary
 
     try:
-        paleo_lat, paleo_lon = geog.get_geog(coords=coords,
-                                            age=age,
-                                            options=options)
+        paleo_lon, paleo_lat = geog.get_geog(coords=coords,
+                                             age=age,
+                                             options=options)
 
     except ValueError as err:
         return connexion.problem(status=err.args[0],
