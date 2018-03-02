@@ -403,6 +403,47 @@ paths:
       x-tags:
       - tag: "Taxonomy"
       x-swagger-router-controller: "swagger_server.controllers.taxonomy_controller"
+  /misc/paleocoords:
+    get:
+      tags:
+      - "Paleocoordinates"
+      summary: "Paleocoodinates conversion"
+      description: "Returns latitude and longitude rotated into paleo-time\
+          \ using the GPlates model made available by the Macrostrat project."
+      operationId: "paleocoords"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "coords"
+        in: "query"
+        description: "Comma separated decimal degrees as latitude,longitude."
+        required: true
+        type: "string"
+      - name: "age"
+        in: "query"
+        description: "Numerical age up to ma 580 or named geologic age."
+        required: true 
+        type: "string"
+      - name: "ageunits"
+        in: "query"
+        description: "The units for maxage and minage. Allowable units are yr,\
+          \ ka or ma"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "timebound response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/timebound"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/errorModel"
+      x-tags:
+      - tag: "Timebound"
+      x-swagger-router-controller: "swagger_server.controllers.misc_controller"
   /misc/timebound:
     get:
       tags:
@@ -428,26 +469,35 @@ paths:
         type: "string"
       responses:
         200:
-          description: "timebound response"
+          description: "paleocoords response"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/timebound"
+              $ref: "#/definitions/paleocoords"
         default:
           description: "unexpected error"
           schema:
             $ref: "#/definitions/errorModel"
       x-tags:
-      - tag: "Timebound"
+      - tag: "Paleocoordinates"
       x-swagger-router-controller: "swagger_server.controllers.misc_controller"
 definitions:
+  paleocoords:
+    type: "object"
+    properties:
+      paleo_lat:
+        type: "string"
+        description: "Paleo converted decimal latitude"
+      paleo_lon:
+        type: "string"
+        description: "Paleo converted decimal longitude"
   timebound:
     type: "object"
     properties:
-      maxage:
+      max_age:
         type: "string"
         description: "Oldest age in bound"
-      minage:
+      min_age:
         type: "string"
         description: "Most recent (youngest) age in bound"
   reference:
@@ -520,7 +570,7 @@ definitions:
         type: "number"
         format: "double"
         description: "Occurrence longitude in decimal degrees"
-      geog_coords:
+      geog:
         type: "string"
         description: "Geographic coordinate type as modern or paleo"
   # assemblage:
@@ -567,7 +617,7 @@ definitions:
         type: "number"
         format: "double"
         description: "Locale longitude"
-      geog_coords:
+      geog:
         type: "string"
         description: "Geographic coordinate type as modern or paleo"
       locale_name:

@@ -81,7 +81,7 @@ def set_age(age_range, options, db):
 
 
 def get_age(age_range, options):
-    """Parse age range parameters."""  
+    """Parse age range parameters."""
     from ..elc import aux
 
     bound = age_range.split(',')
@@ -171,7 +171,7 @@ def get_geog(coords, age, options):
 
     if age.isalpha():
         ea1, la1 = [x / factor for x in aux.resolve_age(age)]
-        age = (ea1 + la1) / 2;
+        age = (ea1 + la1) / 2
 
     return resolve_geog(lat=geog[0], lon=geog[1], mean_age=age)
 

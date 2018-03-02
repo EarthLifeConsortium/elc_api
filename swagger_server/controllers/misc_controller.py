@@ -64,14 +64,30 @@ def paleocoords(coords=None, age=None, ageunits=None):
     # Determine paleocoordinates and resolve geologic age if necessary
 
     try:
-        paleo_lat, paleo_lon = aux.get_age(age_range=agerange,
-                                          options=options)
+        paleo_lat, paleo_lon = aux.get_geog(coords=coords,
+                                            age=age,
+                                            options=options)
 
     except ValueError as err:
         return connexion.problem(status=err.args[0],
                                  title=Status(err.args[0]).name,
                                  detail=err.args[1],
                                  type='about:blank')
+
+    # Build returned metadata object
+
+    desc_obj.update(aux.build_meta(ageunits=options.get('ageunits')))
+
+    desc_obj.update(aux.build_meta_sub(source=ext_provider,
+                                       t0=t0,
+                                       sub_tag='paleo_coord'))
+
+    # Return data structure to client
+
+    return_obj = {'paleo_lat': paleo_lat,
+                  'paleo_lon': paleo_lon}
+
+    return jsonify(metadata=desc_obj, records=return_obj)
 
 
 def timebound(agerange=None, ageunits=None):

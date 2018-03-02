@@ -55,9 +55,9 @@ def set_options(req_args, endpoint):
             raise ValueError(500, msg)
 
     # Geographic coodinates type
-    if 'coords' in req_args.keys():
-        if req_args.get('coords').lower() in spec.get('geog'):
-            options.update(coords=req_args.get('coords'))
+    if 'geog' in req_args.keys():
+        if req_args.get('geog').lower() in spec.get('geog'):
+            options.update(geog=req_args.get('geog'))
         else:
             msg = 'Allowable coordinates: {0:s}'.format(str(spec.get('geog')))
             raise ValueError(400, msg)
