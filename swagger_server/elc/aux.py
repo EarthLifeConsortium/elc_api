@@ -81,15 +81,7 @@ def set_age(age_range, options, db):
 
 
 def get_age(age_range, options):
-    """
-    Parse age range parameters.
-
-    :arg age_range: one or two comma separated numerical or text geoage bounds
-    :type age_range: str
-    :arg age_units: dimension of age parameter
-    :type age_units: str ['yr', 'ka' or 'ma']
-
-    """
+    """Parse age range parameters."""  
     from ..elc import aux
 
     bound = age_range.split(',')
@@ -97,6 +89,7 @@ def get_age(age_range, options):
         msg = 'Incorrectly formatted parameter pair: agerange'
         raise ValueError(400, msg)
 
+    # Sub-service requites ageunits as 'ma'
     factor = aux.set_age_scaler(options, 'pbdb')
 
     if len(bound) == 1:
@@ -158,6 +151,29 @@ def resolve_age(geologic_age):
     data = r.json().get('records')[0]
 
     return data.get('eag'), data.get('lag')
+
+
+def get_geog(coords, age, options):
+    """Parse paleo geography parameters."""
+    from ..elc import aux
+
+    geog = coords.split(',')
+    if '' in geog or len(geog) != 2:
+        msg = 'Incorrectly formatted parameter pair: coords'
+        raise ValueError(400, msg)
+
+    if ',' in age:
+        msg = 'Single numeric or geologic name required: age'
+        raise ValueError(400, msg)
+
+    # Sub-service requites ageunits as 'ma'
+    factor = aux.set_age_scaler(options, 'pbdb')
+
+    if age.isalpha():
+        ea1, la1 = [x / factor for x in aux.resolve_age(age)]
+        age = (ea1 + la1) / 2;
+
+    return resolve_geog(lat=geog[0], lon=geog[1], mean_age=age)
 
 
 def resolve_geog(lat, lon, mean_age):

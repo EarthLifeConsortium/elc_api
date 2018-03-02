@@ -130,6 +130,7 @@ def parse(req_args, options, db, endpoint):
     spec.update(tax=['taxon', 'includelower', 'hierarchy'])
     spec.update(ref=['idnumbers', 'format'])
     spec.update(timebound=['agerange', 'ageunits'])
+    spec.update(paleocoords=['coords', 'age', 'ageunits'])
 
     # Bad or missing parameter checks
 

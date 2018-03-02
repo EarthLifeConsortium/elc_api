@@ -39,7 +39,7 @@ def paleocoords(coords=None, age=None, ageunits=None):
 
     try:
         options = params.set_options(req_args=connexion.request.args,
-                                     endpoint='paleocoords')
+                                     endpoint='misc')
 
     except ValueError as err:
         return connexion.problem(status=err.args[0],
@@ -49,7 +49,29 @@ def paleocoords(coords=None, age=None, ageunits=None):
 
     # Call parse function to check for parameter errors
 
+    try:
+        params.parse(req_args=connexion.request.args,
+                     options=options,
+                     db='pbdb',
+                     endpoint='paleocoords')
 
+    except ValueError as err:
+        return connexion.problem(status=err.args[0],
+                                 title=Status(err.args[0]).name,
+                                 detail=err.args[1],
+                                 type='about:blank')
+
+    # Determine paleocoordinates and resolve geologic age if necessary
+
+    try:
+        paleo_lat, paleo_lon = aux.get_age(age_range=agerange,
+                                          options=options)
+
+    except ValueError as err:
+        return connexion.problem(status=err.args[0],
+                                 title=Status(err.args[0]).name,
+                                 detail=err.args[1],
+                                 type='about:blank')
 
 
 def timebound(agerange=None, ageunits=None):
@@ -92,7 +114,7 @@ def timebound(agerange=None, ageunits=None):
                                  detail=err.args[1],
                                  type='about:blank')
 
-    # Determin time bounds and resolve geologic age if necessary
+    # Determine time bounds and resolve geologic age if necessary
 
     try:
         early_age, late_age = aux.get_age(age_range=agerange,
