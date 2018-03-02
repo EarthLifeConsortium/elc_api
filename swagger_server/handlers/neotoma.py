@@ -12,9 +12,9 @@ def occurrences(resp_json, return_obj, options):
     :arg return_obj: List of data objects to be appended and returned
     :type return_obj: list (of dicts)
     """
-    from ..elc import aux
+    from ..elc import ages
 
-    factor = aux.set_age_scaler(options=options, db='neotoma')
+    factor = ages.set_age_scaler(options=options, db='neotoma')
 
     for rec in resp_json.get('data', []):
 
