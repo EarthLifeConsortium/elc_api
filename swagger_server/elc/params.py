@@ -118,7 +118,7 @@ def id_parse(ids, db, endpoint):
 
 def parse(req_args, options, db, endpoint):
     """Return a Requests payload specific to resource target."""
-    from ..elc import config, aux
+    from ..elc import config, aux, ages, taxa
 
     # Alowable endpoint parameters (add specification for additional below)
 
@@ -157,7 +157,7 @@ def parse(req_args, options, db, endpoint):
 
     if 'taxon' in req_args.keys():
         try:
-            payload.update(aux.set_taxon(taxon=req_args.get('taxon'),
+            payload.update(taxa.set_taxon(taxon=req_args.get('taxon'),
                                          subtax=options.get('subtax'),
                                          db=db))
         except ValueError as err:
@@ -165,7 +165,7 @@ def parse(req_args, options, db, endpoint):
 
     if 'agerange' in req_args.keys():
         try:
-            payload.update(aux.set_age(age_range=req_args.get('agerange'),
+            payload.update(ages.set_age(age_range=req_args.get('agerange'),
                                        options=options,
                                        db=db))
         except ValueError as err:
