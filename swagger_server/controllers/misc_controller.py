@@ -134,7 +134,7 @@ def timebound(agerange=None, ageunits=None):
 
     try:
         early_age, late_age = ages.get_age(age_range=agerange,
-                                          options=options)
+                                           options=options)
 
     except ValueError as err:
         return connexion.problem(status=err.args[0],
