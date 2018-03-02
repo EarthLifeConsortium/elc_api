@@ -8,6 +8,7 @@ def set_options(req_args, endpoint):
 
     # Add aditional formats and controls below (default is param[0])
     spec = dict()
+    spec.update(misc=['json'])
     spec.update(occ=['json', 'csv'])
     spec.update(loc=['json', 'csv'])
     spec.update(tax=['json', 'csv'])

@@ -19,6 +19,39 @@ from time import time
 from flask import jsonify
 
 
+def paleocoords(coords=None, age=None, ageunits=None):
+    """
+    Return paleocoordinates for a given age and modern lat/lon.
+
+    :param geog: Comma separated latitude,longitude
+    :type geog: str (decimal degrees -180 to 180)
+    :param age: Numerical or geologic age
+    :param age: str
+    :param ageunits: Units of measure for the ages specified (and returned)
+    :type ageunits: str ('yr', 'ka' or 'ma')
+
+    """
+    t0 = time()
+    desc_obj = dict()
+    ext_provider = 'EarthByte GPlates (Wright et al. 2013) via Macrostrat'
+
+    # Set runtime options
+
+    try:
+        options = params.set_options(req_args=connexion.request.args,
+                                     endpoint='paleocoords')
+
+    except ValueError as err:
+        return connexion.problem(status=err.args[0],
+                                 title=Status(err.args[0]).name,
+                                 detail=err.args[1],
+                                 type='about:blank')
+
+    # Call parse function to check for parameter errors
+
+
+
+
 def timebound(agerange=None, ageunits=None):
     """
     Return min and max ages given a specified bound and units.
@@ -31,13 +64,13 @@ def timebound(agerange=None, ageunits=None):
     """
     t0 = time()
     desc_obj = dict()
-    ext_provider = 'International Commission on Stratigraphy (2013-01)'
+    ext_provider = 'International Commission on Stratigraphy (2013) via PBDB'
 
     # Set runtime options
 
     try:
         options = params.set_options(req_args=connexion.request.args,
-                                     endpoint='occ')
+                                     endpoint='misc')
 
     except ValueError as err:
         return connexion.problem(status=err.args[0],
