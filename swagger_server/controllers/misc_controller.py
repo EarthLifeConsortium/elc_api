@@ -64,9 +64,9 @@ def paleocoords(coords=None, age=None, ageunits=None):
     # Determine paleocoordinates and resolve geologic age if necessary
 
     try:
-        paleo_lon, paleo_lat = geog.get_geog(coords=coords,
-                                             age=age,
-                                             options=options)
+        paleo, modern = geog.get_geog(coords=coords,
+                                      age=age,
+                                      options=options)
 
     except ValueError as err:
         return connexion.problem(status=err.args[0],
@@ -76,7 +76,8 @@ def paleocoords(coords=None, age=None, ageunits=None):
 
     # Build returned metadata object
 
-    desc_obj.update(aux.build_meta(ageunits=options.get('ageunits')))
+    desc_obj.update(aux.build_meta(ageunits=options.get('ageunits'),
+                                   coords=options.get('coords')))
 
     desc_obj.update(aux.build_meta_sub(source=ext_provider,
                                        t0=t0,
@@ -84,8 +85,11 @@ def paleocoords(coords=None, age=None, ageunits=None):
 
     # Return data structure to client
 
-    return_obj = {'paleo_lat': paleo_lat,
-                  'paleo_lon': paleo_lon}
+    return_obj = {'paleo_lat': paleo[1],
+                  'paleo_lon': paleo[0],
+                  'modern_lat': modern[0],
+                  'modern_lon': modern[1],
+                  'age': age}
 
     return jsonify(metadata=desc_obj, records=return_obj)
 

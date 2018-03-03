@@ -137,6 +137,7 @@ def occ(bbox=None, minage=None, maxage=None, ageuits=None,
 
         try:
             resp_json = resp.json()
+
         except ValueError as err:
             msg = '{0:s} JSON decode error: {1:s}'.format(db, err)
             return connexion.problem(status=500,
