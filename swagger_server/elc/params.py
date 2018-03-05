@@ -131,6 +131,7 @@ def parse(req_args, options, db, endpoint):
     spec.update(ref=['idnumbers', 'format'])
     spec.update(timebound=['agerange', 'ageunits'])
     spec.update(paleocoords=['coords', 'age', 'ageunits'])
+    spec.update(subtaxa=['taxon', 'synonyms'])
 
     # Bad or missing parameter checks
 
@@ -156,14 +157,16 @@ def parse(req_args, options, db, endpoint):
     payload.update(limit=options.get('limit'))
 
     if 'taxon' in req_args.keys():
+
         try:
             payload.update(taxa.set_taxon(taxon=req_args.get('taxon'),
-                                         subtax=options.get('subtax'),
-                                         db=db))
+                                          subtax=options.get('subtax'),
+                                          db=db))
         except ValueError as err:
             raise ValueError(err.args[0], err.args[1])
 
     if 'agerange' in req_args.keys():
+
         try:
             payload.update(ages.set_age(age_range=req_args.get('agerange'),
                                        options=options,
@@ -172,6 +175,7 @@ def parse(req_args, options, db, endpoint):
             raise ValueError(err.args[0], err.args[1])
 
     if 'offset' in req_args.keys():
+
         if (req_args.get('offset').isalpha() or
                 bool(req_args.get('offset')[0] == '-')):
             msg = 'Parameter must be a number: offset'

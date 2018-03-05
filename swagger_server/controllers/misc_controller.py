@@ -4,6 +4,8 @@ REST dispatcher.
 Endpoint for miscelaneous ELC public functions:
 
 /misc/timebound    - resolve min and max time bounds for specified geo ages
+/misc/paleocoords  - reproject modern geograpic coordinates into paleo
+/misc/subtaxa      - retrieve lower taxa
 
 """
 #  from swagger_server.models.assemblage import Timebound
@@ -19,6 +21,71 @@ from time import time
 from flask import jsonify
 
 
+def subtaxa(taxon=None, synonyms=True):
+    """
+    Retrieve the related lower taxonomy for a given taxon name.
+
+    :param taxon: taxonomic name
+    :type taxon: str
+    :param synonyms: optionally include synonymous names
+    :type synonyms: bool (default true)
+
+    """
+    t0 = time()
+    desc_obj = dict()
+    ext_provider = 'The Paleobiology Database'
+
+    # Set runtime options
+
+    try:
+        options = params.set_options(req_args=connexion.request.args,
+                                     endpoint='misc')
+
+    except ValueError as err:
+        return connexion.problem(status=err.args[0],
+                                 title=Status(err.args[0]).name,
+                                 detail=err.args[1],
+                                 type='about:blank')
+
+    # Call parse function to check for parameter errors
+
+    try:
+        params.parse(req_args=connexion.request.args,
+                     options=options,
+                     db='pbdb',
+                     endpoint='subtaxa')
+
+    except ValueError as err:
+        return connexion.problem(status=err.args[0],
+                                 title=Status(err.args[0]).name,
+                                 detail=err.args[1],
+                                 type='about:blank')
+
+    # Retrieve lower taxa
+
+    try:
+        lower_taxa = get_subtaxa(taxon=taxon, inc_syn=synonyms)
+
+    except ValueError as err:
+        return connexion.problem(status=err.args[0],
+                                 title=Status(err.args[0]).name,
+                                 detail=err.args[1],
+                                 type='about:blank')
+
+    # Build returned metadata object
+
+    desc_obj.update(aux.build_meta())
+
+    desc_obj.update(aux.build_meta_sub(source=ext_provider,
+                                       t0=t0,
+                                       sub_tag='subtaxa'))
+
+    # Return data structure to client
+
+    return_obj = {taxon: lower_taxa}
+
+
+    return jsonify(metadata=desc_obj, records=return_obj)
 def paleocoords(coords=None, age=None, ageunits=None):
     """
     Return paleocoordinates for a given age and modern lat/lon.
