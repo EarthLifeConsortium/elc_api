@@ -15,7 +15,7 @@ Endpoint for miscelaneous ELC public functions:
 #  from six import iteritems
 #  from ..util import deserialize_date, deserialize_datetime
 import connexion
-from ..elc import params, aux, ages, geog
+from ..elc import params, aux, ages, geog, taxa
 from http_status import Status
 from time import time
 from flask import jsonify
@@ -33,7 +33,8 @@ def subtaxa(taxon=None, synonyms=True):
     """
     t0 = time()
     desc_obj = dict()
-    ext_provider = 'The Paleobiology Database'
+    ext_provider = '{0:s} {1:s} synonyms (via PBDB)'.format(
+        taxon.capitalize(), 'including' if synonyms else 'excluding')
 
     # Set runtime options
 
@@ -64,7 +65,7 @@ def subtaxa(taxon=None, synonyms=True):
     # Retrieve lower taxa
 
     try:
-        lower_taxa = get_subtaxa(taxon=taxon, inc_syn=synonyms)
+        lower_taxa = taxa.get_subtaxa(taxon=taxon, inc_syn=synonyms)
 
     except ValueError as err:
         return connexion.problem(status=err.args[0],
@@ -78,14 +79,14 @@ def subtaxa(taxon=None, synonyms=True):
 
     desc_obj.update(aux.build_meta_sub(source=ext_provider,
                                        t0=t0,
-                                       sub_tag='subtaxa'))
+                                       sub_tag='subtaxa',
+                                       data=lower_taxa))
 
     # Return data structure to client
 
-    return_obj = {taxon: lower_taxa}
+    return jsonify(metadata=desc_obj, records=lower_taxa)
 
 
-    return jsonify(metadata=desc_obj, records=return_obj)
 def paleocoords(coords=None, age=None, ageunits=None):
     """
     Return paleocoordinates for a given age and modern lat/lon.

@@ -47,7 +47,10 @@ def build_meta_sub(source, t0, sub_tag, data=None):
     from ..elc import config
 
     if data:
-        rec_cnt = len(data.get(config.get('db_rec_obj', sub_tag)))
+        if type(data) is list:
+            rec_cnt = len(data)
+        else:
+            rec_cnt = len(data.get(config.get('db_rec_obj', sub_tag)))
     else:
         rec_cnt = 1
 
