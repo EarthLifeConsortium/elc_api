@@ -432,17 +432,17 @@ paths:
         type: "string"
       responses:
         200:
-          description: "timebound response"
+          description: "paleocoords response"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/timebound"
+              $ref: "#/definitions/paleocoords"
         default:
           description: "unexpected error"
           schema:
             $ref: "#/definitions/errorModel"
       x-tags:
-      - tag: "Timebound"
+      - tag: "Paleocoordinates"
       x-swagger-router-controller: "swagger_server.controllers.misc_controller"
   /misc/timebound:
     get:
@@ -469,19 +469,60 @@ paths:
         type: "string"
       responses:
         200:
-          description: "paleocoords response"
+          description: "timebound response"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/paleocoords"
+              $ref: "#/definitions/timebound"
         default:
           description: "unexpected error"
           schema:
             $ref: "#/definitions/errorModel"
       x-tags:
-      - tag: "Paleocoordinates"
+      - tag: "Timebound"
+      x-swagger-router-controller: "swagger_server.controllers.misc_controller"
+  /misc/subtaxa:
+    get:
+      tags:
+      - "Subtaxa"
+      summary: "Retrieve subtaxa"
+      description: "For a given taxon, retrieve all related lower taxonomic\
+        \ names optionally including synonyms."
+      operationId: "subtaxa"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "taxon"
+        in: "query"
+        description: "Taxonomic name."
+        required: true
+        type: "string"
+      - name: "synonyms"
+        in: "query"
+        description: "Numerical age up to ma 580 or named geologic age."
+        required: false
+        type: "boolean"
+      responses:
+        200:
+          description: "subtaxa response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/subtaxa"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/errorModel"
+      x-tags:
+      - tag: "Subtaxa"
       x-swagger-router-controller: "swagger_server.controllers.misc_controller"
 definitions:
+  subtaxa:
+    type: "object"
+    properties:
+      taxa:
+        type: "array"
+        description: "List of identified subtaxa"
   paleocoords:
     type: "object"
     properties:
