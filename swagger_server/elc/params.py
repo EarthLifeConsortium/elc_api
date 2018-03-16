@@ -136,7 +136,7 @@ def parse(req_args, options, db, endpoint):
     # Bad or missing parameter checks
 
     if not bool(req_args):
-        msg = 'No parameters provided.'
+        msg = 'No parameters provided: {0:s}'.format(str(spec.get(endpoint)))
         raise ValueError(400, msg)
 
     for param in req_args.keys():
@@ -169,8 +169,8 @@ def parse(req_args, options, db, endpoint):
 
         try:
             payload.update(ages.set_age(age_range=req_args.get('agerange'),
-                                       options=options,
-                                       db=db))
+                                        options=options,
+                                        db=db))
         except ValueError as err:
             raise ValueError(err.args[0], err.args[1])
 
