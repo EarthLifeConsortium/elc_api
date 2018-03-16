@@ -20,18 +20,15 @@ from flask import jsonify
 import requests
 
 
-def occ(bbox=None, minage=None, maxage=None, ageuits=None,
-        timerule=None, taxon=None, includelower=None, limit=None,
-        offset=None, show=None, output=None):
+def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
+        includelower=None, limit=None, offset=None, show=None, output=None):
     """
     Fossil occurrences in a specific place and time.
 
     :param bbox: [lonW, latS, lonE, latN] or GeoJSON
     :type bbox: str
-    :param minage: Default units as Ma, overridden by ageunits
-    :type minage: float
-    :param maxage: Default units as Ma, overridden by ageunits
-    :type maxage: float
+    :param agerange: Comma separated numerical or textual geologic ages
+    :type agerange: str
     :param ageunits: Maxage and minage units (default=ma, ka, yr)
     :type ageunits: str
     :param timerule: Temporal bound (default=contain, major, overlap)
