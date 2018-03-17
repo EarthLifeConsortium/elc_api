@@ -230,11 +230,18 @@ paths:
       - name: "idnumbers"
         in: "query"
         description: "Unique numeric ID, or vector of IDs for occurrences\
-          \ or locales in the form [pbdb,neot]:[occ,col,dst]:id_num"
+          \ or locales in the form [database name]:[dataset type]:id_num\
+          \ where dataset type may be dst, col, ref, occ"
         required: false
         type: "array"
         items:
           type: "string"
+      - name: "show"
+        in: "query"
+        description: "Set to idx for locale id's only. Set to poll for\
+          \ statistics only. Otherwise, full return"
+        required: false
+        type: "string"
       - name: "output"
         in: "query"
         description: "Output format for references. Response is BibJSON\

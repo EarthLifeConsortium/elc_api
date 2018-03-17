@@ -157,7 +157,8 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
         return_obj = router.decode_occs(resp_json=resp_json,
                                         return_obj=return_obj,
                                         options=options,
-                                        db=db)
+                                        db=db,
+                                        endpoint='occ')
 
     # Return composite data structure to client
 
