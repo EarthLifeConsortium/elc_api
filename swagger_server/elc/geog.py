@@ -5,7 +5,7 @@ def get_geog(coords, age, options):
     """Parse paleo geography parameters."""
     from ..elc import ages
 
-    modern = coords.split(',')
+    modern = [x.strip() for x in coords.split(',')]
     if '' in modern or len(modern) != 2:
         msg = 'Incorrectly formatted parameter pair: coords'
         raise ValueError(400, msg)
@@ -25,9 +25,9 @@ def get_geog(coords, age, options):
             raise ValueError(err.args[0], err.args[1])
 
     else:
-        age = str(round(int(age) * factor))
+        age = round(int(age) * factor)
 
-    paleo = resolve_geog(lat=modern[0], lon=modern[1], mean_age=age)
+    paleo = resolve_geog(lat=int(modern[0]), lon=int(modern[1]), mean_age=age)
 
     paleo = [round(x,4) for x in paleo]
     modern = [round(float(x),4) for x in modern]
@@ -56,5 +56,5 @@ def resolve_geog(lat, lon, mean_age):
     if r.json().get('features')[0]['geometry']:
         return r.json().get('features')[0]['geometry']['coordinates']
     else:
-        msg = 'Coordinates must range from -180 to 180 decimal degrees'
+        msg = 'Unavailable point or inalid WGS84 coords (-180 to 180 degrees)'
         raise ValueError(400, msg)

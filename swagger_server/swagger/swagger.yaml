@@ -522,15 +522,30 @@ definitions:
     properties:
       taxa:
         type: "array"
+        items:
+          type: "string"
         description: "List of identified subtaxa"
   paleocoords:
     type: "object"
     properties:
-      paleo_lat:
+      age:
         type: "string"
+        description: "Numerial age (in specified units) or geological ICS age."
+      modern_lat:
+        type: "number"
+        format: "double"
+        description: "Original modern day latitude"
+      modern_lon:
+        type: "number"
+        format: "double"
+        description: "Original modern day longitude"
+      paleo_lat:
+        type: "number"
+        format: "double"
         description: "Paleo converted decimal latitude"
       paleo_lon:
-        type: "string"
+        type: "number"
+        format: "double"
         description: "Paleo converted decimal longitude"
   timebound:
     type: "object"
