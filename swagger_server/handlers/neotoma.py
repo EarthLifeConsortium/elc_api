@@ -58,3 +58,44 @@ def occurrences(resp_json, return_obj, options):
         return_obj.append(data)
 
     return return_obj
+
+
+def references(resp, ret_obj, format):
+    """Reformat data from the Neotoma API call."""
+    if resp.status_code == 200:
+        resp_json = resp.json()
+        if 'data' in resp_json:
+            for rec in resp_json['data']:
+
+                # Format the unique database identifier
+                pub_id = 'neot:pub:' + str(rec.get('PublicationID'))
+
+                # Format author fields
+                author_list = list()
+                if 'Authors' in rec:
+                    for author in rec.get('Authors'):
+                        author_list.append(author['ContactName'])
+
+                # Look for a DOI in the citation string
+                if 'Citation' in rec:
+                    doi = re.search('(?<=\[DOI:\ ).+(?=\])', rec.get('Citation'))
+                    if doi:
+                        doi = doi.group()
+                else:
+                    doi = None
+
+                # Build dictionary of bibliographic fields
+                reference = dict()
+                reference.update(kind=rec.get('PubType'),
+                                 year=rec.get('Year'),
+                                 doi=doi,
+                                 authors=author_list,
+                                 ident=pub_id,
+                                 cite=rec.get('Citation'))
+
+                # Format and append parsed record
+                ret_obj = format_handler(reference, ret_obj, format)
+
+    # End subroutine: parse_neot_resp
+    return len(resp_json['data'])
+

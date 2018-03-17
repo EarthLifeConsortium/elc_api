@@ -11,7 +11,7 @@ def get_geog(coords, age, options):
         raise ValueError(400, msg)
 
     if any(x in age for x in [',', '.']):
-        msg = 'Single integer age or geologic name required: age'
+        msg = 'Single integer or geologic name required: age'
         raise ValueError(400, msg)
 
     # Sub-service requires ageunits as 'ma'

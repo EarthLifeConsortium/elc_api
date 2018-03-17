@@ -18,11 +18,31 @@ def type_csv(data):
     return fmt_obj
 
 
-def type_bibjson(data):
-    fmt_obj = dict()
+def type_bibjson(reference):
+    """Format BibJSON object."""
+    bib = dict()
 
-    return fmt_obj
+    # Add basic reference info
+    bib.update(type=reference.get('kind'), year=reference.get('year'),
+               title=reference.get('title'), citation=reference.get('cite'))
 
+    # Add info specific to the journal or book
+    bib.update(journal=[{'name': reference.get('journal'),
+                         'volume': reference.get('vol'),
+                         'pages': reference.get('pages'),
+                         'editors': reference.get('editor')}])
+
+    # Add reference locator IDs
+    bib.update(identifier=[{'type': 'doi', 'id': reference.get('doi')},
+                           {'type': 'db_index', 'id': reference.get('ident')}])
+
+    # Sequentially add authors to the authors block
+    bib.update(author=[])
+    for author in reference.get('authors'):
+        bib['author'].append({'name': author})
+
+    # End subroutine: format_bibjson
+    return bib
 
 def type_ris(data):
     fmt_obj = dict()
