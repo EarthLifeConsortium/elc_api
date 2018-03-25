@@ -98,20 +98,30 @@ def id_parse(ids, db, endpoint):
     numeric_ids = list()
     db_tag = db[:4]
 
-    # Add additional db specific locale eqivalents here
-    loc_spec = ['col', 'dst']
+    spec = {'dtype': ['occ', 'sit', 'dst', 'col', 'ref', 'pub', 'txn']}
 
     for id in ids:
-        database = re.search('^\w+(?=:)', id).group()
-        datatype = re.search('(?<=:).+(?=:)', id).group()
-        id_num = int(re.search('\d+$', id).group())
+        try:
+            database = re.search('^\w+(?=:)', id).group()
+            datatype = re.search('(?<=:).+(?=:)', id).group()
+            id_num = int(re.search('\d+$', id).group())
+        except AttributeError as err:
+            msg = 'Incorrectly formatted ID: {0:s}'.format(id)
+            #  raise ValueError(400, msg)
+            print(msg)
 
-        if endpoint == 'loc':
-            if database.lower() == db_tag and datatype.lower() in loc_spec:
-                numeric_ids.append(id_num)
-        elif endpoint not in loc_spec:
-            if database.lower() == db_tag and datatype.lower() == endpoint:
-                numeric_ids.append(id_num)
+        if datatype not in spec['dtype']:
+            msg = 'Unknown data type: {0:s}'.format(id)
+            #  raise ValueError(400, msg)
+            print(msg)
+
+        if type(id_num) != int:
+            msg = 'Invalid numerical ID: {0:s}'.format(id)
+            #  raise ValueError(400, msg)
+            print(msg)
+
+        if database.lower() == db_tag and datatype.lower() == endpoint:
+            numeric_ids.append(id_num)
 
     return numeric_ids
 

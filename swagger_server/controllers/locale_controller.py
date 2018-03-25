@@ -1,19 +1,27 @@
 """
 RESTful API controller.
 
-Endpoint for queries on geolocated locales.
-Dataset identifiers are returned for Neotoma and collection identifiers
-for the PBDB.
+Endpoint for queries on taxonomic occurrences in time and space.
 """
 
-import requests
-import time
+#  from swagger_server.models.error_model import ErrorModel
+#  from swagger_server.models.occurrence import Occurrence
+#  from datetime import date, datetime
+#  from typing import List, Dict
+#  from six import iteritems
+#  from ..util import deserialize_date, deserialize_datetime
+
 import connexion
-from flask import request, jsonify
-from statistics import mean
-from ..elc import params
+from ..elc import config, params, aux
+from ..handlers import router
+from http_status import Status
+from time import time
+from flask import jsonify
+import requests
 
 
+def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
+        includelower=None, limit=None, offset=None, show=None, output=None):
 def loc(occid=None, bbox=None, minage=None, maxage=None, ageunits=None,
         timerule=None, taxon=None, includelower=None, limit=None,
         offset=None, show=None):
