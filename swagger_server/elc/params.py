@@ -95,33 +95,37 @@ def id_parse(ids, db, endpoint):
     """
     import re
 
+    # add additional database names below
+    spec = {'dbase': ['pbdb', 'neot']}
+    spec = {'dtype': ['occ', 'sit', 'dst', 'col', 'ref', 'pub', 'txn']}
+
     numeric_ids = list()
     db_tag = db[:4]
-
-    spec = {'dtype': ['occ', 'sit', 'dst', 'col', 'ref', 'pub', 'txn']}
+    database = datatype = id_num = ''
 
     for id in ids:
         try:
-            database = re.search('^\w+(?=:)', id).group()
-            datatype = re.search('(?<=:).+(?=:)', id).group()
-            id_num = int(re.search('\d+$', id).group())
+            database = re.search('^\w+(?=:)', id).group(0)
+            datatype = re.search('(?<=:).+(?=:)', id).group(0)
+            id_num = re.search('(?:.*?:){2}(.*)', id).group(1)
         except AttributeError as err:
             msg = 'Incorrectly formatted ID: {0:s}'.format(id)
-            #  raise ValueError(400, msg)
-            print(msg)
+            raise ValueError(400, msg)
+
+        if database not in spec['dbase']:
+            msg = 'Unknown database: {0:s}'.format(id)
+            raise ValueError(400, msg)
 
         if datatype not in spec['dtype']:
             msg = 'Unknown data type: {0:s}'.format(id)
-            #  raise ValueError(400, msg)
-            print(msg)
+            raise ValueError(400, msg)
 
-        if type(id_num) != int:
+        if not id_num.isnumeric():
             msg = 'Invalid numerical ID: {0:s}'.format(id)
-            #  raise ValueError(400, msg)
-            print(msg)
+            raise ValueError(400, msg)
 
         if database.lower() == db_tag and datatype.lower() == endpoint:
-            numeric_ids.append(id_num)
+            numeric_ids.append(int(id_num))
 
     return numeric_ids
 
