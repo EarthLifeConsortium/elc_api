@@ -153,7 +153,8 @@ def set_id(ids, db, endpoint, options):
         if not id_numbers:
             options.update(run=False)
 
-        return {xmap[db][1]: id_numbers}
+        id_string = ','.join(str(x) for x in id_numbers)
+        return {xmap[db][1]: id_string}
 
 
 def parse(req_args, options, db, endpoint):

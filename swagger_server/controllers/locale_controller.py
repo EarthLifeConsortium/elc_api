@@ -19,6 +19,8 @@ from time import time
 from flask import jsonify
 import requests
 
+import pdb
+
 
 def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
         show=None, output=None):
@@ -85,7 +87,8 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
         # Database API call
 
         url_path = ''.join([config.get('resource_api', db),
-                            config.get('db_occ_endpt', db)])
+                            config.get('db_loc_endpt', db)])
+        
         try:
             resp = requests.get(url_path,
                                 params=payload,

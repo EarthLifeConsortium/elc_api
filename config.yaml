@@ -11,10 +11,10 @@ db_rec_obj:
 db_occ_endpt:
   neotoma: 'occurrence'
   pbdb: 'occs/list.json'
-db_locale_endpt:
+db_loc_endpt:
   neotoma: 'datasets'
   pbdb: 'colls/list.json'
-db_taxa_endpt:
+db_tax_endpt:
   neotoma: ''
   pbdb: ''
 db_ref_endpt:
