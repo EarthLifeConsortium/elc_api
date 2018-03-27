@@ -139,8 +139,8 @@ def parse(req_args, options, db, endpoint):
     spec = dict()
     spec.update(occ=['bbox', 'agerange', 'ageunits', 'timerule', 'taxon',
                      'includelower', 'limit', 'offset', 'show', 'output'])
-    spec.update(loc=['occid', 'bbox', 'agerange', 'ageunits', 'timerule',
-                     'taxon', 'includelower', 'limit', 'offset', 'show'])
+    spec.update(loc=['idlist', 'bbox', 'agerange', 'ageunits', 'timerule',
+                     'offset', 'show'])
     spec.update(tax=['taxon', 'includelower', 'hierarchy'])
     spec.update(ref=['idnumbers', 'format'])
     spec.update(timebound=['agerange', 'ageunits'])

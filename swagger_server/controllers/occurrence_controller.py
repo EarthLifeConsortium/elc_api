@@ -46,7 +46,6 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
     :param output: Response format (defult=json, csv)
     :type output: str
 
-    :rtype: List[Occurrence]
     """
     return_obj = list()
     desc_obj = dict()

@@ -268,19 +268,19 @@ paths:
       - "Locale"
       summary: "Sample localities"
       description: "Return sampling locations in space and time. Sampling locations\
-        \ may include multiple taxon. Utilizes the dataset model from Neotoman and\
+        \ may include multiple taxon. Utilizes the dataset model from Neotoma and\
         \ the collections data model from the PBDB"
       operationId: "loc"
       produces:
       - "application/json"
       - "text/csv"
       parameters:
-      - name: "occid"
+      - name: "idlist"
         in: "query"
-        description: "Unique numeric ID, or vector of IDs for occurrences"
-        required: false
-        type: "integer"
-        format: "int32"
+        description: "Unique numeric ID, or vector of IDs for dataset (dst) or \
+          \ collection (col) in the format of [database]:[datatype]:[numeric]"
+        required: true
+        type: "string"
       - name: "bbox"
         in: "query"
         description: "Bounding box definition, either as a numeric vector of\
@@ -309,41 +309,16 @@ paths:
           \ box"
         required: false
         type: "string"
-      - name: "taxon"
-        in: "query"
-        description: "Taxonomic name. May be truncated, a list of taxa or use\
-          \ wildcards. If a specific taxon ID or a vector of IDs is known that\
-          \ parameter can be passed through taxon. Taxon lists must be passed\
-          \ using JSON formating. By default, returns only taxa named in the\
-          \ query. Use includelower if all lower taxa are desired"
-        required: false
-        type: "string"
-      - name: "includelower"
-        in: "query"
-        description: "A boolean, if TRUE, all species and subspecies lower\
-          \ taxa of a named genera will be included in the response"
-        required: false
-        type: "boolean"
-      - name: "limit"
-        in: "query"
-        description: "Limit the number of records in the response for large\
-          \ queries"
-        required: false
-        type: "integer"
-        format: "int32"
-      - name: "offset"
-        in: "query"
-        description: "Begin the response from a designated point within the\
-          \ larger query. In this way, <i>limit</i> and <i>offset</i> can be\
-          \ used to produce serial queries to the API to avoid issues with\
-          \ larger responses"
-        required: false
-        type: "integer"
-        format: "int32"
       - name: "show"
         in: "query"
         description: "Set to idx for locale id's only. Set to poll for\
           \ statistics only. Otherwise, full return"
+        required: false
+        type: "string"
+      - name: "output"
+        in: "query"
+        description: "Output format for occurrences. Response is JSON\
+          \ (default) or  CSV"
         required: false
         type: "string"
       responses:
@@ -608,6 +583,15 @@ definitions:
       occ_id:
         type: "string"
         description: "Unique occurrence ID"
+      locale_id:
+        type: "string"
+        description: "Generated ID string reflection a dataset or collection"
+      data_type:
+        type: "string"
+        description: "Paleontological type"
+      source:
+        type: "string"
+        description: "Sub-database of literature reference"
       taxon:
         type: "string"
         description: "Taxonomic name"
@@ -622,9 +606,6 @@ definitions:
         type: "number"
         format: "double"
         description: "Youngest age of the occurrence"
-      age_units:
-        type: "string"
-        description: "Units of min and max age as yr, ka or ma"
       lat:
         type: "number"
         format: "double"
@@ -633,9 +614,6 @@ definitions:
         type: "number"
         format: "double"
         description: "Occurrence longitude in decimal degrees"
-      geog:
-        type: "string"
-        description: "Geographic coordinate type as modern or paleo"
   # assemblage:
     # type: "array"
     # items:

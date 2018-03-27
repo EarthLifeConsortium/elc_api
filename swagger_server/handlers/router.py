@@ -1,6 +1,6 @@
 """Call approproiate custom response handler for database:endpoint."""
 
-def decode_occs(resp_json, return_obj, options, db):
+def decode_occs(resp_json, return_obj, options, db, endpoint):
     """
     Extract necessary data from the subquery.
 
@@ -16,15 +16,19 @@ def decode_occs(resp_json, return_obj, options, db):
     from ..handlers import neotoma, pbdb
 
     if db == 'neotoma':
-        if endpoint = 'occ':
+        if endpoint == 'occ':
             return neotoma.occurrences(resp_json, return_obj, options)
-        if endpoint = 'ref':
+        if endpoint == 'loc':
+            return neotoma.locales(resp_json, return_obj, options)
+        if endpoint == 'ref':
             return neotoma.references(resp_json, return_obj, options)
 
     if db == 'pbdb':
-        if endpoint = 'occ':
+        if endpoint == 'occ':
             return pbdb.occurrences(resp_json, return_obj, options)
-        if endpoint = 'ref':
+        if endpoint == 'loc':
+            return neotoma.locales(resp_json, return_obj, options)
+        if endpoint == 'ref':
             return pbdb.references(resp_json, return_obj, options)
 
     # Add additional database custom handler here 
