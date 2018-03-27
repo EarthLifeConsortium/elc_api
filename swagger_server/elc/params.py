@@ -100,14 +100,15 @@ def id_parse(ids, db, id_type):
     import re
 
     # add additional database names below
-    spec = {'dbase': ['pbdb', 'neot']}
-    spec = {'dtype': ['occ', 'sit', 'dst', 'col', 'ref', 'pub', 'txn']}
+    spec = {'dbase': ['pbdb', 'neot'],
+            'dtype': ['occ', 'sit', 'dst', 'col', 'ref', 'pub', 'txn']}
 
     numeric_ids = list()
     db_tag = db[:4]
     database = datatype = id_num = ''
+    id_list = ids.split(',')
 
-    for id in ids:
+    for id in id_list:
         try:
             database = re.search('^\w+(?=:)', id).group(0)
             datatype = re.search('(?<=:).+(?=:)', id).group(0)
@@ -136,6 +137,7 @@ def id_parse(ids, db, id_type):
 
 def set_id(ids, db, endpoint, options):
     """Return a payload parameter for the requested id tag."""
+
     if endpoint == 'loc':
 
         # add additional database to datatype mappings here
@@ -197,7 +199,7 @@ def parse(req_args, options, db, endpoint):
     if 'idlist' in req_args.keys():
 
         try:
-            payload.update(set_id(ids=idlist,
+            payload.update(set_id(ids=req_args.get('idlist'),
                                   db=db,
                                   endpoint=endpoint,
                                   options=options))
