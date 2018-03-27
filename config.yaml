@@ -12,8 +12,8 @@ db_occ_endpt:
   neotoma: 'occurrence'
   pbdb: 'occs/list.json'
 db_locale_endpt:
-  neotoma: ''
-  pbdb: ''
+  neotoma: 'datasets'
+  pbdb: 'colls/list.json'
 db_taxa_endpt:
   neotoma: ''
   pbdb: ''

@@ -78,6 +78,10 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
                                      detail=err.args[1],
                                      type='about:blank')
 
+        # skip this database if no ids specified
+        if not options.get('run'):
+            continue
+
         # Database API call
 
         url_path = ''.join([config.get('resource_api', db),

@@ -78,10 +78,14 @@ def set_options(req_args, endpoint):
                           int(config.get('default', 'limit')))
     options.update(limit=int(choice))
 
+    # Run this database unless specified later
+    # A particular database could be hard switched here
+    options.update(run=True)
+
     return options
 
 
-def id_parse(ids, db, endpoint):
+def id_parse(ids, db, id_type):
     """
     Separate [database]:[datatype]:[id_number] from a list.
 
@@ -89,8 +93,8 @@ def id_parse(ids, db, endpoint):
     :type ids: list (of str)
     :arg db: database name to parse on
     :type db: str
-    :arg endpoint: endpoint to parse on
-    :type endpoint: str
+    :arg id_type: data type to parse on
+    :type id_type: str
 
     """
     import re
@@ -124,10 +128,30 @@ def id_parse(ids, db, endpoint):
             msg = 'Invalid numerical ID: {0:s}'.format(id)
             raise ValueError(400, msg)
 
-        if database.lower() == db_tag and datatype.lower() == endpoint:
+        if database.lower() == db_tag and datatype.lower() == id_type:
             numeric_ids.append(int(id_num))
 
     return numeric_ids
+
+
+def set_id(ids, db, endpoint, options):
+    """Return a payload parameter for the requested id tag."""
+    if endpoint == 'loc':
+
+        # add additional database to datatype mappings here
+        xmap = {'pbdb': ['col', 'coll_id'],
+                'neotoma': ['dst', 'datasetid']}
+
+        try:
+            id_numbers = id_parse(ids=ids, db=db, id_type=xmap[db][0])
+
+        except ValueError as err:
+            raise ValueError(err.args[0], err.args[1])
+
+        if not id_numbers:
+            options.update(run=False)
+
+        return {xmap[db][1]: id_numbers}
 
 
 def parse(req_args, options, db, endpoint):
@@ -170,6 +194,17 @@ def parse(req_args, options, db, endpoint):
 
     payload.update(limit=options.get('limit'))
 
+    if 'idlist' in req_args.keys():
+
+        try:
+            payload.update(set_id(ids=idlist,
+                                  db=db,
+                                  endpoint=endpoint,
+                                  options=options))
+
+        except ValueError as err:
+            raise ValueError(err.args[0], err.args[1])
+
     if 'taxon' in req_args.keys():
 
         try:
@@ -196,5 +231,8 @@ def parse(req_args, options, db, endpoint):
             raise ValueError(400, msg)
         else:
             payload.update(offset=req_args.get('offset'))
+
+    # !!! geography searching as yet unwritten
+    #  if 'bbox' in req_args.keys():
 
     return payload
