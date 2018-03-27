@@ -1,17 +1,20 @@
 """Custom decoder for the Paleobiology Database response."""
 
 
-def occurrences(resp_json, return_obj, options):
-    """
-    Extract necessary data from the subquery.
+def locales(resp_json, return_obj, options):
+    """Extract locale data from the subquery."""
+    from ..elc import ages
 
-    :arg db: Database name
-    :type db: str
-    :arg resp_json: Database subquery responce object
-    :type resp_json: dict
-    :arg return_obj: List of data objects to be appended and returned
-    :type return_obj: list (of dicts)
-    """
+    factor = ages.set_age_scaler(options=options, db='pbdb')
+
+    for rec in resp_json.get('records', []):
+
+        data = dict()
+
+
+
+def occurrences(resp_json, return_obj, options):
+    """Extract occurrence data from the subquery."""
     from ..elc import ages
 
     factor = ages.set_age_scaler(options=options, db='pbdb')

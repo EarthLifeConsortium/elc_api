@@ -160,7 +160,7 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
                                         return_obj=return_obj,
                                         options=options,
                                         db=db,
-                                        endpoint='occ')
+                                        endpoint='loc')
 
     # Return composite data structure to client
 
