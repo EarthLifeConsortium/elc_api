@@ -10,6 +10,7 @@ def locales(resp_json, return_obj, options):
     for rec in resp_json.get('records', []):
 
         data = dict()
+        data.update(occ_id='pbdb:{0:s}'.format(rec.get('oid', 'occ:0')))
 
 
 

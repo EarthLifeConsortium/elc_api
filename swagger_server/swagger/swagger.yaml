@@ -658,9 +658,6 @@ definitions:
         type: "number"
         format: "double"
         description: "Locale longitude"
-      geog:
-        type: "string"
-        description: "Geographic coordinate type as modern or paleo"
       locale_name:
         type: "string"
         description: "Dataset or collection name"
@@ -674,20 +671,21 @@ definitions:
       max_age:
         type: "number"
         format: "Oldest possible age of the locale"
-      age_units:
-        type: "string"
-        description: "Time units (yr, ka or  ma)"
-      age_basis:
-        type: "string"
-        description: "Scientific basis of age determination"
       locale_id:
         type: "string"
-        description: "DB specific index from dataset (neot) or coll (pbdb)"
+        description: "DB specific index from dataset (neotoma) or coll (pbdb)"
+      site_id:
+        type: "string"
+        description: "Site identifier if available for the locale"
+      occ_id:
+        type: "string"
+        description: " "
+      doi:
+        type: "string"
+        description: "Unique DOI for locale if available"
       # occurences:
         # type: "array"
         # description: "List of occurences found within this locale (PBDB only)"
-        # items:
-          # type: "string"
   # assemblage_inner_table:
     # properties:
       # taxon:
