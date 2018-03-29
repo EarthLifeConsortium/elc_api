@@ -586,18 +586,18 @@ definitions:
       locale_id:
         type: "string"
         description: "Generated ID string reflection a dataset or collection"
+      taxon_id:
+        type: "string"
+        description: "Unique taxonomic ID"
+      taxon:
+        type: "string"
+        description: "Taxonomic name"
       data_type:
         type: "string"
         description: "Paleontological type"
       source:
         type: "string"
         description: "Sub-database of literature reference"
-      taxon:
-        type: "string"
-        description: "Taxonomic name"
-      taxon_id:
-        type: "string"
-        description: "Unique taxonomic ID"
       max_age:
         type: "number"
         format: "double"
@@ -650,6 +650,31 @@ definitions:
   locale:
     type: "object"
     properties:
+      locale_id:
+        type: "string"
+        description: "DB specific index from dataset (neotoma) or coll (pbdb)"
+      locale_name:
+        type: "string"
+        description: "Dataset or collection name"
+      doi:
+        type: "string"
+        description: "Unique DOI for locale if available"
+      dataset_type:
+        type: "string"
+        description: "Type of paleoecological or paleontological data"
+      site_id:
+        type: "string"
+        description: "Site identifier if available for the locale"
+      occ_id:
+        type: "string"
+        description: " "
+      min_age:
+        type: "number"
+        format: "double"
+        description: "Youngest possible age of the locale"
+      max_age:
+        type: "number"
+        format: "Oldest possible age of the locale"
       lat:
         type: "number"
         format: "double"
@@ -658,31 +683,6 @@ definitions:
         type: "number"
         format: "double"
         description: "Locale longitude"
-      locale_name:
-        type: "string"
-        description: "Dataset or collection name"
-      dataset_type:
-        type: "string"
-        description: "Type of paleoecological or paleontological data"
-      min_age:
-        type: "number"
-        format: "double"
-        description: "Youngest possible age of the locale"
-      max_age:
-        type: "number"
-        format: "Oldest possible age of the locale"
-      locale_id:
-        type: "string"
-        description: "DB specific index from dataset (neotoma) or coll (pbdb)"
-      site_id:
-        type: "string"
-        description: "Site identifier if available for the locale"
-      occ_id:
-        type: "string"
-        description: " "
-      doi:
-        type: "string"
-        description: "Unique DOI for locale if available"
       # occurences:
         # type: "array"
         # description: "List of occurences found within this locale (PBDB only)"
