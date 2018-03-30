@@ -212,7 +212,7 @@ def parse(req_args, options, db, endpoint):
 
         try:
             payload.update(taxa.set_taxon(taxon=req_args.get('taxon'),
-                                          subtax=options.get('subtax'),
+                                          subtax=options.get('includelower'),
                                           db=db))
         except ValueError as err:
             raise ValueError(err.args[0], err.args[1])
