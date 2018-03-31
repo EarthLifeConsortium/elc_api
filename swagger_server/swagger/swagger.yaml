@@ -683,6 +683,9 @@ definitions:
         type: "number"
         format: "double"
         description: "Locale longitude"
+      source:
+        type: "string"
+        description: "Sub-database of literature reference"
       # occurences:
         # type: "array"
         # description: "List of occurences found within this locale (PBDB only)"
