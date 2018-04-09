@@ -16,7 +16,7 @@ def locales(resp_json, return_obj, options):
 
         data.update(locale_id='pbdb:{0:s}'.format(rec.get('oid', 'col:0')))
         data.update(doi=None)
-        data.update(locale_name=rec.get(
+        #  data.update(locale_name=rec.get(
 
         data.update(source='pbdb:{0:s}'.format(rec.get('rid', 'ref:0')))
         #  data.update(locale_name=rec.get('nam'))
