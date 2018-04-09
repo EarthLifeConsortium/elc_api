@@ -7,19 +7,24 @@ def locales(resp_json, return_obj, options):
 
     factor = ages.set_age_scaler(options=options, db='pbdb')
 
+    #  import pdb; pdb.set_trace()
+
+
     for rec in resp_json.get('records', []):
 
         data = dict()
 
-        data.update(locle_id='pbdb:{0:s}'.format(rec.get('oid', 'col:0')))
-        data.update(locale_name=rec.get('nam'))
-        data.update(doi=
-
-        data.update(max_age=round(rec.get('eag') / factor, 4))
-        data.update(min_age=round(rec.get('lag') / factor, 4))
+        data.update(locale_id='pbdb:{0:s}'.format(rec.get('oid', 'col:0')))
+        data.update(doi=None)
+        data.update(locale_name=rec.get(
 
         data.update(source='pbdb:{0:s}'.format(rec.get('rid', 'ref:0')))
-        data.update(data_type=rec.get('cct', 'general faunal/floral'))
+        #  data.update(locale_name=rec.get('nam'))
+
+        #  data.update(max_age=round(rec.get('eag') / factor, 4))
+        #  data.update(min_age=round(rec.get('lag') / factor, 4))
+
+        #  data.update(data_type=rec.get('cct', 'general faunal/floral'))
 
         # !!! geog stuff here
 

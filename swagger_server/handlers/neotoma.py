@@ -1,6 +1,28 @@
 """Custom decoder for Neotoma Paleoecology Database response."""
 
 
+def locales(resp_json, return_obj, options):
+    """Extract locale data from the subquery."""
+    from ..elc import ages
+
+    factor = ages.set_age_scaler(options=options, db='pbdb')
+
+    for rec in resp_json.get('data', []):
+
+        for dataset in rec.get('dataset'):
+            data = dict()
+
+            data.update(locale_id='neot:dst:{0:d}'
+                        .format(dataset.get('datasetid', 0)))
+            data.update(doi=dataset.get('doi'))
+
+            data.update(source=dataset.get('database'))
+
+            return_obj.append(data)
+
+    return return_obj
+
+
 def occurrences(resp_json, return_obj, options):
     """
     Extract necessary data from the subquery.

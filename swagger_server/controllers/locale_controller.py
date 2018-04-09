@@ -19,8 +19,6 @@ from time import time
 from flask import jsonify
 import requests
 
-import pdb
-
 
 def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
         show=None, output=None):
@@ -65,6 +63,7 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
     for db in config.db_list():
 
         t0 = time()
+        options.update(run=True)
 
         # Configure parameter payload for api subquery
 
@@ -80,7 +79,8 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
                                      detail=err.args[1],
                                      type='about:blank')
 
-        # skip this database if no ids specified
+        # skip this database if no ids specified (run option is False)
+
         if not options.get('run'):
             continue
 

@@ -78,10 +78,6 @@ def set_options(req_args, endpoint):
                           int(config.get('default', 'limit')))
     options.update(limit=int(choice))
 
-    # Run this database unless specified later
-    # A particular database could be hard switched here
-    options.update(run=True)
-
     return options
 
 
@@ -143,6 +139,10 @@ def set_id(ids, db, endpoint, options):
         # add additional database to datatype mappings here
         xmap = {'pbdb': ['col', 'coll_id'],
                 'neotoma': ['dst', 'datasetid']}
+
+        #  if db == 'pbdb':
+            #  import pdb
+            #  pdb.set_trace()
 
         try:
             id_numbers = id_parse(ids=ids, db=db, id_type=xmap[db][0])

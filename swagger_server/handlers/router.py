@@ -27,7 +27,7 @@ def decode_occs(resp_json, return_obj, options, db, endpoint):
         if endpoint == 'occ':
             return pbdb.occurrences(resp_json, return_obj, options)
         if endpoint == 'loc':
-            return neotoma.locales(resp_json, return_obj, options)
+            return pbdb.locales(resp_json, return_obj, options)
         if endpoint == 'ref':
             return pbdb.references(resp_json, return_obj, options)
 
