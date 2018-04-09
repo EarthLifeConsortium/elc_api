@@ -16,105 +16,6 @@ produces:
 - "text/csv"
 - "text/plain"
 paths:
-  # /age:
-    # get:
-      # tags:
-      # - "Age_Basis"
-      # summary: "Generation method of age estimates for the occurrence or locale"
-      # description: "Samples often have assigned temporal uncertainty\
-        # \ estimates, whether from C-14 dates, stratigraphic uncertainty, or\
-        # \ other dating techniques. This endpoint returns the basis for the age\
-        # \ uncertainty estimate"
-      # operationId: "age"
-      # produces:
-      # - "application/json"
-      # parameters:
-      # - name: "occid"
-        # in: "query"
-        # description: "Unique numeric ID, or vector of IDs for occurrences"
-        # required: false
-        # type: "integer"
-        # format: "int32"
-      # - name: "siteid"
-        # in: "query"
-        # description: "Unique numeric ID, or vector of IDs for sites"
-        # required: false
-        # type: "integer"
-        # format: "int32"
-      # responses:
-        # 200:
-          # description: "age basis response"
-          # schema:
-            # type: "array"
-            # items:
-              # $ref: "#/definitions/agebasis"
-        # default:
-          # description: "unexpected error"
-          # schema:
-            # $ref: "#/definitions/errorModel"
-      # x-tags:
-      # - tag: "Age_Basis"
-      # x-swagger-router-controller: "swagger_server.controllers.age_basis_controller"
-  # /grid:
-    # get:
-      # tags:
-      # - "Grid_Assemblage"
-      # summary: "Gridded assemblage data"
-      # description: "Returns assemblage data at pre-built grid sizes for\
-        # \ faster returns"
-      # operationId: "grid"
-      # produces:
-      # - "application/json"
-      # parameters:
-      # - name: "agebound"
-        # in: "query"
-        # description: "netsi"
-        # required: false
-        # type: "string"
-      # - name: "agebin"
-        # in: "query"
-        # description: "netsi"
-        # required: false
-        # type: "string"
-      # - name: "ageunit"
-        # in: "query"
-        # description: "netsi"
-        # required: false
-        # type: "string"
-      # - name: "bbox"
-        # in: "query"
-        # description: "netsi"
-        # required: false
-        # type: "string"
-      # - name: "spatialbin"
-        # in: "query"
-        # description: "netsi"
-        # required: false
-        # type: "string"
-      # - name: "varunit"
-        # in: "query"
-        # description: "netsi"
-        # required: false
-        # type: "string"
-      # - name: "presence"
-        # in: "query"
-        # description: "netsi"
-        # required: false
-        # type: "boolean"
-      # responses:
-        # 200:
-          # description: "grid response"
-          # schema:
-            # type: "array"
-            # items:
-              # $ref: "#/definitions/assemblage"
-        # default:
-          # description: "unexpected error"
-          # schema:
-            # $ref: "#/definitions/errorModel"
-      # x-tags:
-      # - tag: "Grid_Assemblage"
-      # x-swagger-router-controller: "swagger_server.controllers.grid_assemblage_controller"
   /occ:
     get:
       tags:
@@ -614,10 +515,6 @@ definitions:
         type: "number"
         format: "double"
         description: "Occurrence longitude in decimal degrees"
-  # assemblage:
-    # type: "array"
-    # items:
-      # $ref: "#/definitions/assemblage_inner"
   errorModel:
     type: "object"
     required:
@@ -689,39 +586,3 @@ definitions:
       # occurences:
         # type: "array"
         # description: "List of occurences found within this locale (PBDB only)"
-  # assemblage_inner_table:
-    # properties:
-      # taxon:
-        # type: "string"
-        # description: "netsi"
-      # element:
-        # type: "string"
-        # description: "netsi"
-      # value:
-        # type: "integer"
-        # format: "int32"
-        # description: "netsi"
-    # description: "netsi"
-  # assemblage_inner:
-    # properties:
-      # sp_grid:
-        # type: "array"
-        # description: "netsi"
-        # items:
-          # type: "string"
-      # tm_grid:
-        # type: "array"
-        # description: "netsi"
-        # items:
-          # type: "string"
-      # var_unit:
-        # type: "string"
-        # description: "netsi"
-      # site_count:
-        # type: "integer"
-        # format: "int32"
-        # description: "netsi"
-      # table:
-        # type: "array"
-        # items:
-          # $ref: "#/definitions/assemblage_inner_table"
