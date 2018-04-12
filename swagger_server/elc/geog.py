@@ -7,8 +7,15 @@ def get_geog(coords, age, options):
 
     modern = [x.strip() for x in coords.split(',')]
     if '' in modern or len(modern) != 2:
-        msg = 'Incorrectly formatted parameter pair: coords'
+        msg = 'Second parameter not found in pair: coords'
         raise ValueError(400, msg)
+
+    for value in modern:
+        try:
+            int(value)
+        except ValueError as err:
+            msg = 'Non-numeric in parameter pair: coords'
+            raise ValueError(400, msg)
 
     if any(x in age for x in [',', '.']):
         msg = 'Single integer or geologic name required: age'
