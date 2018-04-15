@@ -133,4 +133,3 @@ def references(resp, ret_obj, format):
 
     # End subroutine: parse_pbdb_resp
     return len(resp_json['records'])
-

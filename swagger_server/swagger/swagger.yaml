@@ -180,7 +180,7 @@ paths:
         in: "query"
         description: "Unique numeric ID, or vector of IDs for dataset (dst) or \
           \ collection (col) in the format of [database]:[datatype]:[numeric]"
-        required: true
+        required: false
         type: "string"
       - name: "bbox"
         in: "query"
@@ -210,6 +210,22 @@ paths:
           \ box"
         required: false
         type: "string"
+      - name: "limit"
+        in: "query"
+        description: "Limit the number of records in the response for large\
+          \ queries"
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "offset"
+        in: "query"
+        description: "Begin the response from a designated point within the\
+          \ larger query. In this way, <i>limit</i> and <i>offset</i> can be\
+          \ used to produce serial queries to the API to avoid issues with\
+          \ larger responses"
+        required: false
+        type: "integer"
+        format: "int32"
       - name: "show"
         in: "query"
         description: "Set to idx for locale id's only. Set to poll for\

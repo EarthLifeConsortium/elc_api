@@ -129,4 +129,3 @@ def references(resp, ret_obj, format):
 
     # End subroutine: parse_neot_resp
     return len(resp_json['data'])
-

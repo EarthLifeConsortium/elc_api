@@ -88,7 +88,7 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
 
         url_path = ''.join([config.get('resource_api', db),
                             config.get('db_loc_endpt', db)])
-        
+
         try:
             resp = requests.get(url_path,
                                 params=payload,

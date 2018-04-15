@@ -140,10 +140,6 @@ def set_id(ids, db, endpoint, options):
         xmap = {'pbdb': ['col', 'coll_id'],
                 'neotoma': ['dst', 'datasetid']}
 
-        #  if db == 'pbdb':
-            #  import pdb
-            #  pdb.set_trace()
-
         try:
             id_numbers = id_parse(ids=ids, db=db, id_type=xmap[db][0])
 
@@ -167,7 +163,7 @@ def parse(req_args, options, db, endpoint):
     spec.update(occ=['bbox', 'agerange', 'ageunits', 'timerule', 'taxon',
                      'includelower', 'limit', 'offset', 'show', 'output'])
     spec.update(loc=['idlist', 'bbox', 'agerange', 'ageunits', 'timerule',
-                     'offset', 'show'])
+                     'limit', 'offset', 'show', 'output'])
     spec.update(tax=['taxon', 'includelower', 'hierarchy'])
     spec.update(ref=['idnumbers', 'format'])
     spec.update(timebound=['agerange', 'ageunits'])
