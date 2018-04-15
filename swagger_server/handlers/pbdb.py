@@ -16,17 +16,22 @@ def locales(resp_json, return_obj, options):
 
         data.update(locale_id='pbdb:{0:s}'.format(rec.get('oid', 'col:0')))
         data.update(doi=None)
-        #  data.update(locale_name=rec.get(
 
         data.update(source='pbdb:{0:s}'.format(rec.get('rid', 'ref:0')))
-        #  data.update(locale_name=rec.get('nam'))
+        data.update(locale_name=rec.get('nam'))
+        data.update(data_type=rec.get('cct', 'general faunal/floral'))
+        data.update(occurrences_count=rec.get('noc'))
+        data.update(site_id=None)
 
-        #  data.update(max_age=round(rec.get('eag') / factor, 4))
-        #  data.update(min_age=round(rec.get('lag') / factor, 4))
+        data.update(max_age=round(rec.get('eag') / factor, 4))
+        data.update(min_age=round(rec.get('lag') / factor, 4))
 
-        #  data.update(data_type=rec.get('cct', 'general faunal/floral'))
-
-        # !!! geog stuff here
+        if options.get('geog') == 'paleo':
+            data.update(lat=rec.get('pla'))
+            data.update(lon=rec.get('pln'))
+        else:
+            data.update(lat=rec.get('lat'))
+            data.update(lon=rec.get('lng'))
 
         return_obj.append(data)
 

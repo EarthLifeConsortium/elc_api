@@ -17,6 +17,15 @@ def locales(resp_json, return_obj, options):
             data.update(doi=dataset.get('doi'))
 
             data.update(source=dataset.get('database'))
+            data.update(locale_name=rec.get('site')['sitename'])
+            data.update(data_type=dataset.get('datasettype'))
+            data.update(occurrences_count=None)
+            data.update(site_id='neot:sit:{0:d}'
+                        .format(rec.get('site')['siteid'], 0))
+
+            # age parse
+
+            # geog parse
 
             return_obj.append(data)
 
