@@ -167,6 +167,6 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
     if options.get('show') == 'poll':
         return jsonify(desc_obj)
     if options.get('show') == 'idx':
-        return jsonify(aux.get_id_numbers(data=return_obj, endpoint='occ'))
+        return jsonify(aux.get_id_numbers(data=return_obj, endpoint='locale'))
     else:
         return jsonify(metadata=desc_obj, records=return_obj)

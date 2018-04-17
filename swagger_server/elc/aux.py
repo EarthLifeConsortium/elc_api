@@ -21,13 +21,13 @@ def set_db_special(db):
 
 def get_id_numbers(data, endpoint):
     """Return a list of the specified endpoint's primary id numbers."""
-    ids = list()
+    ids = set()
     id_field = '{0:s}_id'.format(endpoint)
 
     for rec in data:
-        ids.append(rec.get(id_field))
+        ids.add(rec.get(id_field))
 
-    return ids
+    return list(ids)
 
 
 def build_meta(ageunits=None, coords=None):
@@ -45,6 +45,8 @@ def build_meta_sub(source, t0, sub_tag, data=None):
     """Generate database specific metadata object for the return."""
     from time import time
     from ..elc import config
+
+    import pdb; pdb.set_trace()
 
     if data:
         if type(data) is list:
