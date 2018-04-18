@@ -41,21 +41,16 @@ def build_meta(ageunits=None, coords=None):
             'coordinates': coords}
 
 
-def build_meta_sub(source, t0, sub_tag, data=None):
+def build_meta_sub(source, t0, sub_tag, options, data=None):
     """Generate database specific metadata object for the return."""
     from time import time
-    from ..elc import config
 
-    import pdb; pdb.set_trace()
-
-    if data:
-        if type(data) is list:
-            rec_cnt = len(data)
-        else:
-            rec_cnt = len(data.get(config.get('db_rec_obj', sub_tag)))
+    if data and type(data) is list:
+        rec_count = len(data) - options.get('tot_rec_count')
+        options.update(tot_rec_count=len(data))
     else:
-        rec_cnt = 1
+        rec_count = 1
 
     return {sub_tag: {'subquery': source,
                       'response_time': round(time()-t0, 3),
-                      'record_count': rec_cnt}}
+                      'record_count': rec_count}}

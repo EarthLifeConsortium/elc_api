@@ -141,16 +141,6 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
                                      detail=msg,
                                      type='about:blank')
 
-        # Build returned metadata object
-
-        desc_obj.update(aux.build_meta(ageunits=options.get('ageunits'),
-                                       coords=options.get('coords')))
-
-        desc_obj.update(aux.build_meta_sub(data=resp_json,
-                                           source=resp.url,
-                                           t0=t0,
-                                           sub_tag=db))
-
         # Parse database response
 
         return_obj = router.decode_occs(resp_json=resp_json,
@@ -158,6 +148,17 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
                                         options=options,
                                         db=db,
                                         endpoint='occ')
+
+        # Build returned metadata object
+
+        desc_obj.update(aux.build_meta(ageunits=options.get('ageunits'),
+                                       coords=options.get('coords')))
+
+        desc_obj.update(aux.build_meta_sub(data=return_obj,
+                                           source=resp.url,
+                                           t0=t0,
+                                           sub_tag=db,
+                                           options=options))
 
     # Return composite data structure to client
 

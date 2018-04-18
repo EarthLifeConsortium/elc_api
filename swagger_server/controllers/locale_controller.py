@@ -144,16 +144,6 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
                                      detail=msg,
                                      type='about:blank')
 
-        # Build returned metadata object
-
-        desc_obj.update(aux.build_meta(ageunits=options.get('ageunits'),
-                                       coords=options.get('coords')))
-
-        desc_obj.update(aux.build_meta_sub(data=resp_json,
-                                           source=resp.url,
-                                           t0=t0,
-                                           sub_tag=db))
-
         # Parse database response
 
         return_obj = router.decode_occs(resp_json=resp_json,
@@ -161,6 +151,16 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
                                         options=options,
                                         db=db,
                                         endpoint='loc')
+
+        # Build returned metadata object
+
+        desc_obj.update(aux.build_meta(ageunits=options.get('ageunits'),
+                                       coords=options.get('coords')))
+
+        desc_obj.update(aux.build_meta_sub(data=return_obj,
+                                           source=resp.url,
+                                           t0=t0,
+                                           sub_tag=db))
 
     # Return composite data structure to client
 

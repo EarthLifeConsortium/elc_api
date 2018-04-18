@@ -78,6 +78,9 @@ def set_options(req_args, endpoint):
                           int(config.get('default', 'limit')))
     options.update(limit=int(choice))
 
+    # Mutable parameters
+    options.update(tot_rec_count=0)
+
     return options
 
 
