@@ -63,7 +63,7 @@ def set_options(req_args, endpoint):
             raise ValueError(400, msg)
     else:
         if config.get('default', 'coordinates') in spec.get('geog'):
-            options.update(coords=config.get('default', 'coordinates'))
+            options.update(geog=config.get('default', 'coordinates'))
         else:
             msg = 'Config: coords not in {0:s}'.format(str(spec.get('geog')))
             raise ValueError(500, msg)

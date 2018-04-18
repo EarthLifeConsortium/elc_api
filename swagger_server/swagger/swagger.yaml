@@ -416,7 +416,8 @@ paths:
         type: "string"
       - name: "synonyms"
         in: "query"
-        description: "Numerical age up to ma 580 or named geologic age."
+        description: "Include taxonomic synonyms in response. A boolean,\
+          \ default is True"
         required: false
         type: "boolean"
       responses:

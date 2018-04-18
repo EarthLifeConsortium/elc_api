@@ -75,7 +75,7 @@ def subtaxa(taxon=None, synonyms=True):
 
     # Build returned metadata object
 
-    desc_obj.update(aux.build_meta())
+    desc_obj.update(aux.build_meta(options))
 
     desc_obj.update(aux.build_meta_sub(source=ext_provider,
                                        t0=t0,
