@@ -80,6 +80,7 @@ def subtaxa(taxon=None, synonyms=True):
     desc_obj.update(aux.build_meta_sub(source=ext_provider,
                                        t0=t0,
                                        sub_tag='subtaxa',
+                                       options=options,
                                        data=lower_taxa))
 
     # Return data structure to client
@@ -149,7 +150,8 @@ def paleocoords(coords=None, age=None, ageunits=None):
 
     desc_obj.update(aux.build_meta_sub(source=ext_provider,
                                        t0=t0,
-                                       sub_tag='paleo_coord'))
+                                       sub_tag='paleo_coord',
+                                       options=options))
 
     # Return data structure to client
 
@@ -220,7 +222,8 @@ def timebound(agerange=None, ageunits=None):
 
     desc_obj.update(aux.build_meta_sub(source=ext_provider,
                                        t0=t0,
-                                       sub_tag='geo_age'))
+                                       sub_tag='geo_age',
+                                       options=options))
 
     # Return data structure to client
 
