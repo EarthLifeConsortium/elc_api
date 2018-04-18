@@ -65,6 +65,15 @@ paths:
           \ query. Use includelower if all lower taxa are desired"
         required: false
         type: "string"
+      - name: "coordinates"
+        in: "query"
+        description: "Specify modern or paleo geographic coordinates for the\
+          \ data return. Query parameters must still be modern day coordinates\
+          \ If paleocoordinates are not available in the database response,\
+          \ The modern coordinates will be converted using the Gplates model.\
+          \ Allowable parameters are 'modern' (default) or 'paleo'"
+        required: false
+        type: "string"
       - name: "includelower"
         in: "query"
         description: "Retrieve lower taxa. A boolean. If True, all species\
@@ -208,6 +217,15 @@ paths:
           \ occurrences temporal uncertainty must be within the bounding box;\
           \ overlap, any portion of an occurrence may be withing the bounding\
           \ box"
+        required: false
+        type: "string"
+      - name: "coordinates"
+        in: "query"
+        description: "Specify modern or paleo geographic coordinates for the\
+          \ data return. Query parameters must still be modern day coordinates\
+          \ If paleocoordinates are not available in the database response,\
+          \ The modern coordinates will be converted using the Gplates model.\
+          \ Allowable parameters are 'modern' (default) or 'paleo'"
         required: false
         type: "string"
       - name: "limit"

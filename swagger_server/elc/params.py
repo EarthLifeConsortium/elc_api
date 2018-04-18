@@ -55,9 +55,9 @@ def set_options(req_args, endpoint):
             raise ValueError(500, msg)
 
     # Geographic coodinates type
-    if 'geog' in req_args.keys():
-        if req_args.get('geog').lower() in spec.get('geog'):
-            options.update(geog=req_args.get('geog'))
+    if 'coordinates' in req_args.keys():
+        if req_args.get('coordinates').lower() in spec.get('geog'):
+            options.update(geog=req_args.get('coordinates').lower())
         else:
             msg = 'Allowable coordinates: {0:s}'.format(str(spec.get('geog')))
             raise ValueError(400, msg)
@@ -76,7 +76,7 @@ def set_options(req_args, endpoint):
     # Limit records in the query
     choice = req_args.get('limit',
                           int(config.get('default', 'limit')))
-    options.update(limit=int(choice))
+    options.update(limit=abs(int(choice)))
 
     # Mutable parameters
     options.update(tot_rec_count=0)
@@ -164,9 +164,10 @@ def parse(req_args, options, db, endpoint):
 
     spec = dict()
     spec.update(occ=['bbox', 'agerange', 'ageunits', 'timerule', 'taxon',
-                     'includelower', 'limit', 'offset', 'show', 'output'])
+                     'includelower', 'coordinates', 'limit', 'offset',
+                     'show', 'output'])
     spec.update(loc=['idlist', 'bbox', 'agerange', 'ageunits', 'timerule',
-                     'limit', 'offset', 'show', 'output'])
+                     'coordinates', 'limit', 'offset', 'show', 'output'])
     spec.update(tax=['taxon', 'includelower', 'hierarchy'])
     spec.update(ref=['idnumbers', 'format'])
     spec.update(timebound=['agerange', 'ageunits'])

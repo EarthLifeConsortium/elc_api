@@ -21,7 +21,8 @@ import requests
 
 
 def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
-        includelower=None, limit=None, offset=None, show=None, output=None):
+        includelower=None, paleocoords=None, limit=None, offset=None,
+        show=None, output=None):
     """
     Fossil occurrences in a specific place and time.
 
