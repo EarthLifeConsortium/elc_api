@@ -21,7 +21,7 @@ import requests
 
 
 def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
-        show=None, output=None):
+        limit=None, offset=None, show=None, output=None):
     """
     Return locale identifiers from Neotoma and PBDB.
 
