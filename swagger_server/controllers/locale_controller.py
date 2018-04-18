@@ -154,8 +154,7 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
 
         # Build returned metadata object
 
-        desc_obj.update(aux.build_meta(ageunits=options.get('ageunits'),
-                                       coords=options.get('coords')))
+        desc_obj.update(aux.build_meta(options))
 
         desc_obj.update(aux.build_meta_sub(data=return_obj,
                                            source=resp.url,

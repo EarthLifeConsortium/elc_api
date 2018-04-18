@@ -30,15 +30,15 @@ def get_id_numbers(data, endpoint):
     return list(ids)
 
 
-def build_meta(ageunits=None, coords=None):
+def build_meta(options):
     """Generate metadata for the composite return."""
     from ..elc import config, aux
 
     return {'license': config.get('default', 'license'),
             'retrieval_timestamp': aux.set_timestamp(),
             'source': 'http://earthlifeconsortium.org',
-            'age_units': ageunits,
-            'coordinates': coords}
+            'age_units': options.get('ageunits'),
+            'coordinates': options.get('geog')}
 
 
 def build_meta_sub(source, t0, sub_tag, options, data=None):

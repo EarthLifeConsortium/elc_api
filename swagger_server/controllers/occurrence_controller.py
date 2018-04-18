@@ -152,8 +152,7 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
 
         # Build returned metadata object
 
-        desc_obj.update(aux.build_meta(ageunits=options.get('ageunits'),
-                                       coords=options.get('coords')))
+        desc_obj.update(aux.build_meta(options))
 
         desc_obj.update(aux.build_meta_sub(data=return_obj,
                                            source=resp.url,

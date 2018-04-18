@@ -145,8 +145,7 @@ def paleocoords(coords=None, age=None, ageunits=None):
 
     # Build returned metadata object
 
-    desc_obj.update(aux.build_meta(ageunits=options.get('ageunits'),
-                                   coords=options.get('coords')))
+    desc_obj.update(aux.build_meta(options))
 
     desc_obj.update(aux.build_meta_sub(source=ext_provider,
                                        t0=t0,
@@ -218,7 +217,7 @@ def timebound(agerange=None, ageunits=None):
 
     # Build returned metadata object
 
-    desc_obj.update(aux.build_meta(ageunits=options.get('ageunits')))
+    desc_obj.update(aux.build_meta(options))
 
     desc_obj.update(aux.build_meta_sub(source=ext_provider,
                                        t0=t0,
