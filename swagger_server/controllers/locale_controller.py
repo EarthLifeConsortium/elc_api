@@ -160,7 +160,8 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
         desc_obj.update(aux.build_meta_sub(data=return_obj,
                                            source=resp.url,
                                            t0=t0,
-                                           sub_tag=db))
+                                           sub_tag=db,
+                                           options=options))
 
     # Return composite data structure to client
 
