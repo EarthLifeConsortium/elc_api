@@ -12,7 +12,7 @@ def get_geog(coords, age, options):
 
     for value in modern:
         try:
-            int(value)
+            float(value)
         except ValueError as err:
             msg = 'Non-numeric in parameter pair: coords'
             raise ValueError(400, msg)
@@ -34,8 +34,8 @@ def get_geog(coords, age, options):
     else:
         age = round(int(age) * factor)
 
-    paleo, geog_ref = resolve_geog(lat=int(modern[0]),
-                                   lon=int(modern[1]),
+    paleo, geog_ref = resolve_geog(lat=float(modern[0]),
+                                   lon=float(modern[1]),
                                    mean_age=age)
 
     paleo = [round(x,4) for x in paleo]
