@@ -33,7 +33,7 @@ def subtaxa(taxon=None, synonyms=True):
     """
     t0 = time()
     desc_obj = dict()
-    ext_provider = '{0:s} {1:s} synonyms (via PBDB)'.format(
+    sub_query = '{0:s} {1:s} synonyms (PBDB systematics)'.format(
         taxon.capitalize(), 'including' if synonyms else 'excluding')
 
     # Set runtime options
@@ -77,7 +77,7 @@ def subtaxa(taxon=None, synonyms=True):
 
     desc_obj.update(aux.build_meta(options))
 
-    desc_obj.update(aux.build_meta_sub(source=ext_provider,
+    desc_obj.update(aux.build_meta_sub(source=sub_query,
                                        t0=t0,
                                        sub_tag='subtaxa',
                                        options=options,
@@ -102,7 +102,6 @@ def paleocoords(coords=None, age=None, ageunits=None):
     """
     t0 = time()
     desc_obj = dict()
-    ext_provider = 'EarthByte GPlates (Wright et al. 2013) via Macrostrat'
 
     # Set runtime options
 
@@ -133,9 +132,9 @@ def paleocoords(coords=None, age=None, ageunits=None):
     # Determine paleocoordinates and resolve geologic age if necessary
 
     try:
-        paleo, modern = geog.get_geog(coords=coords,
-                                      age=age,
-                                      options=options)
+        paleo, modern, geog_ref = geog.get_geog(coords=coords,
+                                                age=age,
+                                                options=options)
 
     except ValueError as err:
         return connexion.problem(status=err.args[0],
@@ -147,7 +146,7 @@ def paleocoords(coords=None, age=None, ageunits=None):
 
     desc_obj.update(aux.build_meta(options))
 
-    desc_obj.update(aux.build_meta_sub(source=ext_provider,
+    desc_obj.update(aux.build_meta_sub(source=geog_ref,
                                        t0=t0,
                                        sub_tag='paleo_coord',
                                        options=options))
@@ -175,7 +174,6 @@ def timebound(agerange=None, ageunits=None):
     """
     t0 = time()
     desc_obj = dict()
-    # ext_provider = 'International Commission on Stratigraphy (2013) via PBDB'
 
     # Set runtime options
 

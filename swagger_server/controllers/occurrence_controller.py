@@ -51,8 +51,6 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
     return_obj = list()
     desc_obj = dict()
 
-    #  import pdb; pdb.set_trace()
-
     # Set runtime options
 
     try:

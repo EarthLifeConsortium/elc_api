@@ -34,12 +34,14 @@ def get_geog(coords, age, options):
     else:
         age = round(int(age) * factor)
 
-    paleo = resolve_geog(lat=int(modern[0]), lon=int(modern[1]), mean_age=age)
+    paleo, geog_ref = resolve_geog(lat=int(modern[0]),
+                                   lon=int(modern[1]),
+                                   mean_age=age)
 
     paleo = [round(x,4) for x in paleo]
     modern = [round(float(x),4) for x in modern]
 
-    return paleo, modern
+    return paleo, modern, geog_ref
 
 
 def resolve_geog(lat, lon, mean_age):
@@ -61,7 +63,9 @@ def resolve_geog(lat, lon, mean_age):
         raise ValueError(r.status_code, msg)
 
     if r.json().get('features')[0]['geometry']:
-        return r.json().get('features')[0]['geometry']['coordinates']
+        coords = r.json().get('features')[0]['geometry']['coordinates']
+        geog_ref = r.json().get('properties')['model']['citation']
+        return coords, geog_ref
     else:
         msg = 'Unavailable point or inalid WGS84 coords (-180 to 180 degrees)'
         raise ValueError(400, msg)
