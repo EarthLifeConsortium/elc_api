@@ -116,11 +116,11 @@ def id_parse(ids, db, id_type):
             msg = 'Incorrectly formatted ID: {0:s}'.format(id)
             raise ValueError(400, msg)
 
-        if database not in spec['dbase']:
+        if database.lower() not in spec['dbase']:
             msg = 'Unknown database: {0:s}'.format(id)
             raise ValueError(400, msg)
 
-        if datatype not in spec['dtype']:
+        if datatype.lower() not in spec['dtype']:
             msg = 'Unknown data type: {0:s}'.format(id)
             raise ValueError(400, msg)
 
