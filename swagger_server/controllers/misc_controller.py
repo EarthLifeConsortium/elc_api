@@ -175,7 +175,7 @@ def timebound(agerange=None, ageunits=None):
     """
     t0 = time()
     desc_obj = dict()
-    ext_provider = 'International Commission on Stratigraphy (2013) via PBDB'
+    #ext_provider = 'International Commission on Stratigraphy (2013) via PBDB'
 
     # Set runtime options
 
@@ -206,8 +206,9 @@ def timebound(agerange=None, ageunits=None):
     # Determine time bounds and resolve geologic age if necessary
 
     try:
-        early_age, late_age = ages.get_age(age_range=agerange,
-                                           options=options)
+        early_age, late_age, \
+        col_hex, age_ref = ages.get_age(age_range=agerange,
+                                        options=options)
 
     except ValueError as err:
         return connexion.problem(status=err.args[0],
@@ -219,7 +220,7 @@ def timebound(agerange=None, ageunits=None):
 
     desc_obj.update(aux.build_meta(options))
 
-    desc_obj.update(aux.build_meta_sub(source=ext_provider,
+    desc_obj.update(aux.build_meta_sub(source=age_ref,
                                        t0=t0,
                                        sub_tag='geo_age',
                                        options=options))
@@ -227,6 +228,7 @@ def timebound(agerange=None, ageunits=None):
     # Return data structure to client
 
     return_obj = {'early_age': early_age,
-                  'late_age': late_age}
+                  'late_age': late_age,
+                  'color': col_hex}
 
     return jsonify(metadata=desc_obj, records=return_obj)
