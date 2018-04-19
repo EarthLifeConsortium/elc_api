@@ -40,7 +40,10 @@ def get_age(age_range, options):
     """Parse age range parameters."""
     from ..elc import ages
 
-    bound = age_range.split(',')
+    bound = list()
+    for val in age_range.split(','):
+        bound.append(val.strip())
+
     if '' in bound:
         msg = 'Incorrectly formatted parameter pair: agerange'
         raise ValueError(400, msg)
