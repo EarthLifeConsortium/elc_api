@@ -136,7 +136,6 @@ def id_parse(ids, db, id_type):
 
 def set_id(ids, db, endpoint, options):
     """Return a payload parameter for the requested id tag."""
-
     if endpoint == 'loc':
 
         # add additional database to datatype mappings here

@@ -18,9 +18,9 @@ def set_age(age_range, options, db):
     from ..elc import ages
 
     try:
-        early_age, late_age,
-        col_hex, age_ref  = ages.get_age(age_range=age_range,
-                                         options=options)
+        early_age, late_age, \
+            col_hex, age_ref = ages.get_age(age_range=age_range,
+                                            options=options)
     except ValueError as err:
         raise ValueError(err.args[0], err.args[1])
 
@@ -67,7 +67,7 @@ def get_age(age_range, options):
             msg = 'Incorrect number of parameters: agerange'
             raise ValueError(400, msg)
 
-        return round(ea1, 2), round(la1, 2)
+        return round(ea1, 2), round(la1, 2), col_hex, age_ref
 
     if len(bound) == 2:
 
@@ -87,7 +87,7 @@ def get_age(age_range, options):
             except ValueError as err:
                 raise ValueError(err.args[0], err.args[1])
             if not col_hex:
-                col_hex, age_ref = ages.get_age_meta(bound[0])
+                col_hex, age_ref = ages.get_age_meta(bound[1])
         elif float(bound[1]) < 0:
             msg = 'Parameter out of bounds: agerange'
             raise ValueError(400, msg)
@@ -126,6 +126,7 @@ def resolve_age(geologic_age):
     data = r.json().get('records')[0]
 
     return data.get('eag'), data.get('lag')
+
 
 def get_age_meta(geologic_age):
     """Retrieve ancillary data for geologic ages."""

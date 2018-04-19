@@ -175,7 +175,7 @@ def timebound(agerange=None, ageunits=None):
     """
     t0 = time()
     desc_obj = dict()
-    #ext_provider = 'International Commission on Stratigraphy (2013) via PBDB'
+    # ext_provider = 'International Commission on Stratigraphy (2013) via PBDB'
 
     # Set runtime options
 
@@ -207,8 +207,8 @@ def timebound(agerange=None, ageunits=None):
 
     try:
         early_age, late_age, \
-        col_hex, age_ref = ages.get_age(age_range=agerange,
-                                        options=options)
+            col_hex, age_ref = ages.get_age(age_range=agerange,
+                                            options=options)
 
     except ValueError as err:
         return connexion.problem(status=err.args[0],
