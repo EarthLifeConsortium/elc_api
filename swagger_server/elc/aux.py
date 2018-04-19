@@ -49,7 +49,10 @@ def build_meta_sub(source, t0, sub_tag, options, data=None):
         rec_count = len(data) - options.get('tot_rec_count')
         options.update(tot_rec_count=len(data))
     else:
-        rec_count = 1
+        if data == []:
+            rec_count = 0
+        else:
+            rec_count = 1
 
     return {sub_tag: {'subquery': source,
                       'response_time': round(time()-t0, 3),
