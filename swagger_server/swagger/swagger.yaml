@@ -84,7 +84,7 @@ paths:
       - name: "limit"
         in: "query"
         description: "Limit the number of records in the response for large\
-          \ queries"
+          \ queries. Default is 999"
         required: false
         type: "integer"
         format: "int32"
@@ -231,7 +231,7 @@ paths:
       - name: "limit"
         in: "query"
         description: "Limit the number of records in the response for large\
-          \ queries"
+          \ queries. Default is 999"
         required: false
         type: "integer"
         format: "int32"
