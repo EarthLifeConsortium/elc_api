@@ -12,12 +12,11 @@ Endpoint for queries on taxonomic occurrences in time and space.
 #  from ..util import deserialize_date, deserialize_datetime
 
 import connexion
-from ..elc import config, params, aux
+from ..elc import config, params, aux, subreq
 from ..handlers import router
 from http_status import Status
 from time import time
 from flask import jsonify
-import requests
 
 
 def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
@@ -87,59 +86,14 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
 
         url_path = ''.join([config.get('resource_api', db),
                             config.get('db_occ_endpt', db)])
-        try:
-            resp = requests.get(url_path,
-                                params=payload,
-                                timeout=config.get('default', 'timeout'))
-            resp.raise_for_status()
-
-        except requests.exceptions.HTTPError as err:
-            return connexion.problem(status=resp.status_code,
-                                     title=Status(resp.status_code).name,
-                                     detail=str(err.args[0]),
-                                     type='about:blank')
-
-        except requests.exceptions.SSLError as err:
-            return connexion.problem(status=495,
-                                     title=Status(495).name,
-                                     detail=str(err.args[0]),
-                                     type='about:blank')
-
-        except requests.exceptions.ConnectionError as err:
-            return connexion.problem(status=502,
-                                     title=Status(502).name,
-                                     detail=str(err.args[0]),
-                                     type='about:blank')
-
-        except requests.exceptions.Timeout as err:
-            return connexion.problem(status=504,
-                                     title=Status(504).name,
-                                     detail=str(err.args[0]),
-                                     type='about:blank')
-
-        except requests.exceptions.RequestException as err:
-            return connexion.problem(status=500,
-                                     title=Status(500).name,
-                                     detail=str(err.args[0]),
-                                     type='about:blank')
-
-        # Check the Content-Type of the return and decode the JSON object
-
-        if 'application/json' not in resp.headers.get('content-type'):
-            msg = '{0:s} response is not of type application/json'.format(db)
-            return connexion.problem(status=417,
-                                     title=Status(417).name,
-                                     detail=msg,
-                                     type='about:blank')
 
         try:
-            resp_json = resp.json()
+            resp_json, api_call = subreq.trigger(url_path, payload, db)
 
         except ValueError as err:
-            msg = '{0:s} JSON decode error: {1:s}'.format(db, err)
-            return connexion.problem(status=500,
-                                     title=Status(500).name,
-                                     detail=msg,
+            return connexion.problem(status=err.args[0],
+                                     title=Status(err.args[0]).name,
+                                     detail=err.args[1],
                                      type='about:blank')
 
         # Parse database response
@@ -155,7 +109,7 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
         desc_obj.update(aux.build_meta(options))
 
         desc_obj.update(aux.build_meta_sub(data=return_obj,
-                                           source=resp.url,
+                                           source=api_call,
                                            t0=t0,
                                            sub_tag=db,
                                            options=options))
