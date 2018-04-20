@@ -5,9 +5,6 @@ resource_api:
 native_ageunits:
   neotoma: 'yr'
   pbdb: 'ma'
-db_rec_obj:
-  neotoma: 'data'
-  pbdb: 'records'
 db_occ_endpt:
   neotoma: 'occurrence'
   pbdb: 'occs/list.json'
