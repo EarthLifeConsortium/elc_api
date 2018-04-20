@@ -98,11 +98,11 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
 
         # Parse database response
 
-        return_obj = router.decode_occs(resp_json=resp_json,
-                                        return_obj=return_obj,
-                                        options=options,
-                                        db=db,
-                                        endpoint='occ')
+        return_obj = router.response_decode(resp_json=resp_json,
+                                            return_obj=return_obj,
+                                            options=options,
+                                            db=db,
+                                            endpoint='occ')
 
         # Build returned metadata object
 

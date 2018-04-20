@@ -1,4 +1,4 @@
-"""Custom decoder for the Paleobiology Database response."""
+"""Custom decoder logic for the Paleobiology Database response."""
 
 
 def locales(resp_json, return_obj, options):
@@ -64,69 +64,80 @@ def occurrences(resp_json, return_obj, options):
     return return_obj
 
 
-def references(resp, ret_obj, format):
-    """Reformat data from the Neotoma API call."""
-    if resp.status_code == 200:
-        resp_json = resp.json()
-        if 'records' in resp_json:
-            for rec in resp_json['records']:
+def references(resp_json, return_obj, options):
+    """Extract references data from the subquery."""
 
-                # Format publication "volume(issue)"
-                if 'pubno' in rec:
-                    vol_no = rec.get('pubno')
-                    if 'pubvol' in rec:
-                        vol_no = rec.get('pubvol') + ' (' + vol_no + ')'
-                else:
-                    vol_no = None
+    for rec in resp_json.get('records', []):
 
-                # Format publication "first-last" page range
-                if 'firstpage' in rec:
-                    page_range = rec.get('firstpage')
-                    if 'lastpage' in rec:
-                        page_range = page_range + '-' + rec.get('lastpage')
-                else:
-                    page_range = None
+        data = dict()
 
-                # Format author fields
-                author_list = list()
-                if 'author1last' in rec:
-                    author1 = rec.get('author1last').replace(',', '')
-                    if 'author1init' in rec:
-                        author1 += ', ' + rec.get('author1init')
-                    author_list.append(author1)
-                if 'author2last' in rec:
-                    author2 = rec.get('author2last').replace(',', '')
-                    if 'author2init' in rec:
-                        author2 += ', ' + rec.get('author2init')
-                    author_list.append(author2)
-                if 'otherauthors' in rec:
-                    more_authors = rec.get('otherauthors').split(', ')
-                    for next_author in more_authors:
-                        surname = re.search('[A-Z][a-z]+', next_author)
-                        name = surname.group() + ', ' + \
-                            next_author[0: surname.start()-1]
-                        name = name.replace(', and', ', ')
-                        author_list.append(name)
+        data.update(ref_id='pbdb:{0:s}'.format(rec.get('oid', 'occ:0')))
+        data.update(ref_id='pbdb:{0:s}'.format(rec.get('oid', 'occ:0')))
+        # more here
 
-                # Format the unique database identifier
-                pub_id = 'pbdb:ref:' + str(rec.get('reference_no'))
+        return_obj.append(data)
 
-                # Build dictionary of bibliographic fields
-                reference = dict()
-                reference.update(kind=rec.get('publication_type'),
-                                 title=rec.get('referencetitle'),
-                                 year=rec.get('pubyr'),
-                                 journal=rec.get('pubtitle'),
-                                 vol=vol_no,
-                                 editor=rec.get('editors'),
-                                 pages=page_range,
-                                 doi=rec.get('doi'),
-                                 authors=author_list,
-                                 ident=pub_id,
-                                 cite=rec.get('formatted'))
+    return return_obj
 
-                # Format and append parsed record
-                ret_obj = format_handler(reference, ret_obj, format)
 
-    # End subroutine: parse_pbdb_resp
-    return len(resp_json['records'])
+            #  for rec in resp_json['records']:
+
+                #  # Format publication "volume(issue)"
+                #  if 'pubno' in rec:
+                    #  vol_no = rec.get('pubno')
+                    #  if 'pubvol' in rec:
+                        #  vol_no = rec.get('pubvol') + ' (' + vol_no + ')'
+                #  else:
+                    #  vol_no = None
+
+                #  # Format publication "first-last" page range
+                #  if 'firstpage' in rec:
+                    #  page_range = rec.get('firstpage')
+                    #  if 'lastpage' in rec:
+                        #  page_range = page_range + '-' + rec.get('lastpage')
+                #  else:
+                    #  page_range = None
+
+                #  # Format author fields
+                #  author_list = list()
+                #  if 'author1last' in rec:
+                    #  author1 = rec.get('author1last').replace(',', '')
+                    #  if 'author1init' in rec:
+                        #  author1 += ', ' + rec.get('author1init')
+                    #  author_list.append(author1)
+                #  if 'author2last' in rec:
+                    #  author2 = rec.get('author2last').replace(',', '')
+                    #  if 'author2init' in rec:
+                        #  author2 += ', ' + rec.get('author2init')
+                    #  author_list.append(author2)
+                #  if 'otherauthors' in rec:
+                    #  more_authors = rec.get('otherauthors').split(', ')
+                    #  for next_author in more_authors:
+                        #  surname = re.search('[A-Z][a-z]+', next_author)
+                        #  name = surname.group() + ', ' + \
+                            #  next_author[0: surname.start()-1]
+                        #  name = name.replace(', and', ', ')
+                        #  author_list.append(name)
+
+                #  # Format the unique database identifier
+                #  pub_id = 'pbdb:ref:' + str(rec.get('reference_no'))
+
+                #  # Build dictionary of bibliographic fields
+                #  reference = dict()
+                #  reference.update(kind=rec.get('publication_type'),
+                                 #  title=rec.get('referencetitle'),
+                                 #  year=rec.get('pubyr'),
+                                 #  journal=rec.get('pubtitle'),
+                                 #  vol=vol_no,
+                                 #  editor=rec.get('editors'),
+                                 #  pages=page_range,
+                                 #  doi=rec.get('doi'),
+                                 #  authors=author_list,
+                                 #  ident=pub_id,
+                                 #  cite=rec.get('formatted'))
+
+                #  # Format and append parsed record
+                #  ret_obj = format_handler(reference, ret_obj, format)
+
+    #  # End subroutine: parse_pbdb_resp
+    #  return len(resp_json['records'])

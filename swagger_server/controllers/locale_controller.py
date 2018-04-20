@@ -99,11 +99,11 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
 
         # Parse database response
 
-        return_obj = router.decode_occs(resp_json=resp_json,
-                                        return_obj=return_obj,
-                                        options=options,
-                                        db=db,
-                                        endpoint='loc')
+        return_obj = router.response_decode(resp_json=resp_json,
+                                            return_obj=return_obj,
+                                            options=options,
+                                            db=db,
+                                            endpoint='loc')
 
         # Build returned metadata object
 

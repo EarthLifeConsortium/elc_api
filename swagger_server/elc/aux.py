@@ -10,10 +10,14 @@ def set_timestamp():
         t.tm_year, t.tm_mon, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec)
 
 
-def set_db_special(db):
+def set_db_special(db, endpoint):
     """Add custom payload additions unique to a specific db."""
-    if db == 'pbdb':
+    if db == 'pbdb' and endpoint in ['loc', 'occ']:
         return {'show': 'full'}
+
+    if db == 'pbdb' and endpoint in ['ref']:
+        return {'show': 'both'}
+
     # Add another database specific case here
     else:
         return {}

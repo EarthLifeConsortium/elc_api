@@ -1,6 +1,6 @@
 """Call approproiate custom response handler for database:endpoint."""
 
-def decode_occs(resp_json, return_obj, options, db, endpoint):
+def response_decode(resp_json, return_obj, options, db, endpoint):
     """
     Extract necessary data from the subquery.
 

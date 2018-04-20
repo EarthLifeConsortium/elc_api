@@ -136,23 +136,28 @@ def id_parse(ids, db, id_type):
 
 def set_id(ids, db, endpoint, options):
     """Return a payload parameter for the requested id tag."""
-    if endpoint == 'loc':
 
-        # add additional database to datatype mappings here
+    # add additional database to datatype mappings here
+    if endpoint == 'loc':
         xmap = {'pbdb': ['col', 'coll_id'],
                 'neotoma': ['dst', 'datasetid']}
+    elif endpoint == 'ref':
+        xmap = {'pbdb': ['ref', 'ref_id'],
+                'neotoma': ['pub', 'pubid']}
+    else:
+        return {}
 
-        try:
-            id_numbers = id_parse(ids=ids, db=db, id_type=xmap[db][0])
+    try:
+        id_numbers = id_parse(ids=ids, db=db, id_type=xmap[db][0])
+    except ValueError as err:
+        raise ValueError(err.args[0], err.args[1])
 
-        except ValueError as err:
-            raise ValueError(err.args[0], err.args[1])
+    if not id_numbers:
+        options.update(run=False)
 
-        if not id_numbers:
-            options.update(run=False)
+    id_string = ','.join(str(x) for x in id_numbers)
 
-        id_string = ','.join(str(x) for x in id_numbers)
-        return {xmap[db][1]: id_string}
+    return {xmap[db][1]: id_string}
 
 
 def parse(req_args, options, db, endpoint):
@@ -168,7 +173,7 @@ def parse(req_args, options, db, endpoint):
     spec.update(loc=['idlist', 'bbox', 'agerange', 'ageunits', 'timerule',
                      'coordinates', 'limit', 'offset', 'show', 'output'])
     spec.update(tax=['taxon', 'includelower', 'hierarchy'])
-    spec.update(ref=['idnumbers', 'format'])
+    spec.update(ref=['idlist', 'show', 'output'])
     spec.update(timebound=['agerange', 'ageunits'])
     spec.update(paleocoords=['coords', 'age', 'ageunits'])
     spec.update(subtaxa=['taxon', 'synonyms'])
@@ -192,7 +197,7 @@ def parse(req_args, options, db, endpoint):
 
     payload = dict()
 
-    payload.update(aux.set_db_special(db))
+    payload.update(aux.set_db_special(db, endpoint))
 
     payload.update(limit=options.get('limit'))
 

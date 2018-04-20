@@ -15,8 +15,8 @@ db_tax_endpt:
   neotoma: ''
   pbdb: ''
 db_ref_endpt:
-  neotoma: ''
-  pbdb: ''
+  neotoma: 'publications'
+  pbdb: 'refs/list.json'
 default:
   timeout: Null
   ageunits: 'ma'
