@@ -10,6 +10,32 @@ def set_timestamp():
         t.tm_year, t.tm_mon, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec)
 
 
+def get_checksum(data, full=False):
+    """Calculate an md5 hash of an object and return short form."""
+    import hashlib
+    import pickle
+
+    if full:
+        # Full checksum
+        return hashlib.md5(pickle.dumps(data)).hexdigest()
+    else:
+        # GitHub style 7 character abbreviated form
+        return hashlib.md5(pickle.dumps(data)).hexdigest()[0:7]
+
+
+def build_filename(endpoint, data):
+    """Compose a filename for CSV return."""
+    from ..elc import aux
+
+    datatype = {'occ': 'occurrences',
+                'ref': 'references',
+                'tax': 'taxa',
+                'loc': 'locales'}
+
+    return 'elc_{0:s}_{1:s}.csv'.format(datatype.get(endpoint),
+                                        get_checksum(data=data))
+
+
 def set_db_special(db, endpoint):
     """Add custom payload additions unique to a specific db."""
     if db == 'pbdb' and endpoint in ['loc', 'occ']:

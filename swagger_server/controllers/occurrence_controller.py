@@ -117,8 +117,6 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
 
     # Return composite data structure to client
 
-    #  import pdb; pdb.set_trace()
-
     if options.get('output') == 'json':
         if options.get('show') == 'poll':
             return jsonify(desc_obj)
@@ -127,4 +125,5 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
         else:
             return jsonify(metadata=desc_obj, records=return_obj)
     elif options.get('output') == 'csv':
-        return flask_csv.send_csv(return_obj, 'elc.csv', return_obj[0].keys())
+        filename = aux.build_filename(endpoint='occ', data=return_obj)
+        return flask_csv.send_csv(return_obj, filename, return_obj[0].keys())
