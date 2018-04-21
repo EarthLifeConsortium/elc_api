@@ -12,6 +12,7 @@ Endpoint for queries on taxonomic occurrences in time and space.
 #  from ..util import deserialize_date, deserialize_datetime
 
 import connexion
+import flask_csv
 from ..elc import config, params, aux, subreq
 from ..handlers import router
 from http_status import Status
@@ -116,9 +117,14 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
 
     # Return composite data structure to client
 
-    if options.get('show') == 'poll':
-        return jsonify(desc_obj)
-    if options.get('show') == 'idx':
-        return jsonify(aux.get_id_numbers(data=return_obj, endpoint='occ'))
-    else:
-        return jsonify(metadata=desc_obj, records=return_obj)
+    #  import pdb; pdb.set_trace()
+
+    if options.get('output') == 'json':
+        if options.get('show') == 'poll':
+            return jsonify(desc_obj)
+        if options.get('show') == 'idx':
+            return jsonify(aux.get_id_numbers(data=return_obj, endpoint='occ'))
+        else:
+            return jsonify(metadata=desc_obj, records=return_obj)
+    elif options.get('output') == 'csv':
+        return flask_csv.send_csv(return_obj, 'elc.csv', return_obj[0].keys())

@@ -23,7 +23,7 @@ def set_options(req_args, endpoint):
     # Response format
     if 'output' in req_args.keys():
         if req_args.get('output').lower() in spec.get(endpoint):
-            options.update(output=req_args.get('output'))
+            options.update(output=req_args.get('output').lower())
         else:
             msg = 'Allowable formats: {0:s}'.format(str(spec.get(endpoint)))
             raise ValueError(400, msg)
@@ -33,7 +33,7 @@ def set_options(req_args, endpoint):
     # Response includes
     if 'show' in req_args.keys():
         if req_args.get('show').lower() in spec.get('show'):
-            options.update(show=req_args.get('show'))
+            options.update(show=req_args.get('show').lower())
         else:
             msg = 'Allowable show args: {0:s}'.format(str(spec.get('show')))
             raise ValueError(400, msg)
@@ -43,7 +43,7 @@ def set_options(req_args, endpoint):
     # Age measurement units
     if 'ageunits' in req_args.keys():
         if req_args.get('ageunits').lower() in spec.get('age'):
-            options.update(ageunits=req_args.get('ageunits'))
+            options.update(ageunits=req_args.get('ageunits').lower())
         else:
             msg = 'Allowable age units: {0:s}'.format(str(spec.get('age')))
             raise ValueError(400, msg)

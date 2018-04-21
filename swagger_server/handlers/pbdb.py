@@ -104,19 +104,19 @@ def references(resp_json, return_obj, options):
         # Build author list
         author_list = list()
 
-        if rec.get('author1last'):
-            author1 = rec.get('author1last').replace(',', '')
-            if rec.get('author1init'):
-                author1 = '{0:s}, {1:s}'.format(author1,
-                                                rec.get('author1init'))
+        if rec.get('al1'):
+            author1 = rec.get('al1').replace(',', '')
+            if rec.get('ai1'):
+                author1 = '{0:s}, {1:s}'.format(author1, rec.get('ai1'))
             author_list.append(author1)
 
-        if rec.get('author2last'):
-            author2 = rec.get('author2last').replace(',', '')
-            if rec.get('author2init'):
-                author2 += ', ' + rec.get('author2init')
+        if rec.get('al2'):
+            author2 = rec.get('al2').replace(',', '')
+            if rec.get('ai2'):
+                author2 = '{0:s}, {1:s}'.format(author2, rec.get('ai2'))
             author_list.append(author2)
-        if 'otherauthors' in rec:
+
+        if rec.get('otherauthors'):
             more_authors = rec.get('otherauthors').split(', ')
             for next_author in more_authors:
                 surname = re.search('[A-Z][a-z]+', next_author)
