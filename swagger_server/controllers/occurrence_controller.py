@@ -124,6 +124,16 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
             return jsonify(aux.get_id_numbers(data=return_obj, endpoint='occ'))
         else:
             return jsonify(metadata=desc_obj, records=return_obj)
+
     elif options.get('output') == 'csv':
-        filename = aux.build_filename(endpoint='occ', data=return_obj)
-        return flask_csv.send_csv(return_obj, filename, return_obj[0].keys())
+        if return_obj:
+            filename = aux.build_filename(endpoint='occ', data=return_obj)
+            return flask_csv.send_csv(return_obj,
+                                      filename,
+                                      return_obj[0].keys())
+        else:
+            msg = 'Unable to generate CSV file. Search returned no records.'
+            return connexion.problem(status=204,
+                                     title=Status(204).name,
+                                     detail=msg,
+                                     type='about:blank')
