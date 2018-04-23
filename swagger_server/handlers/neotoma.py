@@ -33,17 +33,9 @@ def locales(resp_json, return_obj, options):
 
 
 def occurrences(resp_json, return_obj, options):
-    """
-    Extract necessary data from the subquery.
-
-    :arg db: Database name
-    :type db: str
-    :arg resp_json: Database subquery responce object
-    :type resp_json: dict
-    :arg return_obj: List of data objects to be appended and returned
-    :type return_obj: list (of dicts)
-    """
-    from ..elc import ages
+    """Extract occurrence data from the subquery."""  
+    import geojson
+    from ..elc import ages, aux
 
     factor = ages.set_age_scaler(options=options, db='neotoma')
 
@@ -78,14 +70,25 @@ def occurrences(resp_json, return_obj, options):
                 data.update(min_age=None)
 
         if rec.get('site'):
+            
+            site = rec.get('site')
 
-            data.update(source=rec.get('site').get('database'))
-            data.update(data_type=rec.get('site').get('datasettype'))
-            if rec.get('site').get('datasetid'):
+            data.update(source=site.get('database'))
+            data.update(data_type=site.get('datasettype'))
+            if site.get('datasetid'):
                 data.update(locale_id='neot:dst:{0:d}'
-                            .format(rec.get('site').get('datasetid', 0)))
+                            .format(site.get('datasetid', 0)))
 
-        # !!! geog stuff here
+            if site.get('location'):
+                loc = geojson.loads(site.get('location'))
+                if options.get('geog') == 'paleo':
+                    modern = '{0:1},{0:2}'.format(loc['coordinates'][1],
+                                                  loc['coordinates'][0])
+
+                else:
+                    data.update(lat=loc['coordinates'][1])
+                    data.update(lon=loc['coordinates'][0])
+
         return_obj.append(data)
 
     return return_obj

@@ -57,7 +57,12 @@ def occurrences(resp_json, return_obj, options):
         data.update(data_type=rec.get('cct', 'general faunal/floral'))
         data.update(locale_id='pbdb:{0:s}'.format(rec.get('cid', 'col:0')))
 
-        # !!! geog stuff here
+        if options.get('geog') == 'paleo':
+            data.update(lat=rec.get('pla'))
+            data.update(lon=rec.get('pln'))
+        else:
+            data.update(lat=rec.get('lat'))
+            data.update(lon=rec.get('lng'))
 
         return_obj.append(data)
 
