@@ -20,14 +20,14 @@ from time import time
 from flask import jsonify
 
 
-def ref(idnumbers=None, show=None, output=None):
+def ref(idlist=None, show=None, output=None):
     """
     Literature references/publications.
 
     Accepts the following dataset types: occ, col, dst, ref
 
-    :param idnumbers: List of formatted ids [dbname]:[datasettype]:[number]
-    :type idnumbers: str
+    :param idlist: List of formatted ids [dbname]:[datasettype]:[number]
+    :type idlist: str
     :param show: Return identifiers or stats (defult=full, idx, poll)
     :type show: str
     :param output: Response format (defult=bibjson, csv)
@@ -107,9 +107,23 @@ def ref(idnumbers=None, show=None, output=None):
 
     # Return composite data structure to client
 
-    if options.get('show') == 'poll':
-        return jsonify(desc_obj)
-    if options.get('show') == 'idx':
-        return jsonify(aux.get_id_numbers(data=return_obj, endpoint='ref'))
-    else:
-        return jsonify(metadata=desc_obj, records=return_obj)
+    if options.get('output') == 'bibjson':
+        if options.get('show') == 'poll':
+            return jsonify(desc_obj)
+        if options.get('show') == 'idx':
+            return jsonify(aux.get_id_numbers(data=return_obj, endpoint='ref'))
+        else:
+            return jsonify(metadata=desc_obj, records=return_obj)
+
+    elif options.get('output') == 'csv':
+        if return_obj:
+            filename = aux.build_filename(endpoint='ref', data=return_obj)
+            return flask_csv.send_csv(return_obj,
+                                      filename,
+                                      return_obj[0].keys())
+        else:
+            msg = 'Unable to generate CSV file. Search returned no records.'
+            return jsonify(status=204,
+                           title=Status(204).name,
+                           detail=msg,
+                           type='about:blank')

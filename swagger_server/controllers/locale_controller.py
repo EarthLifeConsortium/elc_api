@@ -127,6 +127,7 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
         else:
             return jsonify(metadata=desc_obj, records=return_obj)
 
+    #  elif options.get('
     elif options.get('output') == 'csv':
         if return_obj:
             filename = aux.build_filename(endpoint='loc', data=return_obj)
