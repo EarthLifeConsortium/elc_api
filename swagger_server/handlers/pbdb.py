@@ -66,10 +66,10 @@ def occurrences(resp_json, return_obj, options):
 
 def references(resp_json, return_obj, options):
     """Extract references data from the subquery."""
-    import re
 
     for rec in resp_json.get('records', []):
 
+        # Directly mapped bibliographic data
         data = {'title': rec.get('tit'),
                 'kind': rec.get('pty'),
                 'year': rec.get('pby'),
@@ -103,32 +103,25 @@ def references(resp_json, return_obj, options):
 
         # Build author list
         author_list = list()
-
         if rec.get('al1'):
             author1 = rec.get('al1').replace(',', '')
             if rec.get('ai1'):
                 author1 = '{0:s}, {1:s}'.format(author1, rec.get('ai1'))
             author_list.append(author1)
-
         if rec.get('al2'):
             author2 = rec.get('al2').replace(',', '')
             if rec.get('ai2'):
                 author2 = '{0:s}, {1:s}'.format(author2, rec.get('ai2'))
             author_list.append(author2)
-
-        if rec.get('otherauthors'):
-            more_authors = rec.get('otherauthors').split(', ')
+        if rec.get('oau'):
+            more_authors = rec.get('oau').split(', ')
             for next_author in more_authors:
-                surname = re.search('[A-Z][a-z]+', next_author)
-                name = surname.group() + ', ' + \
-                    next_author[0: surname.start()-1]
+                surname = next_author.split()[-1]
+                given = next_author[0:next_author.find(surname)-1]
+                name = '{0:s}, {1:s}'.format(surname, given)
                 name = name.replace(', and', ', ')
                 author_list.append(name)
-
-
-
-                #  # Format and append parsed record
-                #  ret_obj = format_handler(reference, ret_obj, format)
+        data.update(authors=author_list)
 
         return_obj.append(data)
 
