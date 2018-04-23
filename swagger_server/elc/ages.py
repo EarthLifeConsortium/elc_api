@@ -44,9 +44,7 @@ def get_age(age_range, options):
     col_hex = None
     age_ref = None
 
-    bound = list()
-    for val in age_range.split(','):
-        bound.append(val.strip())
+    bound = [x.strip() for x in age_range.split(',')]
 
     if '' in bound:
         msg = 'Incorrectly formatted parameter pair: agerange'

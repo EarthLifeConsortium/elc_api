@@ -227,6 +227,6 @@ def timebound(agerange=None, ageunits=None):
 
     return_obj = {'early_age': early_age,
                   'late_age': late_age,
-                  'color': col_hex}
+                  'ics_color': col_hex}
 
     return jsonify(metadata=desc_obj, records=return_obj)

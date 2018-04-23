@@ -121,7 +121,7 @@ def references(resp_json, return_obj, options):
                 name = '{0:s}, {1:s}'.format(surname, given)
                 name = name.replace(', and', ', ')
                 author_list.append(name)
-        data.update(author=author_list)
+        data.update(authors=author_list)
 
         return_obj.append(data)
 

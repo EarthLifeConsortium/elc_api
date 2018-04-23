@@ -37,7 +37,7 @@ def build_filename(endpoint, data):
 
 
 def set_db_special(db, endpoint):
-    """Add custom payload additions unique to a specific db."""
+    """Add custom payload parameters unique to a specific db."""
     if db == 'pbdb' and endpoint in ['loc', 'occ']:
         return {'show': 'full'}
 

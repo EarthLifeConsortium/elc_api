@@ -13,7 +13,8 @@ citations in the subordinate databases.
 #  from ..util import deserialize_date, deserialize_datetime
 
 import connexion
-from ..elc import config, params, aux, subreq
+import flask_csv
+from ..elc import config, params, aux, subreq, formatter
 from ..handlers import router
 from http_status import Status
 from time import time
@@ -53,9 +54,10 @@ def ref(idlist=None, show=None, output=None):
 
     for db in config.db_list():
 
-        # temporary (hopefully) shim
+        ### temporary shim #######
         if db == 'neotoma':
             continue
+        ##########################
 
         t0 = time()
 
@@ -107,11 +109,25 @@ def ref(idlist=None, show=None, output=None):
 
     # Return composite data structure to client
 
-    if options.get('output') == 'bibjson':
+    if options.get('output') in ['json', 'bibjson']:
         if options.get('show') == 'poll':
             return jsonify(desc_obj)
         if options.get('show') == 'idx':
-            return jsonify(aux.get_id_numbers(data=return_obj, endpoint='ref'))
+            return jsonify(aux.get_id_numbers(data=return_obj,
+                                              endpoint='ref'))
+        else:
+            if options.get('output') == 'bibjson':
+                return jsonify(metadata=desc_obj,
+                               records=formatter.type_bibjson(return_obj))
+            else:
+                return jsonify(metadata=desc_obj, records=return_obj)
+
+    elif options.get('output') == 'json':
+        if options.get('show') == 'poll':
+            return jsonify(desc_obj)
+        if options.get('show') == 'idx':
+            return jsonify(aux.get_id_numbers(data=return_obj,
+                                              endpoint='ref'))
         else:
             return jsonify(metadata=desc_obj, records=return_obj)
 

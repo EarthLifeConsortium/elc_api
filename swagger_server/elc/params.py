@@ -12,7 +12,7 @@ def set_options(req_args, endpoint):
     spec.update(occ=['json', 'csv'])
     spec.update(loc=['json', 'csv'])
     spec.update(tax=['json', 'itis'])
-    spec.update(ref=['bibjson', 'csv', 'ris'])
+    spec.update(ref=['bibjson', 'json', 'csv', 'ris'])
     spec.update(show=['all', 'poll', 'idx'])
     spec.update(age=['ma', 'ka', 'yr'])
     spec.update(geog=['paleo', 'modern'])
@@ -105,7 +105,7 @@ def id_parse(ids, db, id_type):
     numeric_ids = list()
     db_tag = db[:4]
     database = datatype = id_num = ''
-    id_list = ids.split(',')
+    id_list = [x.strip() for x in ids.split(',')]
 
     for id in id_list:
         try:
