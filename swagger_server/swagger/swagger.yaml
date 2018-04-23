@@ -105,8 +105,8 @@ paths:
         type: "string"
       - name: "output"
         in: "query"
-        description: "Output format for occurrences. Response is JSON\
-          \ (default) or  CSV"
+        description: "[NOTE: Only JSON format is supported in the sandbox]\
+          \ Output format for occurrences. Response is JSON (default) or CSV"
         required: false
         type: "string"
       responses:
@@ -152,8 +152,9 @@ paths:
         type: "string"
       - name: "output"
         in: "query"
-        description: "Output format for references. Response is BibJSON\
-          \ (default), CSV or RIS"
+        description: "[NOTE: Only BibJSON format is supported in the sandbox]\
+          \ Output format for references. Response is BibJSON (default),\
+          \ CSV or RIS"
         required: false
         type: "string"
       responses:
@@ -250,8 +251,8 @@ paths:
         type: "string"
       - name: "output"
         in: "query"
-        description: "Output format for occurrences. Response is JSON\
-          \ (default) or  CSV"
+        description: "[Note: Only JSON format is supported in the sandbox]. \
+          \ Output format for occurrences. Response is JSON (default) or  CSV"
         required: false
         type: "string"
       responses:

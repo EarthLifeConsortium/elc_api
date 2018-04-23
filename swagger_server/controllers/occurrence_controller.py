@@ -121,7 +121,8 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
         if options.get('show') == 'poll':
             return jsonify(desc_obj)
         if options.get('show') == 'idx':
-            return jsonify(aux.get_id_numbers(data=return_obj, endpoint='occ'))
+            return jsonify(aux.get_id_numbers(data=return_obj,
+                                              endpoint='occ'))
         else:
             return jsonify(metadata=desc_obj, records=return_obj)
 
@@ -133,7 +134,7 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
                                       return_obj[0].keys())
         else:
             msg = 'Unable to generate CSV file. Search returned no records.'
-            return connexion.problem(status=204,
-                                     title=Status(204).name,
-                                     detail=msg,
-                                     type='about:blank')
+            return jsonify(status=204,
+                           title=Status(204).name,
+                           detail=msg,
+                           type='about:blank')

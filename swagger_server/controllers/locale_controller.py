@@ -12,6 +12,7 @@ Endpoint for queries on data locales (collections and datasets).
 #  from ..util import deserialize_date, deserialize_datetime
 
 import connexion
+import flask_csv
 from ..elc import config, params, aux, subreq
 from ..handlers import router
 from http_status import Status
@@ -117,9 +118,24 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
 
     # Return composite data structure to client
 
-    if options.get('show') == 'poll':
-        return jsonify(desc_obj)
-    if options.get('show') == 'idx':
-        return jsonify(aux.get_id_numbers(data=return_obj, endpoint='locale'))
-    else:
-        return jsonify(metadata=desc_obj, records=return_obj)
+    if options.get('output') == 'json':
+        if options.get('show') == 'poll':
+            return jsonify(desc_obj)
+        if options.get('show') == 'idx':
+            return jsonify(aux.get_id_numbers(data=return_obj,
+                                              endpoint='loc'))
+        else:
+            return jsonify(metadata=desc_obj, records=return_obj)
+
+    elif options.get('output') == 'csv':
+        if return_obj:
+            filename = aux.build_filename(endpoint='loc', data=return_obj)
+            return flask_csv.send_csv(return_obj,
+                                      filename,
+                                      return_obj[0].keys())
+        else:
+            msg = 'Unable to generate CSV file. Search returned no records.'
+            return jsonify(status=204,
+                           title=Status(204).name,
+                           detail=msg,
+                           type='about:blank')
