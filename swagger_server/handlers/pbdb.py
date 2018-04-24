@@ -71,7 +71,6 @@ def occurrences(resp_json, return_obj, options):
 
 def references(resp_json, return_obj, options):
     """Extract references data from the subquery."""
-
     for rec in resp_json.get('records', []):
 
         # Directly mapped bibliographic data

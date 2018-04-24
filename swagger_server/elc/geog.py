@@ -38,8 +38,8 @@ def get_geog(coords, age, options):
                                    lon=float(modern[1]),
                                    mean_age=age)
 
-    paleo = [round(x,4) for x in paleo]
-    modern = [round(float(x),4) for x in modern]
+    paleo = [round(x, 4) for x in paleo]
+    modern = [round(float(x), 4) for x in modern]
 
     return paleo, modern, geog_ref
 

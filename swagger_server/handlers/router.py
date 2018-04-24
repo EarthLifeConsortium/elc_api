@@ -1,4 +1,5 @@
-"""Call approproiate custom response handler for database:endpoint."""
+"""Call approproiate custom response handler for database:api_route."""
+
 
 def response_decode(resp_json, return_obj, options, db, endpoint):
     """
@@ -31,7 +32,7 @@ def response_decode(resp_json, return_obj, options, db, endpoint):
         if endpoint == 'ref':
             return pbdb.references(resp_json, return_obj, options)
 
-    # Add additional database custom handler here 
+    # Add additional database custom handler here
 
     else:
         msg = 'Database suport lacking: {0:s}'.format(db)

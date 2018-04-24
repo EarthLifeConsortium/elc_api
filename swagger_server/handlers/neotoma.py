@@ -33,9 +33,15 @@ def locales(resp_json, return_obj, options):
 
 
 def occurrences(resp_json, return_obj, options):
-    """Extract occurrence data from the subquery."""  
+    """Extract occurrence data from the subquery."""
     import geojson
-    from ..elc import ages, aux
+    from ..elc import ages, geog
+    from statistics import mean
+
+    # Utlity functions
+    def choose(x, y): return x or y
+
+    def greater(x, y): return x if x > y else y
 
     factor = ages.set_age_scaler(options=options, db='neotoma')
 
@@ -45,15 +51,15 @@ def occurrences(resp_json, return_obj, options):
 
         data.update(occ_id='neot:occ:{0:d}'.format(rec.get('sampleid', 0)))
 
+        # Taxonomic information
         if rec.get('sample'):
 
             data.update(taxon=rec.get('sample').get('taxonname'))
             data.update(taxon_id='neot:txn:{0:d}'
                         .format(rec.get('sample').get('taxonid', 0)))
 
+        # Record age (unit scaled)
         if rec.get('age'):
-
-            def choose(x, y): return x or y
 
             old = choose(rec.get('age').get('ageolder'),
                          rec.get('age').get('age'))
@@ -70,65 +76,80 @@ def occurrences(resp_json, return_obj, options):
                 data.update(min_age=None)
 
         if rec.get('site'):
-            
+
             site = rec.get('site')
 
+            # Dataset level information
             data.update(source=site.get('database'))
             data.update(data_type=site.get('datasettype'))
             if site.get('datasetid'):
                 data.update(locale_id='neot:dst:{0:d}'
                             .format(site.get('datasetid', 0)))
 
+            # Paleo and modern coordinates
             if site.get('location'):
                 loc = geojson.loads(site.get('location'))
-                if options.get('geog') == 'paleo':
-                    modern = '{0:1},{0:2}'.format(loc['coordinates'][1],
-                                                  loc['coordinates'][0])
-
+                if loc.get('type').lower() == 'point':
+                    modern = [loc.get('coordinates')[1],
+                              loc.get('coordinates')[0]]
                 else:
-                    data.update(lat=loc['coordinates'][1])
-                    data.update(lon=loc['coordinates'][0])
+                    modern = [loc.get('coordinates')[0][0][1],
+                              loc.get('coordinates')[0][0][0]]
+                if options.get('geog') == 'paleo':
+                    m_age = greater(mean(modern) / 1e6, 1)
+                    try:
+                        paleo, ref = geog.resolve_geog(lat=modern[0],
+                                                       lon=modern[1],
+                                                       mean_age=round(m_age))
+                        data.update(lat=paleo[0], lon=paleo[1])
+                    except ValueError as err:
+                        data.update(lat=modern[0], lon=modern[1])
+                else:
+                    data.update(lat=modern[0], lon=modern[1])
 
         return_obj.append(data)
 
     return return_obj
 
 
-def references(resp, ret_obj, format):
-    """Reformat data from the Neotoma API call."""
-    if resp.status_code == 200:
-        resp_json = resp.json()
-        if 'data' in resp_json:
-            for rec in resp_json['data']:
+#  def references(resp, ret_obj, format):
+    #  """Reformat data from the Neotoma API call."""
+    #  import re
 
-                # Format the unique database identifier
-                pub_id = 'neot:pub:' + str(rec.get('PublicationID'))
+    #  if resp.status_code == 200:
+        #  resp_json = resp.json()
+        #  if 'data' in resp_json:
+            #  for rec in resp_json['data']:
 
-                # Format author fields
-                author_list = list()
-                if 'Authors' in rec:
-                    for author in rec.get('Authors'):
-                        author_list.append(author['ContactName'])
+                #  # Format the unique database identifier
+                #  pub_id = 'neot:pub:' + str(rec.get('PublicationID'))
 
-                # Look for a DOI in the citation string
-                if 'Citation' in rec:
-                    doi = re.search('(?<=\[DOI:\ ).+(?=\])', rec.get('Citation'))
-                    if doi:
-                        doi = doi.group()
-                else:
-                    doi = None
+                #  # Format author fields
+                #  author_list = list()
+                #  if 'Authors' in rec:
+                    #  for author in rec.get('Authors'):
+                        #  author_list.append(author['ContactName'])
 
-                # Build dictionary of bibliographic fields
-                reference = dict()
-                reference.update(kind=rec.get('PubType'),
-                                 year=rec.get('Year'),
-                                 doi=doi,
-                                 authors=author_list,
-                                 ident=pub_id,
-                                 cite=rec.get('Citation'))
+                #  # Look for a DOI in the citation string
+                #  if 'Citation' in rec:
+                    #  doi = re.search('(?<=\[DOI:\ ).+(?=\])',
+                                    #  rec.get('Citation'))
+                    #  if doi:
+                        #  doi = doi.group()
+                #  else:
+                    #  doi = None
 
-                # Format and append parsed record
-                ret_obj = format_handler(reference, ret_obj, format)
+                #  # Build dictionary of bibliographic fields
+                #  reference = dict()
+                #  reference.update(kind=rec.get('PubType'),
+                                 #  year=rec.get('Year'),
+                                 #  doi=doi,
+                                 #  authors=author_list,
+                                 #  ident=pub_id,
+                                 #  cite=rec.get('Citation'))
 
-    # End subroutine: parse_neot_resp
-    return len(resp_json['data'])
+                #  # Format and append parsed record
+                #  ret_obj = format_handler(reference, ret_obj, format)
+
+    #  # End subroutine: parse_neot_resp
+    #  return len(resp_json['data'])
