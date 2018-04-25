@@ -5,6 +5,12 @@ def locales(resp_json, return_obj, options):
     """Extract locale data from the subquery."""
     from ..elc import ages
 
+    # Utlity function: Choose the existing, non-empty parameter
+    def choose(x, y): return x or y
+
+    # Utility function: Choose the greater of two numbers 
+    def greater(x, y): return x if x > y else y
+
     factor = ages.set_age_scaler(options=options, db='pbdb')
 
     for rec in resp_json.get('data', []):
@@ -12,6 +18,7 @@ def locales(resp_json, return_obj, options):
         for dataset in rec.get('dataset'):
             data = dict()
 
+            # Dataset level information
             data.update(locale_id='neot:dst:{0:d}'
                         .format(dataset.get('datasetid', 0)))
             data.update(doi=dataset.get('doi'))
@@ -23,9 +30,28 @@ def locales(resp_json, return_obj, options):
             data.update(site_id='neot:sit:{0:d}'
                         .format(rec.get('site')['siteid'], 0))
 
-            # age parse
+            # Record age (unit scaled)
+            #  if rec.get('age'):
 
-            # geog parse
+                #  old = choose(rec.get('age').get('ageolder'),
+                             #  rec.get('age').get('age'))
+                #  if old and old >= 0:
+                    #  data.update(max_age=round(old / factor, 5))
+                #  else:
+                    #  data.update(max_age=None)
+
+                #  yng = choose(rec.get('age').get('ageyounger'),
+                             #  rec.get('age').get('age'))
+                #  if yng and yng >= 0:
+                    #  data.update(min_age=round(yng / factor, 5))
+                #  else:
+                    #  data.update(min_age=None)
+
+            ### geog parse here
+
+            ### hack until neotoma can return ages and geography for datasets
+            data.update(lat=None, lon=None, min_age=None, max_age=None)
+
 
             return_obj.append(data)
 
@@ -38,9 +64,10 @@ def occurrences(resp_json, return_obj, options):
     from ..elc import ages, geog
     from statistics import mean
 
-    # Utlity functions
+    # Utlity function: Choose the existing, non-empty parameter
     def choose(x, y): return x or y
 
+    # Utility function: Choose the greater of two numbers 
     def greater(x, y): return x if x > y else y
 
     factor = ages.set_age_scaler(options=options, db='neotoma')
