@@ -128,6 +128,7 @@ def occurrences(resp_json, return_obj, options):
                         paleo, ref = geog.resolve_geog(lat=modern[0],
                                                        lon=modern[1],
                                                        mean_age=round(m_age))
+                        paleo = [round(x, 4) for x in paleo]
                         data.update(lat=paleo[0], lon=paleo[1])
                     except ValueError as err:
                         data.update(lat=modern[0], lon=modern[1])
