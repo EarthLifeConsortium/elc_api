@@ -24,7 +24,7 @@ def get_geog(coords, age, options):
     # Sub-service requires ageunits as 'ma'
     factor = ages.set_age_scaler(options, 'pbdb')
 
-    if age.isalpha():
+    if age[0].isalpha():
         try:
             ea1, la1 = ages.resolve_age(age)
             age = round((ea1 + la1) / 2)

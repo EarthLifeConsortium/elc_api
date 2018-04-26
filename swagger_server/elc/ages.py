@@ -55,7 +55,7 @@ def get_age(age_range, options):
 
     if len(bound) == 1:
 
-        if bound[0].isalpha():
+        if bound[0][0].isalpha():
             ea1, la1 = [x / factor for x in ages.resolve_age(bound[0])]
             col_hex, age_ref = ages.get_age_meta(bound[0])
         elif float(bound[0]) < 0:
@@ -69,7 +69,7 @@ def get_age(age_range, options):
 
     if len(bound) == 2:
 
-        if bound[0].isalpha():
+        if bound[0][0].isalpha():
             ea1, la1 = [x / factor for x in ages.resolve_age(bound[0])]
             if not col_hex:
                 col_hex, age_ref = ages.get_age_meta(bound[0])
@@ -79,7 +79,7 @@ def get_age(age_range, options):
         else:
             ea1 = la1 = float(bound[0])
 
-        if bound[1].isalpha():
+        if bound[1][0].isalpha():
             try:
                 ea2, la2 = [x / factor for x in ages.resolve_age(bound[1])]
             except ValueError as err:
