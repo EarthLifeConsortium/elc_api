@@ -5,7 +5,7 @@ def set_age_scaler(options, db):
     """Return a numerical scale factor for ages."""
     from ..elc import config
 
-    unit = {'yr': 1, 'ka': 1000, 'ma': 1000000}
+    unit = {'ybp': 1, 'ka': 1000, 'ma': 1000000}
 
     elc_age = unit.get(options.get('ageunits'))
     db_age = unit.get(config.get('native_ageunits', db))

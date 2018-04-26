@@ -34,7 +34,7 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
     :type bbox: str
     :param agerange: Comma separated numerical or textual geologic ages
     :type agerange: str
-    :param ageunits: Maxage and minage units (default=ma, ka, yr)
+    :param ageunits: Maxage and minage units (default=ma, ka, ybp)
     :type ageunits: str
     :param timerule: Temporal bound (default=contain, major, overlap)
     :type timerule: str

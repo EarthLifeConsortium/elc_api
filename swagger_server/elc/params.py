@@ -14,7 +14,7 @@ def set_options(req_args, endpoint):
     spec.update(tax=['json', 'itis'])
     spec.update(ref=['bibjson', 'json', 'csv', 'ris'])
     spec.update(show=['all', 'poll', 'idx'])
-    spec.update(age=['ma', 'ka', 'yr'])
+    spec.update(age=['ma', 'ka', 'ybp'])
     spec.update(geog=['paleo', 'modern'])
 
     # Runtime options

@@ -97,7 +97,7 @@ def paleocoords(coords=None, age=None, ageunits=None):
     :param age: Numerical or geologic age
     :param age: str
     :param ageunits: Units of measure for the ages specified (and returned)
-    :type ageunits: str ('yr', 'ka' or 'ma')
+    :type ageunits: str ('ybp', 'ka' or 'ma')
 
     """
     t0 = time()
@@ -169,7 +169,7 @@ def timebound(agerange=None, ageunits=None):
     :param agerange: Comma separated numerical or textual geologic ages
     :type agerange: str
     :param ageunits: Units of measure for the ages specified (and returned)
-    :type ageunits: str ('yr', 'ka' or 'ma')
+    :type ageunits: str ('ybp', 'ka' or 'ma')
 
     """
     t0 = time()

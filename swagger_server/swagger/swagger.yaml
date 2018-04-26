@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Composite interface for paleontological databases. Currently supports the Neotoma Paleoecology Database and PBDB (The Paleobiology Database). WARNING: This API is under active development and may be incomplete. Functionality is being added and errors corrected on a continuous basis."
-  version: "1.0a7"
+  version: "1.0a8"
   title: "REST API Sandbox"
   contact:
     url: "http://earthlifeconsortium.org"
@@ -42,8 +42,8 @@ paths:
         type: "string"
       - name: "ageunits"
         in: "query"
-        description: "The units for maxage and minage. Allowable units are yr,\
-          \ ka or ma"
+        description: "The units for maxage and minage. Allowable units are YBP,\
+          \ Ka or Ma"
         required: false
         type: "string"
       - name: "timerule"
@@ -205,7 +205,7 @@ paths:
       - name: "ageunits"
         in: "query"
         description: "The units for maxage and minage. Allowable units are\ 
-          \ yr, ka or ma"
+          \ YBP, Ka or Ma"
         required: false
         type: "string"
       - name: "timerule"
@@ -342,8 +342,8 @@ paths:
         type: "string"
       - name: "ageunits"
         in: "query"
-        description: "The units for maxage and minage. Allowable units are yr,\
-          \ ka or ma"
+        description: "The units for maxage and minage. Allowable units are YBP,\
+          \ Ka or Ma"
         required: false
         type: "string"
       responses:
@@ -379,8 +379,8 @@ paths:
         type: "string"
       - name: "ageunits"
         in: "query"
-        description: "The units for maxage and minage. Allowable units are yr,\
-          \ ka or ma"
+        description: "The units for maxage and minage. Allowable units are YBP,\
+          \ Ka or Ma"
         required: false
         type: "string"
       responses:
