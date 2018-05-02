@@ -151,7 +151,7 @@ def get_age_meta(geologic_age):
 
     # Retrieve the bibliographic reference using the id number
 
-    url = 'http://paleobiologydb.org/data1.2/refs/single.json'
+    url = 'http://paleobiodb.org/data1.2/refs/single.json'
     payload = {'show': 'both', 'id': data.get('rid')[0]}
 
     try:

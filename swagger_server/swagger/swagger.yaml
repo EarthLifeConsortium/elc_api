@@ -46,16 +46,16 @@ paths:
           \ Ka or Ma"
         required: false
         type: "string"
-      - name: "timerule"
-        in: "query"
-        description: "Control the application of the temporal bounding box.\
-          \ May choose one of three rules, contain, all samples must be fully\
-          \ within the temporal bounding box; major, more than half of an\
-          \ occurrences temporal uncertainty must be within the bounding box;\
-          \ overlap, any portion of an occurrence may be withing the bounding\
-          \ box"
-        required: false
-        type: "string"
+      # - name: "timerule"
+        # in: "query"
+        # description: "Control the application of the temporal bounding box.\
+          # \ May choose one of three rules, contain, all samples must be fully\
+          # \ within the temporal bounding box; major, more than half of an\
+          # \ occurrences temporal uncertainty must be within the bounding box;\
+          # \ overlap, any portion of an occurrence may be withing the bounding\
+          # \ box"
+        # required: false
+        # type: "string"
       - name: "taxon"
         in: "query"
         description: "Taxonomic name. May be truncated, a list of taxa or use\
@@ -84,7 +84,8 @@ paths:
       - name: "limit"
         in: "query"
         description: "Limit the number of records in the response for large\
-          \ queries. Default is 999"
+          \ queries. Any whole number numerical value is accepted. Default is\
+          \ 999999 which infers no limit."
         required: false
         type: "integer"
         format: "int32"
@@ -105,8 +106,9 @@ paths:
         type: "string"
       - name: "output"
         in: "query"
-        description: "[NOTE: Only JSON format is supported in the sandbox]\
-          \ Output format for occurrences. Response is JSON (default) or CSV"
+        description: "Response format. Allowable parameters JSON (default)\
+          \ [CSV is not supported in this web sandbox but may be\
+          \ specified if constructing the query URL manually]"
         required: false
         type: "string"
       responses:
@@ -152,9 +154,9 @@ paths:
         type: "string"
       - name: "output"
         in: "query"
-        description: "[NOTE: Only BibJSON format is supported in the sandbox]\
-          \ Output format for references. Response is BibJSON (default),\
-          \ CSV or RIS"
+        description: "Response format. Allowable parameters are BibJSON (default)\
+          \ or JSON. [CSV is not supported in this web sandbox but may be\
+          \ specified if constructing the query URL manually]"
         required: false
         type: "string"
       responses:
@@ -208,16 +210,16 @@ paths:
           \ YBP, Ka or Ma"
         required: false
         type: "string"
-      - name: "timerule"
-        in: "query"
-        description: "Control the application of the temporal bounding box.\
-          \ May choose one of three rules, contain, all samples must be fully\
-          \ within the temporal bounding box; major, more than half of an\
-          \ occurrences temporal uncertainty must be within the bounding box;\
-          \ overlap, any portion of an occurrence may be withing the bounding\
-          \ box"
-        required: false
-        type: "string"
+      # - name: "timerule"
+        # in: "query"
+        # description: "Control the application of the temporal bounding box.\
+          # \ May choose one of three rules, contain, all samples must be fully\
+          # \ within the temporal bounding box; major, more than half of an\
+          # \ occurrences temporal uncertainty must be within the bounding box;\
+          # \ overlap, any portion of an occurrence may be withing the bounding\
+          # \ box"
+        # required: false
+        # type: "string"
       - name: "coordinates"
         in: "query"
         description: "Specify modern or paleo geographic coordinates for the\
@@ -230,7 +232,8 @@ paths:
       - name: "limit"
         in: "query"
         description: "Limit the number of records in the response for large\
-          \ queries. Default is 999"
+          \ queries. Any whole number numerical value is accepted. Default is\
+          \ 999999 which infers no limit."
         required: false
         type: "integer"
         format: "int32"
@@ -251,8 +254,9 @@ paths:
         type: "string"
       - name: "output"
         in: "query"
-        description: "[Note: Only JSON format is supported in the sandbox]. \
-          \ Output format for occurrences. Response is JSON (default) or  CSV"
+        description: "Response format. Allowable parameters JSON (default)\
+          \ [CSV is not supported in this web sandbox but may be\
+          \ specified if constructing the query URL manually]"
         required: false
         type: "string"
       responses:
@@ -337,7 +341,7 @@ paths:
         type: "string"
       - name: "age"
         in: "query"
-        description: "Numerical age up to ma 580 or named geologic age."
+        description: "Numerical age up to ma 580 or named geologic age. This is a limit of the paleoreconstruction model used."
         required: true 
         type: "string"
       - name: "ageunits"
