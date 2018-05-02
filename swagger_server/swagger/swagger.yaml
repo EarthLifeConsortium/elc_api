@@ -76,9 +76,9 @@ paths:
         type: "string"
       - name: "includelower"
         in: "query"
-        description: "Retrieve lower taxa. A boolean. If True, all species\
-          \ and subspecies of a named genera will be included in the response.\
-          \ Default is True"
+        description: "Retrieve lower taxa. All species and subspecies of a\
+          \ named genera will be included in the response. True (default) or\
+          \ False."
         required: false
         type: "boolean"
       - name: "limit"
@@ -299,8 +299,9 @@ paths:
         type: "string"
       - name: "includelower"
         in: "query"
-        description: "If TRUE, all species and subspecies of a named genera\
-          \ will be included in the response"
+        description: "Retrieve lower taxa. All species and subspecies of a\
+          \ named genera will be included in the response. True (default) or\
+          \ False."
         required: false
         type: "boolean"
       - name: "hierarchy"
@@ -419,8 +420,8 @@ paths:
         type: "string"
       - name: "synonyms"
         in: "query"
-        description: "Include taxonomic synonyms in response. A boolean,\
-          \ default is True"
+        description: "Include taxonomic synonyms in response. True (default)\
+          \ or False."
         required: false
         type: "boolean"
       responses:
