@@ -135,8 +135,7 @@ def get_age_meta(geologic_age):
 
     url = ''.join([config.get('resource_api', 'pbdb'),
                    'intervals/single.json'])
-    payload = {'name': geologic_age,
-               'extids': False}
+    payload = {'name': geologic_age, 'extids': False}
 
     try:
         r = requests.get(url=url,
@@ -152,9 +151,8 @@ def get_age_meta(geologic_age):
 
     # Retrieve the bibliographic reference using the id number
 
-    url = 'http://localhost/data1.2/refs/single.json'
-    payload = {'show': 'both',
-               'id': data.get('rid')[0]}
+    url = 'http://paleobiologydb.org/data1.2/refs/single.json'
+    payload = {'show': 'both', 'id': data.get('rid')[0]}
 
     try:
         r = requests.get(url=url,
