@@ -1,9 +1,9 @@
 ---
 resource_api:
-  neotoma: 'http://api-dev.neotomadb.org/v2/data/'
+  neotoma: 'http://api-dev.neotomadb.org/v2.0/data/'
   pbdb: 'https://paleobiodb.org/data1.2/'
 native_ageunits:
-  neotoma: 'yr'
+  neotoma: 'ybp'
   pbdb: 'ma'
 db_occ_endpt:
   neotoma: 'occurrence'
@@ -22,5 +22,5 @@ default:
   ageunits: 'ma'
   coordinates: 'modern'
   includelower: True
-  limit: 99
+  limit: 999999
   license: 'CC BY 4.0 (https://creativecommons.org/licenses/by/4.0)'
