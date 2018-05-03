@@ -11,25 +11,29 @@ Occurrences
 
 [description here]
 
+
 **Base path**
     ``http://earthlifeconsortium.org/api_v1/occ?``
 
 **Parameters**
 
+.. include:: parameters/taxon.rst
+.. include:: parameters/bbox.rst
+.. include:: parameters/agerange.rst
+.. note::
+    At a minimum, a `taxon`, `bbox` or `agerange` parameter must be specified, however more than one of these may be used together to further constrain the query.'
+
+.. include:: parameters/ageunits.rst
 .. include:: parameters/coordtype.rst
-
 .. include:: parameters/includelower.rst
-
 .. include:: parameters/limit.rst
-
 .. include:: parameters/offset.rst
-
 .. include:: parameters/output.rst
-
 .. include:: parameters/show.rst
 
-.. seealso::
-    [example of this endpoint]
+**Examples**
+
+.. include:: examples/occurrences.rst
 
 Locales
 -------
@@ -85,14 +89,11 @@ Convert modern day cartesian coordinates into paleocoordinates using the GPlates
 **Parameters**
 
 .. include:: parameters/coords.rst
-
 .. warning::
     Due to restriction in GPlates, some coordinates are not rotatable. In this case, an error message will be returned.
 
 .. include:: parameters/age.rst
-
 .. include:: parameters/ageunits.rst
-
 .. include:: examples/paleocoordinates.rst
 
 Timebounds
@@ -105,9 +106,7 @@ Return the oldest and youngest ages (bounds) spanning the specified range. Geolo
 **Parameters**
 
 .. include:: parameters/agerange.rst
-
 .. include:: parameters/ageunits.rst
-
 .. include:: examples/timebound.rst
 
 Subtaxa
@@ -123,9 +122,7 @@ Return a list of all taxonomic names hierarchically below the specified taxon, o
 **Parameters**
 
 .. include:: parameters/taxon.rst
-
 .. include:: parameters/synonyms.rst
-
 .. seealso::
     [example of this endpoint]
 

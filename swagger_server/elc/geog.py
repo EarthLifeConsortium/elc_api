@@ -67,5 +67,5 @@ def resolve_geog(lat, lon, mean_age):
         geog_ref = r.json().get('properties')['model']['citation']
         return coords, geog_ref
     else:
-        msg = 'Unavailable point or inalid WGS84 coords (-180 to 180 degrees)'
+        msg = 'Unavailable point or inalid WGS84 coords'
         raise ValueError(400, msg)

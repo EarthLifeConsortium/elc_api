@@ -1,9 +1,9 @@
 ---
 swagger: "2.0"
 info:
-  description: "Composite interface for paleontological databases. Currently supports the Neotoma Paleoecology Database and PBDB (The Paleobiology Database). WARNING: This API is under active development and may be incomplete. Functionality is being added and errors corrected on a continuous basis. <p>Full documentation <a href='http:///earthlifeconsortium.org/docs/api-docs.html'>here</a>."
-  version: "1.0a9"
-  title: "REST API Sandbox"
+  description: "Composite interface for paleontological databases. Currently supports the Neotoma Paleoecology Database and PBDB (The Paleobiology Database). WARNING: This API is under active development and may be incomplete. Functionality is being added and errors corrected on a continuous basis. <a href='http:///earthlifeconsortium.org/docs/api-docs.html'>Read full documentation</a>."
+  version: "1.0a10"
+  title: "API Sandbox"
   contact:
     url: "http://earthlifeconsortium.org/"
 basePath: "/api_v1"
@@ -337,7 +337,7 @@ paths:
       parameters:
       - name: "coords"
         in: "query"
-        description: "Comma separated decimal degrees as latitude,longitude."
+        description: "Comma separated decimal degrees as latitude (-90 to 90),longitude (-180 to 180) with negative values indicating southern latitudes and western longitudes."
         required: true
         type: "string"
       - name: "age"
