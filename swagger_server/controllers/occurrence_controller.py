@@ -21,33 +21,9 @@ from flask import jsonify
 
 
 def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
-        includelower=None, paleocoords=None, limit=None, offset=None,
+        includelower=None, coordtype=None, limit=None, offset=None,
         show=None, output=None):
-    """
-    Fossil occurrences in a specific place and time.
-
-    :param bbox: [lonW, latS, lonE, latN] or GeoJSON
-    :type bbox: str
-    :param agerange: Comma separated numerical or textual geologic ages
-    :type agerange: str
-    :param ageunits: Maxage and minage units (default=ma, ka, ybp)
-    :type ageunits: str
-    :param timerule: Temporal bound (default=contain, major, overlap)
-    :type timerule: str
-    :param taxon: Taxonomic name, ASCII encode
-    :type taxon: str
-    :param includelower: Include sub-taxa (defult=True)
-    :type includelower: bool
-    :param limit: Limit the number of records in the response
-    :type limit: int
-    :param offset: Begin the response from a designated point
-    :type offset: int
-    :param show: Return identifiers or stats (defult=full, idx, poll)
-    :type show: str
-    :param output: Response format (defult=json, csv)
-    :type output: str
-
-    """
+    """Paleobiological occurrences in a specific place and time."""
     return_obj = list()
     desc_obj = dict()
 

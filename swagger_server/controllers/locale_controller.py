@@ -21,28 +21,8 @@ from flask import jsonify
 
 
 def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
-        paleocoords=None, limit=None, offset=None, show=None, output=None):
-    """
-    Return locale identifiers from Neotoma and PBDB.
-
-    A locale in PBDB is a collection, in Neotoma it is every individual
-    dataset in a site.
-
-    :param idlist: Comma separated list of col or dst ids as db:dtype:number
-    :type idlist: str
-    :param bbox: [lonW, latS, lonE, latN] or GeoJSON
-    :type bbox: str
-    :param agerange: Comma separated numerical or textual geologic ages
-    :type agerange: str
-    :param ageunits: Maxage and minage units (default=ma, ka, ybp)
-    :type ageunits: str
-    :param timerule: Temporal bound (default=contain, major, overlap)
-    :type timerule: str
-    :param show: Return identifiers or stats (defult=full, idx, poll)
-    :type show: str
-    :param output: Response format (defult=json, csv)
-    :type output: str
-    """
+        coordtype=None, limit=None, offset=None, show=None, output=None):
+    """Return locale identifiers: collections, datasets etc."""
     return_obj = list()
     desc_obj = dict()
 

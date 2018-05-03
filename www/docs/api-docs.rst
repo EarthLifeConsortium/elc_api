@@ -16,6 +16,16 @@ Occurrences
 
 **Parameters**
 
+.. include:: parameters/includelower.rst
+
+.. include:: parameters/limit.rst
+
+.. include:: parameters/offset.rst
+
+.. include:: parameters/output.rst
+
+.. include:: parameters/show.rst
+
 .. seealso::
     [example of this endpoint]
 
@@ -65,7 +75,7 @@ ELC utilities ancillary to core data retrieval are collected in the ``misc`` con
 
 Paleocoordinates
 ^^^^^^^^^^^^^^^^
-Convert modern day cartesian coordinates into paleocoordinates using the GPlates [#]_ tectonics reconstruction model. Operationally this model is hosted by the Macrostrat Project at the University of Wisconsin.
+Convert modern day cartesian coordinates into paleocoordinates using the GPlates [#]_ tectonics reconstruction model. Operationally this model is hosted by the Macrostrat Project [#]_ at the University of Wisconsin.
 
 **Base path**
     ``http://earthlifeconsortium.org/api_v1/misc/paleocoords?``
@@ -129,6 +139,9 @@ API errors are reported according to IETF [#]_ standards including both server l
 
 .. [#]
     Wright, N., S. Zahirovic, R. D. Müller, and M. Seton (2013), Towards community-driven, open-access paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics, Biogeosciences, 10, 1529-1541.
+
+.. [#]
+    Macrostrat public API: https://macrostrat.org/#api
 
 .. [#]
     F. Gradstein, J. Ogg, and M. Schmitz, G. Ogg. 2012. The Geologic Time Scale 2012.

@@ -65,7 +65,7 @@ paths:
           \ query. Use includelower if all lower taxa are desired"
         required: false
         type: "string"
-      - name: "coordinates"
+      - name: "coordtype"
         in: "query"
         description: "Specify modern or paleo geographic coordinates for the\
           \ data return. Query parameters must still be modern day coordinates\
@@ -220,7 +220,7 @@ paths:
           # \ box"
         # required: false
         # type: "string"
-      - name: "coordinates"
+      - name: "coordtype"
         in: "query"
         description: "Specify modern or paleo geographic coordinates for the\
           \ data return. Query parameters must still be modern day coordinates\
