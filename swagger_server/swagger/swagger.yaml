@@ -1,11 +1,11 @@
 ---
 swagger: "2.0"
 info:
-  description: "Composite interface for paleontological databases. Currently supports the Neotoma Paleoecology Database and PBDB (The Paleobiology Database). WARNING: This API is under active development and may be incomplete. Functionality is being added and errors corrected on a continuous basis."
-  version: "1.0a8"
+  description: "Composite interface for paleontological databases. Currently supports the Neotoma Paleoecology Database and PBDB (The Paleobiology Database). WARNING: This API is under active development and may be incomplete. Functionality is being added and errors corrected on a continuous basis. <p>Full documentation <a href='http:///earthlifeconsortium.org/docs/api-docs.html'>here</a>."
+  version: "1.0a9"
   title: "REST API Sandbox"
   contact:
-    url: "http://earthlifeconsortium.org"
+    url: "http://earthlifeconsortium.org/"
 basePath: "/api_v1"
 schemes:
 - "http"

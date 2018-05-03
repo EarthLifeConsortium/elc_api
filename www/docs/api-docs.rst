@@ -16,6 +16,8 @@ Occurrences
 
 **Parameters**
 
+.. include:: parameters/coordtype.rst
+
 .. include:: parameters/includelower.rst
 
 .. include:: parameters/limit.rst
