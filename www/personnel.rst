@@ -9,6 +9,12 @@ Scientists and developers associated with the ELC project
 | PBDB Principle Investigator
 | George Mason University
 
+|jenkins_pic|
+
+| **Julian Jenkins**
+| ELC Lead Developer
+| George Mason University
+
 |williams_pic|
 
 | **Jack Williams**
@@ -24,7 +30,7 @@ Scientists and developers associated with the ELC project
 |goring_pic|
 
 | **Simon Goring**
-| Neotoma Developer and PI    
+| Neotoma/ELC Developer and PI    
 | University of Wisconsin, Madison
 
 |mcclennen_pic|
@@ -57,11 +63,6 @@ Scientists and developers associated with the ELC project
 | Neotoma Principle Investigator
 | University of Oregon
 
-|jenkins_pic|
-
-| **Julian Jenkins**
-| ELC Lead Developer
-| George Mason University
 
 .. |uhen_pic| image:: _static/Uhen.jpg
    :width: 150px

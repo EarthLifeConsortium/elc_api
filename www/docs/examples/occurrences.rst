@@ -1,11 +1,11 @@
 .. seealso::
-    Find first 10 occurrences of the programmer's best friend with ages reportes as years before present:
+    Find number of occurrences of the paleo-programmer's best friend in each resource database:
 
-    http://earthlifeconsortium.org/api_v1/occ?taxon=canis+dirus&limit=10&ageunits=ybp
+    http://earthlifeconsortium.org/api_v1/occ?taxon=canis+dirus
 
-    Find the number of occurrences of "Pinus" in each resource database without returning all of the records (also try it with ``idx`` instead of ``poll``):
+    Retrieve first 10 occurrences of "Pinus" with ages reported as years before present:
 
-    http://earthlifeconsortium.org/api_v1/occ?taxon=pinus&show=poll
+    http://earthlifeconsortium.org/api_v1/occ?taxon=pinus&limit=10&ageunits=ybp&includelower=false
 
     Download all of the whales as tabular data:
 

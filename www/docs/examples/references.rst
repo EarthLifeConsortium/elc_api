@@ -1,0 +1,4 @@
+.. seealso::
+    Specifiy a list of references and use the default output format of BibJSON [#]_
+
+    http://earthlifeconsortium.com/api_v1/ref?idlist=pbdb:ref:31213

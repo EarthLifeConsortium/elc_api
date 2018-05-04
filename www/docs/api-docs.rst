@@ -11,7 +11,6 @@ Occurrences
 
 [description here]
 
-
 **Base path**
     ``http://earthlifeconsortium.org/api_v1/occ?``
 
@@ -45,8 +44,27 @@ Locales
 
 **Parameters**
 
-.. seealso::
-    [example of this endpoint]
+.. include:: parameters/idlist.rst
+.. note::
+    ELC extended identifiers are both consumed and produced by various API routes. They consist of a three parameter, colon separated string which provides a universally unique identifier of a data resource object.
+
+    Examples of ELC IDs for the locale (``/loc``) route would be ``neot:dst:998`` or ``pbdb:col:9191``. Because of the database specific names for locale data objects, neotoma will only use ``dst`` (dataset) and PBDB will only use ``col`` (collection).
+
+.. include:: parameters/bbox.rst
+.. include:: parameters/agerange.rst
+.. note::
+    If a list of ELC universal identifiers, `idlist`, is not provided, then either `bbox` or `agerange` must be specified.
+
+.. include:: parameters/ageunits.rst
+.. include:: parameters/coordtype.rst
+.. include:: parameters/limit.rst
+.. include:: parameters/offset.rst
+.. include:: parameters/output.rst
+.. include:: parameters/show.rst
+
+**Examples**
+
+.. include:: examples/locales.rst
 
 References
 ----------
@@ -58,8 +76,16 @@ References
 
 **Parameters**
 
-.. seealso::
-    [example of this endpoint]
+.. include:: parameters/idlist.rst
+.. note::
+    Examples of valid ELC IDs for the references (``/ref``) route include ``pbdb:ref:100`` and ``neot:pub:234``. Database specific datatype names are again used in the ID construct, the ELC API route happens to be called ``/ref`` merely because there can only be one name.
+
+.. include:: parameters/output.rst
+.. include:: parameters/show.rst
+
+**Examples**
+
+.. include:: examples/references.rst
 
 Taxa
 ----
@@ -71,11 +97,13 @@ Taxa
 
 **Parameters**
 
+**Examples**
+
 .. seealso::
     [example of this endpoint]
 
-Miscellaneous endpoint
-----------------------
+Miscellaneous route
+-------------------
 
 ELC utilities ancillary to core data retrieval are collected in the ``misc`` controller and are accessible by appending the desired route to the base path.
 
@@ -94,6 +122,9 @@ Convert modern day cartesian coordinates into paleocoordinates using the GPlates
 
 .. include:: parameters/age.rst
 .. include:: parameters/ageunits.rst
+
+**Examples**
+
 .. include:: examples/paleocoordinates.rst
 
 Timebounds
@@ -107,6 +138,9 @@ Return the oldest and youngest ages (bounds) spanning the specified range. Geolo
 
 .. include:: parameters/agerange.rst
 .. include:: parameters/ageunits.rst
+
+**Examples**
+
 .. include:: examples/timebound.rst
 
 Subtaxa
@@ -123,12 +157,15 @@ Return a list of all taxonomic names hierarchically below the specified taxon, o
 
 .. include:: parameters/taxon.rst
 .. include:: parameters/synonyms.rst
+
+**Examples**
+
 .. seealso::
     [example of this endpoint]
 
 Metadata
 --------
-All ``full`` or ``poll`` JSON responses include a metadata block which importantly indicates the URLs composed for the resource databases in addition to a timestamp, the age units and the type of geographic coordinates retrieved.
+All ``full`` or ``poll`` JSON responses include a metadata block which importantly indicates the URLs composed for the resource databases in addition to a timestamp, the age units and the type of geographic coordinates retrieved. If desired, the subquery URL may be used to delve deeper into each individual database.
 
 Error handling
 --------------
@@ -137,10 +174,13 @@ API errors are reported according to IETF [#]_ standards including both server l
 .. rubric:: Footnotes
 
 .. [#]
+    BibJSON: Representing bibliographic metadata in JSON. http://okfnlabs.org/bibjson/
+
+.. [#]
     Wright, N., S. Zahirovic, R. D. Müller, and M. Seton (2013), Towards community-driven, open-access paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics, Biogeosciences, 10, 1529-1541.
 
 .. [#]
-    Macrostrat public API: https://macrostrat.org/#api
+    Macrostrat public API. https://macrostrat.org/#api
 
 .. [#]
     F. Gradstein, J. Ogg, and M. Schmitz, G. Ogg. 2012. The Geologic Time Scale 2012.
