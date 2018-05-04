@@ -3,6 +3,7 @@
 
 def locales(resp_json, return_obj, options):
     """Extract locale data from the subquery."""
+    import geojson
     from ..elc import ages
 
     # Utlity function: Choose the existing, non-empty parameter
@@ -47,11 +48,27 @@ def locales(resp_json, return_obj, options):
                 else:
                     data.update(min_age=None)
 
-            ## geog parse here
-
-            ### hack until neotoma can return geography for datasets
-            data.update(lat=None, lon=None)
-
+            # Paleo and modern coordinates
+            if rec.get('site').get('geography'):
+                loc = geojson.loads(rec.get('site').get('geography'))
+                if loc.get('type').lower() == 'point':
+                    modern = [loc.get('coordinates')[1],
+                              loc.get('coordinates')[0]]
+                else:
+                    modern = [loc.get('coordinates')[0][0][1],
+                              loc.get('coordinates')[0][0][0]]
+                if options.get('geog') == 'paleo':
+                    m_age = greater(mean(modern) / 1e6, 1)
+                    try:
+                        paleo, ref = geog.resolve_geog(lat=modern[0],
+                                                       lon=modern[1],
+                                                       mean_age=round(m_age))
+                        paleo = [round(x, 4) for x in paleo]
+                        data.update(lat=paleo[0], lon=paleo[1])
+                    except ValueError as err:
+                        data.update(lat=modern[0], lon=modern[1])
+                else:
+                    data.update(lat=modern[0], lon=modern[1])
 
             return_obj.append(data)
 
