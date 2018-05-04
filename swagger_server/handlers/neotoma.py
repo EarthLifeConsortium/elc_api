@@ -31,26 +31,26 @@ def locales(resp_json, return_obj, options):
                         .format(rec.get('site')['siteid'], 0))
 
             # Record age (unit scaled)
-            #  if rec.get('age'):
+            if dataset.get('agerange'):
 
-                #  old = choose(rec.get('age').get('ageolder'),
-                             #  rec.get('age').get('age'))
-                #  if old and old >= 0:
-                    #  data.update(max_age=round(old / factor, 5))
-                #  else:
-                    #  data.update(max_age=None)
+                old = choose(dataset.get('agerange').get('ageold'),
+                             dataset.get('agerange').get('age'))
+                if old and old >= 0:
+                    data.update(max_age=round(old / factor, 5))
+                else:
+                    data.update(max_age=None)
 
-                #  yng = choose(rec.get('age').get('ageyounger'),
-                             #  rec.get('age').get('age'))
-                #  if yng and yng >= 0:
-                    #  data.update(min_age=round(yng / factor, 5))
-                #  else:
-                    #  data.update(min_age=None)
+                yng = choose(dataset.get('agerange').get('ageyoung'),
+                             dataset.get('agerange').get('age'))
+                if yng and yng >= 0:
+                    data.update(min_age=round(yng / factor, 5))
+                else:
+                    data.update(min_age=None)
 
             ## geog parse here
 
-            ### hack until neotoma can return ages and geography for datasets
-            data.update(lat=None, lon=None, min_age=None, max_age=None)
+            ### hack until neotoma can return geography for datasets
+            data.update(lat=None, lon=None)
 
 
             return_obj.append(data)
