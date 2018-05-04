@@ -99,9 +99,6 @@ Taxa
 
 **Examples**
 
-.. seealso::
-    [example of this endpoint]
-
 Miscellaneous route
 -------------------
 
@@ -160,8 +157,7 @@ Return a list of all taxonomic names hierarchically below the specified taxon, o
 
 **Examples**
 
-.. seealso::
-    [example of this endpoint]
+.. include:: examples/subtaxa.rst
 
 Metadata
 --------
