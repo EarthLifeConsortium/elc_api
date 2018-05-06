@@ -29,10 +29,13 @@ def set_age(age_range, options, db):
     if db == 'neotoma':
         return {'ageolder': round((early_age * factor), 4),
                 'ageyounger': round((late_age * factor), 4)}
+
     elif db == 'pbdb':
         return {'max_ma': round((early_age * factor), 4),
                 'min_ma': round((late_age * factor), 4)}
-    # Add another databse specific case here
+
+    # NEW RESOURCE: Add databse specific age vocabulary here
+
     else:
         return {}
 

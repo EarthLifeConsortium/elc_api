@@ -12,8 +12,8 @@ db_loc_endpt:
   neotoma: 'datasets'
   pbdb: 'colls/list.json'
 db_tax_endpt:
-  neotoma: ''
-  pbdb: ''
+  neotoma: 'taxa'
+  pbdb: 'taxa/list.json'
 db_ref_endpt:
   neotoma: 'publications'
   pbdb: 'refs/list.json'

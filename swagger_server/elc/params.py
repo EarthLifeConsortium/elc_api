@@ -6,7 +6,8 @@ def set_options(req_args, endpoint):
     from ..elc import config
     from ast import literal_eval
 
-    # Add aditional formats and controls below (default is param[0])
+    # NEW RESOURCE: Optional. Add aditional formats and controls below
+    # The default parameter is always taken to be param[0]
     spec = dict()
     spec.update(misc=['json'])
     spec.update(occ=['json', 'csv'])
@@ -98,7 +99,7 @@ def id_parse(ids, db, id_type):
     """
     import re
 
-    # add additional database names below
+    # NEW RESOURCE: Add additional database names and datatypes below
     spec = {'dbase': ['pbdb', 'neot'],
             'dtype': ['occ', 'sit', 'dst', 'col', 'ref', 'pub', 'txn']}
 
@@ -137,7 +138,7 @@ def id_parse(ids, db, id_type):
 def set_id(ids, db, endpoint, options):
     """Return a payload parameter for the requested id tag."""
 
-    # add additional database to datatype mappings here
+    # NEW RESOURCE: Add additional database-to-datatype mappings below
     if endpoint == 'loc':
         xmap = {'pbdb': ['col', 'coll_id'],
                 'neotoma': ['dst', 'datasetid']}

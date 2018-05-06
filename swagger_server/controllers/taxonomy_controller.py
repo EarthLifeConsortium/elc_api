@@ -4,48 +4,82 @@ RESTful API controller.
 Endpoint for miscelaneous queries on specific species taxonomy.
 """
 
-import time
-from connexion import problem
-import json
-from flask import request, jsonify, Response
-from ..elc import params, config, formatter, aux
+import connexion
+import flask_csv
+from ..elc import config, params, aux, subreq
+from ..handlers import router
+from http_status import Status
+from time import time
+from flask import jsonify
 
 def tax(taxon=None, includelower=None, hierarchy=None):
-    """
-    Return taxonomic hierarchy and subtaxa in various formats.
-
-    :arg format: json, itis or csv formatted return
-    """
-    # Parameter checks
-    if not bool(request.args):
-        return problem(status=400,
-                       title='Bad Request',
-                       detail='No parameters provided.',
-                       type='about:blank')
-
-    # Init core returned objects
+    """Information about specific taxa."""
+    return_obj = list()
     desc_obj = dict()
-    indicies = set()
-    ret_obj  = list()
 
-    t0 = time.time()
+    # Set runtime options
 
-    # Build parent list
     try:
-        parents = aux.get_parents(taxon)
-    except ValueError as err:
-        return problem(status=err.args[0],
-                       title=err.args[1],
-                       detail=err.args[2],
-                       type='about:blank')
+        options = params.set_options(req_args=connexion.request.args,
+                                     endpoint='tax')
 
-    # Build subtaxa list
-    try:
-        subtaxa = aux.get_subtaxa(taxon)
     except ValueError as err:
-        return problem(status=err.args[0],
-                       title=err.args[1],
-                       detail=err.args[2],
-                       type='about:blank')
+        return connexion.problem(status=err.args[0],
+                                 title=Status(err.args[0]).name,
+                                 detail=err.args[1],
+                                 type='about:blank')
 
-    return formatters.type_itis(parents, subtaxa)
+    # Cycle through external databases
+
+    for db in config.db_list():
+
+        t0 = time()
+
+        # Configure parameter payload for api subquery
+
+        try:
+            payload = params.parse(req_args=connexion.request.args,
+                                   options=options,
+                                   db=db,
+                                   endpoint='tax')
+
+        except ValueError as err:
+            return connexion.problem(status=err.args[0],
+                                     title=Status(err.args[0]).name,
+                                     detail=err.args[1],
+                                     type='about:blank')
+
+        # Database API call
+
+        url_path = ''.join([config.get('resource_api', db),
+                            config.get('db_tax_endpt', db)])
+
+        try:
+            resp_json, api_call = subreq.trigger(url_path, payload, db)
+
+        except ValueError as err:
+            return connexion.problem(status=err.args[0],
+                                     title=Status(err.args[0]).name,
+                                     detail=err.args[1],
+                                     type='about:blank')
+
+        # Parse database response
+
+        return_obj = router.response_decode(resp_json=resp_json,
+                                            return_obj=return_obj,
+                                            options=options,
+                                            db=db,
+                                            endpoint='tax')
+
+        # Build returned metadata object
+
+        desc_obj.update(aux.build_meta(options))
+
+        desc_obj.update(aux.build_meta_sub(data=return_obj,
+                                           source=api_call,
+                                           t0=t0,
+                                           sub_tag=db,
+                                           options=options))
+
+    # DEVELOPMENT
+    return jsonify(options)

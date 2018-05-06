@@ -29,12 +29,15 @@ def set_taxon(taxon, subtax, db):
             return {'taxonname': wildcard}
         else:
             return {'taxonname': taxon}
+
     elif db == 'pbdb':
         if subtax and not genus_species:
             return {'base_name': taxon}
         else:
             return {'taxon_name': taxon}
-    # Add another databse specific case here
+
+    # NEW RESOURCE:  Add another databse specific taxon name mapping here
+
     else:
         return {}
 

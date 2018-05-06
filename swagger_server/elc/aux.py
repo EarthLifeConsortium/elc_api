@@ -44,7 +44,8 @@ def set_db_special(db, endpoint):
     if db == 'pbdb' and endpoint in ['ref']:
         return {'show': 'both'}
 
-    # Add another database specific case here
+    # NEW RESOURCE: Optional. Add any database specific API parameters here
+
     else:
         return {}
 
