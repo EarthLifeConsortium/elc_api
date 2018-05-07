@@ -12,7 +12,7 @@ from http_status import Status
 from time import time
 from flask import jsonify
 
-def tax(taxon=None, includelower=None, hierarchy=None):
+def tax(taxon=None, idlist=None, includelower=False, hierarchy=None):
     """Information about specific taxa."""
     return_obj = list()
     desc_obj = dict()

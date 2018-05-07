@@ -62,7 +62,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#occurrences">Occurrences</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#locales">Locales</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#taxa">Taxa</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#taxonomy">Taxonomy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#miscellaneous-route">Miscellaneous route</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#paleocoordinates">Paleocoordinates</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#timebounds">Timebounds</a></li>
@@ -126,57 +126,57 @@
 </dl>
 <p><strong>Parameters</strong></p>
 <dl class="docutils">
-<dt><cite>taxon=taxon_name|genus+species</cite></dt>
-<dd>A single name at any taxonomic level or a two word pair refering to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code>.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">taxon=taxon_name|genus+species</span></code></dt>
+<dd>A single name at any taxonomic level or a two word pair refering to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
 </dl>
 <dl class="docutils">
-<dt><cite>bbox=latitude_ll,longitude_ll,latitude_ur,longitude_ur</cite></dt>
-<dd>Geographic bounding box for constraining the response. Latitudes and longitudes are given in decimal degrees ranging from -90 to 90 for latitude (negative values denoting southern) and -180 to 180 for longitude (negative values denoting western). <code class="docutils literal notranslate"><span class="pre">_ll</span></code> indicates coordinates of the lower left corner of the polygon and <code class="docutils literal notranslate"><span class="pre">_ur</span></code> the upper right. This list must contain precisely four coordinates (two sets) and be ordered exactly as written above. Type: <code class="docutils literal notranslate"><span class="pre">float</span></code></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">bbox=latitude_ll,longitude_ll,latitude_ur,longitude_ur</span></code></dt>
+<dd>Geographic bounding box for constraining the response. Latitudes and longitudes are given in decimal degrees ranging from -90 to 90 for latitude (negative values denoting southern) and -180 to 180 for longitude (negative values denoting western). <code class="docutils literal notranslate"><span class="pre">_ll</span></code> indicates coordinates of the lower left corner of the polygon and <code class="docutils literal notranslate"><span class="pre">_ur</span></code> the upper right. This list must contain precisely four coordinates (two sets) and be ordered exactly as written above. Type: <cite>float</cite></dd>
 </dl>
 <dl class="docutils">
-<dt><cite>agerange=geologic_age,[value,value][geologic_age|value]</cite></dt>
-<dd>A single named geologic age or a comma-separated pair of numerical ages, geologic ages or a combination of the two. Order does not matter, returned ages will always reflect the minimum and maximum from the pairwise set. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="docutils literal notranslate"><span class="pre">float</span></code></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">agerange=geologic_age,[value,value][geologic_age|value]</span></code></dt>
+<dd>A single named geologic age or a comma-separated pair of numerical ages, geologic ages or a combination of the two. Order does not matter, returned ages will always reflect the minimum and maximum from the pairwise set. Type: <cite>str</cite> or <cite>float</cite></dd>
 </dl>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">At a minimum, a <cite>taxon</cite>, <cite>bbox</cite> or <cite>agerange</cite> parameter must be specified, however more than one of these may be used together to further constrain the query.’</p>
 </div>
 <dl class="docutils">
-<dt><cite>ageunits=ybp|ka|ma</cite></dt>
-<dd>Units of geologic age to be used in the query. Age values passed to the API will be interpreted in the context of this parameter. All time specific returned values will also be converted to match this parameter. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code>. Default: “Ma”</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ageunits=ybp|ka|ma</span></code></dt>
+<dd>Units of geologic age to be used in the query. Age values passed to the API will be interpreted in the context of this parameter. All time specific returned values will also be converted to match this parameter. Type: <cite>str</cite>. Default: “Ma”</dd>
 </dl>
 <dl class="docutils">
-<dt><cite>coordtype=modern|paleo</cite></dt>
-<dd>Configure the type of cartesian coordinates to be included in the response. Most resource databases will store the geography of occurrences and other data objects using modern day coordinates. However, with some limitations (see <code class="docutils literal notranslate"><span class="pre">misc/paleocoordinates</span></code> route below) the API is able to convert the coodinates in to a historical projection. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code>. Default: “modern”</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">coordtype=modern|paleo</span></code></dt>
+<dd>Configure the type of cartesian coordinates to be included in the response. Most resource databases will store the geography of occurrences and other data objects using modern day coordinates. However, with some limitations (see <code class="docutils literal notranslate"><span class="pre">misc/paleocoordinates</span></code> route below) the API is able to convert the coodinates in to a historical projection. Type: <cite>str</cite>. Default: “modern”</dd>
 </dl>
 <dl class="docutils">
-<dt><cite>includelower=true|false</cite></dt>
-<dd>Include all species and subspecies of a named genera in the response. For PBDB the taxonomy system is used, for other databases, this flag triggers wildcard completion. This works well for species epithets but not for higher level taxa. Type: <code class="docutils literal notranslate"><span class="pre">boolean</span></code>. Default: “true”</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">includelower=true|false</span></code></dt>
+<dd>Include all species and subspecies of a named genera in the response. For PBDB the taxonomy system is used, for other databases, this flag triggers wildcard completion. This works well for species epithets but not for higher level taxa. Type: <cite>boolean</cite>. Default: “true”</dd>
 </dl>
 <dl class="docutils">
-<dt><cite>limit=value</cite></dt>
-<dd>Impose a limit on the number of records returned from each database. Useful for testing or in conjuction with the <cite>offset</cite> parameter. Set to a very large number to negate any default limits set on any of the subqueried database resources. Type: <code class="docutils literal notranslate"><span class="pre">int</span></code>. Default: “999999”</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">limit=value</span></code></dt>
+<dd>Impose a limit on the number of records returned from each database. Useful for testing or in conjuction with the <code class="docutils literal notranslate"><span class="pre">offset</span></code> parameter. Set to a very large number to negate any default limits set on any of the subqueried database resources. Type: <cite>int</cite>. Default: “999999”</dd>
 </dl>
 <dl class="docutils">
-<dt><cite>offset=value</cite></dt>
-<dd>Select a sequential record number to begin the return. Useful in conjunction with <cite>limit</cite> to chunk very large returns. For example, <code class="docutils literal notranslate"><span class="pre">?limit=1000&amp;offset=0</span></code> would return the first 1000 records and <code class="docutils literal notranslate"><span class="pre">?limit=1000&amp;offset=1000</span></code> the next 1000 records. Handling of this is secific to the resource database and has no relationship of any data record number, merely a database table row. If not included, the respose will always begin with the first record. Type: <code class="docutils literal notranslate"><span class="pre">int</span></code></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">offset=value</span></code></dt>
+<dd>Select a sequential record number to begin the return. Useful in conjunction with <code class="docutils literal notranslate"><span class="pre">limit</span></code> to chunk very large returns. For example, <code class="docutils literal notranslate"><span class="pre">?limit=1000&amp;offset=0</span></code> would return the first 1000 records and <code class="docutils literal notranslate"><span class="pre">?limit=1000&amp;offset=1000</span></code> the next 1000 records. Handling of this is secific to the resource database and has no relationship of any data record number, merely a database table row. If not included, the respose will always begin with the first record. Type: <cite>int</cite></dd>
 </dl>
 <dl class="docutils">
-<dt><cite>output=json|csv</cite></dt>
-<dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortend MD5 hash of the response data for identification purposes. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code>. Default: “json”</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">output=json|csv</span></code></dt>
+<dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortend MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “json”</dd>
 </dl>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">The web-based API <a class="reference external" href="http://earthlifeconsortium.org/api_v1/ui/">sandbox</a> hosted on this site <strong>does not</strong> support retrieval of CSV files. If you are using the sandbox to explore API parameters and wish to download a CSV file, copy the URL displayed under [Request URL] after running a query and paste it into the browser window appending <code class="docutils literal notranslate"><span class="pre">&amp;output=csv</span></code> to the end.</p>
 </div>
 <dl class="docutils">
-<dt><cite>show=all|poll|idx</cite></dt>
-<dd><p class="first">Configure the objects to be included in the return. This parameter is ignored if the selected output format is <cite>csv</cite>. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code>. Default: “all”</p>
+<dt><code class="docutils literal notranslate"><span class="pre">show=all|poll|idx</span></code></dt>
+<dd><p class="first">Configure the objects to be included in the return. This parameter is ignored if the selected output format is “csv”. Type: <cite>str</cite>. Default: “all”</p>
 <blockquote class="last">
 <div><ul class="simple">
-<li><cite>all</cite>: All data records and meta-data</li>
-<li><cite>poll</cite>: Only the meta-data block with summary statistics</li>
-<li><cite>idx</cite>: A list of the endpoints primary data indicies</li>
+<li><code class="docutils literal notranslate"><span class="pre">all</span></code>: All data records and meta-data</li>
+<li><code class="docutils literal notranslate"><span class="pre">poll</span></code>: Only the meta-data block with summary statistics</li>
+<li><code class="docutils literal notranslate"><span class="pre">idx</span></code>: A list of the endpoints primary data indicies</li>
 </ul>
 </div></blockquote>
 </dd>
@@ -201,13 +201,13 @@
 </dl>
 <p><strong>Parameters</strong></p>
 <dl class="docutils">
-<dt><cite>idlist=database:datatype:id_number,[…]</cite></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">idlist=database:datatype:id_number,[...]</span></code></dt>
 <dd><dl class="first last docutils">
 <dt>Comma separated list of database specific ID numbers in the ELC extended format:</dt>
 <dd><ul class="first last simple">
-<li><cite>database</cite>: Subquery database name. Only first four characters are read so, for example, either <code class="docutils literal notranslate"><span class="pre">neot</span></code> or <code class="docutils literal notranslate"><span class="pre">neotoma</span></code> may be used</li>
-<li><cite>datatype</cite>: Short name for the data object to be returned. This is relative to both the database and the endpoint in question</li>
-<li><cite>id_number</cite>: A database specific numerical identifier</li>
+<li><code class="docutils literal notranslate"><span class="pre">database</span></code>: Subquery database name. Only first four characters are read so, for example, either “neot” or “neotoma” may be used</li>
+<li><code class="docutils literal notranslate"><span class="pre">datatype</span></code>: Short name for the data object to be returned. This is relative to both the database and the endpoint in question</li>
+<li><code class="docutils literal notranslate"><span class="pre">id_number</span></code>: A database specific numerical identifier</li>
 </ul>
 </dd>
 </dl>
@@ -219,49 +219,49 @@
 <p class="last">Examples of ELC IDs for the locale (<code class="docutils literal notranslate"><span class="pre">/loc</span></code>) route would be <code class="docutils literal notranslate"><span class="pre">neot:dst:998</span></code> or <code class="docutils literal notranslate"><span class="pre">pbdb:col:9191</span></code>. Because of the database specific names for locale data objects, neotoma will only use <code class="docutils literal notranslate"><span class="pre">dst</span></code> (dataset) and PBDB will only use <code class="docutils literal notranslate"><span class="pre">col</span></code> (collection).</p>
 </div>
 <dl class="docutils">
-<dt><cite>bbox=latitude_ll,longitude_ll,latitude_ur,longitude_ur</cite></dt>
-<dd>Geographic bounding box for constraining the response. Latitudes and longitudes are given in decimal degrees ranging from -90 to 90 for latitude (negative values denoting southern) and -180 to 180 for longitude (negative values denoting western). <code class="docutils literal notranslate"><span class="pre">_ll</span></code> indicates coordinates of the lower left corner of the polygon and <code class="docutils literal notranslate"><span class="pre">_ur</span></code> the upper right. This list must contain precisely four coordinates (two sets) and be ordered exactly as written above. Type: <code class="docutils literal notranslate"><span class="pre">float</span></code></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">bbox=latitude_ll,longitude_ll,latitude_ur,longitude_ur</span></code></dt>
+<dd>Geographic bounding box for constraining the response. Latitudes and longitudes are given in decimal degrees ranging from -90 to 90 for latitude (negative values denoting southern) and -180 to 180 for longitude (negative values denoting western). <code class="docutils literal notranslate"><span class="pre">_ll</span></code> indicates coordinates of the lower left corner of the polygon and <code class="docutils literal notranslate"><span class="pre">_ur</span></code> the upper right. This list must contain precisely four coordinates (two sets) and be ordered exactly as written above. Type: <cite>float</cite></dd>
 </dl>
 <dl class="docutils">
-<dt><cite>agerange=geologic_age,[value,value][geologic_age|value]</cite></dt>
-<dd>A single named geologic age or a comma-separated pair of numerical ages, geologic ages or a combination of the two. Order does not matter, returned ages will always reflect the minimum and maximum from the pairwise set. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="docutils literal notranslate"><span class="pre">float</span></code></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">agerange=geologic_age,[value,value][geologic_age|value]</span></code></dt>
+<dd>A single named geologic age or a comma-separated pair of numerical ages, geologic ages or a combination of the two. Order does not matter, returned ages will always reflect the minimum and maximum from the pairwise set. Type: <cite>str</cite> or <cite>float</cite></dd>
 </dl>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">If a list of ELC universal identifiers, <cite>idlist</cite>, is not provided, then either <cite>bbox</cite> or <cite>agerange</cite> must be specified.</p>
 </div>
 <dl class="docutils">
-<dt><cite>ageunits=ybp|ka|ma</cite></dt>
-<dd>Units of geologic age to be used in the query. Age values passed to the API will be interpreted in the context of this parameter. All time specific returned values will also be converted to match this parameter. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code>. Default: “Ma”</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ageunits=ybp|ka|ma</span></code></dt>
+<dd>Units of geologic age to be used in the query. Age values passed to the API will be interpreted in the context of this parameter. All time specific returned values will also be converted to match this parameter. Type: <cite>str</cite>. Default: “Ma”</dd>
 </dl>
 <dl class="docutils">
-<dt><cite>coordtype=modern|paleo</cite></dt>
-<dd>Configure the type of cartesian coordinates to be included in the response. Most resource databases will store the geography of occurrences and other data objects using modern day coordinates. However, with some limitations (see <code class="docutils literal notranslate"><span class="pre">misc/paleocoordinates</span></code> route below) the API is able to convert the coodinates in to a historical projection. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code>. Default: “modern”</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">coordtype=modern|paleo</span></code></dt>
+<dd>Configure the type of cartesian coordinates to be included in the response. Most resource databases will store the geography of occurrences and other data objects using modern day coordinates. However, with some limitations (see <code class="docutils literal notranslate"><span class="pre">misc/paleocoordinates</span></code> route below) the API is able to convert the coodinates in to a historical projection. Type: <cite>str</cite>. Default: “modern”</dd>
 </dl>
 <dl class="docutils">
-<dt><cite>limit=value</cite></dt>
-<dd>Impose a limit on the number of records returned from each database. Useful for testing or in conjuction with the <cite>offset</cite> parameter. Set to a very large number to negate any default limits set on any of the subqueried database resources. Type: <code class="docutils literal notranslate"><span class="pre">int</span></code>. Default: “999999”</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">limit=value</span></code></dt>
+<dd>Impose a limit on the number of records returned from each database. Useful for testing or in conjuction with the <code class="docutils literal notranslate"><span class="pre">offset</span></code> parameter. Set to a very large number to negate any default limits set on any of the subqueried database resources. Type: <cite>int</cite>. Default: “999999”</dd>
 </dl>
 <dl class="docutils">
-<dt><cite>offset=value</cite></dt>
-<dd>Select a sequential record number to begin the return. Useful in conjunction with <cite>limit</cite> to chunk very large returns. For example, <code class="docutils literal notranslate"><span class="pre">?limit=1000&amp;offset=0</span></code> would return the first 1000 records and <code class="docutils literal notranslate"><span class="pre">?limit=1000&amp;offset=1000</span></code> the next 1000 records. Handling of this is secific to the resource database and has no relationship of any data record number, merely a database table row. If not included, the respose will always begin with the first record. Type: <code class="docutils literal notranslate"><span class="pre">int</span></code></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">offset=value</span></code></dt>
+<dd>Select a sequential record number to begin the return. Useful in conjunction with <code class="docutils literal notranslate"><span class="pre">limit</span></code> to chunk very large returns. For example, <code class="docutils literal notranslate"><span class="pre">?limit=1000&amp;offset=0</span></code> would return the first 1000 records and <code class="docutils literal notranslate"><span class="pre">?limit=1000&amp;offset=1000</span></code> the next 1000 records. Handling of this is secific to the resource database and has no relationship of any data record number, merely a database table row. If not included, the respose will always begin with the first record. Type: <cite>int</cite></dd>
 </dl>
 <dl class="docutils">
-<dt><cite>output=json|csv</cite></dt>
-<dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortend MD5 hash of the response data for identification purposes. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code>. Default: “json”</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">output=json|csv</span></code></dt>
+<dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortend MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “json”</dd>
 </dl>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">The web-based API <a class="reference external" href="http://earthlifeconsortium.org/api_v1/ui/">sandbox</a> hosted on this site <strong>does not</strong> support retrieval of CSV files. If you are using the sandbox to explore API parameters and wish to download a CSV file, copy the URL displayed under [Request URL] after running a query and paste it into the browser window appending <code class="docutils literal notranslate"><span class="pre">&amp;output=csv</span></code> to the end.</p>
 </div>
 <dl class="docutils">
-<dt><cite>show=all|poll|idx</cite></dt>
-<dd><p class="first">Configure the objects to be included in the return. This parameter is ignored if the selected output format is <cite>csv</cite>. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code>. Default: “all”</p>
+<dt><code class="docutils literal notranslate"><span class="pre">show=all|poll|idx</span></code></dt>
+<dd><p class="first">Configure the objects to be included in the return. This parameter is ignored if the selected output format is “csv”. Type: <cite>str</cite>. Default: “all”</p>
 <blockquote class="last">
 <div><ul class="simple">
-<li><cite>all</cite>: All data records and meta-data</li>
-<li><cite>poll</cite>: Only the meta-data block with summary statistics</li>
-<li><cite>idx</cite>: A list of the endpoints primary data indicies</li>
+<li><code class="docutils literal notranslate"><span class="pre">all</span></code>: All data records and meta-data</li>
+<li><code class="docutils literal notranslate"><span class="pre">poll</span></code>: Only the meta-data block with summary statistics</li>
+<li><code class="docutils literal notranslate"><span class="pre">idx</span></code>: A list of the endpoints primary data indicies</li>
 </ul>
 </div></blockquote>
 </dd>
@@ -282,13 +282,13 @@
 </dl>
 <p><strong>Parameters</strong></p>
 <dl class="docutils">
-<dt><cite>idlist=database:datatype:id_number,[…]</cite></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">idlist=database:datatype:id_number,[...]</span></code></dt>
 <dd><dl class="first last docutils">
 <dt>Comma separated list of database specific ID numbers in the ELC extended format:</dt>
 <dd><ul class="first last simple">
-<li><cite>database</cite>: Subquery database name. Only first four characters are read so, for example, either <code class="docutils literal notranslate"><span class="pre">neot</span></code> or <code class="docutils literal notranslate"><span class="pre">neotoma</span></code> may be used</li>
-<li><cite>datatype</cite>: Short name for the data object to be returned. This is relative to both the database and the endpoint in question</li>
-<li><cite>id_number</cite>: A database specific numerical identifier</li>
+<li><code class="docutils literal notranslate"><span class="pre">database</span></code>: Subquery database name. Only first four characters are read so, for example, either “neot” or “neotoma” may be used</li>
+<li><code class="docutils literal notranslate"><span class="pre">datatype</span></code>: Short name for the data object to be returned. This is relative to both the database and the endpoint in question</li>
+<li><code class="docutils literal notranslate"><span class="pre">id_number</span></code>: A database specific numerical identifier</li>
 </ul>
 </dd>
 </dl>
@@ -299,21 +299,21 @@
 <p class="last">Examples of valid ELC IDs for the references (<code class="docutils literal notranslate"><span class="pre">/ref</span></code>) route include <code class="docutils literal notranslate"><span class="pre">pbdb:ref:100</span></code> and <code class="docutils literal notranslate"><span class="pre">neot:pub:234</span></code>. Database specific datatype names are again used in the ID construct, the ELC API route happens to be called <code class="docutils literal notranslate"><span class="pre">/ref</span></code> merely because there can only be one name.</p>
 </div>
 <dl class="docutils">
-<dt><cite>output=json|csv</cite></dt>
-<dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortend MD5 hash of the response data for identification purposes. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code>. Default: “json”</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">output=json|csv</span></code></dt>
+<dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortend MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “json”</dd>
 </dl>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">The web-based API <a class="reference external" href="http://earthlifeconsortium.org/api_v1/ui/">sandbox</a> hosted on this site <strong>does not</strong> support retrieval of CSV files. If you are using the sandbox to explore API parameters and wish to download a CSV file, copy the URL displayed under [Request URL] after running a query and paste it into the browser window appending <code class="docutils literal notranslate"><span class="pre">&amp;output=csv</span></code> to the end.</p>
 </div>
 <dl class="docutils">
-<dt><cite>show=all|poll|idx</cite></dt>
-<dd><p class="first">Configure the objects to be included in the return. This parameter is ignored if the selected output format is <cite>csv</cite>. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code>. Default: “all”</p>
+<dt><code class="docutils literal notranslate"><span class="pre">show=all|poll|idx</span></code></dt>
+<dd><p class="first">Configure the objects to be included in the return. This parameter is ignored if the selected output format is “csv”. Type: <cite>str</cite>. Default: “all”</p>
 <blockquote class="last">
 <div><ul class="simple">
-<li><cite>all</cite>: All data records and meta-data</li>
-<li><cite>poll</cite>: Only the meta-data block with summary statistics</li>
-<li><cite>idx</cite>: A list of the endpoints primary data indicies</li>
+<li><code class="docutils literal notranslate"><span class="pre">all</span></code>: All data records and meta-data</li>
+<li><code class="docutils literal notranslate"><span class="pre">poll</span></code>: Only the meta-data block with summary statistics</li>
+<li><code class="docutils literal notranslate"><span class="pre">idx</span></code>: A list of the endpoints primary data indicies</li>
 </ul>
 </div></blockquote>
 </dd>
@@ -325,15 +325,17 @@
 <p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/ref?idlist=pbdb:ref:31213">http://earthlifeconsortium.org/api_v1/ref?idlist=pbdb:ref:31213</a></p>
 </div>
 </div>
-<div class="section" id="taxa">
-<h2>Taxa<a class="headerlink" href="#taxa" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="taxonomy">
+<h2>Taxonomy<a class="headerlink" href="#taxonomy" title="Permalink to this headline">¶</a></h2>
 <p>[description here]</p>
 <dl class="docutils">
 <dt><strong>Base path</strong></dt>
 <dd><code class="docutils literal notranslate"><span class="pre">http://earthlifeconsortium.org/api_v1/tax?</span></code></dd>
 </dl>
 <p><strong>Parameters</strong></p>
+<p>[description here]</p>
 <p><strong>Examples</strong></p>
+<p>[description here]</p>
 </div>
 <div class="section" id="miscellaneous-route">
 <h2>Miscellaneous route<a class="headerlink" href="#miscellaneous-route" title="Permalink to this headline">¶</a></h2>
@@ -347,24 +349,24 @@
 </dl>
 <p><strong>Parameters</strong></p>
 <dl class="docutils">
-<dt><cite>coords=latitude,longitude</cite></dt>
-<dd>Modern day coordinates ranging from latitude -90 to 90 (southern latitudes are negative) and longitude -180 to 180 (western longitudes are negative) decimal degrees of arbritary precision. Type: <code class="docutils literal notranslate"><span class="pre">float</span></code></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">coords=latitude,longitude</span></code></dt>
+<dd>Modern day coordinates ranging from latitude -90 to 90 (southern latitudes are negative) and longitude -180 to 180 (western longitudes are negative) decimal degrees of arbritary precision. Type: <cite>float</cite></dd>
 </dl>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">Due to restriction in GPlates, some coordinates are not rotatable. In this case, an error message will be returned.</p>
 </div>
 <dl class="docutils">
-<dt><cite>age=value</cite></dt>
-<dd>Historical age of desired paleocoodinates where <cite>value</cite> is an integer from 1 to 580 Ma or a named geologic age. If a numerical age is specified, it may be in the units of the ageunits parameter. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="docutils literal notranslate"><span class="pre">int</span></code></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">age=value</span></code></dt>
+<dd>Historical age of desired paleocoodinates where <code class="docutils literal notranslate"><span class="pre">value</span></code> is an integer from 1 to 580 Ma or a named geologic age. If a numerical age is specified, it may be in the units of the ageunits parameter. Type: <cite>str</cite> or <cite>int</cite></dd>
 </dl>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The Ma 580 limit <strong>only</strong> applies to the paleocoordinates calculation. <cite>agerange</cite> searches in other API routes refer to the actual ages of the paleobiological records and have no limits.</p>
+<p class="last">The Ma 580 limit <strong>only</strong> applies to the paleocoordinates calculation. <code class="docutils literal notranslate"><span class="pre">agerange</span></code> searches in other API routes refer to the actual ages of the paleobiological records and have no limits.</p>
 </div>
 <dl class="docutils">
-<dt><cite>ageunits=ybp|ka|ma</cite></dt>
-<dd>Units of geologic age to be used in the query. Age values passed to the API will be interpreted in the context of this parameter. All time specific returned values will also be converted to match this parameter. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code>. Default: “Ma”</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ageunits=ybp|ka|ma</span></code></dt>
+<dd>Units of geologic age to be used in the query. Age values passed to the API will be interpreted in the context of this parameter. All time specific returned values will also be converted to match this parameter. Type: <cite>str</cite>. Default: “Ma”</dd>
 </dl>
 <p><strong>Examples</strong></p>
 <div class="admonition seealso">
@@ -382,12 +384,12 @@
 </dl>
 <p><strong>Parameters</strong></p>
 <dl class="docutils">
-<dt><cite>agerange=geologic_age,[value,value][geologic_age|value]</cite></dt>
-<dd>A single named geologic age or a comma-separated pair of numerical ages, geologic ages or a combination of the two. Order does not matter, returned ages will always reflect the minimum and maximum from the pairwise set. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="docutils literal notranslate"><span class="pre">float</span></code></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">agerange=geologic_age,[value,value][geologic_age|value]</span></code></dt>
+<dd>A single named geologic age or a comma-separated pair of numerical ages, geologic ages or a combination of the two. Order does not matter, returned ages will always reflect the minimum and maximum from the pairwise set. Type: <cite>str</cite> or <cite>float</cite></dd>
 </dl>
 <dl class="docutils">
-<dt><cite>ageunits=ybp|ka|ma</cite></dt>
-<dd>Units of geologic age to be used in the query. Age values passed to the API will be interpreted in the context of this parameter. All time specific returned values will also be converted to match this parameter. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code>. Default: “Ma”</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ageunits=ybp|ka|ma</span></code></dt>
+<dd>Units of geologic age to be used in the query. Age values passed to the API will be interpreted in the context of this parameter. All time specific returned values will also be converted to match this parameter. Type: <cite>str</cite>. Default: “Ma”</dd>
 </dl>
 <p><strong>Examples</strong></p>
 <div class="admonition seealso">
@@ -413,12 +415,12 @@
 </dl>
 <p><strong>Parameters</strong></p>
 <dl class="docutils">
-<dt><cite>taxon=taxon_name|genus+species</cite></dt>
-<dd>A single name at any taxonomic level or a two word pair refering to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <code class="docutils literal notranslate"><span class="pre">str</span></code>.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">taxon=taxon_name|genus+species</span></code></dt>
+<dd>A single name at any taxonomic level or a two word pair refering to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
 </dl>
 <dl class="docutils">
-<dt><cite>synonyms=true|false</cite></dt>
-<dd>Include known synonomous names for the children of the specified parent taxon together with recognized names. If “False” only the primary sub taxa will be retrieved. Type: <code class="docutils literal notranslate"><span class="pre">Boolean</span></code>. Default: “true”</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">synonyms=true|false</span></code></dt>
+<dd>Include known synonomous names for the children of the specified parent taxon together with recognized names. If “False” only the primary sub taxa will be retrieved. Type: <cite>Boolean</cite>. Default: “true”</dd>
 </dl>
 <p><strong>Examples</strong></p>
 <div class="admonition seealso">
@@ -447,7 +449,7 @@
 <table class="docutils footnote" frame="void" id="id10" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id5">[2]</a></td><td>Wright, N., S. Zahirovic, R. D. Müller, and M. Seton (2013), Towards community-driven, open-access paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics, Biogeosciences, 10, 1529-1541.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id5">[2]</a></td><td>Wright, N., S. Zahirovic, R. D. Müller, and M. Seton (2013), Towards community-driven, open-access paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics, Biogeosciences, 10, 1529-1541. DOI: 10.5194/bg-10-1529-2013</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id11" rules="none">
@@ -459,10 +461,7 @@
 <table class="docutils footnote" frame="void" id="id12" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id7">[4]</a></td><td><ol class="first last upperalpha simple" start="6">
-<li>Gradstein, J. Ogg, and M. Schmitz, G. Ogg. 2012. The Geologic Time Scale 2012.</li>
-</ol>
-</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id7">[4]</a></td><td>Gradstein, F., J. Ogg, and M. Schmitz, G. Ogg. 2012. The Geologic Time Scale 2012.</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id13" rules="none">

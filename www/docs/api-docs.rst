@@ -87,8 +87,8 @@ References
 
 .. include:: examples/references.rst
 
-Taxa
-----
+Taxonomy
+--------
 
 [description here]
 
@@ -97,7 +97,11 @@ Taxa
 
 **Parameters**
 
+[description here]
+
 **Examples**
+
+[description here]
 
 Miscellaneous route
 -------------------
@@ -173,13 +177,13 @@ API errors are reported according to IETF [#]_ standards including both server l
     BibJSON: Representing bibliographic metadata in JSON. http://okfnlabs.org/bibjson/
 
 .. [#]
-    Wright, N., S. Zahirovic, R. D. Müller, and M. Seton (2013), Towards community-driven, open-access paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics, Biogeosciences, 10, 1529-1541.
+    Wright, N., S. Zahirovic, R. D. Müller, and M. Seton (2013), Towards community-driven, open-access paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics, Biogeosciences, 10, 1529-1541. DOI: 10.5194/bg-10-1529-2013
 
 .. [#]
     Macrostrat public API. https://macrostrat.org/#api
 
 .. [#]
-    F. Gradstein, J. Ogg, and M. Schmitz, G. Ogg. 2012. The Geologic Time Scale 2012.
+    Gradstein, F., J. Ogg, and M. Schmitz, G. Ogg. 2012. The Geologic Time Scale 2012.
 
 .. [#]
     Internet Engineering Task Force: Problem Details for HTTP APIs. https://tools.ietf.org/html/draft-ietf-appsawg-http-problem-00

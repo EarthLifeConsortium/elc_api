@@ -1,2 +1,2 @@
-`coordtype=modern|paleo`
-    Configure the type of cartesian coordinates to be included in the response. Most resource databases will store the geography of occurrences and other data objects using modern day coordinates. However, with some limitations (see ``misc/paleocoordinates`` route below) the API is able to convert the coodinates in to a historical projection. Type: ``str``. Default: "modern"
+``coordtype=modern|paleo``
+    Configure the type of cartesian coordinates to be included in the response. Most resource databases will store the geography of occurrences and other data objects using modern day coordinates. However, with some limitations (see ``misc/paleocoordinates`` route below) the API is able to convert the coodinates in to a historical projection. Type: `str`. Default: "modern"

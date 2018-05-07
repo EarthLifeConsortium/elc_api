@@ -298,6 +298,13 @@ paths:
           \ includelower"
         required: false
         type: "string"
+      - name: "idlist"
+        in: "query"
+        description: "Unique numeric ID, or vector of IDs for dataset (dst)\
+          \ or collection (col) in the format of [database]:[datatype]:\
+          \ [numeric]"
+        required: false
+        type: "string"
       - name: "includelower"
         in: "query"
         description: "Retrieve lower taxa. All species and subspecies of a\
