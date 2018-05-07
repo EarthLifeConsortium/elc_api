@@ -12,7 +12,7 @@ Handlers
 --------
 The majority of code required to support each resource database is contained in a file named ``handlers/[database_name].py``. As every subquery resource will return data differing in structure and tag vocabulary, a custom "handler" is required to process and map these returns to the common ELC dictionaries.
 
-It is suggested that one of the existing handler be used as a template, paying close attention to the ``data.update()`` statements as these load the ELC response object. These fields are all required and for those that can not be returned by the new resource database, ``data.update(UnretrievableParamName=None)`` where statements must be included. This will insert a `Null` into the JSON response and a blank field in a CSV download.
+It is suggested that one of the existing handler be used as a template, paying close attention to the ``data.update()`` statements as these load the ELC response object. These fields are all required. If a parameter can not be returned by the new resource database, ``data.update(UnretrievableParamName=None)`` statements must be included. This will insert a `Null` into the JSON response and a blank field in a CSV download.
 
 Inline modifications
 --------------------
