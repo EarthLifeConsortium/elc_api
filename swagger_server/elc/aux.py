@@ -25,8 +25,6 @@ def get_checksum(data, full=False):
 
 def build_filename(endpoint, data):
     """Compose a filename for CSV return."""
-    from ..elc import aux
-
     datatype = {'occ': 'occurrences',
                 'ref': 'references',
                 'tax': 'taxa',
@@ -43,6 +41,9 @@ def set_db_special(db, endpoint):
 
     if db == 'pbdb' and endpoint in ['ref']:
         return {'show': 'both'}
+
+    if db == 'pbdb' and endpoint in ['tax']:
+        return {'show': 'full,attr,refattr'}
 
     # NEW RESOURCE: Optional. Add any database specific API parameters here
 

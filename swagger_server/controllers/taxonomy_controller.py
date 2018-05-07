@@ -33,6 +33,11 @@ def tax(taxon=None, includelower=None, hierarchy=None):
 
     for db in config.db_list():
 
+        ### temporary shim #######
+        if db == 'neotoma':
+            continue
+        ##########################
+
         t0 = time()
 
         # Configure parameter payload for api subquery
@@ -81,5 +86,28 @@ def tax(taxon=None, includelower=None, hierarchy=None):
                                            sub_tag=db,
                                            options=options))
 
+    # Return composite data structure to client
+
+    if options.get('output') == 'json':
+        if options.get('show') == 'poll':
+            return jsonify(desc_obj)
+        if options.get('show') == 'idx':
+            return jsonify(aux.get_id_numbers(data=return_obj,
+                                              endpoint='tax'))
+        else:
+            return jsonify(metadata=desc_obj, records=return_obj)
+
+    elif options.get('output') == 'csv':
+        if return_obj:
+            filename = aux.build_filename(endpoint='tax', data=return_obj)
+            return flask_csv.send_csv(return_obj,
+                                      filename,
+                                      return_obj[0].keys())
+        else:
+            msg = 'Unable to generate CSV file. Search returned no records.'
+            return jsonify(status=204,
+                           title=Status(204).name,
+                           detail=msg,
+                           type='about:blank')
     # DEVELOPMENT
     return jsonify(options)

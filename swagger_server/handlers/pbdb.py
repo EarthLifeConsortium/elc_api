@@ -1,6 +1,30 @@
 """Custom decoder logic for the Paleobiology Database response."""
 
 
+def taxonomy(resp_json, return_obj, options):
+    """Extract specific data on taxa from the subquery."""
+    for rec in resp_json.get('records', []):
+
+        data = dict()
+
+        data.update(taxon_id='pbdb:{0:s}'.format(rec.get('oid', 'txn:0')))
+        data.update(taxon=rec.get('nam'))
+        data.update(parent_id='pbdb:{0:s}'.format(rec.get('par', 'txn:0')))
+
+        try:
+            status = 'extant' if bool(int(rec.get('ext'))) else 'extinct'
+            data.update(status=status)
+        except TypeError as e:
+            data.update(status=None)
+
+        data.update(source='pbdb:{0:s}'.format(rec.get('rid', 'ref:0')))
+        data.update(attribution=rec.get('att'))
+
+        return_obj.append(data)
+
+    return return_obj
+
+
 def locales(resp_json, return_obj, options):
     """Extract locale data from the subquery."""
     from ..elc import ages

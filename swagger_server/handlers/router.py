@@ -23,8 +23,8 @@ def response_decode(resp_json, return_obj, options, db, endpoint):
             return neotoma.locales(resp_json, return_obj, options)
         if endpoint == 'ref':
             return neotoma.references(resp_json, return_obj, options)
-        id endpoint == 'tax':
-            return neotoma.taxa(resp_json, return_obj, options)
+        if endpoint == 'tax':
+            return neotoma.taxonomy(resp_json, return_obj, options)
 
     if db == 'pbdb':
         if endpoint == 'occ':
@@ -33,8 +33,8 @@ def response_decode(resp_json, return_obj, options, db, endpoint):
             return pbdb.locales(resp_json, return_obj, options)
         if endpoint == 'ref':
             return pbdb.references(resp_json, return_obj, options)
-        id endpoint == 'tax':
-            return pbdb.taxa(resp_json, return_obj, options)
+        if endpoint == 'tax':
+            return pbdb.taxonomy(resp_json, return_obj, options)
 
     # NEW RESOURCE: Additional custom database handler calls here
 
