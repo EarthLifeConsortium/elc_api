@@ -24,13 +24,13 @@ Scientists and developers associated with the ELC project
 |peters_pic|
 
 | **Shanan Peters**
-| PBDB Principle Investigator    
+| PBDB Principle Investigator
 | University of Wisconsin, Madison
 
 |goring_pic|
 
 | **Simon Goring**
-| Neotoma/ELC Developer and PI    
+| Neotoma Developer and PI    
 | University of Wisconsin, Madison
 
 |mcclennen_pic|

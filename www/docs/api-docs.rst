@@ -20,7 +20,7 @@ Occurrences
 .. include:: parameters/bbox.rst
 .. include:: parameters/agerange.rst
 .. note::
-    At a minimum, a `taxon`, `bbox` or `agerange` parameter must be specified, however more than one of these may be used together to further constrain the query.'
+    At a minimum, a ``taxon``, ``bbox`` or ``agerange`` parameter must be specified, however more than one of these may be used together to further constrain the query.'
 
 .. include:: parameters/ageunits.rst
 .. include:: parameters/coordtype.rst
@@ -53,7 +53,7 @@ Locales
 .. include:: parameters/bbox.rst
 .. include:: parameters/agerange.rst
 .. note::
-    If a list of ELC universal identifiers, `idlist`, is not provided, then either `bbox` or `agerange` must be specified.
+    If a list of ELC universal identifiers, ``idlist``, is not provided, then either ``bbox`` or ``agerange`` must be specified.
 
 .. include:: parameters/ageunits.rst
 .. include:: parameters/coordtype.rst
