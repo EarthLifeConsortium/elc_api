@@ -8,8 +8,7 @@ An interactive web-based `sandbox <http://earthlifeconsortium.org/api_v1/ui/>`_ 
 
 Occurrences
 -----------
-
-[description here]
+Occurrences are the individual instances of fossils in time and space. Occurrences of taxa can be specified at any taxonomic level bound by any units of time and spatial delimitation.
 
 **Base path**
     ``http://earthlifeconsortium.org/api_v1/occ?``
@@ -36,8 +35,7 @@ Occurrences
 
 Locales
 -------
-
-[description here]
+A locale is a cube of time-space delimited with geographic units and geologic time bounds.
 
 **Base path**
     ``http://earthlifeconsortium.org/api_v1/loc?``
@@ -68,8 +66,7 @@ Locales
 
 References
 ----------
-
-[description here]
+References returns bibliographic information on the publications from which other data are derived.
 
 **Base path**
     ``http://earthlifeconsortium.org/api_v1/ref?``
@@ -89,8 +86,7 @@ References
 
 Taxonomy
 --------
-
-[description here]
+Taxonomy returns the classification of a given taxon.
 
 **Base path**
     ``http://earthlifeconsortium.org/api_v1/tax?``
@@ -163,13 +159,11 @@ Return a list of all taxonomic names hierarchically below the specified taxon, o
 
 .. include:: examples/subtaxa.rst
 
-Metadata
---------
-All ``full`` or ``poll`` JSON responses include a metadata block which importantly indicates the URLs composed for the resource databases in addition to a timestamp, the age units and the type of geographic coordinates retrieved. If desired, the subquery URL may be used to delve deeper into each individual database.
+`Metadata`
+    All ``full`` or ``poll`` JSON responses include a metadata block which importantly indicates the URLs composed for the resource databases in addition to a timestamp, the age units and the type of geographic coordinates retrieved. If desired, the subquery URL may be used to delve deeper into each individual database.
 
-Error handling
---------------
-API errors are reported according to IETF [#]_ standards including both server level 500 series and client level 400 series HTTP errors. As the ELC API leverages remote data service resources for much of it's functionality, bad requests to or lack of availability of these remote services may result in the propogation of a 400 level error as ELC is the client in this circumstance.
+`Error handling`
+    API errors are reported according to IETF [#]_ standards including both server level 500 series and client level 400 series HTTP errors. As the ELC API leverages remote data service resources for much of it's functionality, bad requests to or lack of availability of these remote services may result in the propogation of a 400 level error as ELC is the client in this circumstance.
 
 .. rubric:: Footnotes
 
@@ -177,13 +171,13 @@ API errors are reported according to IETF [#]_ standards including both server l
     BibJSON: Representing bibliographic metadata in JSON. http://okfnlabs.org/bibjson/
 
 .. [#]
-    Wright, N., S. Zahirovic, R. D. Müller, and M. Seton (2013), Towards community-driven, open-access paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics, Biogeosciences, 10, 1529-1541. DOI: 10.5194/bg-10-1529-2013
+    Wright, N., S. Zahirovic, R. D. Müller, and M. Seton (2013), Towards community-driven, open-access paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics, Biogeosciences, 10, 1529-1541. DOI: `10.5194/bg-10-1529-2013 <https://www.researchgate.net/publication/235789001_Towards_community-driven_paleogeographic_reconstructions_Integrating_open-access_paleogeographic_and_paleobiology_data_with_plate_tectonics>`_
 
 .. [#]
     Macrostrat public API. https://macrostrat.org/#api
 
 .. [#]
-    Gradstein, F., J. Ogg, and M. Schmitz, G. Ogg. 2012. The Geologic Time Scale 2012.
+    Gradstein, F. M., J. G. Ogg, M. D. Schmitz, and G. M. Ogg. 2012. `A Geologic Time Scale 2012 <https://www.elsevier.com/books/the-geologic-time-scale-2012/gradstein/978-0-444-59425-9>`_, Volume 2. Elsevier, Amsterdam, 1144 pp.
 
 .. [#]
     Internet Engineering Task Force: Problem Details for HTTP APIs. https://tools.ietf.org/html/draft-ietf-appsawg-http-problem-00

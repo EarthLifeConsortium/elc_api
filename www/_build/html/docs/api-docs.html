@@ -56,21 +56,13 @@
 <h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">ELC: Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../deliverables.html">Project Deliverables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../personnel.html">Personnel</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#occurrences">Occurrences</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#locales">Locales</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#taxonomy">Taxonomy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#miscellaneous-route">Miscellaneous route</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#paleocoordinates">Paleocoordinates</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#timebounds">Timebounds</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#subtaxa">Subtaxa</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#metadata">Metadata</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#error-handling">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#miscellaneous-route">Miscellaneous route</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api-extend.html">Extending the API</a></li>
@@ -119,7 +111,7 @@
 <p>An interactive web-based <a class="reference external" href="http://earthlifeconsortium.org/api_v1/ui/">sandbox</a> is available for exploring the API. The API can, of course be called directly using a browser, cURL or using your favorite HTTP library such as Requests. The generated query URL is available in the sandbox for copying and editing.</p>
 <div class="section" id="occurrences">
 <h2>Occurrences<a class="headerlink" href="#occurrences" title="Permalink to this headline">¶</a></h2>
-<p>[description here]</p>
+<p>Occurrences are the individual instances of fossils in time and space. Occurrences of taxa can be specified at any taxonomic level bound by any units of time and spatial delimitation.</p>
 <dl class="docutils">
 <dt><strong>Base path</strong></dt>
 <dd><code class="docutils literal notranslate"><span class="pre">http://earthlifeconsortium.org/api_v1/occ?</span></code></dd>
@@ -194,7 +186,7 @@
 </div>
 <div class="section" id="locales">
 <h2>Locales<a class="headerlink" href="#locales" title="Permalink to this headline">¶</a></h2>
-<p>[description here]</p>
+<p>A locale is a cube of time-space delimited with geographic units and geologic time bounds.</p>
 <dl class="docutils">
 <dt><strong>Base path</strong></dt>
 <dd><code class="docutils literal notranslate"><span class="pre">http://earthlifeconsortium.org/api_v1/loc?</span></code></dd>
@@ -275,7 +267,7 @@
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
-<p>[description here]</p>
+<p>References returns bibliographic information on the publications from which other data are derived.</p>
 <dl class="docutils">
 <dt><strong>Base path</strong></dt>
 <dd><code class="docutils literal notranslate"><span class="pre">http://earthlifeconsortium.org/api_v1/ref?</span></code></dd>
@@ -327,7 +319,7 @@
 </div>
 <div class="section" id="taxonomy">
 <h2>Taxonomy<a class="headerlink" href="#taxonomy" title="Permalink to this headline">¶</a></h2>
-<p>[description here]</p>
+<p>Taxonomy returns the classification of a given taxon.</p>
 <dl class="docutils">
 <dt><strong>Base path</strong></dt>
 <dd><code class="docutils literal notranslate"><span class="pre">http://earthlifeconsortium.org/api_v1/tax?</span></code></dd>
@@ -430,15 +422,12 @@
 <p>Check to see if there are any known synonyms of “Dorudon atrox”:</p>
 <p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/misc/subtaxa?taxon=dorudon+atrox&amp;synonyms=true">http://earthlifeconsortium.org/api_v1/misc/subtaxa?taxon=dorudon+atrox&amp;synonyms=true</a></p>
 </div>
-</div>
-</div>
-<div class="section" id="metadata">
-<h2>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h2>
-<p>All <code class="docutils literal notranslate"><span class="pre">full</span></code> or <code class="docutils literal notranslate"><span class="pre">poll</span></code> JSON responses include a metadata block which importantly indicates the URLs composed for the resource databases in addition to a timestamp, the age units and the type of geographic coordinates retrieved. If desired, the subquery URL may be used to delve deeper into each individual database.</p>
-</div>
-<div class="section" id="error-handling">
-<h2>Error handling<a class="headerlink" href="#error-handling" title="Permalink to this headline">¶</a></h2>
-<p>API errors are reported according to IETF <a class="footnote-reference" href="#id13" id="id8">[5]</a> standards including both server level 500 series and client level 400 series HTTP errors. As the ELC API leverages remote data service resources for much of it’s functionality, bad requests to or lack of availability of these remote services may result in the propogation of a 400 level error as ELC is the client in this circumstance.</p>
+<dl class="docutils">
+<dt><cite>Metadata</cite></dt>
+<dd>All <code class="docutils literal notranslate"><span class="pre">full</span></code> or <code class="docutils literal notranslate"><span class="pre">poll</span></code> JSON responses include a metadata block which importantly indicates the URLs composed for the resource databases in addition to a timestamp, the age units and the type of geographic coordinates retrieved. If desired, the subquery URL may be used to delve deeper into each individual database.</dd>
+<dt><cite>Error handling</cite></dt>
+<dd>API errors are reported according to IETF <a class="footnote-reference" href="#id13" id="id8">[5]</a> standards including both server level 500 series and client level 400 series HTTP errors. As the ELC API leverages remote data service resources for much of it’s functionality, bad requests to or lack of availability of these remote services may result in the propogation of a 400 level error as ELC is the client in this circumstance.</dd>
+</dl>
 <p class="rubric">Footnotes</p>
 <table class="docutils footnote" frame="void" id="id9" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
@@ -449,7 +438,7 @@
 <table class="docutils footnote" frame="void" id="id10" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id5">[2]</a></td><td>Wright, N., S. Zahirovic, R. D. Müller, and M. Seton (2013), Towards community-driven, open-access paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics, Biogeosciences, 10, 1529-1541. DOI: 10.5194/bg-10-1529-2013</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id5">[2]</a></td><td>Wright, N., S. Zahirovic, R. D. Müller, and M. Seton (2013), Towards community-driven, open-access paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics, Biogeosciences, 10, 1529-1541. DOI: <a class="reference external" href="https://www.researchgate.net/publication/235789001_Towards_community-driven_paleogeographic_reconstructions_Integrating_open-access_paleogeographic_and_paleobiology_data_with_plate_tectonics">10.5194/bg-10-1529-2013</a></td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id11" rules="none">
@@ -461,7 +450,7 @@
 <table class="docutils footnote" frame="void" id="id12" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id7">[4]</a></td><td>Gradstein, F., J. Ogg, and M. Schmitz, G. Ogg. 2012. The Geologic Time Scale 2012.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id7">[4]</a></td><td>Gradstein, F. M., J. G. Ogg, M. D. Schmitz, and G. M. Ogg. 2012. <a class="reference external" href="https://www.elsevier.com/books/the-geologic-time-scale-2012/gradstein/978-0-444-59425-9">A Geologic Time Scale 2012</a>, Volume 2. Elsevier, Amsterdam, 1144 pp.</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id13" rules="none">
@@ -470,6 +459,7 @@
 <tr><td class="label"><a class="fn-backref" href="#id8">[5]</a></td><td>Internet Engineering Task Force: Problem Details for HTTP APIs. <a class="reference external" href="https://tools.ietf.org/html/draft-ietf-appsawg-http-problem-00">https://tools.ietf.org/html/draft-ietf-appsawg-http-problem-00</a></td></tr>
 </tbody>
 </table>
+</div>
 </div>
 </div>
 
