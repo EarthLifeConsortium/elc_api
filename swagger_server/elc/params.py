@@ -145,6 +145,9 @@ def set_id(ids, db, endpoint, options):
     elif endpoint == 'ref':
         xmap = {'pbdb': ['ref', 'ref_id'],
                 'neotoma': ['pub', 'pubid']}
+    elif endpoint == 'tax':
+        xmap = {'pbdb': ['txn', 'taxon_id'],
+                'neotoma': ['txn', 'taxonid']}
     else:
         return {}
 
@@ -165,7 +168,7 @@ def parse(req_args, options, db, endpoint):
     """Return a Requests payload specific to resource target."""
     from ..elc import config, aux, ages, taxa
 
-    # Alowable endpoint parameters (add specification for additional below)
+    # Alowable endpoint parameters
 
     spec = dict()
     spec.update(occ=['bbox', 'agerange', 'ageunits', 'timerule', 'taxon',
@@ -173,7 +176,7 @@ def parse(req_args, options, db, endpoint):
                      'show', 'output'])
     spec.update(loc=['idlist', 'bbox', 'agerange', 'ageunits', 'timerule',
                      'coordinates', 'limit', 'offset', 'show', 'output'])
-    spec.update(tax=['taxon', 'includelower', 'hierarchy'])
+    spec.update(tax=['taxon', 'idlist', 'includelower', 'hierarchy'])
     spec.update(ref=['idlist', 'show', 'output'])
     spec.update(timebound=['agerange', 'ageunits'])
     spec.update(paleocoords=['coords', 'age', 'ageunits'])

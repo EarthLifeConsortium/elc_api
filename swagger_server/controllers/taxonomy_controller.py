@@ -33,11 +33,6 @@ def tax(taxon=None, idlist=None, includelower=False, hierarchy=None):
 
     for db in config.db_list():
 
-        ### temporary shim #######
-        #  if db == 'neotoma':
-            #  continue
-        ##########################
-
         t0 = time()
 
         # Configure parameter payload for api subquery
