@@ -1,15 +1,39 @@
 """Custom decoder for Neotoma Paleoecology Database response."""
 
 
+def taxonomy(resp_json, return_obj, options):
+    """Extract specific data on taxa from the subquery."""
+    for rec in resp_json.get('data', []):
+
+        data = dict()
+
+        data.update(taxon_id='neot:txn:{0:d}'
+                    .format(rec.get('taxonid', 0)))
+        data.update(taxon=rec.get('taxonname'))
+        data.update(parent_id='neot:txn:{0:d}'
+                    .format(rec.get('highertaxonid', 0)))
+
+        data.update(status=rec.get('status'))
+
+        data.update(source='neot:pub:{0:d}'
+                    .format(rec.get('publicationid', 0)))
+        data.update(attribution=rec.get('author'))
+
+        return_obj.append(data)
+
+    return return_obj
+
+
 def locales(resp_json, return_obj, options):
     """Extract locale data from the subquery."""
     import geojson
-    from ..elc import ages
+    from ..elc import ages, geog
+    from statistics import mean
 
     # Utlity function: Choose the existing, non-empty parameter
     def choose(x, y): return x or y
 
-    # Utility function: Choose the greater of two numbers 
+    # Utility function: Choose the greater of two numbers
     def greater(x, y): return x if x > y else y
 
     factor = ages.set_age_scaler(options=options, db='pbdb')
@@ -84,7 +108,7 @@ def occurrences(resp_json, return_obj, options):
     # Utlity function: Choose the existing, non-empty parameter
     def choose(x, y): return x or y
 
-    # Utility function: Choose the greater of two numbers 
+    # Utility function: Choose the greater of two numbers
     def greater(x, y): return x if x > y else y
 
     factor = ages.set_age_scaler(options=options, db='neotoma')
