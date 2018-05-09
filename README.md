@@ -18,7 +18,7 @@ This project is currently under development.
 Development team:
 * [Julian Jenkins](http://github.com/jpjenk)
 * [Simon Goring](http://github.com/SimonGoring)
-* with Mike Anderson (Neotoma) and Michael McClennen (PBDB)
+* with Michael McClennen (PBDB), Mike Anderson (Neotoma), Mike Stryker (Neotoma)
 
 For more infomation about the EarthLife Consortium and it's members visit [EarthLifeConsortium.org](http://earthlifeconsortium.org).
 
@@ -65,4 +65,4 @@ The API reports all excemptions as serialized JSON strictly conforming to the In
 
 ## Production Environment
 
-The REST API should be deployed with the [Green Unicorn](http://gunicorn.org) WSGI app server in combination with [Nginx](http://nginx.org) on the front end in place of the [Werkzeng](http://werkzeug.pocoo.org) development server included with Flask.
+See README-Deploy for informaton regarding production deployment as a uWSGI app.
