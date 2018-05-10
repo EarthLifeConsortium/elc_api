@@ -3,7 +3,7 @@ swagger: "2.0"
 info:
   description: "Composite interface for paleontological databases. Currently supports the Neotoma Paleoecology Database and PBDB (The Paleobiology Database). See full <a href='http://earthlifeconsortium.org/api_v1/swagger.json'>OpenAPI Specification</a>. <b>NOTE:</b> The 'show=csv' parameter is not supported in this web sandbox, only use this switch when calling the API directly with a URL. Read <a href='http:///earthlifeconsortium.org/docs/api-docs.html'>full documentation</a>."
   # <b>WARNING</b>: This API is under active development and may be incomplete. Functionality is being added and errors corrected on a continuous basis."
-  version: "1.0a18"
+  version: "1.0a19"
   title: "API Sandbox"
   contact:
     url: "http://earthlifeconsortium.org"

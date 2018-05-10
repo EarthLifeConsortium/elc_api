@@ -24,11 +24,13 @@ def set_taxon(taxon, subtax, db):
         raise ValueError(400, msg)
 
     if db == 'neotoma':
-        if subtax and not genus_species:
-            wildcard = '{0:s}%'.format(taxon)
-            return {'taxonname': wildcard}
-        else:
-            return {'taxonname': taxon}
+        # Disused Neotoma wildcard matching routine
+        #  if subtax and not genus_species:
+            #  wildcard = '{0:s}%'.format(taxon)
+            #  return {'taxonname': wildcard}
+        #  else:
+            #  return {'taxonname': taxon}
+        return {'taxonname': taxon}
 
     elif db == 'pbdb':
         if subtax and not genus_species:
