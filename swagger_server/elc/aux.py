@@ -84,7 +84,8 @@ def build_meta(options):
             'retrieval_timestamp': aux.set_timestamp(),
             'source': 'http://earthlifeconsortium.org',
             'age_units': options.get('ageunits'),
-            'coordinates': options.get('geog')}
+            'coordinates': options.get('geog'),
+            'subtaxa_included': options.get('includelower')}
 
 
 def build_meta_sub(source, t0, sub_tag, options, data=None):

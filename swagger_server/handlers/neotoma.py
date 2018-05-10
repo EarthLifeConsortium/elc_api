@@ -133,6 +133,12 @@ def locales(resp_json, return_obj, options):
                 else:
                     data.update(lat=modern[0], lon=modern[1])
 
+            # Site elevation
+            if rec.get('site').get('altitude'):
+                data.update(elevation=rec.get('site').get('altitude'))
+            else:
+                data.update(elevation=None)
+
             return_obj.append(data)
 
     return return_obj
@@ -187,6 +193,7 @@ def occurrences(resp_json, return_obj, options):
             site = rec.get('site')
 
             # Dataset level information
+            data.update(elevation=site.get('altitude'))
             data.update(source=site.get('database'))
             data.update(data_type=site.get('datasettype'))
             if site.get('datasetid'):
