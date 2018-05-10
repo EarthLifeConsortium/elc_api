@@ -3,22 +3,40 @@
 
 def taxonomy(resp_json, return_obj, options):
     """Extract specific data on taxa from the subquery."""
+    import yaml
+
+    # Full ecological group names
+    with open('swagger_server/lookup/neotoma_eco_groups.yaml') as f:
+        eco_map = yaml.safe_load(f)
+
     for rec in resp_json.get('data', []):
 
         data = dict()
 
         # Core return
 
-        data.update(taxon_id='neot:txn:{0:d}'
-                    .format(rec.get('taxonid', 0)))
+        if rec.get('taxonid'):
+            data.update(taxon_id='neot:txn:{0:d}'
+                        .format(rec.get('taxonid')))
+        else:
+            data.update(taxon_id=None)
+
         data.update(taxon=rec.get('taxonname'))
-        data.update(parent_id='neot:txn:{0:d}'
-                    .format(rec.get('highertaxonid', 0)))
+
+        if rec.get('highertaxonid'):
+            data.update(parent_id='neot:txn:{0:d}'
+                        .format(rec.get('highertaxonid')))
+        else:
+            data.update(parent_id=None)
 
         data.update(status=rec.get('status'))
 
-        data.update(source='neot:pub:{0:d}'
-                    .format(rec.get('publicationid', 0)))
+        if rec.get('publicationid'):
+            data.update(source='neot:pub:{0:d}'
+                        .format(rec.get('publicationid')))
+        else:
+            data.update(source=None)
+
         data.update(attribution=rec.get('author'))
 
         # Not available from Neotoma
@@ -37,7 +55,8 @@ def taxonomy(resp_json, return_obj, options):
         data.update(composition=None)
 
         # Neotoma only taxonomy fields
-        data.update(ecological_group=rec.get('ecolgroup'))
+        if rec.get('ecolgroup'):
+            data.update(ecological_group=eco_map.get(rec.get('ecolgroup')))
 
         return_obj.append(data)
 
