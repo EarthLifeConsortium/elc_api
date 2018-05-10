@@ -51,6 +51,20 @@ def set_db_special(db, endpoint):
         return {}
 
 
+def get_run_list(run):
+    """Determine the resource databases for ELC to use."""
+    from ..elc import config
+
+    if run:
+        run_list = [x.strip().lower() for x in run.split(',')]
+        if 'all' in run_list:
+            return config.db_list()
+        else:
+            return run_list
+    else:
+        return config.db_list()
+
+
 def get_id_numbers(data, endpoint):
     """Return a list of the specified endpoint's primary id numbers."""
     ids = set()

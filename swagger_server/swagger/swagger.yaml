@@ -99,12 +99,6 @@ paths:
         required: false
         type: "integer"
         format: "int32"
-      - name: "show"
-        in: "query"
-        description: "Set to idx for occurrence id's only. Set to poll for\
-          \ statistics only. Otherwise, full return"
-        required: false
-        type: "string"
       - name: "output"
         in: "query"
         description: "Response format. Allowable parameters JSON (default)\
@@ -112,6 +106,18 @@ paths:
           \ specified if constructing the query URL manually]"
         required: false
         type: "string"
+      - name: "show"
+        in: "query"
+        description: "Set to idx for occurrence id's only. Set to poll for\
+          \ statistics only. Otherwise, full return"
+        required: false
+        type: "string"
+      # - name: "run"
+        # in: "query"
+        # description: "Specify resource databases to use. Comma separated list\
+          # \ of database names, default is 'all'."
+        # required: false
+        # type: "string"
       responses:
         200:
           description: "occurrence response"
@@ -147,19 +153,25 @@ paths:
           \ [numeric]"
         required: false
         type: "string"
+      - name: "output"
+        in: "query"
+        description: "Response format. Allowable parameters are BibJSON\
+          \ (default) or JSON. [CSV is not supported in this web sandbox but\
+          \ may be specified if constructing the query URL manually]"
+        required: false
+        type: "string"
       - name: "show"
         in: "query"
         description: "Set to idx for locale id's only. Set to poll for\
           \ statistics only. Otherwise, full return"
         required: false
         type: "string"
-      - name: "output"
-        in: "query"
-        description: "Response format. Allowable parameters are BibJSON (default)\
-          \ or JSON. [CSV is not supported in this web sandbox but may be\
-          \ specified if constructing the query URL manually]"
-        required: false
-        type: "string"
+      # - name: "run"
+        # in: "query"
+        # description: "Specify resource databases to use. Comma separated list\
+          # \ of database names, default is 'all'."
+        # required: false
+        # type: "string"
       responses:
         200:
           description: "reference response"
@@ -247,12 +259,6 @@ paths:
         required: false
         type: "integer"
         format: "int32"
-      - name: "show"
-        in: "query"
-        description: "Set to idx for locale id's only. Set to poll for\
-          \ statistics only. Otherwise, full return"
-        required: false
-        type: "string"
       - name: "output"
         in: "query"
         description: "Response format. Allowable parameters JSON (default)\
@@ -260,6 +266,18 @@ paths:
           \ specified if constructing the query URL manually]"
         required: false
         type: "string"
+      - name: "show"
+        in: "query"
+        description: "Set to idx for locale id's only. Set to poll for\
+          \ statistics only. Otherwise, full return"
+        required: false
+        type: "string"
+      # - name: "run"
+        # in: "query"
+        # description: "Specify resource databases to use. Comma separated list\
+          # \ of database names, default is 'all'."
+        # required: false
+        # type: "string"
       responses:
         200:
           description: "Locale response"
@@ -318,6 +336,25 @@ paths:
           \ included in the response, otherwise just the unique entry for a match"
         required: false
         type: "boolean"
+      - name: "output"
+        in: "query"
+        description: "Response format. Allowable parameters JSON (default)\
+          \ [CSV is not supported in this web sandbox but may be\
+          \ specified if constructing the query URL manually]"
+        required: false
+        type: "string"
+      - name: "show"
+        in: "query"
+        description: "Set to idx for taxonomic id's only. Set to poll for\
+          \ statistics only. Otherwise, full return"
+        required: false
+        type: "string"
+      # - name: "run"
+        # in: "query"
+        # description: "Specify resource databases to use. Comma separated list\
+          # \ of database names, default is 'all'."
+        # required: false
+        # type: "string"
       responses:
         200:
           description: "taxon response"

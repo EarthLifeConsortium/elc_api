@@ -7,6 +7,8 @@ def taxonomy(resp_json, return_obj, options):
 
         data = dict()
 
+        # Core return
+
         data.update(taxon_id='neot:txn:{0:d}'
                     .format(rec.get('taxonid', 0)))
         data.update(taxon=rec.get('taxonname'))
@@ -18,6 +20,24 @@ def taxonomy(resp_json, return_obj, options):
         data.update(source='neot:pub:{0:d}'
                     .format(rec.get('publicationid', 0)))
         data.update(attribution=rec.get('author'))
+
+        # Not available from Neotoma
+        data.update(rank=None)
+        data.update(common_name=None)
+        data.update(occurrences_count=None)
+        data.update(early_interval=None)
+        data.update(late_interval=None)
+        data.update(subtaxa_count=None)
+        data.update(subtaxa_extant=None)
+        data.update(environment=None)
+        data.update(env_basis=None)
+        data.update(mobility=None)
+        data.update(habitat=None)
+        data.update(diet=None)
+        data.update(composition=None)
+
+        # Neotoma only taxonomy fields
+        data.update(ecological_group=rec.get('ecolgroup'))
 
         return_obj.append(data)
 

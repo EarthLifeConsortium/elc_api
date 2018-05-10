@@ -12,7 +12,7 @@ from http_status import Status
 from time import time
 from flask import jsonify
 
-def tax(taxon=None, idlist=None, includelower=False, hierarchy=None):
+def tax(taxon=None, idlist=None, includelower=None, hierarchy=None, run=None):
     """Information about specific taxa."""
     return_obj = list()
     desc_obj = dict()
@@ -29,9 +29,11 @@ def tax(taxon=None, idlist=None, includelower=False, hierarchy=None):
                                  detail=err.args[1],
                                  type='about:blank')
 
+    run_list = aux.get_run_list(connexion.request.args.get('run'))
+
     # Cycle through external databases
 
-    for db in config.db_list():
+    for db in run_list:
 
         t0 = time()
 

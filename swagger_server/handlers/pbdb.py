@@ -3,9 +3,20 @@
 
 def taxonomy(resp_json, return_obj, options):
     """Extract specific data on taxa from the subquery."""
+    rank = {'2':'subspecies', '3':'species', '4':'subgenus', '5':'genus',
+            '6':'subtribe', '7':'tribe', '8':'subfamily', '9':'family',
+            '10':'superfamily', '11':'infraorder', '12':'suborder',
+            '13':'order', '14':'superorder', '15':'infraclass',
+            '16':'subclass', '17':'class', '18':'superclass',
+            '19':'subphylum', '20':'phylum', '21':'superphylum',
+            '22':'subkingdom', '23':'kingdom', '25':'unranked clade',
+            '26':'informal'}
+
     for rec in resp_json.get('records', []):
 
         data = dict()
+
+        # Core return
 
         data.update(taxon_id='pbdb:{0:s}'.format(rec.get('oid', 'txn:0')))
         data.update(taxon=rec.get('nam'))
@@ -19,6 +30,24 @@ def taxonomy(resp_json, return_obj, options):
 
         data.update(source='pbdb:{0:s}'.format(rec.get('rid', 'ref:0')))
         data.update(attribution=rec.get('att'))
+
+        # PBDB only taxonomy fields
+        data.update(rank=rank.get(str(rec.get('rnk'))))
+        data.update(common_name=rec.get('nm2'))
+        data.update(occurrences_count=rec.get('noc'))
+        data.update(early_interval=rec.get('tei'))
+        data.update(late_interval=rec.get('tli'))
+        data.update(subtaxa_count=rec.get('siz'))
+        data.update(subtaxa_extant=rec.get('exs'))
+        data.update(environment=rec.get('jev'))
+        data.update(env_basis=rec.get('jec'))
+        data.update(mobility=rec.get('jmo'))
+        data.update(habitat=rec.get('jlh'))
+        data.update(diet=rec.get('jdt'))
+        data.update(composition=rec.get('jco'))
+
+        # Not available from PBDB
+        data.update(ecological_group=None)
 
         return_obj.append(data)
 

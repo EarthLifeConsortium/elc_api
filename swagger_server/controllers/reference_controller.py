@@ -50,14 +50,11 @@ def ref(idlist=None, show=None, output=None):
                                  detail=err.args[1],
                                  type='about:blank')
 
+    run_list = aux.get_run_list(connexion.request.args.get('run'))
+
     # Cycle through external databases
 
-    for db in config.db_list():
-
-        ### temporary shim #######
-        if db == 'neotoma':
-            continue
-        ##########################
+    for db in run_list:
 
         t0 = time()
 

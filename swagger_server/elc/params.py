@@ -12,7 +12,7 @@ def set_options(req_args, endpoint):
     spec.update(misc=['json'])
     spec.update(occ=['json', 'csv'])
     spec.update(loc=['json', 'csv'])
-    spec.update(tax=['json', 'itis'])
+    spec.update(tax=['json', 'itis', 'csv'])
     spec.update(ref=['bibjson', 'json', 'csv', 'ris'])
     spec.update(show=['all', 'poll', 'idx'])
     spec.update(age=['ma', 'ka', 'ybp'])
@@ -69,10 +69,13 @@ def set_options(req_args, endpoint):
             msg = 'Config: coords not in {0:s}'.format(str(spec.get('geog')))
             raise ValueError(500, msg)
 
-    # Subtaxa inclusion in the query
-    choice = req_args.get('includelower',
-                          str(config.get('default', 'includelower')))
-    options.update(includelower=literal_eval(choice.capitalize()))
+    # Subtaxa inclusion in the query (override default for taxonomy route)
+    if endpoint == 'tax' and 'includelower' not in req_args.keys():
+        options.update(includelower=False)
+    else:
+        choice = req_args.get('includelower',
+                              str(config.get('default', 'includelower')))
+        options.update(includelower=literal_eval(choice.capitalize()))
 
     # Limit records in the query
     choice = req_args.get('limit',
@@ -137,7 +140,6 @@ def id_parse(ids, db, id_type):
 
 def set_id(ids, db, endpoint, options):
     """Return a payload parameter for the requested id tag."""
-
     # NEW RESOURCE: Add additional database-to-datatype mappings below
     if endpoint == 'loc':
         xmap = {'pbdb': ['col', 'coll_id'],
@@ -173,11 +175,13 @@ def parse(req_args, options, db, endpoint):
     spec = dict()
     spec.update(occ=['bbox', 'agerange', 'ageunits', 'timerule', 'taxon',
                      'includelower', 'coordinates', 'limit', 'offset',
-                     'show', 'output'])
+                     'show', 'output', 'run'])
     spec.update(loc=['idlist', 'bbox', 'agerange', 'ageunits', 'timerule',
-                     'coordinates', 'limit', 'offset', 'show', 'output'])
-    spec.update(tax=['taxon', 'idlist', 'includelower', 'hierarchy'])
-    spec.update(ref=['idlist', 'show', 'output'])
+                     'coordinates', 'limit', 'offset', 'show', 'output',
+                     'run'])
+    spec.update(tax=['taxon', 'idlist', 'includelower', 'hierarchy',
+                     'show', 'output', 'run'])
+    spec.update(ref=['idlist', 'show', 'output', 'run'])
     spec.update(timebound=['agerange', 'ageunits'])
     spec.update(paleocoords=['coords', 'age', 'ageunits'])
     spec.update(subtaxa=['taxon', 'synonyms'])
