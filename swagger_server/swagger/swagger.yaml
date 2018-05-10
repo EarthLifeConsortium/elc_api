@@ -3,7 +3,7 @@ swagger: "2.0"
 info:
   description: "Composite interface for paleontological databases. Currently supports the Neotoma Paleoecology Database and PBDB (The Paleobiology Database). See full <a href='http://earthlifeconsortium.org/api_v1/swagger.json'>OpenAPI Specification</a>. <b>NOTE:</b> The 'show=csv' parameter is not supported in this web sandbox, only use this switch when calling the API directly with a URL. Read <a href='http:///earthlifeconsortium.org/docs/api-docs.html'>full documentation</a>."
   # <b>WARNING</b>: This API is under active development and may be incomplete. Functionality is being added and errors corrected on a continuous basis."
-  version: "1.0a17"
+  version: "1.0a18"
   title: "API Sandbox"
   contact:
     url: "http://earthlifeconsortium.org"
@@ -112,12 +112,12 @@ paths:
           \ statistics only. Otherwise, full return"
         required: false
         type: "string"
-      # - name: "run"
-        # in: "query"
-        # description: "Specify resource databases to use. Comma separated list\
-          # \ of database names, default is 'all'."
-        # required: false
-        # type: "string"
+      - name: "run"
+        in: "query"
+        description: "Specify resource databases to use. Comma separated list\
+          \ of database names, default is 'all'."
+        required: false
+        type: "string"
       responses:
         200:
           description: "occurrence response"
@@ -166,12 +166,12 @@ paths:
           \ statistics only. Otherwise, full return"
         required: false
         type: "string"
-      # - name: "run"
-        # in: "query"
-        # description: "Specify resource databases to use. Comma separated list\
-          # \ of database names, default is 'all'."
-        # required: false
-        # type: "string"
+      - name: "run"
+        in: "query"
+        description: "Specify resource databases to use. Comma separated list\
+          \ of database names, default is 'all'."
+        required: false
+        type: "string"
       responses:
         200:
           description: "reference response"
@@ -272,12 +272,12 @@ paths:
           \ statistics only. Otherwise, full return"
         required: false
         type: "string"
-      # - name: "run"
-        # in: "query"
-        # description: "Specify resource databases to use. Comma separated list\
-          # \ of database names, default is 'all'."
-        # required: false
-        # type: "string"
+      - name: "run"
+        in: "query"
+        description: "Specify resource databases to use. Comma separated list\
+          \ of database names, default is 'all'."
+        required: false
+        type: "string"
       responses:
         200:
           description: "Locale response"
@@ -330,12 +330,12 @@ paths:
           \ False."
         required: false
         type: "boolean"
-      - name: "hierarchy"
-        in: "query"
-        description: "If TRUE, the full hierarchy for the taxon will be\
-          \ included in the response, otherwise just the unique entry for a match"
-        required: false
-        type: "boolean"
+      # - name: "hierarchy"
+        # in: "query"
+        # description: "If TRUE, the full hierarchy for the taxon will be\
+          # \ included in the response, otherwise just the unique entry for a match"
+        # required: false
+        # type: "boolean"
       - name: "output"
         in: "query"
         description: "Response format. Allowable parameters JSON (default)\
@@ -349,12 +349,12 @@ paths:
           \ statistics only. Otherwise, full return"
         required: false
         type: "string"
-      # - name: "run"
-        # in: "query"
-        # description: "Specify resource databases to use. Comma separated list\
-          # \ of database names, default is 'all'."
-        # required: false
-        # type: "string"
+      - name: "run"
+        in: "query"
+        description: "Specify resource databases to use. Comma separated list\
+          \ of database names, default is 'all'."
+        required: false
+        type: "string"
       responses:
         200:
           description: "taxon response"
@@ -667,6 +667,3 @@ definitions:
       source:
         type: "string"
         description: "Sub-database of literature reference"
-      # occurences:
-        # type: "array"
-        # description: "List of occurences found within this locale (PBDB only)"

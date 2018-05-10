@@ -28,6 +28,7 @@ Occurrences are the individual instances of fossils in time and space. Occurrenc
 .. include:: parameters/offset.rst
 .. include:: parameters/output.rst
 .. include:: parameters/show.rst
+.. include:: parameters/run.rst
 
 **Examples**
 
@@ -59,6 +60,7 @@ A locale is a cube of time-space delimited with geographic units and geologic ti
 .. include:: parameters/offset.rst
 .. include:: parameters/output.rst
 .. include:: parameters/show.rst
+.. include:: parameters/run.rst
 
 **Examples**
 
@@ -79,6 +81,7 @@ References returns bibliographic information on the publications from which othe
 
 .. include:: parameters/output.rst
 .. include:: parameters/show.rst
+.. include:: parameters/run.rst
 
 **Examples**
 
@@ -93,11 +96,19 @@ Taxonomy returns the classification of a given taxon.
 
 **Parameters**
 
-[description here]
+.. include:: parameters/taxon.rst
+.. include:: parameters/idlist.rst
+.. note::
+    Either a taxon name or a list of ELC formatted taxonomic IDs must be provided. Examples of valid ELC IDs for the taxonomy (``/tax``) route include ``pbdb:txn:929`` and ``neot:txn:34``.
+
+.. include:: parameters/includelower_false.rst
+.. include:: parameters/output.rst
+.. include:: parameters/show.rst
+.. include:: parameters/run.rst
 
 **Examples**
 
-[description here]
+.. include:: examples/taxonomy.rst
 
 Miscellaneous route
 -------------------
