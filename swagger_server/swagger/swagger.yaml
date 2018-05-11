@@ -3,7 +3,7 @@ swagger: "2.0"
 info:
   description: "Composite interface for paleontological databases. Currently supports the Neotoma Paleoecology Database and PBDB (The Paleobiology Database). See full <a href='http://earthlifeconsortium.org/api_v1/swagger.json'>OpenAPI Specification</a>. <b>NOTE:</b> The 'show=csv' parameter is not supported in this web sandbox, only use this switch when calling the API directly with a URL. Read <a href='http:///earthlifeconsortium.org/docs/api-docs.html'>full documentation</a>."
   # <b>WARNING</b>: This API is under active development and may be incomplete. Functionality is being added and errors corrected on a continuous basis."
-  version: "1.0b1-subtaxa"
+  version: "1.0b3"
   title: "API Sandbox"
   contact:
     url: "http://earthlifeconsortium.org"
@@ -29,6 +29,15 @@ paths:
       - "application/json"
       - "text/csv"
       parameters:
+      - name: "taxon"
+        in: "query"
+        description: "Taxonomic name. May be truncated, a list of taxa or use\
+          \ wildcards. If a specific taxon ID or a vector of IDs is known that\
+          \ parameter can be passed through taxon. Taxon lists must be passed\
+          \ using JSON formating. By default, returns only taxa named in the\
+          \ query. Use includelower if all lower taxa are desired"
+        required: false
+        type: "string"
       - name: "bbox"
         in: "query"
         description: "Bounding box definition, either as a numeric vector of\
@@ -57,15 +66,6 @@ paths:
           # \ box"
         # required: false
         # type: "string"
-      - name: "taxon"
-        in: "query"
-        description: "Taxonomic name. May be truncated, a list of taxa or use\
-          \ wildcards. If a specific taxon ID or a vector of IDs is known that\
-          \ parameter can be passed through taxon. Taxon lists must be passed\
-          \ using JSON formating. By default, returns only taxa named in the\
-          \ query. Use includelower if all lower taxa are desired"
-        required: false
-        type: "string"
       - name: "coordtype"
         in: "query"
         description: "Specify modern or paleo geographic coordinates for the\

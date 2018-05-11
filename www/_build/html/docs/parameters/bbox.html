@@ -92,8 +92,8 @@
           <div class="body" role="main">
             
   <dl class="docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">bbox=latitude_ll,longitude_ll,latitude_ur,longitude_ur</span></code></dt>
-<dd>Geographic bounding box for constraining the response. Latitudes and longitudes are given in decimal degrees ranging from -90 to 90 for latitude (negative values denoting southern) and -180 to 180 for longitude (negative values denoting western). <code class="docutils literal notranslate"><span class="pre">_ll</span></code> indicates coordinates of the lower left corner of the polygon and <code class="docutils literal notranslate"><span class="pre">_ur</span></code> the upper right. This list must contain precisely four coordinates (two sets) and be ordered exactly as written above. Type: <cite>float</cite></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">bbox=POLYGON((...))</span></code></dt>
+<dd>Geographic bounding box for constraining the response. Must be a strictly formated OGC WKT Polygon. The unaffiliated tool <a class="reference external" href="http://boundingbox.klokantech.com">BoundingBox</a> may be useful in graphically creating a rectangular polygon. Select “OGC WKT” from the menu and past the generated string into the <code class="docutils literal notranslate"><span class="pre">bbox</span></code> field of the ELC API. Type: <cite>str</cite></dd>
 </dl>
 
 

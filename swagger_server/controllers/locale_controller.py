@@ -21,7 +21,8 @@ from flask import jsonify
 
 
 def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
-        coordtype=None, limit=None, offset=None, show=None, output=None):
+        coordtype=None, limit=None, offset=None, show=None, output=None,
+        run=None):
     """Return locale identifiers: collections, datasets etc."""
     return_obj = list()
     desc_obj = dict()

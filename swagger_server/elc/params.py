@@ -168,7 +168,7 @@ def set_id(ids, db, endpoint, options):
 
 def parse(req_args, options, db, endpoint):
     """Return a Requests payload specific to resource target."""
-    from ..elc import config, aux, ages, taxa
+    from ..elc import config, aux, ages, taxa, geog
 
     # Alowable endpoint parameters
 
@@ -247,7 +247,11 @@ def parse(req_args, options, db, endpoint):
         else:
             payload.update(offset=req_args.get('offset'))
 
-    # !!! geography searching as yet unwritten
-    #  if 'bbox' in req_args.keys():
+    if 'bbox' in req_args.keys():
+
+        try:
+            payload.update(geog.set_location(wkt=req_args.get('bbox'), db=db))
+        except ValueError as err:
+            raise ValueError(err.args[0], err.args[1])
 
     return payload

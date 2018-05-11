@@ -22,7 +22,7 @@ from flask import jsonify
 
 def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
         includelower=None, coordtype=None, limit=None, offset=None,
-        show=None, output=None):
+        show=None, output=None, run=None):
     """Paleobiological occurrences in a specific place and time."""
     return_obj = list()
     desc_obj = dict()

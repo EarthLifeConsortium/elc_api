@@ -69,3 +69,21 @@ def resolve_geog(lat, lon, mean_age):
     else:
         msg = 'Unavailable point or inalid WGS84 coords'
         raise ValueError(400, msg)
+
+
+def set_location(wkt, db):
+    """Return location constraint payload parameter."""
+    if 'POLYGON((' not in wkt:
+        msg = 'WKT bounding box must be in POLYGON((...)) format'
+        raise ValueError(400, msg)
+
+    if db == 'neotoma':
+        return {'loc': wkt}
+
+    elif db == 'pbdb':
+        return {'loc': wkt}
+
+    # NEW RESOURCE: Add databse specific WKT bounding box vocabulary here
+
+    else:
+        return {}

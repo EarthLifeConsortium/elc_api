@@ -1,2 +1,2 @@
-``bbox=latitude_ll,longitude_ll,latitude_ur,longitude_ur``
-    Geographic bounding box for constraining the response. Latitudes and longitudes are given in decimal degrees ranging from -90 to 90 for latitude (negative values denoting southern) and -180 to 180 for longitude (negative values denoting western). ``_ll`` indicates coordinates of the lower left corner of the polygon and ``_ur`` the upper right. This list must contain precisely four coordinates (two sets) and be ordered exactly as written above. Type: `float`
+``bbox=POLYGON((...))``
+    Geographic bounding box for constraining the response. Must be a strictly formated OGC WKT Polygon. The unaffiliated tool `BoundingBox <http://boundingbox.klokantech.com>`_ may be useful in graphically creating a rectangular polygon. Select "OGC WKT" from the menu and past the generated string into the ``bbox`` field of the ELC API. Type: `str`

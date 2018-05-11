@@ -21,7 +21,7 @@ from time import time
 from flask import jsonify
 
 
-def ref(idlist=None, show=None, output=None):
+def ref(idlist=None, show=None, output=None, run=None):
     """
     Literature references/publications.
 
