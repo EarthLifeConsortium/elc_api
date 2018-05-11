@@ -13,7 +13,7 @@ Endpoint for queries on taxonomic occurrences in time and space.
 
 import connexion
 import flask_csv
-from ..elc import config, params, aux, subreq
+from ..elc import config, params, aux, subreq, taxa
 from ..handlers import router
 from http_status import Status
 from time import time
@@ -61,27 +61,65 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
                                      detail=err.args[1],
                                      type='about:blank')
 
-        # Database API call
-
         url_path = ''.join([config.get('resource_api', db),
                             config.get('db_occ_endpt', db)])
 
-        try:
-            resp_json, api_call = subreq.trigger(url_path, payload, db)
+        if options.get('includelower') and db == 'neotoma':
 
-        except ValueError as err:
-            return connexion.problem(status=err.args[0],
-                                     title=Status(err.args[0]).name,
-                                     detail=err.args[1],
-                                     type='about:blank')
+            lower_taxa = taxa.get_subtaxa(taxon=taxon, inc_syn=True)
 
-        # Parse database response
+            for subtaxon in lower_taxa:
 
-        return_obj = router.response_decode(resp_json=resp_json,
-                                            return_obj=return_obj,
-                                            options=options,
-                                            db=db,
-                                            endpoint='occ')
+                # Run Neotoma with PBDB taxonomy (part 1: Multi-call)
+                payload.update(taxonname=subtaxon)
+                # Database API call
+                try:
+                    resp_json, api_call = subreq.trigger(url_path, payload, db)
+                except ValueError as err:
+                    return connexion.problem(status=err.args[0],
+                                             title=Status(err.args[0]).name,
+                                             detail=err.args[1],
+                                             type='about:blank')
+                # Parse database response
+                return_obj = router.response_decode(resp_json=resp_json,
+                                                    return_obj=return_obj,
+                                                    options=options,
+                                                    db=db,
+                                                    endpoint='occ')
+
+            # Run with Neotoma's own recursion routine (part 2: Single call)
+            payload.update(taxonname=taxon)
+            payload.update(lower=True)
+            # Database API call
+            try:
+                resp_json, api_call = subreq.trigger(url_path, payload, db)
+            except ValueError as err:
+                return connexion.problem(status=err.args[0],
+                                         title=Status(err.args[0]).name,
+                                         detail=err.args[1],
+                                         type='about:blank')
+            # Parse database response
+            return_obj = router.response_decode(resp_json=resp_json,
+                                                return_obj=return_obj,
+                                                options=options,
+                                                db=db,
+                                                endpoint='occ')
+        else:
+
+            # Database API call
+            try:
+                resp_json, api_call = subreq.trigger(url_path, payload, db)
+            except ValueError as err:
+                return connexion.problem(status=err.args[0],
+                                         title=Status(err.args[0]).name,
+                                         detail=err.args[1],
+                                         type='about:blank')
+            # Parse database response
+            return_obj = router.response_decode(resp_json=resp_json,
+                                                return_obj=return_obj,
+                                                options=options,
+                                                db=db,
+                                                endpoint='occ')
 
         # Build returned metadata object
 
