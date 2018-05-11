@@ -89,7 +89,7 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
 
             # Run with Neotoma's own recursion routine (part 2: Single call)
             payload.update(taxonname=taxon)
-            payload.update(lower=True)
+            payload.update(lower='true')
             # Database API call
             try:
                 resp_json, api_call = subreq.trigger(url_path, payload, db)
