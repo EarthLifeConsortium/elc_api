@@ -69,7 +69,7 @@ def locales(resp_json, return_obj, options):
     from ..elc import ages, geog
     from statistics import mean
 
-    # Utlity function: Choose the existing, non-empty parameter
+    # Utlity function: if 1st param is '', 0 or None return 2nd param
     def choose(x, y): return x or y
 
     # Utility function: Choose the greater of two numbers
@@ -96,17 +96,18 @@ def locales(resp_json, return_obj, options):
 
             # Record age (unit scaled)
             if dataset.get('agerange'):
+                #  import pdb; pdb.set_trace()
 
-                old = choose(dataset.get('agerange').get('ageold'),
-                             dataset.get('agerange').get('age'))
-                if old and old >= 0:
+                old = choose(dataset.get('agerange').get('age'),
+                             dataset.get('agerange').get('ageold'))
+                if old is not None and old >= 0:
                     data.update(max_age=round(old / factor, 5))
                 else:
                     data.update(max_age=None)
 
-                yng = choose(dataset.get('agerange').get('ageyoung'),
-                             dataset.get('agerange').get('age'))
-                if yng and yng >= 0:
+                yng = choose(dataset.get('agerange').get('age'),
+                             dataset.get('agerange').get('ageyoung'))
+                if yng is not None and yng >= 0:
                     data.update(min_age=round(yng / factor, 5))
                 else:
                     data.update(min_age=None)
