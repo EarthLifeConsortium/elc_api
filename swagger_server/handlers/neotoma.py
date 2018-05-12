@@ -96,7 +96,6 @@ def locales(resp_json, return_obj, options):
 
             # Record age (unit scaled)
             if dataset.get('agerange'):
-                #  import pdb; pdb.set_trace()
 
                 old = choose(dataset.get('agerange').get('age'),
                              dataset.get('agerange').get('ageold'))

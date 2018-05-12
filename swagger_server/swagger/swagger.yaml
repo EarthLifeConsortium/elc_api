@@ -523,45 +523,49 @@ definitions:
       min_age:
         type: "string"
         description: "Most recent (youngest) age in bound"
+      ics_color:
+        type: "string"
+        description: "Standardized color hex for first geologic age in range"
   reference:
     type: "object"
     properties:
-      author:
+      authors:
         type: "array"
         description: "Parsed list of author names"
         items:
           type: "string"
-      citation:
+      cite:
         type: "string"
         description: "Formated APA citation. For legacy reasons, this is all\
           \ that is currently available for Neotoma references"
-      identifier:
-        type: "array"
-        description: "Container for DOI and unique database reference index"
-        items:
-          type: "string"
+      doi:
+        type: "string"
+        description: "Journal artical DOI"
+      ref_id:
+        type: "string"
+        description: "Unique database reference identifier"
       journal:
         type: "array"
         description: "Container for journal or book name, editors, pages and\
           \ volume"
-        items:
-          type: "string"
+      page_range:
+        type: "string"
+        description: "Pages of journal article or book"
+      vol_no:
+        type: "string"
+        description: "Journal volume and number"
       title:
         type: "string"
         description: "Title of the reference material"
-      type:
+      editor:
+        type: "string"
+        description: "Name of book editor"
+      kind:
         type: "string"
         description: "Nature of the reference publication. Journal, book etc."
       year:
         type: "string"
         description: "Publication year of the reference material"
-  taxonomy:
-    type: "array"
-    items:
-      $ref: "#/definitions/taxonomy_inner"
-  agebasis:
-    type: "string"
-    description: "Basis of age estimate for the given site or occurence"
   occurrence:
     type: "object"
     properties:
@@ -580,9 +584,6 @@ definitions:
       data_type:
         type: "string"
         description: "Paleontological type"
-      source:
-        type: "string"
-        description: "Sub-database of literature reference"
       max_age:
         type: "number"
         format: "double"
@@ -599,6 +600,13 @@ definitions:
         type: "number"
         format: "double"
         description: "Occurrence longitude in decimal degrees"
+      elevation:
+        type: "number"
+        format: "double"
+        description: "Locale elevation"
+      source:
+        type: "string"
+        description: "Sub-database or literature reference"
   errorModel:
     type: "object"
     required:
@@ -620,42 +628,105 @@ definitions:
         type: "integer"
         format: "int32"
         description: "HTTP numeric status code"
-  taxonomy_inner:
+  taxonomy:
+    type: "object"
     properties:
+      attribution:
+        type: "string"
+        description: "Original author and year"
+      common_name:
+        type: "string"
+        description: "Colloquial name"
+      composition:
+        type: "string"
+        description: " "
+      diet:
+        type: "string"
+        description: " "
+      early_interval:
+        type: "string"
+        description: "Earliest geologic age occurrence"
+      ecological_group:
+        type: "string"
+        description: " "
+      env_basis:
+        type: "string"
+        description: " "
+      environment:
+        type: "string"
+        description: " "
+      habitat:
+        type: "string"
+        description: " "
+      late_interval:
+        type: "string"
+        description: "Latest geologic age occurrence"
+      mobility:
+        type: "string"
+        description: " "
+      occurrences_count:
+        type: "number"
+        format: "integer"
+        description: "Number of occurence of the taxa in database if available"
+      parent_id:
+        type: "string"
+        description: "Unique ID of the parent taxa"
+      rank:
+        type: "string"
+        description: "Taxonomic rank"
+      source:
+        type: "string"
+        description: "Sub-database or literature reference"
+      status:
+        type: "string"
+        description: "Extinct or extant"
+      subtaxa_count:
+        type: "number"
+        format: "integer"
+        description: "Number of child taxa"
+      subtaxa_extant:
+        type: "number"
+        format: "integer"
+        description: "Number of child taxa that are extant"
       taxon:
         type: "string"
         description: "Taxonomic name"
-      hierarchy:
+      taxon_id:
         type: "string"
-        description: "A JSON formatted object providing the taxon hierarchy"
+        description: "Unique database specific ID"
+      # hierarchy:
+        # type: "string"
+        # description: "A JSON formatted object providing the taxon hierarchy"
   locale:
     type: "object"
     properties:
       locale_id:
         type: "string"
-        description: "DB specific index from dataset (neotoma) or coll (pbdb)"
+        description: "DB specific locale"
       locale_name:
         type: "string"
         description: "Dataset or collection name"
       doi:
         type: "string"
         description: "Unique DOI for locale if available"
-      dataset_type:
+      data_type:
         type: "string"
         description: "Type of paleoecological or paleontological data"
       site_id:
         type: "string"
         description: "Site identifier if available for the locale"
-      occ_id:
-        type: "string"
-        description: " "
+      occurrences_count:
+        type: "number"
+        format: "integer"
+        description: "Number of occurrences in locale"
       min_age:
         type: "number"
         format: "double"
         description: "Youngest possible age of the locale"
       max_age:
         type: "number"
-        format: "Oldest possible age of the locale"
+        format: "double"
+        description: "Oldest possible age of the locale"
       lat:
         type: "number"
         format: "double"
@@ -664,6 +735,13 @@ definitions:
         type: "number"
         format: "double"
         description: "Locale longitude"
+      elevation:
+        type: "number"
+        format: "double"
+        description: "Locale elevation"
+      site_id:
+        type: "string"
+        description: "Unique identifier of a sample site if available"
       source:
         type: "string"
-        description: "Sub-database of literature reference"
+        description: "Sub-database or literature reference"
