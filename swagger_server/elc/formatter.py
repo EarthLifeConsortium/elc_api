@@ -1,14 +1,8 @@
 """Alternative output generators for ELC endpoints."""
 
 
-
 def type_bibjson(refs_json):
-    """
-    Format BibJSON return from list of standard JSON objects.
-    
-    Reference spec at http://okfnlabs.org/bibjson.
-    """
-
+    """Format BibJSON return from list of standard JSON objects."""
     refs_bibjson = list()
 
     for rec in refs_json:
@@ -40,47 +34,3 @@ def type_bibjson(refs_json):
         refs_bibjson.append(bib)
 
     return refs_bibjson
-
-
-def type_ris(data):
-    fmt_obj = dict()
-
-    return fmt_obj
-
-
-def type_itis(parents, subtaxa):
-    """
-    Format full taxonomic hierarchy according to the ITIS data model.
-
-    :arg parents: dict containing upper rank and names
-    :arg subtaxa: dict containing lower taxa
-    """
-    itis = list()
-
-    for rank in parents:
-        tsn = 9999
-        itis.append('[TU]|' + str(tsn) + '||' + parents[rank] + '|')
-    return type_plain(itis)
-
-
-        #  tsn = 9999
-        #  unit_ind1
-        #  unit_name1
-        #  unit_ind2
-        #  unit_name2
-        #  unit_ind3
-        #  unit_name3
-        #  unit_ind4
-        #  unit_name4
-        #  unnamed_taxon_ind
-        #  usage
-        #  unacceptability_reason
-        #  taxonomic_credibility_rating | taxonomic_completeness_rating | currency_rating | phylo_sort_sequence | initial_time_stamp | parent_tsn || taxon_author_id || hybrid_author_id | kingdom_id | rank_id | uncertain_parent_ind |
-
-
-def type_plain(data):
-    """Return a list of strings as plain text."""
-    from flask import Response
-
-    return Response('\n'.join(data),
-                    content_type='text/plain; charset=utf-8')

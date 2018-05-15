@@ -46,7 +46,7 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
     for db in run_list:
 
         t0 = time()
-        options.update(run=True)
+        options.update(skip=False)
 
         # Configure parameter payload for api subquery
 
@@ -62,9 +62,9 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
                                      detail=err.args[1],
                                      type='about:blank')
 
-        # skip this database if no ids specified (run option is False)
+        # skip this database if no ids specified
 
-        if not options.get('run'):
+        if options.get('skip'):
             continue
 
         # Database API call

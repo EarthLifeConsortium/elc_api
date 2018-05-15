@@ -227,14 +227,39 @@ def occurrences(resp_json, return_obj, options):
     return return_obj
 
 
-#  def references(resp, ret_obj, format):
-    #  """Reformat data from the Neotoma API call."""
-    #  import re
+def references(resp_json, return_obj, options):
+    """Extract references from the subquery."""
+    pubs = resp_json.get('data')
 
-    #  if resp.status_code == 200:
-        #  resp_json = resp.json()
-        #  if 'data' in resp_json:
-            #  for rec in resp_json['data']:
+    for rec in pubs.get('result', []):
+
+        # Available fields
+        data = {'title': rec.get('title'),
+                'year': rec.get('year'),
+                'journal': rec.get('journal'),
+                'doi': rec.get('doi'),
+                'cite': rec.get('citation'),
+                'page_range': rec.get('pages')}
+
+        # Reference number
+        data.update(ref_id='neot:ref:{0:d}'
+                    .format(rec.get('publicationid', 0)))
+
+        # Publication volume(number)
+        if rec.get('issue') and rec.get('volume'):
+            data.update(vol_no='{0:s} ({1:s})'.format(rec.get('volume'),
+                                                      rec.get('issue')))
+        else:
+            data.update(vol_no=rec.get('volume'))
+
+        # Not available directly in Neotoma
+        data.update(kind=None, editor=None, authors=[])
+
+        return_obj.append(data)
+
+    return return_obj
+
+    #  import re
 
                 #  # Format the unique database identifier
                 #  pub_id = 'neot:pub:' + str(rec.get('PublicationID'))

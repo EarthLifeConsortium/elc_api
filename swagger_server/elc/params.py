@@ -158,8 +158,9 @@ def set_id(ids, db, endpoint, options):
     except ValueError as err:
         raise ValueError(err.args[0], err.args[1])
 
+    # Set dispacher to skip the requested DB, no IDs in the query
     if not id_numbers:
-        options.update(run=False)
+        options.update(skip=True)
 
     id_string = ','.join(str(x) for x in id_numbers)
 

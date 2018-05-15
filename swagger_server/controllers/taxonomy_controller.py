@@ -12,6 +12,7 @@ from http_status import Status
 from time import time
 from flask import jsonify
 
+
 def tax(taxon=None, idlist=None, includelower=None, hierarchy=None, run=None):
     """Information about specific taxa."""
     return_obj = list()
@@ -36,6 +37,7 @@ def tax(taxon=None, idlist=None, includelower=None, hierarchy=None, run=None):
     for db in run_list:
 
         t0 = time()
+        options.update(skip=False)
 
         # Configure parameter payload for api subquery
 
@@ -50,6 +52,11 @@ def tax(taxon=None, idlist=None, includelower=None, hierarchy=None, run=None):
                                      title=Status(err.args[0]).name,
                                      detail=err.args[1],
                                      type='about:blank')
+
+        # skip this database if no ids specified
+
+        if options.get('skip'):
+            continue
 
         # Database API call
 

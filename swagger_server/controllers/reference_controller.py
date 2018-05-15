@@ -57,6 +57,7 @@ def ref(idlist=None, show=None, output=None, run=None):
     for db in run_list:
 
         t0 = time()
+        options.update(skip=False)
 
         # Configure parameter payload for api subquery
 
@@ -71,6 +72,11 @@ def ref(idlist=None, show=None, output=None, run=None):
                                      title=Status(err.args[0]).name,
                                      detail=err.args[1],
                                      type='about:blank')
+
+        # skip this database if no ids specified
+
+        if options.get('skip'):
+            continue
 
         # Database API call
 

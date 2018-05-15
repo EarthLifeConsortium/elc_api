@@ -3,7 +3,6 @@
 
 def taxonomy(resp_json, return_obj, options):
     """Extract specific data on taxa from the subquery."""
-
     import yaml
 
     # Named taxonomic ranks

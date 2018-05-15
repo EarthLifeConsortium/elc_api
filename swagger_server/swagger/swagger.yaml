@@ -665,8 +665,8 @@ definitions:
         type: "string"
         description: " "
       occurrences_count:
-        type: "number"
-        format: "integer"
+        type: "integer"
+        format: "int32"
         description: "Number of occurence of the taxa in database if available"
       parent_id:
         type: "string"
@@ -681,12 +681,12 @@ definitions:
         type: "string"
         description: "Extinct or extant"
       subtaxa_count:
-        type: "number"
-        format: "integer"
+        type: "integer"
+        format: "int32"
         description: "Number of child taxa"
       subtaxa_extant:
-        type: "number"
-        format: "integer"
+        type: "integer"
+        format: "int32"
         description: "Number of child taxa that are extant"
       taxon:
         type: "string"
@@ -716,8 +716,8 @@ definitions:
         type: "string"
         description: "Site identifier if available for the locale"
       occurrences_count:
-        type: "number"
-        format: "integer"
+        type: "integer"
+        format: "int32"
         description: "Number of occurrences in locale"
       min_age:
         type: "number"
