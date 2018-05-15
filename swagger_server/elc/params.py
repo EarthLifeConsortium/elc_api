@@ -206,6 +206,15 @@ def parse(req_args, options, db, endpoint):
 
     payload = dict()
 
+    if 'taxon' in req_args.keys():
+
+        try:
+            payload = taxa.set_taxon(taxon=req_args.get('taxon'),
+                                     subtax=options.get('includelower'),
+                                     db=db)
+        except ValueError as err:
+            raise ValueError(err.args[0], err.args[1])
+
     payload.update(aux.set_db_special(db, endpoint))
 
     payload.update(limit=options.get('limit'))
@@ -218,15 +227,6 @@ def parse(req_args, options, db, endpoint):
                                   endpoint=endpoint,
                                   options=options))
 
-        except ValueError as err:
-            raise ValueError(err.args[0], err.args[1])
-
-    if 'taxon' in req_args.keys():
-
-        try:
-            payload.update(taxa.set_taxon(taxon=req_args.get('taxon'),
-                                          subtax=options.get('includelower'),
-                                          db=db))
         except ValueError as err:
             raise ValueError(err.args[0], err.args[1])
 

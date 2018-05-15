@@ -64,62 +64,24 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
         url_path = ''.join([config.get('resource_api', db),
                             config.get('db_occ_endpt', db)])
 
-        if options.get('includelower') and db == 'neotoma':
+        # Database API call
 
-            lower_taxa = taxa.get_subtaxa(taxon=taxon, inc_syn=True)
+        try:
+            resp_json, api_call = subreq.trigger(url_path, payload, db)
 
-            for subtaxon in lower_taxa:
+        except ValueError as err:
+            return connexion.problem(status=err.args[0],
+                                     title=Status(err.args[0]).name,
+                                     detail=err.args[1],
+                                     type='about:blank')
 
-                # Run Neotoma with PBDB taxonomy (part 1: Multi-call)
-                payload.update(taxonname=subtaxon)
-                # Database API call
-                try:
-                    resp_json, api_call = subreq.trigger(url_path, payload, db)
-                except ValueError as err:
-                    return connexion.problem(status=err.args[0],
-                                             title=Status(err.args[0]).name,
-                                             detail=err.args[1],
-                                             type='about:blank')
-                # Parse database response
-                return_obj = router.response_decode(resp_json=resp_json,
-                                                    return_obj=return_obj,
-                                                    options=options,
-                                                    db=db,
-                                                    endpoint='occ')
+        # Parse database response
 
-            # Run with Neotoma's own recursion routine (part 2: Single call)
-            payload.update(taxonname=taxon)
-            payload.update(lower='true')
-            # Database API call
-            try:
-                resp_json, api_call = subreq.trigger(url_path, payload, db)
-            except ValueError as err:
-                return connexion.problem(status=err.args[0],
-                                         title=Status(err.args[0]).name,
-                                         detail=err.args[1],
-                                         type='about:blank')
-            # Parse database response
-            return_obj = router.response_decode(resp_json=resp_json,
-                                                return_obj=return_obj,
-                                                options=options,
-                                                db=db,
-                                                endpoint='occ')
-        else:
-
-            # Database API call
-            try:
-                resp_json, api_call = subreq.trigger(url_path, payload, db)
-            except ValueError as err:
-                return connexion.problem(status=err.args[0],
-                                         title=Status(err.args[0]).name,
-                                         detail=err.args[1],
-                                         type='about:blank')
-            # Parse database response
-            return_obj = router.response_decode(resp_json=resp_json,
-                                                return_obj=return_obj,
-                                                options=options,
-                                                db=db,
-                                                endpoint='occ')
+        return_obj = router.response_decode(resp_json=resp_json,
+                                            return_obj=return_obj,
+                                            options=options,
+                                            db=db,
+                                            endpoint='occ')
 
         # Build returned metadata object
 
