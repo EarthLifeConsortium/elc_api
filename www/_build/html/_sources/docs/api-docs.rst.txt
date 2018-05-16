@@ -16,6 +16,7 @@ Occurrences are the individual instances of fossils in time and space. Occurrenc
 **Parameters**
 
 .. include:: parameters/taxon.rst
+.. include:: parameters/taxonomichierarchy.rst
 .. include:: parameters/bbox.rst
 .. include:: parameters/agerange.rst
 .. note::
@@ -97,6 +98,7 @@ Taxonomy returns the classification of a given taxon.
 **Parameters**
 
 .. include:: parameters/taxon.rst
+.. include:: parameters/taxonomichierarchy.rst
 .. include:: parameters/idlist.rst
 .. note::
     Either a taxon name or a list of ELC formatted taxonomic IDs must be provided. Examples of valid ELC IDs for the taxonomy (``/tax``) route include ``pbdb:txn:929`` and ``neot:txn:34``.
