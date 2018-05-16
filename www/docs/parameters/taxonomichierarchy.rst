@@ -4,5 +4,5 @@
     
     Neotoma: Taxonomic names returned by the Neotoma databases reflect a static taxonomy as determined by taxonomic experts. Details of these determinations can be found `here <http://neotoma-manual.readthedocs.io/en/latest/db_design_concepts.html#taxonomy-and-synonymy>`_.
     
-    ELC API returns for any given taxon will include each database's understanding of the what is contained in the given taxon. If the taxonomic name does NOT occurr in the given database, the ELC API will not return any data from that database. These two taxonomic concepts may not be the same in each included database.
+    ELC API returns for any given taxon will include each database's understanding of what is contained in the given taxon. If the taxonomic name does NOT occur in the given database, the ELC API will not return any data from that database. These two taxonomic concepts may not be the same in each included database.
     
