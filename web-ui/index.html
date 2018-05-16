@@ -87,6 +87,49 @@
         }
       }
   });
+
+  (function() {
+
+    function removeCsvLinks () {
+      var csvLinkEls = document.querySelectorAll('.new-text')
+      csvLinkEls.forEach((el) => {
+        el.remove()
+      })
+    }
+
+    function addCsvLink (el) {
+      var text = el.textContent + '&output=csv'
+      var linkNode = document.createElement('a')
+      linkNode.href = text
+      linkNode.innerHTML = text
+      linkNode.className = 'new-text'
+
+      el.parentNode.appendChild(linkNode)
+    }
+
+    function searchForApiLinks() {
+      var els = document.querySelectorAll('pre')
+      var link = 'http://earthlifeconsortium.org/api_v1/'
+
+      els.forEach(function(el) {
+        if(el.textContent.indexOf(link) == 0) {
+          addCsvLink(el)
+        }
+      })
+    }
+
+    function submitHandler () {
+      setTimeout(function() {
+        removeCsvLinks()
+        searchForApiLinks()
+      }, 3000);
+    }
+
+    var submitEls = document.querySelectorAll('.submit')
+    submitEls.forEach((el) => el.addEventListener('click', submitHandler) )
+
+  })()
+
   </script>
 </head>
 
