@@ -2,18 +2,14 @@
 
 
 def set_taxon(taxon, subtax, db):
-    """
-    Return a database specific key-val pair for taxon paramaterization.
+    """Return a database specific key-val pair for taxon."""
+    import requests
 
-    :arg db: database name
-    :type db: str
-    :arg taxon: user input taxon name
-    :type taxon: str
-    :arg subtax: include lower taxonomy switch
-    :type subtax: bool
-
-    """
-    taxon = taxon.capitalize()
+    taxon = taxon.replace(', ',',')
+    taxon = taxon.split(',')
+    taxon = [x.strip() for x in taxon]
+    taxon = [x.capitalize() for x in taxon]
+    taxon = ','.join(taxon)
 
     if len(taxon.split()) == 2:
         genus_species = True
@@ -35,6 +31,25 @@ def set_taxon(taxon, subtax, db):
             return {'base_name': taxon}
         else:
             return {'taxon_name': taxon}
+
+    elif db == 'sead':
+        if genus_species:
+            #  name = 'ilike.*{0:s}'.format(taxon.split(' ')[1])
+            name = 'ilike.*{0:s}'.format(taxon)
+            return {'taxon': name}
+        else:
+            url = 'https://paleobiodb.org/data1.2/taxa/single.json'
+            payload = {'taxon_name': taxon}
+            rank = requests.get(url, payload).json()['records'][0]['rnk']
+
+            if rank == 9:
+                name = 'ilike.{0:s}'.format(taxon)
+                return {'family_name': name}
+
+            elif rank == 5:
+                name ='ilike.{0:s}'.format(taxon)
+                return {'genus_name': name}
+
 
     # NEW RESOURCE:  Add another databse specific taxon name mapping here
 

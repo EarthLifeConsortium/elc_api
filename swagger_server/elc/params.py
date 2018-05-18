@@ -217,7 +217,9 @@ def parse(req_args, options, db, endpoint):
 
     payload.update(aux.set_db_special(db, endpoint))
 
-    payload.update(limit=options.get('limit'))
+    # NEW RESOURCE
+    if db in ['pbdb', 'neotoma']:
+        payload.update(limit=options.get('limit'))
 
     if 'idlist' in req_args.keys():
 

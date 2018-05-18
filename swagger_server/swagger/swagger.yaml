@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Composite interface for paleontological databases. Currently supports the Neotoma Paleoecology Database and PBDB (The Paleobiology Database). See full <a href='http://earthlifeconsortium.org/api_v1/swagger.json'>OpenAPI Specification</a>. <b>NOTE:</b> The 'show=csv' parameter is not supported in this web sandbox, only use this switch when calling the API directly with a URL. Read <a href='http:///earthlifeconsortium.org/docs/api-docs.html'>full documentation</a>."
-  version: "1.0b3"
+  version: "1.0b4"
   title: "API Sandbox"
   contact:
     url: "http://earthlifeconsortium.org"
@@ -462,6 +462,40 @@ paths:
       x-tags:
       - tag: "Subtaxa"
       x-swagger-router-controller: "swagger_server.controllers.misc_controller"
+  /misc/mobile:
+    get:
+      tags:
+      - "Mobile"
+      summary: "Lightweight response" 
+      description: "Custom data objects appropriate for visulization."
+      operationId: "mobile"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "taxon"
+        in: "query"
+        description: "Comma separated string of taxonomic names."
+        required: true
+        type: "string"
+      - name: "bbox"
+        in: "query"
+        description: "Bounding box definition, structured WKT text"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "mobile response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/mobile"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/errorModel"
+      x-tags:
+      - tag: "Mobile"
+      x-swagger-router-controller: "swagger_server.controllers.misc_controller"
 definitions:
   subtaxa:
     type: "object"
@@ -505,6 +539,15 @@ definitions:
       ics_color:
         type: "string"
         description: "Standardized color hex for first geologic age in range"
+  mobile:
+    type: "object"
+    properties:
+      max_age:
+        type: "string"
+        description: "Oldest age in bound"
+      min_age:
+        type: "string"
+        description: "Most recent (youngest) age in bound"
   reference:
     type: "object"
     properties:

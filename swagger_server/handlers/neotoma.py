@@ -144,6 +144,89 @@ def locales(resp_json, return_obj, options):
     return return_obj
 
 
+def mobile(resp_json, return_obj, options):
+    """Lightweight response."""
+    import geojson
+    from ..elc import ages, geog
+    from statistics import mean
+
+    # Utlity function: Choose the existing, non-empty parameter
+    def choose(x, y): return x or y
+
+    # Utility function: Choose the greater of two numbers
+    def greater(x, y): return x if x > y else y
+
+    factor = ages.set_age_scaler(options=options, db='neotoma')
+
+    for rec in resp_json.get('data', []):
+
+        data = dict()
+
+        data.update(occ_id='neot:occ:{0:d}'.format(rec.get('sampleid', 0)))
+
+        # Taxonomic information
+        if rec.get('sample'):
+
+            data.update(taxon=rec.get('sample').get('taxonname'))
+            data.update(taxon_id='neot:txn:{0:d}'
+                        .format(rec.get('sample').get('taxonid', 0)))
+
+        # Record age (unit scaled)
+        if rec.get('age'):
+
+            old = choose(rec.get('age').get('ageolder'),
+                         rec.get('age').get('age'))
+            if old and old >= 0:
+                data.update(max_age=round(old / factor, 5))
+            else:
+                data.update(max_age=None)
+
+            yng = choose(rec.get('age').get('ageyounger'),
+                         rec.get('age').get('age'))
+            if yng and yng >= 0:
+                data.update(min_age=round(yng / factor, 5))
+            else:
+                data.update(min_age=None)
+
+        if rec.get('site'):
+
+            site = rec.get('site')
+
+            # Dataset level information
+            data.update(elevation=site.get('altitude'))
+            data.update(source=site.get('database'))
+            data.update(data_type=site.get('datasettype'))
+            if site.get('datasetid'):
+                data.update(locale_id='neot:dst:{0:d}'
+                            .format(site.get('datasetid', 0)))
+
+            # Paleo and modern coordinates
+            if site.get('location'):
+                loc = geojson.loads(site.get('location'))
+                if loc.get('type').lower() == 'point':
+                    modern = [loc.get('coordinates')[1],
+                              loc.get('coordinates')[0]]
+                else:
+                    modern = [loc.get('coordinates')[0][0][1],
+                              loc.get('coordinates')[0][0][0]]
+                if options.get('geog') == 'paleo':
+                    m_age = greater(mean(modern) / 1e6, 1)
+                    try:
+                        paleo, ref = geog.resolve_geog(lat=modern[0],
+                                                       lon=modern[1],
+                                                       mean_age=round(m_age))
+                        paleo = [round(x, 4) for x in paleo]
+                        data.update(lat=paleo[0], lon=paleo[1])
+                    except ValueError as err:
+                        data.update(lat=modern[0], lon=modern[1])
+                else:
+                    data.update(lat=modern[0], lon=modern[1])
+
+        return_obj.append(data)
+
+    return return_obj
+
+
 def occurrences(resp_json, return_obj, options):
     """Extract occurrence data from the subquery."""
     import geojson

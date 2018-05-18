@@ -14,7 +14,7 @@ def response_decode(resp_json, return_obj, options, db, endpoint):
     :arg endpoint: Route to follow
     :type endpoint: str
     """
-    from ..handlers import neotoma, pbdb
+    from ..handlers import neotoma, pbdb, sead
 
     if db == 'neotoma':
         if endpoint == 'occ':
@@ -25,6 +25,8 @@ def response_decode(resp_json, return_obj, options, db, endpoint):
             return neotoma.references(resp_json, return_obj, options)
         if endpoint == 'tax':
             return neotoma.taxonomy(resp_json, return_obj, options)
+        if endpoint == 'mbl':
+            return neotoma.mobile(resp_json, return_obj, options)
 
     if db == 'pbdb':
         if endpoint == 'occ':
@@ -35,6 +37,12 @@ def response_decode(resp_json, return_obj, options, db, endpoint):
             return pbdb.references(resp_json, return_obj, options)
         if endpoint == 'tax':
             return pbdb.taxonomy(resp_json, return_obj, options)
+        if endpoint == 'mbl':
+            return pbdb.mobile(resp_json, return_obj, options)
+
+    if db == 'sead':
+        if endpoint == 'occ':
+            return sead.occurrences(resp_json, return_obj, options)
 
     # NEW RESOURCE: Additional custom database handler calls here
 

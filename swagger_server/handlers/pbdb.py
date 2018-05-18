@@ -88,6 +88,42 @@ def locales(resp_json, return_obj, options):
     return return_obj
 
 
+def mobile(resp_json, return_obj, options):
+    """Lightweight response."""
+    from ..elc import ages
+
+    factor = ages.set_age_scaler(options=options, db='pbdb')
+
+    for rec in resp_json.get('records', []):
+
+        data = dict()
+
+        data.update(occ_id='pbdb:{0:s}'.format(rec.get('oid', 'occ:0')))
+
+        data.update(taxon=rec.get('tna'))
+        data.update(taxon_id='pbdb:{0:s}'.format(rec.get('tid', 'txn:0')))
+
+        data.update(max_age=round(rec.get('eag') / factor, 4))
+        data.update(min_age=round(rec.get('lag') / factor, 4))
+
+        data.update(source='pbdb:{0:s}'.format(rec.get('rid', 'ref:0')))
+        data.update(data_type=rec.get('cct', 'general faunal/floral'))
+        data.update(locale_id='pbdb:{0:s}'.format(rec.get('cid', 'col:0')))
+
+        if options.get('geog') == 'paleo':
+            data.update(lat=rec.get('pla'))
+            data.update(lon=rec.get('pln'))
+        else:
+            data.update(lat=rec.get('lat'))
+            data.update(lon=rec.get('lng'))
+
+        data.update(elevation=None)
+
+        return_obj.append(data)
+
+    return return_obj
+
+
 def occurrences(resp_json, return_obj, options):
     """Extract occurrence data from the subquery."""
     from ..elc import ages

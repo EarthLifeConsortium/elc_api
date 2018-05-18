@@ -21,6 +21,83 @@ from time import time
 from flask import jsonify
 
 
+def mobile(taxon=None, bbox=None):
+    """Lightweight custom response."""
+    from ..handlers import router
+    from ..elc import config, subreq
+
+    return_obj = list()
+    desc_obj = dict()
+
+    # Set runtime options
+
+    try:
+        options = params.set_options(req_args=connexion.request.args,
+                                     endpoint='occ')
+
+    except ValueError as err:
+        return connexion.problem(status=err.args[0],
+                                 title=Status(err.args[0]).name,
+                                 detail=err.args[1],
+                                 type='about:blank')
+
+    # This query only applies to Neotoma and PBDB
+
+    for db in ['neotoma', 'pbdb']:
+
+        t0 = time()
+
+        # Configure parameter payload for api subquery
+
+        try:
+            payload = params.parse(req_args=connexion.request.args,
+                                   options=options,
+                                   db=db,
+                                   endpoint='occ')
+
+        except ValueError as err:
+            return connexion.problem(status=err.args[0],
+                                     title=Status(err.args[0]).name,
+                                     detail=err.args[1],
+                                     type='about:blank')
+
+        # Database API call
+
+        url_path = ''.join([config.get('resource_api', db),
+                            config.get('db_occ_endpt', db)])
+
+        try:
+            resp_json, api_call = subreq.trigger(url_path, payload, db)
+
+        except ValueError as err:
+            return connexion.problem(status=err.args[0],
+                                     title=Status(err.args[0]).name,
+                                     detail=err.args[1],
+                                     type='about:blank')
+
+        # Parse database response
+
+        return_obj = router.response_decode(resp_json=resp_json,
+                                            return_obj=return_obj,
+                                            options=options,
+                                            db=db,
+                                            endpoint='mbl')
+
+        # Build returned metadata object
+
+        desc_obj.update(aux.build_meta(options))
+
+        desc_obj.update(aux.build_meta_sub(data=return_obj,
+                                           source=api_call,
+                                           t0=t0,
+                                           sub_tag=db,
+                                           options=options))
+
+    # Return composite data structure to client
+
+    return jsonify(metadata=desc_obj, records=return_obj)
+
+
 def subtaxa(taxon=None, synonyms=True):
     """
     Retrieve the related lower taxonomy for a given taxon name.

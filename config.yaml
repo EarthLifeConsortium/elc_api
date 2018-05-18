@@ -2,12 +2,15 @@
 resource_api:
   neotoma: 'http://api-dev.neotomadb.org/v2.0/data/'
   pbdb: 'https://paleobiodb.org/data1.2/'
+  sead: 'http://snares.humlab.umu.se:3009/'
 native_ageunits:
   neotoma: 'ybp'
   pbdb: 'ma'
+  sead: 'ybp'
 db_occ_endpt:
   neotoma: 'occurrence'
   pbdb: 'occs/list.json'
+  sead: 'site_sample_taxon_abundance'
 db_loc_endpt:
   neotoma: 'datasets'
   pbdb: 'colls/list.json'
