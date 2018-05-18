@@ -162,7 +162,7 @@ def occurrences(resp_json, return_obj, options):
 
         data = dict()
 
-        data.update(occ_id='neot:occ:{0:d}'.format(rec.get('sampleid', 0)))
+        data.update(occ_id='neot:occ:{0:d}'.format(rec.get('occid', 0)))
 
         # Taxonomic information
         if rec.get('sample'):
