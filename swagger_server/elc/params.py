@@ -109,11 +109,14 @@ def id_parse(ids, db, id_type):
     numeric_ids = list()
     db_tag = db[:4]
     database = datatype = id_num = ''
+
+    ids = ids.strip('"')
     id_list = [x.strip() for x in ids.split(',')]
 
     for id in id_list:
         try:
             database = re.search('^\w+(?=:)', id).group(0)
+            database = database[:4]
             datatype = re.search('(?<=:).+(?=:)', id).group(0)
             id_num = re.search('(?:.*?:){2}(.*)', id).group(1)
         except AttributeError as err:

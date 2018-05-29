@@ -9,6 +9,7 @@ This deployment utilizes:
 
 ## Installation
 Install API with
+
 ```
 git clone https://github.com/EarthLifeConsortium/elc_api.git
 pip3 install -r requirements.txt
@@ -54,3 +55,10 @@ location ^~ /api_v1 {
     uwsgi_pass 127.0.0.1:8008;
 }
 ```
+The Sandbox UI can be customized to match the look and feel of the rest of the ELC site by symlinking the files in ./web_ui into the local installation of the Connexion library. Example:
+```
+ELC-logo-horz-M.png --> [path to connexion/vendor/swagger-ui/images/
+
+index.html --> [path to connexion]/vendor/swagger-ui/
+```
+

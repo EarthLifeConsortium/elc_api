@@ -106,7 +106,7 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
             return jsonify(desc_obj)
         if options.get('show') == 'idx':
             return jsonify(aux.get_id_numbers(data=return_obj,
-                                              endpoint='loc'))
+                                              endpoint='locale'))
         else:
             return jsonify(metadata=desc_obj, records=return_obj)
 

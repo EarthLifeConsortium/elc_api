@@ -78,7 +78,6 @@ def locales(resp_json, return_obj, options):
     factor = ages.set_age_scaler(options=options, db='pbdb')
 
     for rec in resp_json.get('data', []):
-        import pdb; pdb.set_trace()
 
         for dataset in rec.get('dataset'):
             data = dict()

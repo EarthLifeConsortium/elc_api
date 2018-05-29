@@ -73,7 +73,7 @@ def get_id_numbers(data, endpoint):
     for rec in data:
         ids.add(rec.get(id_field))
 
-    return list(ids)
+    return ','.join(ids)
 
 
 def build_meta(options):

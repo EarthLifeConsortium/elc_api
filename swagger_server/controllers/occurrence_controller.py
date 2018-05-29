@@ -100,7 +100,7 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
             return jsonify(desc_obj)
         if options.get('show') == 'idx':
             return jsonify(aux.get_id_numbers(data=return_obj,
-                                              endpoint='occ'))
+                                              endpoint='occ_id'))
         else:
             return jsonify(metadata=desc_obj, records=return_obj)
 
