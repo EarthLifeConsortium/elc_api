@@ -42,4 +42,6 @@ def trigger(url_path, payload, db):
         msg = '{0:s} JSON decode error: {1:s}'.format(db, err)
         raise ValueError(500, msg)
 
+    print(resp.url)
+
     return resp_json, resp.url

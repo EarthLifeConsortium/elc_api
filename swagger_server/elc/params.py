@@ -144,12 +144,12 @@ def id_parse(ids, db, id_type):
 def set_id(ids, db, endpoint, options):
     """Return a payload parameter for the requested id tag."""
     # NEW RESOURCE: Add additional database-to-datatype mappings below
-    if endpoint == 'loc':
+    if endpoint in ['loc','ref']:
         xmap = {'pbdb': ['col', 'coll_id'],
                 'neotoma': ['dst', 'datasetid']}
-    elif endpoint == 'ref':
-        xmap = {'pbdb': ['ref', 'ref_id'],
-                'neotoma': ['pub', 'pubid']}
+    #  elif endpoint == 'ref':
+        #  xmap = {'pbdb': ['ref', 'ref_id'],
+                #  'neotoma': ['pub', 'pubid']}
     elif endpoint == 'tax':
         xmap = {'pbdb': ['txn', 'taxon_id'],
                 'neotoma': ['txn', 'taxonid']}

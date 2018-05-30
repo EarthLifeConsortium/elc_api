@@ -16,7 +16,7 @@ db_tax_endpt:
   pbdb: 'taxa/list.json'
 db_ref_endpt:
   neotoma: 'publications'
-  pbdb: 'refs/list.json'
+  pbdb: 'colls/refs.json'
 default:
   timeout: Null
   ageunits: 'ma'
