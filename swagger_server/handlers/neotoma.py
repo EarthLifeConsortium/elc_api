@@ -246,7 +246,7 @@ def references(resp_json, return_obj, options):
                 'page_range': rec.get('pages')}
 
         # Reference number
-        data.update(ref_id='neot:ref:{0:d}'
+        data.update(ref_id='neot:pub:{0:d}'
                     .format(choose(rec.get('publicationid'), 0)))
 
         # Publication volume(number)
