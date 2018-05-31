@@ -18,7 +18,7 @@ from ..elc import config, params, aux, subreq, formatter
 from ..handlers import router
 from http_status import Status
 from time import time
-from flask import jsonify
+from flask import jsonify, Response
 
 
 def ref(idlist=None, show=None, output=None, run=None):
@@ -146,3 +146,7 @@ def ref(idlist=None, show=None, output=None, run=None):
                            title=Status(204).name,
                            detail=msg,
                            type='about:blank')
+
+    elif options.get('output') == 'ris':
+        ris = formatter.type_ris(return_obj)
+        return Response((x for x in ris), mimetype='text/plain')
