@@ -1,0 +1,21 @@
+"abstract": ABST
+"authored book": BOOK
+"authored report": RPRT
+"book": BOOK
+"book chapter": CHAP
+"book/book chapter": BOOK
+"compendium": BOOK
+"doctoral dissertation": THES
+"edited book": EDBOOK
+"edited report": RPRT
+"guidebook": BOOK
+"journal article": JOUR
+"legacy": AGGR
+"m.s. thesis": THES
+"master's thesis": THES
+"news article": NEWS
+"other authored": GEN
+"other edited": GEN
+"ph.d. thesis": THES
+"serial monograph": MANSCPT
+"unpublished": UNPB
