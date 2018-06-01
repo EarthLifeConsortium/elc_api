@@ -10,13 +10,13 @@ def set_options(req_args, endpoint):
     # The default parameter is always taken to be param[0]
     spec = dict()
     spec.update(misc=['json'])
-    spec.update(occ=['json', 'csv'])
-    spec.update(loc=['json', 'csv'])
-    spec.update(tax=['json', 'itis', 'csv'])
-    spec.update(ref=['bibjson', 'json', 'csv', 'ris'])
+    spec.update(occ=['json', 'csv', 'file'])
+    spec.update(loc=['json', 'csv', 'file'])
+    spec.update(tax=['json', 'itis', 'csv', 'file'])
+    spec.update(ref=['bibjson', 'json', 'csv', 'ris', 'file'])
     spec.update(show=['all', 'poll', 'idx'])
     spec.update(age=['ma', 'ka', 'ybp'])
-    spec.update(geog=['paleo', 'modern'])
+    spec.update(geog=['modern','paleo'])
 
     # Runtime options
     options = dict()

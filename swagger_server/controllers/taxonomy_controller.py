@@ -103,7 +103,19 @@ def tax(taxon=None, idlist=None, includelower=None, hierarchy=None, run=None):
 
     elif options.get('output') == 'csv':
         if return_obj:
-            filename = aux.build_filename(endpoint='tax', data=return_obj)
+            tab_data = formatter.type_csv(return_obj)
+            return Response((x for x in tab_data), mimetype='text/csv')
+        else:
+            msg = 'Unable to generate CSV file. Search returned no records.'
+            return jsonify(status=204,
+                           title=Status(204).name,
+                           detail=msg,
+                           type='about:blank')
+
+    elif options.get('output') == 'file':
+        import flask_csv
+        if return_obj:
+            filename = aux.build_filename(endpoint='loc', data=return_obj)
             return flask_csv.send_csv(return_obj,
                                       filename,
                                       return_obj[0].keys())
@@ -113,5 +125,3 @@ def tax(taxon=None, idlist=None, includelower=None, hierarchy=None, run=None):
                            title=Status(204).name,
                            detail=msg,
                            type='about:blank')
-    # DEVELOPMENT
-    return jsonify(options)
