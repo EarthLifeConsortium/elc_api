@@ -243,7 +243,8 @@ def references(resp_json, return_obj, options):
                 'journal': rec.get('journal'),
                 'doi': rec.get('doi'),
                 'cite': rec.get('citation'),
-                'page_range': rec.get('pages')}
+                'page_range': rec.get('pages'),
+                'kind': rec.get('pubtype')}
 
         # Reference number
         data.update(ref_id='neot:pub:{0:d}'
@@ -256,8 +257,8 @@ def references(resp_json, return_obj, options):
         else:
             data.update(vol_no=rec.get('volume'))
 
-        # Not available directly in Neotoma
-        data.update(kind=None, editor=None, authors=[])
+        # Not currently available directly in Neotoma
+        data.update(publisher=None, place=None, editor=None, authors=[])
 
         return_obj.append(data)
 

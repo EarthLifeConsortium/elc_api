@@ -135,7 +135,9 @@ def references(resp_json, return_obj, options):
                 'journal': rec.get('pbt'),
                 'editor': rec.get('eds'),
                 'doi': rec.get('doi'),
-                'cite': rec.get('ref')}
+                'cite': rec.get('ref'),
+                'publisher': rec.get('???'),
+                'place': rec.get('???')}
 
         # Reference number
         data.update(ref_id='pbdb:{0:s}'.format(rec.get('oid', 'occ:0')))

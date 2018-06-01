@@ -1,11 +1,12 @@
 """Alternative output generators for ELC endpoints."""
 
 
-def type_bibjson(refs_json):
+def type_bibjson(data):
     """Format BibJSON return from list of standard JSON objects."""
     refs_bibjson = list()
 
-    for rec in refs_json:
+    for rec in data:
+
         bib = dict()
 
         # Add basic reference info
@@ -36,7 +37,7 @@ def type_bibjson(refs_json):
     return refs_bibjson
 
 
-def type_ris(refs_json):
+def type_ris(data):
     """Format RIS return from list of standard JSON objects."""
     import yaml
 
@@ -45,13 +46,13 @@ def type_ris(refs_json):
 
     ris = list()
 
-    for rec in refs_json:
+    for rec in data:
 
         print(rec.get('ref_id'))
         print(rec.get('kind'))
         if rec.get('kind'):
             ris.append('TY  - {0:s}\n'
-                       .format(ris_type.get(rec['kind'], ' ')))
+                       .format(ris_type.get(rec['kind'].lower(), '')))
         else:
             ris.append('TY  - \n')
 
@@ -80,6 +81,12 @@ def type_ris(refs_json):
         if rec.get('editor'):
             ris.append('ED  - {0:s}\n'.format(rec['editor']))
 
+        if rec.get('publisher'):
+            ris.append('PB  - {0:s}'.format(str(rec['publisher'])))
+
+        if rec.get('place'):
+            ris.append('PP  - {0:s}'.format(str(rec['place'])))
+
         if rec.get('doi'):
             ris.append('DO  - {0:s}\n'.format(rec['doi']))
 
@@ -92,3 +99,31 @@ def type_ris(refs_json):
         ris.append('ER  -\n\n')
 
     return ris
+
+
+def type_csv(data):
+    """Format CSV return from list of standard JSON objects."""
+    import io
+    import csv
+
+    tab_data = list()
+
+    mem_file = io.StringIO()
+    writer = csv.writer(mem_file)
+
+    row = [key for key in data[0].keys()]
+
+    writer.writerow(row)
+    tab_data.append(mem_file.getvalue())
+
+    for rec in data:
+
+        mem_file = io.StringIO()
+        writer = csv.writer(mem_file)
+
+        row = [rec[key] for key in rec.keys()]
+
+        writer.writerow(row)
+        tab_data.append(mem_file.getvalue())
+
+    return tab_data
