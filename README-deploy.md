@@ -41,7 +41,7 @@ python3 -m swagger_server
 ## Deployment
 Run API concurrently across multiple logical cores using uWSGI
 ```
-uwsgi --socket 127.0.0.1:8008 --callable app --file swagger_server/app.py --master -p 4 --threads 2 --stats 127.0.0.1:9009 --memory-report --wsgi-disable-file-wrapper
+uwsgi --socket 127.0.0.1:8008 --callable app --file swagger_server/app.py --master -p 4 --threads 2 --stats 127.0.0.1:9009 --memory-report --wsgi-disable-file-wrapper --buffer-size=262144
 ```
 Note: `--protocol=http` is omitted becasuse NGINX can nativly speak the uWSGI protocol. These parameters are included in a config file so `uwsgi elc-api.ini` will also work. Daemonize the uWSGI stack with `-d /[path]/[logfile]`
 If statistics and memory usage reporting is enabled, monitor workers with
