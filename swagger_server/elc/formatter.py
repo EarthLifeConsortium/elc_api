@@ -48,8 +48,6 @@ def type_ris(data):
 
     for rec in data:
 
-        print(rec.get('ref_id'))
-        print(rec.get('kind'))
         if rec.get('kind'):
             ris.append('TY  - {0:s}\n'
                        .format(ris_type.get(rec['kind'].lower(), '')))

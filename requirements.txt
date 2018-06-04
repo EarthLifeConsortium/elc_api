@@ -5,3 +5,4 @@ requests >= 2.13.0
 flask-csv >= 1.0.1
 http_status >= 1.0.0
 geojson >= 2.3.0
+sphinx >= 1.7.4
