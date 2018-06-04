@@ -121,6 +121,8 @@ def type_csv(data):
         mem_file = io.StringIO()
         writer = csv.writer(mem_file)
 
+        rec.update(authors=', '.join(rec['authors']))
+
         row = [rec[key] for key in rec.keys()]
 
         writer.writerow(row)
