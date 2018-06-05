@@ -21,19 +21,7 @@ from flask import jsonify, Response
 
 
 def ref(idlist=None, show=None, output=None, run=None):
-    """
-    Literature references/publications.
-
-    Accepts the following dataset types: occ, col, dst, ref
-
-    :param idlist: List of formatted ids [dbname]:[datasettype]:[number]
-    :type idlist: str
-    :param show: Return identifiers or stats (defult=full, idx, poll)
-    :type show: str
-    :param output: Response format (defult=bibjson, csv)
-    :type output: str
-
-    """
+    """Bibliographic references, publications and other sources."""
     return_obj = list()
     desc_obj = dict()
 
