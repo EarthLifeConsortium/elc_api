@@ -5,19 +5,16 @@ def set_taxon(taxon, subtax, db):
     """Return a database specific key-val pair for taxon."""
     import requests
 
-    taxon = taxon.replace(', ',',')
     taxon = taxon.split(',')
     taxon = [x.strip() for x in taxon]
     taxon = [x.capitalize() for x in taxon]
-    taxon = ','.join(taxon)
 
-    if len(taxon.split()) == 2:
-        genus_species = True
-    elif len(taxon.split()) == 1:
-        genus_species = False
-    else:
-        msg = 'Taxon argument contains too many parameters'
-        raise ValueError(400, msg)
+    for txn in taxon:
+        if len(txn.split()) > 2 or len(txn.split()) == 0:
+            msg = 'Unsupported taxon (two word max): {0:s}'.format(name)
+            raise ValueError(400, msg)
+
+    taxon = ','.join(taxon)
 
     if db == 'neotoma':
         if subtax:
@@ -27,29 +24,36 @@ def set_taxon(taxon, subtax, db):
             return {'taxonname': taxon}
 
     elif db == 'pbdb':
-        if subtax and not genus_species:
+        if subtax:
             return {'base_name': taxon}
         else:
             return {'taxon_name': taxon}
 
     elif db == 'sead':
-        if genus_species:
-            #  name = 'ilike.*{0:s}'.format(taxon.split(' ')[1])
-            name = 'ilike.*{0:s}'.format(taxon)
-            return {'taxon': name}
+        # Currently SEAD does not support general taxa serching.
+        # An external service must be used to resolve the taxon rank of
+        # the first name in a list of taxa prior to parameterizing the query
+
+        single_taxon = taxon.split(',')[0]
+
+        if len(single_taxon.split()) == 2:
+            # Consider this to be a 'Genus Species' name
+            query = 'ilike.*{0:s}'.format(single_taxon)
+            return {'taxon': query}
         else:
             url = 'https://paleobiodb.org/data1.2/taxa/single.json'
-            payload = {'taxon_name': taxon}
+            payload = {'taxon_name': single_taxon}
             rank = requests.get(url, payload).json()['records'][0]['rnk']
 
             if rank == 9:
-                name = 'ilike.{0:s}'.format(taxon)
-                return {'family_name': name}
+                # Rank of Family
+                query = 'ilike.{0:s}'.format(single_taxon)
+                return {'family_name': query}
 
             elif rank == 5:
-                name ='ilike.{0:s}'.format(taxon)
-                return {'genus_name': name}
-
+                # Rank of Genus
+                query = 'ilike.{0:s}'.format(single_taxon)
+                return {'genus_name': query}
 
     # NEW RESOURCE:  Add another databse specific taxon name mapping here
 

@@ -174,6 +174,8 @@ def parse(req_args, options, db, endpoint):
     """Return a Requests payload specific to resource target."""
     from ..elc import config, aux, ages, taxa, geog
 
+    # 
+
     # Alowable endpoint parameters
 
     spec = dict()
@@ -201,7 +203,9 @@ def parse(req_args, options, db, endpoint):
             msg = 'Unknown parameter: {0:s}'.format(param)
             raise ValueError(400, msg)
 
-    if db not in config.db_list():
+    # NEW RESOURCE: Add to the list if database support exits
+    # Using the 'run=' parameter, default runtime list may be overridden
+    if db not in ['pbdb', 'neotoma', 'sead']:
         msg = 'Database support lacking: {0:s}'.format(db)
         raise ValueError(501, msg)
 
@@ -220,7 +224,7 @@ def parse(req_args, options, db, endpoint):
 
     payload.update(aux.set_db_special(db, endpoint))
 
-    # NEW RESOURCE
+    # NEW RESOURCE: Add to the list if database supports limiting
     if db in ['pbdb', 'neotoma']:
         payload.update(limit=options.get('limit'))
 

@@ -5,6 +5,9 @@ def occurrences(resp_json, return_obj, options):
     """Taxa in time and space."""
     from ..elc import ages
 
+    # Currently SEAD does not support age parameterization
+    # The database also does not include age in the occurrence response
+
     #  factor = ages.set_age_scaler(options=options, db='pbdb')
 
     for rec in resp_json:

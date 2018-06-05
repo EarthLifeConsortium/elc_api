@@ -27,4 +27,4 @@ def db_list():
     """Return names of all external queryable database resources."""
     data_map = read_file('config.yaml')
 
-    return data_map['resource_api'].keys()
+    return data_map['run_list']
