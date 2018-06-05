@@ -219,7 +219,9 @@ def occurrences(resp_json, return_obj, options):
                         paleo = [round(x, 4) for x in paleo]
                         data.update(lat=paleo[0], lon=paleo[1])
                     except ValueError as err:
-                        data.update(lat=modern[0], lon=modern[1])
+                        #  data.update(lat=modern[0], lon=modern[1])
+                        data.update(lat='({0:4.2f})'.format(modern[0]),
+                                    lon='({0:4.2f})'.format(modern[1]))
                 else:
                     data.update(lat=modern[0], lon=modern[1])
 

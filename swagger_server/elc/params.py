@@ -57,14 +57,14 @@ def set_options(req_args, endpoint):
 
     # Geographic coodinates type
     if 'coordtype' in req_args.keys():
-        if req_args.get('coordinates').lower() in spec.get('geog'):
-            options.update(geog=req_args.get('coordinates').lower())
+        if req_args.get('coordtype').lower() in spec.get('geog'):
+            options.update(geog=req_args.get('coordtype').lower())
         else:
             msg = 'Allowable coordinates: {0:s}'.format(str(spec.get('geog')))
             raise ValueError(400, msg)
     else:
-        if config.get('default', 'coordinates') in spec.get('geog'):
-            options.update(geog=config.get('default', 'coordinates'))
+        if config.get('default', 'coordtype') in spec.get('geog'):
+            options.update(geog=config.get('default', 'coordtype'))
         else:
             msg = 'Config: coords not in {0:s}'.format(str(spec.get('geog')))
             raise ValueError(500, msg)
@@ -178,10 +178,10 @@ def parse(req_args, options, db, endpoint):
 
     spec = dict()
     spec.update(occ=['bbox', 'agerange', 'ageunits', 'timerule', 'taxon',
-                     'includelower', 'coordinates', 'limit', 'offset',
+                     'includelower', 'coordtype', 'limit', 'offset',
                      'show', 'output', 'run'])
     spec.update(loc=['idlist', 'bbox', 'agerange', 'ageunits', 'timerule',
-                     'coordinates', 'limit', 'offset', 'show', 'output',
+                     'coordtype', 'limit', 'offset', 'show', 'output',
                      'run'])
     spec.update(tax=['taxon', 'idlist', 'includelower', 'hierarchy',
                      'show', 'output', 'run'])
