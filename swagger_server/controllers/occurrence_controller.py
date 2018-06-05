@@ -12,11 +12,11 @@ Endpoint for queries on taxonomic occurrences in time and space.
 #  from ..util import deserialize_date, deserialize_datetime
 
 import connexion
-from ..elc import config, params, aux, subreq, taxa
+from ..elc import config, params, aux, subreq, formatter
 from ..handlers import router
 from http_status import Status
 from time import time
-from flask import jsonify
+from flask import jsonify, Response
 
 
 def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,

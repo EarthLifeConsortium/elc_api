@@ -1,4 +1,4 @@
-"""Custom decoder logic for the Paleobiology Database response."""
+"""Response decoder: The Paleobiology Database (PBDB)."""
 
 
 def taxonomy(resp_json, return_obj, options):

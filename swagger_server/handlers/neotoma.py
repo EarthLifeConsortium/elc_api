@@ -1,4 +1,4 @@
-"""Custom decoder for Neotoma Paleoecology Database response."""
+"""Response decoder: Neotoma Paleoecology Database."""
 
 
 def taxonomy(resp_json, return_obj, options):
