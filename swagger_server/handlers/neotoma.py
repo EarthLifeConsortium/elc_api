@@ -1,4 +1,4 @@
-"""Custom decoder for Neotoma Paleoecology Database response."""
+"""Response decoder: Neotoma Paleoecology Database."""
 
 
 def taxonomy(resp_json, return_obj, options):
@@ -84,7 +84,7 @@ def locales(resp_json, return_obj, options):
 
             # Dataset level information
             data.update(locale_id='neot:dst:{0:d}'
-                        .format(dataset.get('datasetid', 0)))
+                        .format(choose(dataset.get('datasetid'), 0)))
             data.update(doi=dataset.get('doi'))
 
             data.update(source=dataset.get('database'))
@@ -92,7 +92,7 @@ def locales(resp_json, return_obj, options):
             data.update(data_type=dataset.get('datasettype'))
             data.update(occurrences_count=None)
             data.update(site_id='neot:sit:{0:d}'
-                        .format(rec.get('site')['siteid'], 0))
+                        .format(choose(rec.get('site')['siteid'], 0)))
 
             # Record age (unit scaled)
             if dataset.get('agerange'):
@@ -245,14 +245,15 @@ def occurrences(resp_json, return_obj, options):
 
         data = dict()
 
-        data.update(occ_id='neot:occ:{0:d}'.format(rec.get('sampleid', 0)))
+        data.update(occ_id='neot:occ:{0:d}'
+                    .format(choose(rec.get('occid'), 0)))
 
         # Taxonomic information
         if rec.get('sample'):
-
-            data.update(taxon=rec.get('sample').get('taxonname'))
+            sample = rec.get('sample')
+            data.update(taxon=sample.get('taxonname'))
             data.update(taxon_id='neot:txn:{0:d}'
-                        .format(rec.get('sample').get('taxonid', 0)))
+                        .format(choose(sample.get('taxonid'), 0)))
 
         # Record age (unit scaled)
         if rec.get('age'):
@@ -281,7 +282,7 @@ def occurrences(resp_json, return_obj, options):
             data.update(data_type=site.get('datasettype'))
             if site.get('datasetid'):
                 data.update(locale_id='neot:dst:{0:d}'
-                            .format(site.get('datasetid', 0)))
+                            .format(choose(site.get('datasetid'), 0)))
 
             # Paleo and modern coordinates
             if site.get('location'):
@@ -301,7 +302,9 @@ def occurrences(resp_json, return_obj, options):
                         paleo = [round(x, 4) for x in paleo]
                         data.update(lat=paleo[0], lon=paleo[1])
                     except ValueError as err:
-                        data.update(lat=modern[0], lon=modern[1])
+                        #  data.update(lat=modern[0], lon=modern[1])
+                        data.update(lat='({0:4.2f})'.format(modern[0]),
+                                    lon='({0:4.2f})'.format(modern[1]))
                 else:
                     data.update(lat=modern[0], lon=modern[1])
 
@@ -314,6 +317,9 @@ def references(resp_json, return_obj, options):
     """Extract references from the subquery."""
     pubs = resp_json.get('data')
 
+    # Utlity function: if 1st param is '', 0 or None return 2nd param
+    def choose(x, y): return x or y
+
     for rec in pubs.get('result', []):
 
         # Available fields
@@ -322,11 +328,12 @@ def references(resp_json, return_obj, options):
                 'journal': rec.get('journal'),
                 'doi': rec.get('doi'),
                 'cite': rec.get('citation'),
-                'page_range': rec.get('pages')}
+                'page_range': rec.get('pages'),
+                'kind': rec.get('pubtype')}
 
         # Reference number
-        data.update(ref_id='neot:ref:{0:d}'
-                    .format(rec.get('publicationid', 0)))
+        data.update(ref_id='neot:pub:{0:d}'
+                    .format(choose(rec.get('publicationid'), 0)))
 
         # Publication volume(number)
         if rec.get('issue') and rec.get('volume'):
@@ -335,44 +342,9 @@ def references(resp_json, return_obj, options):
         else:
             data.update(vol_no=rec.get('volume'))
 
-        # Not available directly in Neotoma
-        data.update(kind=None, editor=None, authors=[])
+        # Not currently available directly in Neotoma
+        data.update(publisher=None, place=None, editor=None, authors=[])
 
         return_obj.append(data)
 
     return return_obj
-
-    #  import re
-
-                #  # Format the unique database identifier
-                #  pub_id = 'neot:pub:' + str(rec.get('PublicationID'))
-
-                #  # Format author fields
-                #  author_list = list()
-                #  if 'Authors' in rec:
-                    #  for author in rec.get('Authors'):
-                        #  author_list.append(author['ContactName'])
-
-                #  # Look for a DOI in the citation string
-                #  if 'Citation' in rec:
-                    #  doi = re.search('(?<=\[DOI:\ ).+(?=\])',
-                                    #  rec.get('Citation'))
-                    #  if doi:
-                        #  doi = doi.group()
-                #  else:
-                    #  doi = None
-
-                #  # Build dictionary of bibliographic fields
-                #  reference = dict()
-                #  reference.update(kind=rec.get('PubType'),
-                                 #  year=rec.get('Year'),
-                                 #  doi=doi,
-                                 #  authors=author_list,
-                                 #  ident=pub_id,
-                                 #  cite=rec.get('Citation'))
-
-                #  # Format and append parsed record
-                #  ret_obj = format_handler(reference, ret_obj, format)
-
-    #  # End subroutine: parse_neot_resp
-    #  return len(resp_json['data'])

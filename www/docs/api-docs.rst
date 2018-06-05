@@ -80,7 +80,7 @@ References returns bibliographic information on the publications from which othe
 .. note::
     Examples of valid ELC IDs for the references (``/ref``) route include ``pbdb:ref:100`` and ``neot:pub:234``. Database specific datatype names are again used in the ID construct, the ELC API route happens to be called ``/ref`` merely because there can only be one name.
 
-.. include:: parameters/output.rst
+.. include:: parameters/output_ref.rst
 .. include:: parameters/show.rst
 .. include:: parameters/run.rst
 

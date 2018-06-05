@@ -13,28 +13,15 @@ citations in the subordinate databases.
 #  from ..util import deserialize_date, deserialize_datetime
 
 import connexion
-import flask_csv
 from ..elc import config, params, aux, subreq, formatter
 from ..handlers import router
 from http_status import Status
 from time import time
-from flask import jsonify
+from flask import jsonify, Response
 
 
 def ref(idlist=None, show=None, output=None, run=None):
-    """
-    Literature references/publications.
-
-    Accepts the following dataset types: occ, col, dst, ref
-
-    :param idlist: List of formatted ids [dbname]:[datasettype]:[number]
-    :type idlist: str
-    :param show: Return identifiers or stats (defult=full, idx, poll)
-    :type show: str
-    :param output: Response format (defult=bibjson, csv)
-    :type output: str
-
-    """
+    """Bibliographic references, publications and other sources."""
     return_obj = list()
     desc_obj = dict()
 
@@ -136,12 +123,35 @@ def ref(idlist=None, show=None, output=None, run=None):
 
     elif options.get('output') == 'csv':
         if return_obj:
-            filename = aux.build_filename(endpoint='ref', data=return_obj)
+            tab_data = formatter.type_csv(return_obj)
+            return Response((x for x in tab_data), mimetype='text/csv')
+        else:
+            msg = 'Unable to generate CSV file. Search returned no records.'
+            return jsonify(status=204,
+                           title=Status(204).name,
+                           detail=msg,
+                           type='about:blank')
+
+    elif options.get('output') == 'file':
+        import flask_csv
+        if return_obj:
+            filename = aux.build_filename(endpoint='loc', data=return_obj)
             return flask_csv.send_csv(return_obj,
                                       filename,
                                       return_obj[0].keys())
         else:
             msg = 'Unable to generate CSV file. Search returned no records.'
+            return jsonify(status=204,
+                           title=Status(204).name,
+                           detail=msg,
+                           type='about:blank')
+
+    elif options.get('output') == 'ris':
+        if return_obj:
+            ris = formatter.type_ris(return_obj)
+            return Response((x for x in ris), mimetype='text/plain')
+        else: 
+            msg = 'Unable to generate RIS file. Search returned no records.'
             return jsonify(status=204,
                            title=Status(204).name,
                            detail=msg,

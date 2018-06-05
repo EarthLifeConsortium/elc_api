@@ -9,6 +9,7 @@ This deployment utilizes:
 
 ## Installation
 Install API with
+
 ```
 git clone https://github.com/EarthLifeConsortium/elc_api.git
 pip3 install -r requirements.txt
@@ -37,13 +38,24 @@ Test the API using Flask's Werkzeug single threaded develoment server
 python3 -m swagger_server
 ```
 
+Build the website and documentation
+```
+cd www
+make html
+```
+
 ## Deployment
 Run API concurrently across multiple logical cores using uWSGI
 ```
-uwsgi --socket 127.0.0.1:8008 --callable app --file swagger_server/app.py --master -p 4 --threads 2 --stats 127.0.0.1:9009 --memory-report --wsgi-disable-file-wrapper
+uwsgi --socket 127.0.0.1:8008 --callable app --file swagger_server/app.py --master -p 4 --threads 2 --stats 127.0.0.1:9009 --memory-report --wsgi-disable-file-wrapper --buffer-size=262144
 ```
 Note: `--protocol=http` is omitted becasuse NGINX can nativly speak the uWSGI protocol. These parameters are included in a config file so `uwsgi elc-api.ini` will also work. Daemonize the uWSGI stack with `-d /[path]/[logfile]`
+
 If statistics and memory usage reporting is enabled, monitor workers with
+```
+Or, use the included config file
+```
+uwsgi elc-api.uwsgi.ini
 ```
 uwsgitop 127.0.0.1:9009
 ```
@@ -54,3 +66,10 @@ location ^~ /api_v1 {
     uwsgi_pass 127.0.0.1:8008;
 }
 ```
+The Sandbox UI can be customized to match the look and feel of the rest of the ELC site by symlinking the files in ./web_ui into the local installation of the Connexion library. Example:
+```
+ELC-logo-horz-M.png --> [path to connexion/vendor/swagger-ui/images/
+
+index.html --> [path to connexion]/vendor/swagger-ui/
+```
+

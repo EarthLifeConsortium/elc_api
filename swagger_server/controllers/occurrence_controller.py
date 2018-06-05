@@ -12,12 +12,11 @@ Endpoint for queries on taxonomic occurrences in time and space.
 #  from ..util import deserialize_date, deserialize_datetime
 
 import connexion
-import flask_csv
-from ..elc import config, params, aux, subreq, taxa
+from ..elc import config, params, aux, subreq, formatter
 from ..handlers import router
 from http_status import Status
 from time import time
-from flask import jsonify
+from flask import jsonify, Response
 
 
 def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
@@ -100,13 +99,25 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
             return jsonify(desc_obj)
         if options.get('show') == 'idx':
             return jsonify(aux.get_id_numbers(data=return_obj,
-                                              endpoint='occ'))
+                                              endpoint='locale'))
         else:
             return jsonify(metadata=desc_obj, records=return_obj)
 
     elif options.get('output') == 'csv':
         if return_obj:
-            filename = aux.build_filename(endpoint='occ', data=return_obj)
+            tab_data = formatter.type_csv(return_obj)
+            return Response((x for x in tab_data), mimetype='text/csv')
+        else:
+            msg = 'Unable to generate CSV file. Search returned no records.'
+            return jsonify(status=204,
+                           title=Status(204).name,
+                           detail=msg,
+                           type='about:blank')
+
+    elif options.get('output') == 'file':
+        import flask_csv
+        if return_obj:
+            filename = aux.build_filename(endpoint='loc', data=return_obj)
             return flask_csv.send_csv(return_obj,
                                       filename,
                                       return_obj[0].keys())

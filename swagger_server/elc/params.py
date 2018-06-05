@@ -10,13 +10,13 @@ def set_options(req_args, endpoint):
     # The default parameter is always taken to be param[0]
     spec = dict()
     spec.update(misc=['json'])
-    spec.update(occ=['json', 'csv'])
-    spec.update(loc=['json', 'csv'])
-    spec.update(tax=['json', 'itis', 'csv'])
-    spec.update(ref=['bibjson', 'json', 'csv', 'ris'])
+    spec.update(occ=['json', 'csv', 'file'])
+    spec.update(loc=['json', 'csv', 'file'])
+    spec.update(tax=['json', 'itis', 'csv', 'file'])
+    spec.update(ref=['bibjson', 'json', 'csv', 'ris', 'file'])
     spec.update(show=['all', 'poll', 'idx'])
     spec.update(age=['ma', 'ka', 'ybp'])
-    spec.update(geog=['paleo', 'modern'])
+    spec.update(geog=['modern','paleo'])
 
     # Runtime options
     options = dict()
@@ -57,14 +57,14 @@ def set_options(req_args, endpoint):
 
     # Geographic coodinates type
     if 'coordtype' in req_args.keys():
-        if req_args.get('coordinates').lower() in spec.get('geog'):
-            options.update(geog=req_args.get('coordinates').lower())
+        if req_args.get('coordtype').lower() in spec.get('geog'):
+            options.update(geog=req_args.get('coordtype').lower())
         else:
             msg = 'Allowable coordinates: {0:s}'.format(str(spec.get('geog')))
             raise ValueError(400, msg)
     else:
-        if config.get('default', 'coordinates') in spec.get('geog'):
-            options.update(geog=config.get('default', 'coordinates'))
+        if config.get('default', 'coordtype') in spec.get('geog'):
+            options.update(geog=config.get('default', 'coordtype'))
         else:
             msg = 'Config: coords not in {0:s}'.format(str(spec.get('geog')))
             raise ValueError(500, msg)
@@ -109,11 +109,14 @@ def id_parse(ids, db, id_type):
     numeric_ids = list()
     db_tag = db[:4]
     database = datatype = id_num = ''
+
+    ids = ids.strip('"')
     id_list = [x.strip() for x in ids.split(',')]
 
     for id in id_list:
         try:
             database = re.search('^\w+(?=:)', id).group(0)
+            database = database[:4]
             datatype = re.search('(?<=:).+(?=:)', id).group(0)
             id_num = re.search('(?:.*?:){2}(.*)', id).group(1)
         except AttributeError as err:
@@ -141,12 +144,12 @@ def id_parse(ids, db, id_type):
 def set_id(ids, db, endpoint, options):
     """Return a payload parameter for the requested id tag."""
     # NEW RESOURCE: Add additional database-to-datatype mappings below
-    if endpoint == 'loc':
+    if endpoint in ['loc','ref']:
         xmap = {'pbdb': ['col', 'coll_id'],
                 'neotoma': ['dst', 'datasetid']}
-    elif endpoint == 'ref':
-        xmap = {'pbdb': ['ref', 'ref_id'],
-                'neotoma': ['pub', 'pubid']}
+    #  elif endpoint == 'ref':
+        #  xmap = {'pbdb': ['ref', 'ref_id'],
+                #  'neotoma': ['pub', 'pubid']}
     elif endpoint == 'tax':
         xmap = {'pbdb': ['txn', 'taxon_id'],
                 'neotoma': ['txn', 'taxonid']}
@@ -175,10 +178,10 @@ def parse(req_args, options, db, endpoint):
 
     spec = dict()
     spec.update(occ=['bbox', 'agerange', 'ageunits', 'timerule', 'taxon',
-                     'includelower', 'coordinates', 'limit', 'offset',
+                     'includelower', 'coordtype', 'limit', 'offset',
                      'show', 'output', 'run'])
     spec.update(loc=['idlist', 'bbox', 'agerange', 'ageunits', 'timerule',
-                     'coordinates', 'limit', 'offset', 'show', 'output',
+                     'coordtype', 'limit', 'offset', 'show', 'output',
                      'run'])
     spec.update(tax=['taxon', 'idlist', 'includelower', 'hierarchy',
                      'show', 'output', 'run'])

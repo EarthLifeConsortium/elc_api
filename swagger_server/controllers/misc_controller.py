@@ -170,7 +170,7 @@ def paleocoords(coords=None, age=None, ageunits=None):
     Return paleocoordinates for a given age and modern lat/lon.
 
     :param coords: Comma separated latitude,longitude
-    :type coords: str (decimal degrees -180 to 180)
+    :type coords: str
     :param age: Numerical or geologic age
     :param age: str
     :param ageunits: Units of measure for the ages specified (and returned)

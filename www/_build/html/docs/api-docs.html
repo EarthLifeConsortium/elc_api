@@ -308,8 +308,8 @@
 <p class="last">Examples of valid ELC IDs for the references (<code class="docutils literal notranslate"><span class="pre">/ref</span></code>) route include <code class="docutils literal notranslate"><span class="pre">pbdb:ref:100</span></code> and <code class="docutils literal notranslate"><span class="pre">neot:pub:234</span></code>. Database specific datatype names are again used in the ID construct, the ELC API route happens to be called <code class="docutils literal notranslate"><span class="pre">/ref</span></code> merely because there can only be one name.</p>
 </div>
 <dl class="docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">output=json|csv</span></code></dt>
-<dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortend MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “json”</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">output=json|csv|bibjson|ris</span></code></dt>
+<dd>File format of the data return. Serialized JSON, structured BibJSON, tabular CSV or RIS interchange formats. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortend MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “bibjson”</dd>
 </dl>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -335,7 +335,7 @@
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p>Specify a list of references and use the default output format of BibJSON <a class="footnote-reference" href="#id13" id="id6">[1]</a></p>
-<p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/ref?idlist=pbdb:ref:31213">http://earthlifeconsortium.org/api_v1/ref?idlist=pbdb:ref:31213</a></p>
+<p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/ref?idlist=pbdb:col:60676,neot:dst:5664,neot:dst:5562,pbdb:col:105101">http://earthlifeconsortium.org/api_v1/ref?idlist=pbdb:col:60676,neot:dst:5664,neot:dst:5562,pbdb:col:105101</a></p>
 </div>
 </div>
 <div class="section" id="taxonomy">

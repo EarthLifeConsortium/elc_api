@@ -1,8 +1,8 @@
 ---
 swagger: "2.0"
 info:
-  description: "Composite interface for paleontological databases. Currently supports the Neotoma Paleoecology Database and PBDB (The Paleobiology Database). See full <a href='http://earthlifeconsortium.org/api_v1/swagger.json'>OpenAPI Specification</a>. <b>NOTE:</b> The 'show=csv' parameter is not supported in this web sandbox, only use this switch when calling the API directly with a URL. Read <a href='http:///earthlifeconsortium.org/docs/api-docs.html'>full documentation</a>."
-  version: "1.0b4"
+  description: "Composite interface for paleontological databases. Currently supports the Neotoma Paleoecology Database and PBDB (The Paleobiology Database). See full <a href='http://earthlifeconsortium.org/api_v1/swagger.json'>OpenAPI Specification</a>. Read the <a href='http:///earthlifeconsortium.org/docs/api-docs.html'>full documentation</a> for more detailed instructions."
+  version: "1.0.1"
   title: "API Sandbox"
   contact:
     url: "http://earthlifeconsortium.org"
@@ -39,8 +39,11 @@ paths:
         type: "string"
       - name: "bbox"
         in: "query"
-        description: "Bounding box definition, either as a numeric vector of\
-          \ form [lonW, latS, lonE, latN] or as structured WKT text"
+        description: "WKT bounding box definition. Accepts standard\
+          \ POLYGON((...)) format. Use <a href=\
+          \ 'http://boundingbox.klokantech.com' target='_blank'>this external\
+          \ tool</a> and choose 'OGC WKT' from the bottom left to craft a\
+          \ correctly formated WKT descriptor"
         required: false
         type: "string"
       - name: "agerange"
@@ -196,8 +199,11 @@ paths:
         type: "string"
       - name: "bbox"
         in: "query"
-        description: "Bounding box definition, either as a numeric vector of\
-          \ form [lonW, latS, lonE, latN] or as structured WKT text"
+        description: "WKT bounding box definition. Accepts standard\
+          \ POLYGON((...)) format. Use <a href=\
+          \ 'http://boundingbox.klokantech.com' target='_blank'>this external\
+          \ tool</a> and choose 'OGC WKT' from the bottom left to craft a\
+          \ correctly formated WKT descriptor"
         required: false
         type: "string"
       - name: "agerange"
