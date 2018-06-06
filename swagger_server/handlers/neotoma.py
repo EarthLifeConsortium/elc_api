@@ -272,8 +272,8 @@ def occurrences(resp_json, return_obj, options):
             else:
                 data.update(min_age=None)
 
+        # General site level information
         if rec.get('site'):
-
             site = rec.get('site')
 
             # Dataset level information
@@ -283,6 +283,8 @@ def occurrences(resp_json, return_obj, options):
             if site.get('datasetid'):
                 data.update(locale_id='neot:dst:{0:d}'
                             .format(choose(site.get('datasetid'), 0)))
+            else:
+                data.update(locale_id=None)
 
             # Paleo and modern coordinates
             if site.get('location'):
@@ -307,6 +309,8 @@ def occurrences(resp_json, return_obj, options):
                                     lon='({0:4.2f})'.format(modern[1]))
                 else:
                     data.update(lat=modern[0], lon=modern[1])
+            else:
+                data.update(lat=None, lon=None)
 
         return_obj.append(data)
 

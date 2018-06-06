@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Composite interface for paleontological databases. Currently supports the Neotoma Paleoecology Database and PBDB (The Paleobiology Database). See full <a href='http://earthlifeconsortium.org/api_v1/swagger.json'>OpenAPI Specification</a>. Read the <a href='http:///earthlifeconsortium.org/docs/api-docs.html'>full documentation</a> for more detailed instructions."
-  version: "1.0.1"
+  version: "1.0.2"
   title: "API Sandbox"
   contact:
     url: "http://earthlifeconsortium.org"
@@ -548,12 +548,15 @@ definitions:
   mobile:
     type: "object"
     properties:
-      max_age:
+      age:
         type: "string"
-        description: "Oldest age in bound"
-      min_age:
+        description: "Age bounds (min,max)"
+      loc:
         type: "string"
-        description: "Most recent (youngest) age in bound"
+        description: "Modern geographic coordinates (lat,lon)"
+      # txn:
+      # site:
+      # img:
   reference:
     type: "object"
     properties:
@@ -667,31 +670,31 @@ definitions:
         description: "Colloquial name"
       composition:
         type: "string"
-        description: " "
+        description: "Skeletal composition. "
       diet:
         type: "string"
-        description: " "
+        description: "General diet or feeding mode"
       early_interval:
         type: "string"
         description: "Earliest geologic age occurrence"
       ecological_group:
         type: "string"
-        description: " "
+        description: "General descriptive ecological grouping"
       env_basis:
         type: "string"
-        description: " "
+        description: "Basis for environmental description"
       environment:
         type: "string"
-        description: " "
+        description: "General environment of organism"
       habitat:
         type: "string"
-        description: " "
+        description: "Life mode and locality"
       late_interval:
         type: "string"
         description: "Latest geologic age occurrence"
       mobility:
         type: "string"
-        description: " "
+        description: "Attachment, mobility and locomotion"
       occurrences_count:
         type: "integer"
         format: "int32"

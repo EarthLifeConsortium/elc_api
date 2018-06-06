@@ -71,7 +71,8 @@ def get_id_numbers(data, endpoint):
     id_field = '{0:s}_id'.format(endpoint)
 
     for rec in data:
-        ids.add(rec.get(id_field))
+        if rec.get(id_field):
+            ids.add(rec.get(id_field))
 
     return ','.join(ids)
 
