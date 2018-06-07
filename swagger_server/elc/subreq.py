@@ -45,60 +45,107 @@ def trigger(url_path, payload, db):
     return resp_json, resp.url
 
 
-def mobile_req(payload, db):
+def mobile_req(return_obj, payload, db):
     """Custom multi-part dispach requester."""
     from geojson import Point
-
-    mob = dict()
 
     if db == 'pbdb':
 
         # Retrieve all occurrence data
         route = 'https://paleobiodb.org/data1.2/occs/list.json'
+        payload.update(limit=10, show='full')
         try:
             occs, url = trigger(route, payload, db)
         except ValueError as err:
             raise ValueError(err.args[0], err.args[1])
 
         # Retrieve associated taxonomic data
-        route = 'https://paleobiodb.org/data1.2/tax/single.json'
-        for rec in occs:
+        route = 'https://paleobiodb.org/data1.2/taxa/single.json'
+        for rec in occs.get('records'):
 
             payload = {'show': 'full,img', 'taxon_name': rec.get('tna')}
             try:
-                taxon_info, url = trigger(route, payload, db)
+                taxon_resp, url = trigger(route, payload, db)
             except ValueError as err:
                 raise ValueError(err.args[0], err.args[1])
+            taxon_info = taxon_resp['records'][0]
 
-            mob.update(loc={'crd': geo_point,
-                            'ste': site_desc,
-                            'pla': place,
-                            'age': age_range})
+            mob = {'loc': {},
+                   'org': {},
+                   'eco': {}}
 
-            mob.update(org={'txn': rec.get('')})
+            # Location block
 
+            geoj = Point((rec['lng'],rec['lat']))
+            mob['loc'].update(crd=geoj)
 
+            site_desc = None
+            if 'cnm' in rec.keys():
+                site_desc = rec['cnm']
+            if 'aka' in rec.keys():
+                site_desc = '; '.join([site_desc, rec['aka']])
+            if site_desc:
+                mob['loc'].update(ste=site_desc.replace('\"', '\''))
 
-            mob.update(eco={'env': taxon_info.get('jev'),
-                       mot=taxon_info.get('jmo'),
-                       hab=taxon_info.get('jlh'),
-                       vis=taxon_info.get('jvs'),
-                       dte=taxon_info.get('jdt'),
-                       rep=taxon_info.get('jre'),
-                       ont=taxon_info.get('jon'),
-                       grp=taxon_info.get(''),
+            place = None
+            if 'cc2' in rec.keys():
+                place = rec['cc2']
+            if 'stp' in rec.keys():
+                place = '{0:s}, {1:s}'.format(rec['stp'], place)
+            if 'cny' in rec.keys():
+                place = '{0:s}, {1:s}'.format(rec['cny'], place)
+            if place:
+                mob['loc'].update(pla=place)
 
-                       nam=taxon_info.get('tei tli'))
+            age_range = ', '.join([str(rec['eag']),str(rec['lag'])])
+            mob['loc'].update(age=age_range)
 
-            
+            # Organism block
+
+            mob['org'].update(txn=rec.get('tna'))
+            if 'nm2' in taxon_info.keys():
+                mob['org'].update(nam=taxon_info.get('nm2'))
+                       
+            interval = None
             if 'tei' in taxon_info.keys():
                 interval = taxon_info['tei']
             if 'tli' in taxon_info.keys():
-                interval = ','.join([interval, taxon_info['tli']])
+                interval = ', '.join([interval, taxon_info['tli']])
+            if interval:
+                mob['org'].update(itv=interval)
 
+            extant = None
             if 'ext' in taxon_info.keys():
-                extant = True if rec['ext'] == 1 else False
+                extant = True if taxon_info['ext'] == 1 else False
+            if extant:
+                mob['org'].update(ext=extant)
 
+            img_uri = None
             if 'img' in taxon_info.keys():
                 base = 'https://paleobiodb.org/data1.2/taxa/thumb.png?id='
                 img_uri = ''.join([base, taxon_info['img'][4:]])
+            if img_uri:
+                mob['org'].update(img=img_uri)
+
+            # Ecology and environment block
+
+            if 'jev' in taxon_info.keys():
+                mob['eco'].update(env=taxon_info['jev'])
+            if 'jmo' in taxon_info.keys():
+                mob['eco'].update(mot=taxon_info['jmo'])
+            if 'jlh' in taxon_info.keys():
+                mob['eco'].update(hab=taxon_info['jlh'])
+            if 'jvs' in taxon_info.keys():
+                mob['eco'].update(vis=taxon_info['jvs'])
+            if 'jdt' in taxon_info.keys():
+                mob['eco'].update(dte=taxon_info['jdt'])
+            if 'jre' in taxon_info.keys():
+                mob['eco'].update(rep=taxon_info['jre'])
+            if 'jon' in taxon_info.keys():
+                mob['eco'].update(ont=taxon_info['jon'])
+            if 'cct' in rec.keys():
+                mob['eco'].update(grp=rec['cct'])
+
+            return_obj.append(mob)
+
+    return return_obj

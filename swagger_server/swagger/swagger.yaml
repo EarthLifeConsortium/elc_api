@@ -481,7 +481,7 @@ paths:
       - name: "taxon"
         in: "query"
         description: "Comma separated string of taxonomic names."
-        required: true
+        required: false
         type: "string"
       - name: "bbox"
         in: "query"
@@ -572,7 +572,7 @@ definitions:
           nam:
             type: "string"
             description: "Organism common name"
-          int:
+          itv:
             type: "string"
             description: "Existence geologic interval (eary,late)"
           ext:

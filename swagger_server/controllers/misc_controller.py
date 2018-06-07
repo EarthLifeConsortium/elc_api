@@ -27,7 +27,6 @@ def mobile(taxon=None, bbox=None):
     from ..elc import config, subreq
 
     return_obj = list()
-    desc_obj = dict()
 
     # Set runtime options
 
@@ -43,9 +42,7 @@ def mobile(taxon=None, bbox=None):
 
     # This query only applies to Neotoma and PBDB
 
-    for db in ['neotoma', 'pbdb']:
-
-        t0 = time()
+    for db in ['pbdb']:
 
         # Configure parameter payload for api subquery
 
@@ -67,7 +64,9 @@ def mobile(taxon=None, bbox=None):
                             config.get('db_occ_endpt', db)])
 
         try:
-            resp_json, api_call = subreq.trigger(url_path, payload, db)
+            return_obj =  subreq.mobile_req(return_obj=return_obj,
+                                            payload=payload,
+                                            db=db)
 
         except ValueError as err:
             return connexion.problem(status=err.args[0],
@@ -75,27 +74,9 @@ def mobile(taxon=None, bbox=None):
                                      detail=err.args[1],
                                      type='about:blank')
 
-        # Parse database response
-
-        return_obj = router.response_decode(resp_json=resp_json,
-                                            return_obj=return_obj,
-                                            options=options,
-                                            db=db,
-                                            endpoint='mbl')
-
-        # Build returned metadata object
-
-        desc_obj.update(aux.build_meta(options))
-
-        desc_obj.update(aux.build_meta_sub(data=return_obj,
-                                           source=api_call,
-                                           t0=t0,
-                                           sub_tag=db,
-                                           options=options))
-
     # Return composite data structure to client
 
-    return jsonify(metadata=desc_obj, records=return_obj)
+    return jsonify(return_obj)
 
 
 def subtaxa(taxon=None, synonyms=True):
