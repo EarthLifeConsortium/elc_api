@@ -163,10 +163,6 @@
 <dt><code class="docutils literal notranslate"><span class="pre">output=json|csv</span></code></dt>
 <dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortend MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “json”</dd>
 </dl>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">The web-based API <a class="reference external" href="http://earthlifeconsortium.org/api_v1/ui/">sandbox</a> hosted on this site <strong>does not</strong> support retrieval of CSV files. If you are using the sandbox to explore API parameters and wish to download a CSV file, copy the URL displayed under [Request URL] after running a query and paste it into the browser window appending <code class="docutils literal notranslate"><span class="pre">&amp;output=csv</span></code> to the end.</p>
-</div>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">show=all|poll|idx</span></code></dt>
 <dd><p class="first">Configure the objects to be included in the return. This parameter is ignored if the selected output format is “csv”. Type: <cite>str</cite>. Default: “all”</p>
@@ -252,10 +248,6 @@
 <dt><code class="docutils literal notranslate"><span class="pre">output=json|csv</span></code></dt>
 <dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortend MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “json”</dd>
 </dl>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">The web-based API <a class="reference external" href="http://earthlifeconsortium.org/api_v1/ui/">sandbox</a> hosted on this site <strong>does not</strong> support retrieval of CSV files. If you are using the sandbox to explore API parameters and wish to download a CSV file, copy the URL displayed under [Request URL] after running a query and paste it into the browser window appending <code class="docutils literal notranslate"><span class="pre">&amp;output=csv</span></code> to the end.</p>
-</div>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">show=all|poll|idx</span></code></dt>
 <dd><p class="first">Configure the objects to be included in the return. This parameter is ignored if the selected output format is “csv”. Type: <cite>str</cite>. Default: “all”</p>
@@ -311,10 +303,6 @@
 <dt><code class="docutils literal notranslate"><span class="pre">output=json|csv|bibjson|ris</span></code></dt>
 <dd>File format of the data return. Serialized JSON, structured BibJSON, tabular CSV or RIS interchange formats. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortend MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “bibjson”</dd>
 </dl>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">The web-based API <a class="reference external" href="http://earthlifeconsortium.org/api_v1/ui/">sandbox</a> hosted on this site <strong>does not</strong> support retrieval of CSV files. If you are using the sandbox to explore API parameters and wish to download a CSV file, copy the URL displayed under [Request URL] after running a query and paste it into the browser window appending <code class="docutils literal notranslate"><span class="pre">&amp;output=csv</span></code> to the end.</p>
-</div>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">show=all|poll|idx</span></code></dt>
 <dd><p class="first">Configure the objects to be included in the return. This parameter is ignored if the selected output format is “csv”. Type: <cite>str</cite>. Default: “all”</p>
@@ -334,7 +322,7 @@
 <p><strong>Examples</strong></p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p>Specify a list of references and use the default output format of BibJSON <a class="footnote-reference" href="#id13" id="id6">[1]</a></p>
+<p>Specify a list of references and use the default output format of BibJSON <a class="footnote-reference" href="#id9" id="id3">[1]</a></p>
 <p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/ref?idlist=pbdb:col:60676,neot:dst:5664,neot:dst:5562,pbdb:col:105101">http://earthlifeconsortium.org/api_v1/ref?idlist=pbdb:col:60676,neot:dst:5664,neot:dst:5562,pbdb:col:105101</a></p>
 </div>
 </div>
@@ -381,10 +369,6 @@
 <dt><code class="docutils literal notranslate"><span class="pre">output=json|csv</span></code></dt>
 <dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortend MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “json”</dd>
 </dl>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">The web-based API <a class="reference external" href="http://earthlifeconsortium.org/api_v1/ui/">sandbox</a> hosted on this site <strong>does not</strong> support retrieval of CSV files. If you are using the sandbox to explore API parameters and wish to download a CSV file, copy the URL displayed under [Request URL] after running a query and paste it into the browser window appending <code class="docutils literal notranslate"><span class="pre">&amp;output=csv</span></code> to the end.</p>
-</div>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">show=all|poll|idx</span></code></dt>
 <dd><p class="first">Configure the objects to be included in the return. This parameter is ignored if the selected output format is “csv”. Type: <cite>str</cite>. Default: “all”</p>
@@ -413,7 +397,7 @@
 <p>ELC utilities ancillary to core data retrieval are collected in the <code class="docutils literal notranslate"><span class="pre">misc</span></code> controller and are accessible by appending the desired route to the base path.</p>
 <div class="section" id="paleocoordinates">
 <h3>Paleocoordinates<a class="headerlink" href="#paleocoordinates" title="Permalink to this headline">¶</a></h3>
-<p>Convert modern day cartesian coordinates into paleocoordinates using the GPlates <a class="footnote-reference" href="#id14" id="id9">[2]</a> tectonics reconstruction model. Operationally this model is hosted by the Macrostrat Project <a class="footnote-reference" href="#id15" id="id10">[3]</a> at the University of Wisconsin.</p>
+<p>Convert modern day cartesian coordinates into paleocoordinates using the GPlates <a class="footnote-reference" href="#id10" id="id5">[2]</a> tectonics reconstruction model. Operationally this model is hosted by the Macrostrat Project <a class="footnote-reference" href="#id11" id="id6">[3]</a> at the University of Wisconsin.</p>
 <dl class="docutils">
 <dt><strong>Base path</strong></dt>
 <dd><code class="docutils literal notranslate"><span class="pre">http://earthlifeconsortium.org/api_v1/misc/paleocoords?</span></code></dd>
@@ -448,7 +432,7 @@
 </div>
 <div class="section" id="timebounds">
 <h3>Timebounds<a class="headerlink" href="#timebounds" title="Permalink to this headline">¶</a></h3>
-<p>Return the oldest and youngest ages (bounds) spanning the specified range. Geologic ages are resolved according to ICS definitions <a class="footnote-reference" href="#id16" id="id11">[4]</a>.</p>
+<p>Return the oldest and youngest ages (bounds) spanning the specified range. Geologic ages are resolved according to ICS definitions <a class="footnote-reference" href="#id12" id="id7">[4]</a>.</p>
 <dl class="docutils">
 <dt><strong>Base path</strong></dt>
 <dd><code class="docutils literal notranslate"><span class="pre">http://earthlifeconsortium.org/api_v1/misc/timebound?</span></code></dd>
@@ -505,37 +489,37 @@
 <dt><cite>Metadata</cite></dt>
 <dd>All <code class="docutils literal notranslate"><span class="pre">full</span></code> or <code class="docutils literal notranslate"><span class="pre">poll</span></code> JSON responses include a metadata block which importantly indicates the URLs composed for the resource databases in addition to a timestamp, the age units and the type of geographic coordinates retrieved. If desired, the subquery URL may be used to delve deeper into each individual database.</dd>
 <dt><cite>Error handling</cite></dt>
-<dd>API errors are reported according to IETF <a class="footnote-reference" href="#id17" id="id12">[5]</a> standards including both server level 500 series and client level 400 series HTTP errors. As the ELC API leverages remote data service resources for much of it’s functionality, bad requests to or lack of availability of these remote services may result in the propogation of a 400 level error as ELC is the client in this circumstance.</dd>
+<dd>API errors are reported according to IETF <a class="footnote-reference" href="#id13" id="id8">[5]</a> standards including both server level 500 series and client level 400 series HTTP errors. As the ELC API leverages remote data service resources for much of it’s functionality, bad requests to or lack of availability of these remote services may result in the propogation of a 400 level error as ELC is the client in this circumstance.</dd>
 </dl>
 <p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id9" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[1]</a></td><td>BibJSON: Representing bibliographic metadata in JSON. <a class="reference external" href="http://okfnlabs.org/bibjson/">http://okfnlabs.org/bibjson/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id10" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[2]</a></td><td>Wright, N., S. Zahirovic, R. D. Müller, and M. Seton (2013), Towards community-driven, open-access paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics, Biogeosciences, 10, 1529-1541. DOI: <a class="reference external" href="https://www.researchgate.net/publication/235789001_Towards_community-driven_paleogeographic_reconstructions_Integrating_open-access_paleogeographic_and_paleobiology_data_with_plate_tectonics">10.5194/bg-10-1529-2013</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id11" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[3]</a></td><td>Macrostrat public API. <a class="reference external" href="https://macrostrat.org/#api">https://macrostrat.org/#api</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id12" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[4]</a></td><td>Gradstein, F. M., J. G. Ogg, M. D. Schmitz, and G. M. Ogg. 2012. <a class="reference external" href="https://www.elsevier.com/books/the-geologic-time-scale-2012/gradstein/978-0-444-59425-9">A Geologic Time Scale 2012</a>, Volume 2. Elsevier, Amsterdam, 1144 pp.</td></tr>
+</tbody>
+</table>
 <table class="docutils footnote" frame="void" id="id13" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id6">[1]</a></td><td>BibJSON: Representing bibliographic metadata in JSON. <a class="reference external" href="http://okfnlabs.org/bibjson/">http://okfnlabs.org/bibjson/</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id14" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id9">[2]</a></td><td>Wright, N., S. Zahirovic, R. D. Müller, and M. Seton (2013), Towards community-driven, open-access paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics, Biogeosciences, 10, 1529-1541. DOI: <a class="reference external" href="https://www.researchgate.net/publication/235789001_Towards_community-driven_paleogeographic_reconstructions_Integrating_open-access_paleogeographic_and_paleobiology_data_with_plate_tectonics">10.5194/bg-10-1529-2013</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id15" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id10">[3]</a></td><td>Macrostrat public API. <a class="reference external" href="https://macrostrat.org/#api">https://macrostrat.org/#api</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id16" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id11">[4]</a></td><td>Gradstein, F. M., J. G. Ogg, M. D. Schmitz, and G. M. Ogg. 2012. <a class="reference external" href="https://www.elsevier.com/books/the-geologic-time-scale-2012/gradstein/978-0-444-59425-9">A Geologic Time Scale 2012</a>, Volume 2. Elsevier, Amsterdam, 1144 pp.</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id17" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id12">[5]</a></td><td>Internet Engineering Task Force: Problem Details for HTTP APIs. <a class="reference external" href="https://tools.ietf.org/html/draft-ietf-appsawg-http-problem-00">https://tools.ietf.org/html/draft-ietf-appsawg-http-problem-00</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id8">[5]</a></td><td>Internet Engineering Task Force: Problem Details for HTTP APIs. <a class="reference external" href="https://tools.ietf.org/html/draft-ietf-appsawg-http-problem-00">https://tools.ietf.org/html/draft-ietf-appsawg-http-problem-00</a></td></tr>
 </tbody>
 </table>
 </div>

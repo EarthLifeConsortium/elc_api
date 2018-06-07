@@ -93,9 +93,7 @@ paths:
         format: "int32"
       - name: "output"
         in: "query"
-        description: "Response format. Allowable parameters JSON (default)\
-          \ [CSV is not supported in this web sandbox but may be\
-          \ specified if constructing the query URL manually]"
+        description: "Response format. Allowable parameters JSON (default), CSV"
         required: false
         type: "string"
       - name: "show"
@@ -148,8 +146,7 @@ paths:
       - name: "output"
         in: "query"
         description: "Response format. Allowable parameters are BibJSON\
-          \ (default) or JSON. [CSV is not supported in this web sandbox but\
-          \ may be specified if constructing the query URL manually]"
+          \ (default), JSON, CSV and RIS"
         required: false
         type: "string"
       - name: "show"
@@ -246,9 +243,7 @@ paths:
         format: "int32"
       - name: "output"
         in: "query"
-        description: "Response format. Allowable parameters JSON (default)\
-          \ [CSV is not supported in this web sandbox but may be\
-          \ specified if constructing the query URL manually]"
+        description: "Response format. Allowable parameters JSON (default), CSV"
         required: false
         type: "string"
       - name: "show"
@@ -323,9 +318,7 @@ paths:
         # type: "boolean"
       - name: "output"
         in: "query"
-        description: "Response format. Allowable parameters JSON (default)\
-          \ [CSV is not supported in this web sandbox but may be\
-          \ specified if constructing the query URL manually]"
+        description: "Response format. Allowable parameters JSON (default), CSV"
         required: false
         type: "string"
       - name: "show"
