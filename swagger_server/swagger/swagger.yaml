@@ -548,15 +548,67 @@ definitions:
   mobile:
     type: "object"
     properties:
-      age:
-        type: "string"
-        description: "Age bounds (min,max)"
       loc:
-        type: "string"
-        description: "Modern geographic coordinates (lat,lon)"
-      # txn:
-      # site:
-      # img:
+        type: "object"
+        properties:
+          crd:
+            type: "string"
+            description: "Modern geographic coordinates. GeoJSON point"
+          ste:
+            type: "string"
+            description: "Site/collection name, description"
+          pla:
+            type: "string"
+            description: "County, state/province, country"
+          age:
+            type: "string"
+            description: "Age bounds (min,max)"
+      org:
+        type: "object"
+        properties:
+          txn:
+            type: "string"
+            description: "Taxonomic name"
+          nam:
+            type: "string"
+            description: "Organism common name"
+          int:
+            type: "string"
+            description: "Existence geologic interval (eary,late)"
+          ext:
+            type: "boolean"
+            description: "Modern status. Extant=True"
+          img:
+            type: "integer"
+            format: "int32"
+            description: "Phylopic ID number. Retrieve as https://paleobiodb.org/data1.2/taxa/thumb.png?id=[img]"
+      eco:
+        type: "object"
+        properties:
+          env:
+            type: "string"
+            description: "Found environment"
+          mot:
+            type: "string"
+            description: "Motility and attachment"
+          hab:
+            type: "string"
+            description: "Life habitat, grouping and depth"
+          vis:
+            type: "string"
+            description: "Vision capability"
+          dte:
+            type: "string"
+            description: "Diet and feeding mode"
+          rep:
+            type: "string"
+            description: "Mode of reproduction"
+          ont:
+            type: "string"
+            description: "Ontology"
+          grp:
+            type: "string"
+            description: "General ecological grouping, assemblage"
   reference:
     type: "object"
     properties:
@@ -682,7 +734,7 @@ definitions:
         description: "General descriptive ecological grouping"
       env_basis:
         type: "string"
-        description: "Basis for environmental description"
+        description: "Taxon on which environment description is based"
       environment:
         type: "string"
         description: "General environment of organism"

@@ -36,7 +36,10 @@ def build_filename(endpoint, data):
 
 def set_db_special(db, endpoint):
     """Add custom payload parameters unique to a specific db."""
-    if db == 'pbdb' and endpoint in ['loc', 'occ']:
+    if db == 'pbdb' and endpoint in ['occ']:
+        return {'show': 'methods,coords,paleoloc'}
+
+    if db == 'pbdb' and endpoint in ['loc']:
         return {'show': 'full'}
 
     if db == 'pbdb' and endpoint in ['ref']:
