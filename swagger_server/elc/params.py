@@ -16,7 +16,7 @@ def set_options(req_args, endpoint):
     spec.update(ref=['bibjson', 'json', 'csv', 'ris', 'file'])
     spec.update(show=['all', 'poll', 'idx'])
     spec.update(age=['ma', 'ka', 'ybp'])
-    spec.update(geog=['modern','paleo'])
+    spec.update(geog=['modern', 'paleo'])
 
     # Runtime options
     options = dict()
@@ -144,12 +144,12 @@ def id_parse(ids, db, id_type):
 def set_id(ids, db, endpoint, options):
     """Return a payload parameter for the requested id tag."""
     # NEW RESOURCE: Add additional database-to-datatype mappings below
-    if endpoint in ['loc','ref']:
+    if endpoint in ['loc', 'ref']:
         xmap = {'pbdb': ['col', 'coll_id'],
                 'neotoma': ['dst', 'datasetid']}
     #  elif endpoint == 'ref':
-        #  xmap = {'pbdb': ['ref', 'ref_id'],
-                #  'neotoma': ['pub', 'pubid']}
+    #      xmap = {'pbdb': ['ref', 'ref_id'],
+    #              'neotoma': ['pub', 'pubid']}
     elif endpoint == 'tax':
         xmap = {'pbdb': ['txn', 'taxon_id'],
                 'neotoma': ['txn', 'taxonid']}
@@ -172,9 +172,7 @@ def set_id(ids, db, endpoint, options):
 
 def parse(req_args, options, db, endpoint):
     """Return a Requests payload specific to resource target."""
-    from ..elc import config, aux, ages, taxa, geog
-
-    # 
+    from ..elc import aux, ages, taxa, geog
 
     # Alowable endpoint parameters
 

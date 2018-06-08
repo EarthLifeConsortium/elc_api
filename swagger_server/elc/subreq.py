@@ -45,30 +45,47 @@ def trigger(url_path, payload, db):
     return resp_json, resp.url
 
 
-def mobile_req(return_obj, payload, db):
-    """Custom multi-part dispach requester."""
+def mobile_req(return_obj, url_path, payload, db):
+    """Dispach multi-part requests and assemble mobile response."""
     from geojson import Point
 
     if db == 'pbdb':
 
         # Retrieve all occurrence data
-        route = 'https://paleobiodb.org/data1.2/occs/list.json'
-        payload.update(limit=10, show='full')
+        payload.update(show='methods,coords,paleoloc,loc,coll')
         try:
-            occs, url = trigger(route, payload, db)
+            occs, url = trigger(url_path, payload, db)
         except ValueError as err:
             raise ValueError(err.args[0], err.args[1])
 
-        # Retrieve associated taxonomic data
-        route = 'https://paleobiodb.org/data1.2/taxa/single.json'
+        # Return if no occurrences found for given parameters
+        if 'records' not in occs.keys():
+            return return_obj
+
+        # Generate a list of found taxa
+        #  taxa = set()
+        #  for rec in occs.get('records'):
+        #      if 'tna' in rec:
+        #          taxa.add(rec.get('tna'))
+        #  taxa_list = ','.join(taxa)
+
+        # Build taxa lookup dictionary
+        tax_base = 'https://paleobiodb.org/data1.2/taxa/list.json'
+        tax_payload = {'show': 'full,img',
+                       'base_name': payload['base_name']}
+        try:
+            taxon_resp, url = trigger(tax_base, tax_payload, db)
+        except ValueError as err:
+            raise ValueError(err.args[0], err.args[1])
+        taxa_table = dict()
+        for rec in taxon_resp['records']:
+            if 'nam' in rec.keys():
+                taxa_table[rec['nam']] = rec
+
+        # Build mobile return
         for rec in occs.get('records'):
 
-            payload = {'show': 'full,img', 'taxon_name': rec.get('tna')}
-            try:
-                taxon_resp, url = trigger(route, payload, db)
-            except ValueError as err:
-                raise ValueError(err.args[0], err.args[1])
-            taxon_info = taxon_resp['records'][0]
+            taxon_info = taxa_table[rec['tna']]
 
             mob = {'loc': {},
                    'org': {},
@@ -76,8 +93,9 @@ def mobile_req(return_obj, payload, db):
 
             # Location block
 
-            geoj = Point((rec['lng'],rec['lat']))
-            mob['loc'].update(crd=geoj)
+            if 'lng' in rec.keys() and 'lat' in rec.keys():
+                geoj = Point((round(rec['lng'], 3), round(rec['lat'], 3)))
+                mob['loc'].update(crd=geoj)
 
             site_desc = None
             if 'cnm' in rec.keys():
@@ -97,7 +115,7 @@ def mobile_req(return_obj, payload, db):
             if place:
                 mob['loc'].update(pla=place)
 
-            age_range = ', '.join([str(rec['eag']),str(rec['lag'])])
+            age_range = ', '.join([str(rec['eag']), str(rec['lag'])])
             mob['loc'].update(age=age_range)
 
             # Organism block
@@ -105,7 +123,7 @@ def mobile_req(return_obj, payload, db):
             mob['org'].update(txn=rec.get('tna'))
             if 'nm2' in taxon_info.keys():
                 mob['org'].update(nam=taxon_info.get('nm2'))
-                       
+
             interval = None
             if 'tei' in taxon_info.keys():
                 interval = taxon_info['tei']
@@ -114,17 +132,13 @@ def mobile_req(return_obj, payload, db):
             if interval:
                 mob['org'].update(itv=interval)
 
-            extant = None
             if 'ext' in taxon_info.keys():
-                extant = True if taxon_info['ext'] == 1 else False
-            if extant:
-                mob['org'].update(ext=extant)
+                extant = 'extant' if taxon_info['ext'] == 1 else 'extinct'
+                mob['org'].update(sts=extant)
 
-            img_uri = None
             if 'img' in taxon_info.keys():
                 base = 'https://paleobiodb.org/data1.2/taxa/thumb.png?id='
                 img_uri = ''.join([base, taxon_info['img'][4:]])
-            if img_uri:
                 mob['org'].update(img=img_uri)
 
             # Ecology and environment block
@@ -144,7 +158,108 @@ def mobile_req(return_obj, payload, db):
             if 'jon' in taxon_info.keys():
                 mob['eco'].update(ont=taxon_info['jon'])
             if 'cct' in rec.keys():
-                mob['eco'].update(grp=rec['cct'])
+                mob['eco'].update(typ=rec['cct'])
+            if 'jec' in taxon_info.keys():
+                mob['eco'].update(grp=taxon_info['jec'])
+
+            return_obj.append(mob)
+
+    elif db == 'neotoma':
+
+        import yaml
+        with open('swagger_server/lookup/neotoma_eco_groups.yaml') as f:
+            eco_map = yaml.safe_load(f)
+        with open('swagger_server/lookup/neotoma_taxa_groups.yaml') as f:
+            taxa_map = yaml.safe_load(f)
+
+        # Retrieve all occurrence data
+        payload.update(show='methods,coords,paleoloc,loc,coll')
+        try:
+            occs, url = trigger(url_path, payload, db)
+        except ValueError as err:
+            raise ValueError(err.args[0], err.args[1])
+
+        # Return if no occurrences found for given parameters
+        if 'data' not in occs:
+            return return_obj
+
+        # Generate a list of found taxa
+        #  taxa = set()
+        #  for rec in occs.get('data'):
+        #      if 'sample' in rec:
+        #          if 'taxonname' in rec['sample']:
+        #              taxa.add(rec['sample'].get('taxonname'))
+        #  taxa_list = ','.join(taxa)
+
+        # Build taxa lookup dictionary
+        tax_base = 'http://api-dev.neotomadb.org/v2.0/data/taxa'
+        tax_payload = {'show': 'full,img',
+                       'taxonname': payload['taxonname'],
+                       'lower': 'true'}
+        try:
+            taxon_resp, url = trigger(tax_base, tax_payload, db)
+        except ValueError as err:
+            raise ValueError(err.args[0], err.args[1])
+        taxa_table = dict()
+        for rec in taxon_resp['data']:
+            if 'taxonname' in rec.keys():
+                taxa_table[rec['taxonname']] = rec
+
+        # Build mobile return
+        for rec in occs.get('data'):
+
+            if 'sample' in rec:
+                taxon_info = taxa_table[rec['sample']['taxonname']]
+            else:
+                continue
+
+            mob = {'loc': {},
+                   'org': {},
+                   'eco': {}}
+
+            # Process occurrences return
+
+            if 'site' in rec:
+                if rec['site'].get('location'):
+                    mob['loc'].update(crd=rec['site']['location'])
+
+                if rec['site'].get('sitename'):
+                    mob['loc'].update(ste=rec['site']['sitename'])
+
+                if rec['site'].get('datasettype'):
+                    mob['eco'].update(typ=rec['site']['datasettype'])
+
+            if 'sample' in rec:
+                mob['org'].update(txn=rec['sample']['taxonname'])
+
+            if 'age' in rec:
+                if rec['age'].get('age'):
+                    age_range = ', '.join([str(rec['age']['age']),
+                                           str(rec['age']['age'])])
+                    mob['loc'].update(age=age_range)
+
+                elif (rec['age'].get('ageolder') and
+                      rec['age'].get('ageyounger')):
+                    age_range = ', '.join([str(rec['age']['ageolder']),
+                                           str(rec['age']['ageyounger'])])
+                    mob['loc'].update(age=age_range)
+
+            # Process taxon return
+
+            group = None
+            if 'ecolgroup' in taxon_info.keys():
+                group = eco_map[taxon_info['ecolgroup']]
+            if 'taxagroup' in taxon_info.keys():
+                if group:
+                    group = ', '.join([group,
+                                       taxa_map[taxon_info['taxagroup']]])
+            if group:
+                mob['eco'].update(grp=group)
+
+            if 'status' in taxon_info.keys():
+                mob['org'].update(sts=taxon_info['status'])
+
+            # 'pla' here via geopolitical units: cny,stp,cc2
 
             return_obj.append(mob)
 

@@ -5,12 +5,11 @@ Endpoint for miscelaneous queries on specific species taxonomy.
 """
 
 import connexion
-import flask_csv
-from ..elc import config, params, aux, subreq
+from ..elc import config, params, aux, subreq, formatter
 from ..handlers import router
 from http_status import Status
 from time import time
-from flask import jsonify
+from flask import jsonify, Response
 
 
 def tax(taxon=None, idlist=None, includelower=None, hierarchy=None, run=None):

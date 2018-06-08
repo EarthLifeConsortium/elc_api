@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Composite interface for paleontological databases. Currently supports the Neotoma Paleoecology Database and PBDB (The Paleobiology Database). See full <a href='http://earthlifeconsortium.org/api_v1/swagger.json'>OpenAPI Specification</a>. Read the <a href='http:///earthlifeconsortium.org/docs/api-docs.html'>full documentation</a> for more detailed instructions."
-  version: "1.0.3"
+  version: "1.0.4"
   title: "API Sandbox"
   contact:
     url: "http://earthlifeconsortium.org"
@@ -30,11 +30,9 @@ paths:
       parameters:
       - name: "taxon"
         in: "query"
-        description: "Taxonomic name. May be truncated, a list of taxa or use\
-          \ wildcards. If a specific taxon ID or a vector of IDs is known that\
-          \ parameter can be passed through taxon. Taxon lists must be passed\
-          \ using JSON formating. By default, returns only taxa named in the\
-          \ query. Use includelower if all lower taxa are desired"
+        description: "Comma separated list of taxonomic names. Wildcards (%)\
+          \ are accepted but setting 'includelower=True' (the default) is\
+          \ the recomended method for returning all subtaxa."
         required: false
         type: "string"
       - name: "bbox"
@@ -288,12 +286,9 @@ paths:
       parameters:
       - name: "taxon"
         in: "query"
-        description: "Taxonomic name. May be truncated, a list of taxa or use\
-          \ wildcards. If a specific taxon ID or a vector of IDs is known\
-          \ that parameter can be passed through taxon. Taxon lists must be\
-          \ passed using JSON formating. By default, returns only taxa named\
-          \ in the query. If all lower taxa are desired in the return, use\
-          \ includelower"
+        description: "Comma separated list of taxonomic names. Wildcards (%)\
+          \ are accepted but setting 'includelower=True'\
+          \ is the recomended method for returning all subtaxa."
         required: false
         type: "string"
       - name: "idlist"
@@ -438,7 +433,7 @@ paths:
       parameters:
       - name: "taxon"
         in: "query"
-        description: "Taxonomic name."
+        description: "Single taxonomic name"
         required: true
         type: "string"
       - name: "synonyms"
@@ -473,12 +468,18 @@ paths:
       parameters:
       - name: "taxon"
         in: "query"
-        description: "Comma separated string of taxonomic names."
+        description: "Comma separated list of taxonomic names. Wildcards (%)\
+          \ are accepted but setting 'includelower=True' (the default) is\
+          \ the recomended method for returning all subtaxa."
         required: false
         type: "string"
       - name: "bbox"
         in: "query"
-        description: "Bounding box definition, structured WKT text"
+        description: "WKT bounding box definition. Accepts standard\
+          \ POLYGON((...)) format. Use <a href=\
+          \ 'http://boundingbox.klokantech.com' target='_blank'>this external\
+          \ tool</a> and choose 'OGC WKT' from the bottom left to craft a\
+          \ correctly formated WKT descriptor"
         required: false
         type: "string"
       responses:
@@ -568,9 +569,9 @@ definitions:
           itv:
             type: "string"
             description: "Existence geologic interval (eary,late)"
-          ext:
-            type: "boolean"
-            description: "Modern status. Extant=True"
+          sts:
+            type: "string"
+            description: "Extinct or extant"
           img:
             type: "integer"
             format: "int32"
@@ -601,7 +602,10 @@ definitions:
             description: "Ontology"
           grp:
             type: "string"
-            description: "General ecological grouping, assemblage"
+            description: "Ecological/taxonomic grouping and basis"
+          typ:
+            type: "string"
+            description: "Collection/dataset type"
   reference:
     type: "object"
     properties:

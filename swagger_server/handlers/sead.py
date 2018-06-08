@@ -35,7 +35,7 @@ def occurrences(resp_json, return_obj, options):
             source = 'Sample: {0:s}'.format(str(rec.get('sample_name')))
         if rec.get('locale_name'):
             source = '{0:s}, Site: {1:s}'.format(source,
-                                                rec.get('locale_name'))
+                                                 rec.get('locale_name'))
         data.update(source=source)
 
         # Ages not yet available from SEAD

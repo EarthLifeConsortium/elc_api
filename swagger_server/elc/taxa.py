@@ -11,7 +11,7 @@ def set_taxon(taxon, subtax, db):
 
     for txn in taxon:
         if len(txn.split()) > 2 or len(txn.split()) == 0:
-            msg = 'Unsupported taxon (two word max): {0:s}'.format(name)
+            msg = 'Unsupported taxon (two word max): {0:s}'.format(txn)
             raise ValueError(400, msg)
 
     taxon = ','.join(taxon)

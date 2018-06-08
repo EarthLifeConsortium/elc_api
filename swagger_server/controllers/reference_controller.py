@@ -150,7 +150,7 @@ def ref(idlist=None, show=None, output=None, run=None):
         if return_obj:
             ris = formatter.type_ris(return_obj)
             return Response((x for x in ris), mimetype='text/plain')
-        else: 
+        else:
             msg = 'Unable to generate RIS file. Search returned no records.'
             return jsonify(status=204,
                            title=Status(204).name,

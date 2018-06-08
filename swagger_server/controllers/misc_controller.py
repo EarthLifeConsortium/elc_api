@@ -23,7 +23,6 @@ from flask import jsonify
 
 def mobile(taxon=None, bbox=None):
     """Lightweight custom response."""
-    from ..handlers import router
     from ..elc import config, subreq
 
     return_obj = list()
@@ -42,7 +41,7 @@ def mobile(taxon=None, bbox=None):
 
     # This query only applies to Neotoma and PBDB
 
-    for db in ['pbdb']:
+    for db in ['neotoma', 'pbdb']:
 
         # Configure parameter payload for api subquery
 
@@ -64,9 +63,10 @@ def mobile(taxon=None, bbox=None):
                             config.get('db_occ_endpt', db)])
 
         try:
-            return_obj =  subreq.mobile_req(return_obj=return_obj,
-                                            payload=payload,
-                                            db=db)
+            return_obj = subreq.mobile_req(return_obj=return_obj,
+                                           url_path=url_path,
+                                           payload=payload,
+                                           db=db)
 
         except ValueError as err:
             return connexion.problem(status=err.args[0],
