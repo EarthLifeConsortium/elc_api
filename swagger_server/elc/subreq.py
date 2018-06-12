@@ -285,13 +285,15 @@ def mobile_req(return_obj, url_path, payload, db):
                 if rec['site'].get('datasettype'):
                     mob['eco'].update(typ=rec['site']['datasettype'])
 
-                place = list()
-                for gpu in reversed(geo_units[rec['site']['siteid']]):
-                    loc_level = geo_map.get(gpu)
-                    if loc_level:
-                        place.append(loc_level)
-                if place:
-                    mob['loc'].update(pla=', '.join(place))
+                siteid = rec['site']['siteid']
+                if siteid:
+                    place = list()
+                    for gpu in reversed(geo_units[siteid]):
+                        loc_level = geo_map.get(gpu)
+                        if loc_level:
+                            place.append(loc_level)
+                    if place:
+                        mob['loc'].update(pla=', '.join(place))
 
             if 'sample' in rec:
                 mob['org'].update(txn=rec['sample']['taxonname'])
