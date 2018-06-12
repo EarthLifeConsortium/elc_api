@@ -26,7 +26,7 @@ db_ref_endpt:
   neotoma: 'publications'
   pbdb: 'colls/refs.json'
 default:
-  timeout: Null
+  timeout: 300
   ageunits: 'ma'
   coordtype: 'modern'
   includelower: True

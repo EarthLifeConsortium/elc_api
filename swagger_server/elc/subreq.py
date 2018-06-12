@@ -51,6 +51,10 @@ def mobile_req(return_obj, url_path, payload, db):
 
     if db == 'pbdb':
 
+        import yaml
+        with open('swagger_server/lookup/iso_3166_alpha2.yaml') as f:
+            cc_map = yaml.safe_load(f)
+
         # Retrieve all occurrence data
         payload.update(show='methods,coords,paleoloc,loc,coll')
         try:
@@ -127,7 +131,11 @@ def mobile_req(return_obj, url_path, payload, db):
 
             place = None
             if 'cc2' in rec.keys():
-                place = rec['cc2']
+                country = cc_map.get(rec['cc2'])
+                if country:
+                    place = country
+                else:
+                    place = ''
             if 'stp' in rec.keys():
                 place = '{0:s}, {1:s}'.format(rec['stp'], place)
             if 'cny' in rec.keys():
