@@ -191,6 +191,27 @@ def mobile_req(return_obj, url_path, payload, db):
             eco_map = yaml.safe_load(f)
         with open('swagger_server/lookup/neotoma_taxa_groups.yaml') as f:
             taxa_map = yaml.safe_load(f)
+        with open('swagger_server/lookup/neotoma_geopolunits.yaml') as f:
+            geo_map = yaml.safe_load(f)
+
+        # Build GeoPoliticalUnit index
+        base = 'http://api-dev.neotomadb.org/v2.0/data/'
+        route = 'dbtables/sitegeopolitical'
+        uri = ''.join([base, route])
+        params = ''
+        try:
+            site_gpu, url = trigger(uri, params, db)
+        except ValueError as err:
+            raise ValueError(err.args[0], err.args[1])
+        last_site = ''
+        geo_units = dict()
+        for rec in site_gpu['data']:
+            site = rec.get('siteid')
+            if site == last_site:
+                geo_units[site].append(rec.get('geopoliticalid'))
+            else:
+                geo_units[site] = [rec.get('geopoliticalid')]
+            last_site = site
 
         # Retrieve all occurrence data
         try:
@@ -264,6 +285,14 @@ def mobile_req(return_obj, url_path, payload, db):
                 if rec['site'].get('datasettype'):
                     mob['eco'].update(typ=rec['site']['datasettype'])
 
+                place = list()
+                for gpu in reversed(geo_units[rec['site']['siteid']]):
+                    loc_level = geo_map.get(gpu)
+                    if loc_level:
+                        place.append(loc_level)
+                if place:
+                    mob['loc'].update(pla=', '.join(place))
+
             if 'sample' in rec:
                 mob['org'].update(txn=rec['sample']['taxonname'])
 
@@ -296,8 +325,6 @@ def mobile_req(return_obj, url_path, payload, db):
 
             if 'status' in taxon_info.keys():
                 mob['org'].update(sts=taxon_info['status'])
-
-            # 'pla' here via geopolitical units: cny,stp,cc2
 
             return_obj.append(mob)
 
