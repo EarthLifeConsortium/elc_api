@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Composite interface for paleontological databases. Currently supports the Neotoma Paleoecology Database and PBDB (The Paleobiology Database). See full <a href='http://earthlifeconsortium.org/api_v1/swagger.json'>OpenAPI Specification</a>. Read the <a href='http:///earthlifeconsortium.org/docs/api-docs.html'>full documentation</a> for more detailed instructions."
-  version: "1.0.4"
+  version: "1.0.5"
   title: "API Sandbox"
   contact:
     url: "http://earthlifeconsortium.org"
@@ -542,12 +542,15 @@ definitions:
   mobile:
     type: "object"
     properties:
+      src:
+        type: "string"
+        description: "Providor database"
       loc:
         type: "object"
         properties:
           crd:
             type: "string"
-            description: "Modern geographic coordinates. GeoJSON point"
+            description: "Modern geographic coordinates. GeoJSON WGS 84"
           ste:
             type: "string"
             description: "Site/collection name, description"

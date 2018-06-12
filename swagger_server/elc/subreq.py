@@ -62,21 +62,34 @@ def mobile_req(return_obj, url_path, payload, db):
         if 'records' not in occs.keys():
             return return_obj
 
-        # Generate a list of found taxa
-        #  taxa = set()
-        #  for rec in occs.get('records'):
-        #      if 'tna' in rec:
-        #          taxa.add(rec.get('tna'))
-        #  taxa_list = ','.join(taxa)
-
         # Build taxa lookup dictionary
         tax_base = 'https://paleobiodb.org/data1.2/taxa/list.json'
-        tax_payload = {'show': 'full,img',
-                       'base_name': payload['base_name']}
-        try:
-            taxon_resp, url = trigger(tax_base, tax_payload, db)
-        except ValueError as err:
-            raise ValueError(err.args[0], err.args[1])
+
+        # Taxa named, perform recursive search on DB to get details
+        if payload.get('base_name'):
+            tax_payload = {'show': 'full,img',
+                           'base_name': payload['base_name']}
+            try:
+                taxon_resp, url = trigger(tax_base, tax_payload, db)
+            except ValueError as err:
+                raise ValueError(err.args[0], err.args[1])
+
+        # Only geography named, parameterize taxa from occ response
+        else:
+            taxa = set()
+            for rec in occs.get('records'):
+                if 'tna' in rec:
+                    taxa.add(rec.get('tna'))
+            taxa_list = ','.join(taxa)
+
+            tax_payload = {'show': 'full,img',
+                           'taxon_name': taxa_list}
+            try:
+                taxon_resp, url = trigger(tax_base, tax_payload, db)
+            except ValueError as err:
+                raise ValueError(err.args[0], err.args[1])
+
+        # Reformat taxa return into a nested dict
         taxa_table = dict()
         for rec in taxon_resp['records']:
             if 'nam' in rec.keys():
@@ -85,16 +98,23 @@ def mobile_req(return_obj, url_path, payload, db):
         # Build mobile return
         for rec in occs.get('records'):
 
-            taxon_info = taxa_table[rec['tna']]
+            if rec.get('tna'):
+                taxon_info = taxa_table[rec['tna']]
+            else:
+                continue
 
-            mob = {'loc': {},
+            mob = {'src': 'https://paleobiodb.org',
+                   'loc': {},
                    'org': {},
                    'eco': {}}
 
             # Location block
 
             if 'lng' in rec.keys() and 'lat' in rec.keys():
-                geoj = Point((round(rec['lng'], 3), round(rec['lat'], 3)))
+                crs = {'type': 'name',
+                       'properties': {'name': 'EPSG:4326'}}
+                geoj = str(Point(([round(rec['lng'], 3),
+                                   round(rec['lat'], 3)]), crs=crs))
                 mob['loc'].update(crd=geoj)
 
             site_desc = None
@@ -173,7 +193,6 @@ def mobile_req(return_obj, url_path, payload, db):
             taxa_map = yaml.safe_load(f)
 
         # Retrieve all occurrence data
-        payload.update(show='methods,coords,paleoloc,loc,coll')
         try:
             occs, url = trigger(url_path, payload, db)
         except ValueError as err:
@@ -183,37 +202,53 @@ def mobile_req(return_obj, url_path, payload, db):
         if 'data' not in occs:
             return return_obj
 
-        # Generate a list of found taxa
-        #  taxa = set()
-        #  for rec in occs.get('data'):
-        #      if 'sample' in rec:
-        #          if 'taxonname' in rec['sample']:
-        #              taxa.add(rec['sample'].get('taxonname'))
-        #  taxa_list = ','.join(taxa)
-
         # Build taxa lookup dictionary
         tax_base = 'http://api-dev.neotomadb.org/v2.0/data/taxa'
-        tax_payload = {'show': 'full,img',
-                       'taxonname': payload['taxonname'],
-                       'lower': 'true'}
-        try:
-            taxon_resp, url = trigger(tax_base, tax_payload, db)
-        except ValueError as err:
-            raise ValueError(err.args[0], err.args[1])
+
+        # Taxa named, perform recursive search on DB to get details
+        if payload.get('taxonname'):
+            tax_payload = {'taxonname': payload['taxonname'],
+                           'lower': 'true',
+                           'limit': 999999}
+            try:
+                taxon_resp, url = trigger(tax_base, tax_payload, db)
+            except ValueError as err:
+                raise ValueError(err.args[0], err.args[1])
+
+        # Only geography named, parameterize taxa from occ response
+        else:
+            taxa = set()
+            for rec in occs.get('data'):
+                if 'sample' in rec:
+                    if 'taxonid' in rec['sample']:
+                        taxa.add(str(rec['sample'].get('taxonid')))
+            taxa_list = ','.join(taxa)
+            tax_payload = {'taxonid': taxa_list, 'limit': 999999}
+
+            try:
+                taxon_resp, url = trigger(tax_base, tax_payload, db)
+            except ValueError as err:
+                raise ValueError(err.args[0], err.args[1])
+
+        # Reformat taxa return into a nested dict
         taxa_table = dict()
         for rec in taxon_resp['data']:
-            if 'taxonname' in rec.keys():
-                taxa_table[rec['taxonname']] = rec
+            if 'taxonid' in rec.keys():
+                taxa_table[rec['taxonid']] = rec
 
         # Build mobile return
         for rec in occs.get('data'):
 
             if 'sample' in rec:
-                taxon_info = taxa_table[rec['sample']['taxonname']]
+                if 'taxonid' in rec['sample']:
+                    taxon_info = taxa_table[rec['sample']['taxonid']]
+                else:
+                    continue
             else:
                 continue
 
-            mob = {'loc': {},
+            mob = {'src': 'https://neotomadb.org',
+                   'loc': {},
                    'org': {},
                    'eco': {}}
 
@@ -248,11 +283,14 @@ def mobile_req(return_obj, url_path, payload, db):
 
             group = None
             if 'ecolgroup' in taxon_info.keys():
-                group = eco_map[taxon_info['ecolgroup']]
+                ecolgroup = eco_map.get(taxon_info['ecolgroup'])
+                if ecolgroup:
+                    group = ecolgroup
             if 'taxagroup' in taxon_info.keys():
                 if group:
-                    group = ', '.join([group,
-                                       taxa_map[taxon_info['taxagroup']]])
+                    taxagroup = taxa_map.get(taxon_info['taxagroup'])
+                    if taxagroup:
+                        group = ', '.join([group, taxagroup])
             if group:
                 mob['eco'].update(grp=group)
 
