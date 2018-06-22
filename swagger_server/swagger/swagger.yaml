@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Composite interface for paleontological databases. Currently supports the Neotoma Paleoecology Database and PBDB (The Paleobiology Database). See full <a href='http://earthlifeconsortium.org/api_v1/swagger.json'>OpenAPI Specification</a>. Read the <a href='http:///earthlifeconsortium.org/docs/api-docs.html'>full documentation</a> for more detailed instructions."
-  version: "1.0.5"
+  version: "1.0.6"
   title: "API Sandbox"
   contact:
     url: "http://earthlifeconsortium.org"
@@ -39,9 +39,8 @@ paths:
         in: "query"
         description: "WKT bounding box definition. Accepts standard\
           \ POLYGON((...)) format. Use <a href=\
-          \ 'http://boundingbox.klokantech.com' target='_blank'>this external\
-          \ tool</a> and choose 'OGC WKT' from the bottom left to craft a\
-          \ correctly formated WKT descriptor"
+          \ 'https://clydedacruz.github.io/openstreetmap-wkt-playground/' target='_blank'>this external\
+          \ tool</a> to craft a correctly formated WKT descriptor"
         required: false
         type: "string"
       - name: "agerange"
@@ -196,9 +195,8 @@ paths:
         in: "query"
         description: "WKT bounding box definition. Accepts standard\
           \ POLYGON((...)) format. Use <a href=\
-          \ 'http://boundingbox.klokantech.com' target='_blank'>this external\
-          \ tool</a> and choose 'OGC WKT' from the bottom left to craft a\
-          \ correctly formated WKT descriptor"
+          \ 'https://clydedacruz.github.io/openstreetmap-wkt-playground/' target='_blank'>this external\
+          \ tool</a> to craft a correctly formated WKT descriptor"
         required: false
         type: "string"
       - name: "agerange"
@@ -477,9 +475,8 @@ paths:
         in: "query"
         description: "WKT bounding box definition. Accepts standard\
           \ POLYGON((...)) format. Use <a href=\
-          \ 'http://boundingbox.klokantech.com' target='_blank'>this external\
-          \ tool</a> and choose 'OGC WKT' from the bottom left to craft a\
-          \ correctly formated WKT descriptor"
+          \ 'https://clydedacruz.github.io/openstreetmap-wkt-playground/' target='_blank'>this external\
+          \ tool</a> to craft a correctly formated WKT descriptor"
         required: false
         type: "string"
       responses:

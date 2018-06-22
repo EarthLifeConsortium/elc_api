@@ -172,6 +172,61 @@ Return a list of all taxonomic names hierarchically below the specified taxon, o
 
 .. include:: examples/subtaxa.rst
 
+Mobile
+^^^^^^
+A custum route designed to return a combination of occurrence data with associated taxonomic and select environmental details. The response is nested JSON with a highly compact vocabulary.
+
+**Base path**
+    ``http://earthlifeconsortium.org/api_v1/misc/mobile?``
+
+**Parameters**
+
+.. include:: parameters/taxon.rst
+.. include:: parameters/bbox.rst
+
+**Compact vocabulary**
+
+=== ==========================
+loc Location parameter block
+=== ==========================
+age Early, Late age (Ma)
+crd Coordinates (GeoJSON)
+pla Place (county/district, state/province, country)
+ste Site/Collection description
+=== ==========================
+
+| 
+
+=== ==========================
+org Organism parameter block
+=== ==========================
+img Phylopic image URI
+itv Early, Late geologic existence interval
+nam Common name
+sts Status of modern existence 
+txn Taxonomic name
+=== ==========================
+
+| 
+
+=== ==========================
+eco Ecology parameter block
+=== ==========================
+dte Diet/Feeding mode
+env Environmental description
+grp Ecological/Taxonomic grouping/env basis
+hab Life habitat, grouping or depth
+mot Motility and/or attachment
+ont Ontology
+rep Mode of reproduction
+typ Collection/Dataset type
+vis Vision capability
+=== ==========================
+
+**Examples**
+
+.. include:: examples/mobile.rst
+
 `Metadata`
     All ``full`` or ``poll`` JSON responses include a metadata block which importantly indicates the URLs composed for the resource databases in addition to a timestamp, the age units and the type of geographic coordinates retrieved. If desired, the subquery URL may be used to delve deeper into each individual database.
 

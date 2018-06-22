@@ -9,7 +9,7 @@
     <title>API Documentation &#8212; EarthLife Consortium 0.1 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -129,7 +129,7 @@
 </div>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">bbox=POLYGON((...))</span></code></dt>
-<dd>Geographic bounding box for constraining the response. Must be a strictly formated OGC WKT Polygon. The unaffiliated tool <a class="reference external" href="http://boundingbox.klokantech.com">BoundingBox</a> may be useful in graphically creating a rectangular polygon. Select “OGC WKT” from the menu and past the generated string into the <code class="docutils literal notranslate"><span class="pre">bbox</span></code> field of the ELC API. Type: <cite>str</cite></dd>
+<dd>Geographic bounding box for constraining the response. Must be a strictly formated OGC WKT Polygon. The unaffiliated tool <a class="reference external" href="https://clydedacruz.github.io/openstreetmap-wkt-playground">OpenStreetMap WKT Playground</a> may be useful in graphically creating a polygon. Paste the generated WKT string into the <code class="docutils literal notranslate"><span class="pre">bbox</span></code> field of the ELC API. Type: <cite>str</cite></dd>
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">agerange=geologic_age,[value,value][geologic_age|value]</span></code></dt>
@@ -218,7 +218,7 @@
 </div>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">bbox=POLYGON((...))</span></code></dt>
-<dd>Geographic bounding box for constraining the response. Must be a strictly formated OGC WKT Polygon. The unaffiliated tool <a class="reference external" href="http://boundingbox.klokantech.com">BoundingBox</a> may be useful in graphically creating a rectangular polygon. Select “OGC WKT” from the menu and past the generated string into the <code class="docutils literal notranslate"><span class="pre">bbox</span></code> field of the ELC API. Type: <cite>str</cite></dd>
+<dd>Geographic bounding box for constraining the response. Must be a strictly formated OGC WKT Polygon. The unaffiliated tool <a class="reference external" href="https://clydedacruz.github.io/openstreetmap-wkt-playground">OpenStreetMap WKT Playground</a> may be useful in graphically creating a polygon. Paste the generated WKT string into the <code class="docutils literal notranslate"><span class="pre">bbox</span></code> field of the ELC API. Type: <cite>str</cite></dd>
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">agerange=geologic_age,[value,value][geologic_age|value]</span></code></dt>
@@ -322,7 +322,7 @@
 <p><strong>Examples</strong></p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p>Specify a list of references and use the default output format of BibJSON <a class="footnote-reference" href="#id9" id="id3">[1]</a></p>
+<p>Specify a list of references and use the default output format of BibJSON <a class="footnote-reference" href="#id9" id="id2">[1]</a></p>
 <p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/ref?idlist=pbdb:col:60676,neot:dst:5664,neot:dst:5562,pbdb:col:105101">http://earthlifeconsortium.org/api_v1/ref?idlist=pbdb:col:60676,neot:dst:5664,neot:dst:5562,pbdb:col:105101</a></p>
 </div>
 </div>
@@ -397,7 +397,7 @@
 <p>ELC utilities ancillary to core data retrieval are collected in the <code class="docutils literal notranslate"><span class="pre">misc</span></code> controller and are accessible by appending the desired route to the base path.</p>
 <div class="section" id="paleocoordinates">
 <h3>Paleocoordinates<a class="headerlink" href="#paleocoordinates" title="Permalink to this headline">¶</a></h3>
-<p>Convert modern day cartesian coordinates into paleocoordinates using the GPlates <a class="footnote-reference" href="#id10" id="id5">[2]</a> tectonics reconstruction model. Operationally this model is hosted by the Macrostrat Project <a class="footnote-reference" href="#id11" id="id6">[3]</a> at the University of Wisconsin.</p>
+<p>Convert modern day cartesian coordinates into paleocoordinates using the GPlates <a class="footnote-reference" href="#id10" id="id4">[2]</a> tectonics reconstruction model. Operationally this model is hosted by the Macrostrat Project <a class="footnote-reference" href="#id11" id="id5">[3]</a> at the University of Wisconsin.</p>
 <dl class="docutils">
 <dt><strong>Base path</strong></dt>
 <dd><code class="docutils literal notranslate"><span class="pre">http://earthlifeconsortium.org/api_v1/misc/paleocoords?</span></code></dd>
@@ -432,7 +432,7 @@
 </div>
 <div class="section" id="timebounds">
 <h3>Timebounds<a class="headerlink" href="#timebounds" title="Permalink to this headline">¶</a></h3>
-<p>Return the oldest and youngest ages (bounds) spanning the specified range. Geologic ages are resolved according to ICS definitions <a class="footnote-reference" href="#id12" id="id7">[4]</a>.</p>
+<p>Return the oldest and youngest ages (bounds) spanning the specified range. Geologic ages are resolved according to ICS definitions <a class="footnote-reference" href="#id12" id="id6">[4]</a>.</p>
 <dl class="docutils">
 <dt><strong>Base path</strong></dt>
 <dd><code class="docutils literal notranslate"><span class="pre">http://earthlifeconsortium.org/api_v1/misc/timebound?</span></code></dd>
@@ -485,6 +485,131 @@
 <p>Check to see if there are any known synonyms of “Dorudon atrox”:</p>
 <p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/misc/subtaxa?taxon=dorudon+atrox&amp;synonyms=true">http://earthlifeconsortium.org/api_v1/misc/subtaxa?taxon=dorudon+atrox&amp;synonyms=true</a></p>
 </div>
+</div>
+<div class="section" id="mobile">
+<h3>Mobile<a class="headerlink" href="#mobile" title="Permalink to this headline">¶</a></h3>
+<p>A custum route designed to return a combination of occurrence data with associated taxonomic and select environmental details. The response is nested JSON with a highly compact vocabulary.</p>
+<dl class="docutils">
+<dt><strong>Base path</strong></dt>
+<dd><code class="docutils literal notranslate"><span class="pre">http://earthlifeconsortium.org/api_v1/misc/mobile?</span></code></dd>
+</dl>
+<p><strong>Parameters</strong></p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">taxon=taxon_name|genus+species</span></code></dt>
+<dd>A single name at any taxonomic level or a two word pair refering to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">bbox=POLYGON((...))</span></code></dt>
+<dd>Geographic bounding box for constraining the response. Must be a strictly formated OGC WKT Polygon. The unaffiliated tool <a class="reference external" href="https://clydedacruz.github.io/openstreetmap-wkt-playground">OpenStreetMap WKT Playground</a> may be useful in graphically creating a polygon. Paste the generated WKT string into the <code class="docutils literal notranslate"><span class="pre">bbox</span></code> field of the ELC API. Type: <cite>str</cite></dd>
+</dl>
+<p><strong>Compact vocabulary</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="94%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">loc</th>
+<th class="head">Location parameter block</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>age</td>
+<td>Early, Late age (Ma)</td>
+</tr>
+<tr class="row-odd"><td>crd</td>
+<td>Coordinates (GeoJSON)</td>
+</tr>
+<tr class="row-even"><td>pla</td>
+<td>Place (county/district, state/province, country)</td>
+</tr>
+<tr class="row-odd"><td>ste</td>
+<td>Site/Collection description</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="93%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">org</th>
+<th class="head">Organism parameter block</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>img</td>
+<td>Phylopic image URI</td>
+</tr>
+<tr class="row-odd"><td>itv</td>
+<td>Early, Late geologic existence interval</td>
+</tr>
+<tr class="row-even"><td>nam</td>
+<td>Common name</td>
+</tr>
+<tr class="row-odd"><td>sts</td>
+<td>Status of modern existence</td>
+</tr>
+<tr class="row-even"><td>txn</td>
+<td>Taxonomic name</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="93%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">eco</th>
+<th class="head">Ecology parameter block</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dte</td>
+<td>Diet/Feeding mode</td>
+</tr>
+<tr class="row-odd"><td>env</td>
+<td>Environmental description</td>
+</tr>
+<tr class="row-even"><td>grp</td>
+<td>Ecological/Taxonomic grouping/env basis</td>
+</tr>
+<tr class="row-odd"><td>hab</td>
+<td>Life habitat, grouping or depth</td>
+</tr>
+<tr class="row-even"><td>mot</td>
+<td>Motility and/or attachment</td>
+</tr>
+<tr class="row-odd"><td>ont</td>
+<td>Ontology</td>
+</tr>
+<tr class="row-even"><td>rep</td>
+<td>Mode of reproduction</td>
+</tr>
+<tr class="row-odd"><td>typ</td>
+<td>Collection/Dataset type</td>
+</tr>
+<tr class="row-even"><td>vis</td>
+<td>Vision capability</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples</strong></p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>Find all occurrences in the U.S. State of Nevada:</p>
+<p><a class="reference external" href="http://earthlifeconsortium.org/api_v1/misc/mobile?bbox=POLYGON((-119.9267578124999941.96765920367815,-114.038085937541.96765920367815,-114.038085937536.949891786813296,-114.5654296875000135.02999636902565,-120.102539062538.7540832757914,-119.9267578124999941.96765920367815))">http://earthlifeconsortium.org/api_v1/misc/mobile?bbox=POLYGON((-119.9267578124999941.96765920367815,-114.038085937541.96765920367815,-114.038085937536.949891786813296,-114.5654296875000135.02999636902565,-120.102539062538.7540832757914,-119.9267578124999941.96765920367815))</a></p>
+<p>Find all pine and oak occurrences (fossil and pollen from cores) in the U.K.</p>
+<p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/misc/mobile?taxon=pinus%2C%20quercus&amp;bbox=POLYGON((-3.1640625000000058%2058.49369382056807%2C-4.921875000000007%2058.49369382056807%2C-5.800781250000001%2057.37393841871409%2C-4.921875000000007%2054.77534585936445%2C-2.7246093750000004%2054.31652324025825%2C-3.2519531250000036%2053.38332836757152%2C-4.921875000000007%2053.435719206694216%2C-4.746093750000004%2051.835777520452496%2C-2.1972656250000067%2051.34433866059925%2C-4.746093750000004%2050.958426723359906%2C-6.152343750000007%2050.176898122001035%2C1.7578124999999936%2050.79204706440686%2C1.2304687499999998%2052.160454557747016%2C2.1093749999999925%2052.643063436658935%2C0.2636718749999928%2053.173119202640606%2C-1.933593750000006%2056.17002298293207%2C-1.2304687499999998%2057.51582286553884%2C-3.6035156250000018%2057.844750992890965%2C-3.1640625000000058%2058.49369382056807))">http://earthlifeconsortium.org/api_v1/misc/mobile?taxon=pinus%2C%20quercus&amp;bbox=POLYGON((-3.1640625000000058%2058.49369382056807%2C-4.921875000000007%2058.49369382056807%2C-5.800781250000001%2057.37393841871409%2C-4.921875000000007%2054.77534585936445%2C-2.7246093750000004%2054.31652324025825%2C-3.2519531250000036%2053.38332836757152%2C-4.921875000000007%2053.435719206694216%2C-4.746093750000004%2051.835777520452496%2C-2.1972656250000067%2051.34433866059925%2C-4.746093750000004%2050.958426723359906%2C-6.152343750000007%2050.176898122001035%2C1.7578124999999936%2050.79204706440686%2C1.2304687499999998%2052.160454557747016%2C2.1093749999999925%2052.643063436658935%2C0.2636718749999928%2053.173119202640606%2C-1.933593750000006%2056.17002298293207%2C-1.2304687499999998%2057.51582286553884%2C-3.6035156250000018%2057.844750992890965%2C-3.1640625000000058%2058.49369382056807))</a></p>
+</div>
 <dl class="docutils">
 <dt><cite>Metadata</cite></dt>
 <dd>All <code class="docutils literal notranslate"><span class="pre">full</span></code> or <code class="docutils literal notranslate"><span class="pre">poll</span></code> JSON responses include a metadata block which importantly indicates the URLs composed for the resource databases in addition to a timestamp, the age units and the type of geographic coordinates retrieved. If desired, the subquery URL may be used to delve deeper into each individual database.</dd>
@@ -495,25 +620,25 @@
 <table class="docutils footnote" frame="void" id="id9" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[1]</a></td><td>BibJSON: Representing bibliographic metadata in JSON. <a class="reference external" href="http://okfnlabs.org/bibjson/">http://okfnlabs.org/bibjson/</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>BibJSON: Representing bibliographic metadata in JSON. <a class="reference external" href="http://okfnlabs.org/bibjson/">http://okfnlabs.org/bibjson/</a></td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id10" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id5">[2]</a></td><td>Wright, N., S. Zahirovic, R. D. Müller, and M. Seton (2013), Towards community-driven, open-access paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics, Biogeosciences, 10, 1529-1541. DOI: <a class="reference external" href="https://www.researchgate.net/publication/235789001_Towards_community-driven_paleogeographic_reconstructions_Integrating_open-access_paleogeographic_and_paleobiology_data_with_plate_tectonics">10.5194/bg-10-1529-2013</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id4">[2]</a></td><td>Wright, N., S. Zahirovic, R. D. Müller, and M. Seton (2013), Towards community-driven, open-access paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics, Biogeosciences, 10, 1529-1541. DOI: <a class="reference external" href="https://www.researchgate.net/publication/235789001_Towards_community-driven_paleogeographic_reconstructions_Integrating_open-access_paleogeographic_and_paleobiology_data_with_plate_tectonics">10.5194/bg-10-1529-2013</a></td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id11" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id6">[3]</a></td><td>Macrostrat public API. <a class="reference external" href="https://macrostrat.org/#api">https://macrostrat.org/#api</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id5">[3]</a></td><td>Macrostrat public API. <a class="reference external" href="https://macrostrat.org/#api">https://macrostrat.org/#api</a></td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id12" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id7">[4]</a></td><td>Gradstein, F. M., J. G. Ogg, M. D. Schmitz, and G. M. Ogg. 2012. <a class="reference external" href="https://www.elsevier.com/books/the-geologic-time-scale-2012/gradstein/978-0-444-59425-9">A Geologic Time Scale 2012</a>, Volume 2. Elsevier, Amsterdam, 1144 pp.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id6">[4]</a></td><td>Gradstein, F. M., J. G. Ogg, M. D. Schmitz, and G. M. Ogg. 2012. <a class="reference external" href="https://www.elsevier.com/books/the-geologic-time-scale-2012/gradstein/978-0-444-59425-9">A Geologic Time Scale 2012</a>, Volume 2. Elsevier, Amsterdam, 1144 pp.</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id13" rules="none">
