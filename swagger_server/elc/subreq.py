@@ -56,7 +56,8 @@ def mobile_req(return_obj, url_path, payload, db):
             cc_map = yaml.safe_load(f)
 
         # Retrieve all occurrence data
-        payload.update(show='methods,coords,paleoloc,loc,coll')
+        payload.update(show='methods,coords,paleoloc,loc,coll',
+                       extids=False)
         try:
             occs, url = trigger(url_path, payload, db)
         except ValueError as err:
@@ -65,6 +66,8 @@ def mobile_req(return_obj, url_path, payload, db):
         # Return if no occurrences found for given parameters
         if 'records' not in occs.keys():
             return return_obj
+        elif occs['records'] == []:
+            return return_obj
 
         # Build taxa lookup dictionary
         tax_base = 'https://paleobiodb.org/data1.2/taxa/list.json'
@@ -72,6 +75,7 @@ def mobile_req(return_obj, url_path, payload, db):
         # Taxa named, perform recursive search on DB to get details
         if payload.get('base_name'):
             tax_payload = {'show': 'full,img',
+                           'extids': False,
                            'base_name': payload['base_name']}
             try:
                 taxon_resp, url = trigger(tax_base, tax_payload, db)
@@ -82,12 +86,13 @@ def mobile_req(return_obj, url_path, payload, db):
         else:
             taxa = set()
             for rec in occs.get('records'):
-                if 'tna' in rec:
-                    taxa.add(rec.get('tna'))
+                if 'tid' in rec:
+                    taxa.add(str(rec.get('tid')))
             taxa_list = ','.join(taxa)
 
             tax_payload = {'show': 'full,img',
-                           'taxon_name': taxa_list}
+                           'extids': False,
+                           'taxon_id': taxa_list}
             try:
                 taxon_resp, url = trigger(tax_base, tax_payload, db)
             except ValueError as err:
@@ -96,14 +101,19 @@ def mobile_req(return_obj, url_path, payload, db):
         # Reformat taxa return into a nested dict
         taxa_table = dict()
         for rec in taxon_resp['records']:
-            if 'nam' in rec.keys():
-                taxa_table[rec['nam']] = rec
+            if 'oid' in rec.keys():
+                if str(rec['oid']) in taxa:
+                    taxa_table[rec['oid']] = rec
 
         # Build mobile return
         for rec in occs.get('records'):
 
-            if rec.get('tna'):
-                taxon_info = taxa_table[rec['tna']]
+            if rec.get('tid'):
+                if rec['tid'] in taxa_table.keys():
+                    taxon_info = taxa_table[rec['tid']]
+                else:
+                    print('ERROR')
+                    continue
             else:
                 continue
 
@@ -125,7 +135,7 @@ def mobile_req(return_obj, url_path, payload, db):
             if 'cnm' in rec.keys():
                 site_desc = rec['cnm']
             if 'aka' in rec.keys():
-                site_desc = '; '.join([site_desc, rec['aka']])
+                site_desc = '; '.join([str(site_desc), str(rec['aka'])])
             if site_desc:
                 mob['loc'].update(ste=site_desc.replace('\"', '\''))
 
@@ -166,7 +176,7 @@ def mobile_req(return_obj, url_path, payload, db):
 
             if 'img' in taxon_info.keys():
                 base = 'https://paleobiodb.org/data1.2/taxa/thumb.png?id='
-                img_uri = ''.join([base, taxon_info['img'][4:]])
+                img_uri = ''.join([base, str(taxon_info['img'])])
                 mob['org'].update(img=img_uri)
 
             # Ecology and environment block
@@ -263,14 +273,18 @@ def mobile_req(return_obj, url_path, payload, db):
         taxa_table = dict()
         for rec in taxon_resp['data']:
             if 'taxonid' in rec.keys():
-                taxa_table[rec['taxonid']] = rec
+                if str(rec['taxonid']) in taxa:
+                    taxa_table[rec['taxonid']] = rec
 
         # Build mobile return
         for rec in occs.get('data'):
 
             if 'sample' in rec:
                 if 'taxonid' in rec['sample']:
-                    taxon_info = taxa_table[rec['sample']['taxonid']]
+                    if rec['sample']['taxonid'] in taxa_table.keys():
+                        taxon_info = taxa_table[rec['sample']['taxonid']]
+                    else:
+                        continue
                 else:
                     continue
             else:
