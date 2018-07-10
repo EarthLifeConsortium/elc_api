@@ -109,7 +109,9 @@ def type_csv(data):
     mem_file = io.StringIO()
     writer = csv.writer(mem_file)
 
-    row = [key for key in data[0].keys()]
+    headers = sorted(data[0].keys())
+
+    row = [key for key in headers]
 
     writer.writerow(row)
     tab_data.append(mem_file.getvalue())
@@ -122,7 +124,7 @@ def type_csv(data):
         if 'authors' in rec:
             rec.update(authors=', '.join(rec['authors']))
 
-        row = [rec[key] for key in rec.keys()]
+        row = [rec[key] for key in headers]
 
         writer.writerow(row)
         tab_data.append(mem_file.getvalue())

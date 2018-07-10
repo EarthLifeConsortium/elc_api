@@ -117,6 +117,7 @@ def mobile(resp_json, return_obj, options):
             data.update(lat=rec.get('lat'))
             data.update(lon=rec.get('lng'))
 
+        # Elevation not yet available through PBDB API
         data.update(elevation=None)
 
         return_obj.append(data)
@@ -153,10 +154,12 @@ def occurrences(resp_json, return_obj, options):
             data.update(lat=rec.get('lat'))
             data.update(lon=rec.get('lng'))
 
+        # Elevation not yet available through PBDB API
         data.update(elevation=None)
 
         return_obj.append(data)
 
+        #  import pdb; pdb.set_trace()
     return return_obj
 
 
