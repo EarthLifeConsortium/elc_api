@@ -50,7 +50,7 @@ def images_req(payload, options):
 
     # Retrieve media sources from iDigBio directly
 
-    if options.get('src') == 'idigbio':
+    if options.get('src').lower() == 'idigbio':
 
         media = set()
 
@@ -75,7 +75,7 @@ def images_req(payload, options):
     # Retrieve media sources using the ePANDDA record matching algorithms
     # media URIs still originate from iDigBio
 
-    elif options.get('src') == 'epandda':
+    elif options.get('src').lower() == 'epandda':
 
         media = set()
 

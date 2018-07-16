@@ -29,7 +29,7 @@ def images(taxon=None, service=None, limit=None, offset=None):
     desc_obj = dict()
     t0 = time()
     sub_query = 'Specimen images for {0:s} retreved through {1:s}'.format(
-        taxon.capitalize(), 'ePANDDA' if service == 'epandda' else 'iDigBio')
+        taxon.capitalize(), 'iDigBio' if service == 'idigbio' else 'ePANDDA')
 
     # Set runtime options
 
