@@ -28,10 +28,9 @@ def images(taxon=None, service=None, limit=None, offset=None):
 
     desc_obj = dict()
     t0 = time()
-    sub_query = 'Specimen images for {0:s} retreved through {1:s}'.format(
+    sub_query = 'Specimen images for {0:s} retrieved through {1:s}'.format(
         taxon.capitalize(), 'iDigBio' if service == 'idigbio' else 'ePANDDA')
 
-    # Set runtime options
 
     try:
         options = params.set_options(req_args=connexion.request.args,
