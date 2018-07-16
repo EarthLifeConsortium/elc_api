@@ -17,6 +17,8 @@ def set_options(req_args, endpoint):
     spec.update(show=['all', 'poll', 'idx'])
     spec.update(age=['ma', 'ka', 'ybp'])
     spec.update(geog=['modern', 'paleo'])
+    spec.update(src=['epandda', 'idigbio'])
+    spec.update(images=['json'])
 
     # Runtime options
     options = dict()
@@ -77,10 +79,23 @@ def set_options(req_args, endpoint):
                               str(config.get('default', 'includelower')))
         options.update(includelower=literal_eval(choice.capitalize()))
 
+    # Source API for image media retrieval
+    if endpoint == 'images' and 'service' in req_args.keys():
+        if req_args.get('service').lower() in spec.get('src'):
+            options.update(src=req_args.get('service'))
+        else:
+            msg = 'Allowable sources: {0:s}'.format(str(spec.get('src')))
+            raise ValueError(400, msg)
+    else:
+        options.update(src=spec.get('src')[0])
+
     # Limit records in the query
-    choice = req_args.get('limit',
-                          int(config.get('default', 'limit')))
-    options.update(limit=abs(int(choice)))
+    if endpoint == 'images' and 'limit' not in req_args.keys():
+        options.update(limit=200)
+    else:
+        choice = req_args.get('limit',
+                              int(config.get('default', 'limit')))
+        options.update(limit=abs(int(choice)))
 
     # Mutable parameters
     options.update(tot_rec_count=0)
@@ -189,6 +204,7 @@ def parse(req_args, options, db, endpoint):
     spec.update(timebound=['agerange', 'ageunits'])
     spec.update(paleocoords=['coords', 'age', 'ageunits'])
     spec.update(subtaxa=['taxon', 'synonyms'])
+    spec.update(images=['taxon', 'service', 'limit', 'offset'])
 
     # Bad or missing parameter checks
 

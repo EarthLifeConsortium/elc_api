@@ -159,7 +159,6 @@ def occurrences(resp_json, return_obj, options):
 
         return_obj.append(data)
 
-        #  import pdb; pdb.set_trace()
     return return_obj
 
 

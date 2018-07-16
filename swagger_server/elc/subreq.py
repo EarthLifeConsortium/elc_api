@@ -45,8 +45,77 @@ def trigger(url_path, payload, db):
     return resp_json, resp.url
 
 
+def images_req(payload, options):
+    """Dispatch sub query for image media retrieval."""
+
+    # Retrieve media sources from iDigBio directly
+
+    if options.get('src') == 'idigbio':
+
+        media = set()
+
+        url_path = 'https://search.idigbio.org/v2/search/media'
+        payload_fmt = {'/rq': {'scientificName': payload.get('base_name'),
+                               'hasImage': 'true'},
+                       'limit': payload.get('limit'),
+                       'offset': payload.get('offset'),
+                       'no_attribution': 'true'}
+
+        try:
+            rdata, url = trigger(url_path, payload_fmt, db='idigbio')
+        except ValueError as err:
+            raise ValueError(err.args[0], err.args[1])
+
+        if 'items' not in rdata.keys():
+            return list(media)
+
+        for rec in rdata['items']:
+            media.add(rec['data']['ac:accessURI'])
+
+    # Retrieve media sources using the ePANDDA record matching algorithms
+    # media URIs still originate from iDigBio
+
+    elif options.get('src') == 'epandda':
+
+        media = set()
+
+        url_path = 'https://api.epandda.org/occurrences'
+        payload_fmt = {'terms': payload.get('base_name'),
+                       'returnMedia': 'true',
+                       'limit': payload.get('limit'),
+                       'offset': payload.get('offset')}
+
+        try:
+            rdata, url = trigger(url_path, payload_fmt, db='idigbio')
+        except ValueError as err:
+            raise ValueError(err.args[0], err.args[1])
+
+        if 'results' not in rdata.keys():
+            return list(media)
+
+        for key in rdata['results'].keys():
+
+            rec = rdata['results'][key]
+
+            if rec.get('matches'):
+                for match in range(0, len(rec['matches'])):
+                    if rec['matches'][match].get('mediaURLs'):
+                        links = rec['matches'][match]['mediaURLs']
+                        for url in range(0, len(links)):
+                            media.add(links[url])
+
+            if rec.get('sources'):
+                for source in range(0, len(rec['sources'])):
+                    if rec['sources'][source].get('mediaURLs'):
+                        links = rec['sources'][source]['mediaURLs']
+                        for url in range(0, len(links)):
+                            media.add(links[url])
+
+    return list(media)
+
+
 def mobile_req(return_obj, url_path, payload, db):
-    """Dispach multi-part requests and assemble mobile response."""
+    """Dispatch multi-part requests and assemble mobile response."""
     from geojson import Point
 
     if db == 'pbdb':

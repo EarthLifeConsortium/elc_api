@@ -6,6 +6,7 @@ Endpoint for miscelaneous ELC public functions:
 /misc/timebound    - resolve min and max time bounds for specified geo ages
 /misc/paleocoords  - reproject modern geograpic coordinates into paleo
 /misc/subtaxa      - retrieve lower taxa
+/misc/images       - retrieve media URIs for a taxon
 
 """
 #  from swagger_server.models.assemblage import Timebound
@@ -19,6 +20,68 @@ from ..elc import params, aux, ages, geog, taxa
 from http_status import Status
 from time import time
 from flask import jsonify
+
+
+def images(taxon=None, service=None, limit=None, offset=None):
+    """Specimen link retrieval."""
+    from ..elc import subreq
+
+    desc_obj = dict()
+    t0 = time()
+    sub_query = 'Specimen images for {0:s} retreved through {1:s}'.format(
+        taxon.capitalize(), 'ePANDDA' if service == 'epandda' else 'iDigBio')
+
+    # Set runtime options
+
+    try:
+        options = params.set_options(req_args=connexion.request.args,
+                                     endpoint='images')
+
+    except ValueError as err:
+        return connexion.problem(status=err.args[0],
+                                 title=Status(err.args[0]).name,
+                                 detail=err.args[1],
+                                 type='about:blank')
+
+    # Call parse function to check for parameter errors
+
+    try:
+        payload = params.parse(req_args=connexion.request.args,
+                               options=options,
+                               db='pbdb',
+                               endpoint='images')
+
+    except ValueError as err:
+        return connexion.problem(status=err.args[0],
+                                 title=Status(err.args[0]).name,
+                                 detail=err.args[1],
+                                 type='about:blank')
+
+    # Query media aggregators
+
+    try:
+        media = subreq.images_req(payload=payload,
+                                  options=options)
+
+    except ValueError as err:
+        return connexion.problem(status=err.args[0],
+                                 title=Status(err.args[0]).name,
+                                 detail=err.args[1],
+                                 type='about:blank')
+
+    # Build returned metadata object
+
+    desc_obj.update(aux.build_meta(options))
+
+    desc_obj.update(aux.build_meta_sub(source=sub_query,
+                                       t0=t0,
+                                       sub_tag='media_links',
+                                       options=options,
+                                       data=media))
+
+    # Return data structure to client
+
+    return jsonify(metadata=desc_obj, records=media)
 
 
 def mobile(taxon=None, bbox=None):
