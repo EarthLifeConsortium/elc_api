@@ -31,7 +31,6 @@ def images(taxon=None, service=None, limit=None, offset=None):
     sub_query = 'Specimen images for {0:s} retrieved through {1:s}'.format(
         taxon.capitalize(), 'iDigBio' if service == 'idigbio' else 'ePANDDA')
 
-
     try:
         options = params.set_options(req_args=connexion.request.args,
                                      endpoint='images')

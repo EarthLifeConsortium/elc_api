@@ -118,6 +118,7 @@ def mobile_req(return_obj, url_path, payload, db):
     """Dispatch multi-part requests and assemble mobile response."""
     from geojson import Point
 
+    # Request occurrences from The Paleobiology Database
     if db == 'pbdb':
 
         import yaml
@@ -151,6 +152,16 @@ def mobile_req(return_obj, url_path, payload, db):
             except ValueError as err:
                 raise ValueError(err.args[0], err.args[1])
 
+            if 'records' not in taxon_resp.keys():
+                return return_obj
+            elif taxon_resp['records'] == []:
+                return return_obj
+
+            taxa = set()
+            for rec in taxon_resp['records']:
+                if rec.get('oid'):
+                    taxa.add(rec['oid'])
+
         # Only geography named, parameterize taxa from occ response
         else:
             taxa = set()
@@ -171,7 +182,7 @@ def mobile_req(return_obj, url_path, payload, db):
         taxa_table = dict()
         for rec in taxon_resp['records']:
             if 'oid' in rec.keys():
-                if str(rec['oid']) in taxa:
+                if rec['oid'] in taxa:
                     taxa_table[rec['oid']] = rec
 
         # Build mobile return
@@ -180,9 +191,6 @@ def mobile_req(return_obj, url_path, payload, db):
             if rec.get('tid'):
                 if rec['tid'] in taxa_table.keys():
                     taxon_info = taxa_table[rec['tid']]
-                else:
-                    print('ERROR')
-                    continue
             else:
                 continue
 
@@ -271,6 +279,7 @@ def mobile_req(return_obj, url_path, payload, db):
 
             return_obj.append(mob)
 
+    # Request occurrences from the Neotoma Paleoecology Database
     elif db == 'neotoma':
 
         import yaml
@@ -323,6 +332,16 @@ def mobile_req(return_obj, url_path, payload, db):
             except ValueError as err:
                 raise ValueError(err.args[0], err.args[1])
 
+            if 'data' not in taxon_resp.keys():
+                return return_obj
+            elif taxon_resp['data'] == []:
+                return return_obj
+
+            taxa = set()
+            for rec in taxon_resp['data']:
+                if rec.get('taxonid'):
+                    taxa.add(rec['taxonid'])
+
         # Only geography named, parameterize taxa from occ response
         else:
             taxa = set()
@@ -342,7 +361,7 @@ def mobile_req(return_obj, url_path, payload, db):
         taxa_table = dict()
         for rec in taxon_resp['data']:
             if 'taxonid' in rec.keys():
-                if str(rec['taxonid']) in taxa:
+                if rec['taxonid'] in taxa:
                     taxa_table[rec['taxonid']] = rec
 
         # Build mobile return
@@ -376,7 +395,7 @@ def mobile_req(return_obj, url_path, payload, db):
                 if rec['site'].get('datasettype'):
                     mob['eco'].update(typ=rec['site']['datasettype'])
 
-                siteid = rec['site']['siteid']
+                siteid = rec['site'].get('siteid')
                 if siteid:
                     place = list()
                     for gpu in reversed(geo_units[siteid]):
