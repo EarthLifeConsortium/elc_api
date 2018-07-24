@@ -167,8 +167,8 @@ def mobile_req(return_obj, url_path, payload, db):
             taxa = set()
             for rec in occs.get('records'):
                 if 'tid' in rec:
-                    taxa.add(str(rec.get('tid')))
-            taxa_list = ','.join(taxa)
+                    taxa.add(rec.get('tid'))
+            taxa_list = ','.join([str(x) for x in taxa])
 
             tax_payload = {'show': 'full,img',
                            'extids': False,
@@ -348,8 +348,8 @@ def mobile_req(return_obj, url_path, payload, db):
             for rec in occs.get('data'):
                 if 'sample' in rec:
                     if 'taxonid' in rec['sample']:
-                        taxa.add(str(rec['sample'].get('taxonid')))
-            taxa_list = ','.join(taxa)
+                        taxa.add(rec['sample'].get('taxonid'))
+            taxa_list = ','.join(str(x) for x in taxa)
             tax_payload = {'taxonid': taxa_list, 'limit': 999999}
 
             try:
