@@ -10,13 +10,11 @@ ELC brings together paleobiological databases so that they share a single set of
 
 **Currently Included Databases:**
 
-* The Paleobiology Database (PBDB)†
+* The Paleobiology Database (PBDB)
 
-* Neotoma Paleoecology Database (Neotoma)†
+* Neotoma Paleoecology Database (Neotoma)
 
 * Strategic Environmental Archaeology Database (SEAD)
-
-†Founding database
 
 .. raw:: html
 
