@@ -5,17 +5,27 @@ def set_taxon(taxon, subtax, db):
     """Return a database specific key-val pair for taxon."""
     import requests
 
-    taxon = taxon.split(',')
-    taxon = [x.strip() for x in taxon]
-    taxon = [x.capitalize() for x in taxon]
+    # Parse incomming taxon name string for errors and reassemble
+    taxon_list = taxon.split(',')
+    taxon_list = [x.strip() for x in taxon_list]
+    taxon_list = [x.capitalize() for x in taxon_list]
 
-    for txn in taxon:
-        if len(txn.split()) > 2 or len(txn.split()) == 0:
-            msg = 'Unsupported taxon (two word max): {0:s}'.format(txn)
+    clean_list = list()
+    for item in taxon_list:
+
+        if len(item.split()) > 3 or len(item.split()) == 0:
+            msg = 'Unsupported taxon name length: {0:s}'.format(item)
             raise ValueError(400, msg)
 
-    taxon = ','.join(taxon)
+        # Remove "not" portion of logical qualifier if unsupported by DB
+        if '^' in item and db != 'pbdb':
+            clean_list.append(item[:item.find('^')])
+        else:
+            clean_list.append(item)
 
+    taxon = ','.join(clean_list)
+
+    # Format for specific database API parameter payloads
     if db == 'neotoma':
         if subtax:
             return {'taxonname': taxon,
