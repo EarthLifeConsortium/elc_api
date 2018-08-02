@@ -17,9 +17,14 @@ def set_taxon(taxon, subtax, db):
             msg = 'Unsupported taxon name length: {0:s}'.format(item)
             raise ValueError(400, msg)
 
-        # Remove "not" portion of logical qualifier if unsupported by DB
-        if '^' in item and db != 'pbdb':
-            clean_list.append(item[:item.find('^')])
+        if '^' in item:
+            parts = [x.strip() for x in item.split('^')]
+            if len(parts) != 2:
+                msg = 'Incorrect usage of "not" caret: {0:s}'.format(item)
+                raise ValueError(400, msg)
+            else:
+                parts = [x.capitalize() for x in parts]
+                clean_list.append('^'.join(parts))
         else:
             clean_list.append(item)
 

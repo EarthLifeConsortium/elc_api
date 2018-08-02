@@ -3,7 +3,7 @@
 
     http://earthlifeconsortium.org/api_v1/occ?taxon=canis+dirus
 
-    Retrieve first 10 occurrences of "Pinus" with ages reported as years before present:
+    Retrieve first 10 occurrences of `Pinus` with ages reported as years before present:
 
     http://earthlifeconsortium.org/api_v1/occ?taxon=pinus&limit=10&ageunits=ybp&includelower=false
 

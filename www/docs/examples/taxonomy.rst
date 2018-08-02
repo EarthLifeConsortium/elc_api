@@ -1,5 +1,5 @@
 .. seealso::
-    Search all subtaxa of order Carcharocles, making sure that megalodon is where it should be:
+    Search all subtaxa of order `Carcharocles`, making sure that megalodon is where it should be:
 
     http://earthlifeconsortium.org/api_v1/tax?taxon=Carcharocles&includelower=true
 

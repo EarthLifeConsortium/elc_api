@@ -1,4 +1,4 @@
 .. seealso::
-    Find all occurrences of the extant plant Borreria and the rodent Dasyprocta in Brazil:
+    Find all occurrences of the extant plant `Borreria` and the rodent `Dasyprocta` in Brazil:
 
     `<http://earthlifeconsortium.org/api_v1/misc/mobile?taxon=Dasyprocta,Borreria&bbox=POLYGON((-73.037109375%20-6.839169626342809%2C-64.423828125%202.635788574166611%2C-51.76757812500001%202.1088986592431382%2C-36.298828125000014%20-6.31529853833004%2C-52.29492187499999%20-32.546813173515154%2C-57.56835937500001%20-16.636191878397653%2C-73.037109375%20-6.839169626342809))>`_

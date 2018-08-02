@@ -121,7 +121,7 @@
 <p><strong>Parameters</strong></p>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">taxon=taxon_name|genus+species</span></code></dt>
-<dd>A single name at any taxonomic level or a two word pair refering to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
+<dd>A single name or comma-separated list of taxa at any taxonomic level or a 2-3 word pair refering to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
 </dl>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -186,7 +186,7 @@
 <p class="first admonition-title">See also</p>
 <p>Find number of occurrences of the paleo-programmer’s best friend in each resource database:</p>
 <p><a class="reference external" href="http://earthlifeconsortium.org/api_v1/occ?taxon=canis+dirus">http://earthlifeconsortium.org/api_v1/occ?taxon=canis+dirus</a></p>
-<p>Retrieve first 10 occurrences of “Pinus” with ages reported as years before present:</p>
+<p>Retrieve first 10 occurrences of <cite>Pinus</cite> with ages reported as years before present:</p>
 <p><a class="reference external" href="http://earthlifeconsortium.org/api_v1/occ?taxon=pinus&amp;limit=10&amp;ageunits=ybp&amp;includelower=false">http://earthlifeconsortium.org/api_v1/occ?taxon=pinus&amp;limit=10&amp;ageunits=ybp&amp;includelower=false</a></p>
 <p>Download all of the whales as tabular data:</p>
 <p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/occ?taxon=cetacea&amp;output=csv">http://earthlifeconsortium.org/api_v1/occ?taxon=cetacea&amp;output=csv</a></p>
@@ -338,7 +338,7 @@
 <p><strong>Parameters</strong></p>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">taxon=taxon_name|genus+species</span></code></dt>
-<dd>A single name at any taxonomic level or a two word pair refering to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
+<dd>A single name or comma-separated list of taxa at any taxonomic level or a 2-3 word pair refering to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
 </dl>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -390,7 +390,7 @@
 <p><strong>Examples</strong></p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p>Search all subtaxa of order Carcharocles, making sure that megalodon is where it should be:</p>
+<p>Search all subtaxa of order <cite>Carcharocles</cite>, making sure that megalodon is where it should be:</p>
 <p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/tax?taxon=Carcharocles&amp;includelower=true">http://earthlifeconsortium.org/api_v1/tax?taxon=Carcharocles&amp;includelower=true</a></p>
 </div>
 </div>
@@ -473,7 +473,7 @@
 <p><strong>Parameters</strong></p>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">taxon=taxon_name|genus+species</span></code></dt>
-<dd>A single name at any taxonomic level or a two word pair refering to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
+<dd>A single name or comma-separated list of taxa at any taxonomic level or a 2-3 word pair refering to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">synonyms=true|false</span></code></dt>
@@ -482,9 +482,9 @@
 <p><strong>Examples</strong></p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p>Retrieve all lower taxa of the family “Tyrannosauridae” excluding synonyms:</p>
+<p>Retrieve all lower taxa of the family <cite>Tyrannosauridae</cite> excluding synonyms:</p>
 <p><a class="reference external" href="http://earthlifeconsortium.org/api_v1/misc/subtaxa?taxon=tyrannosauridae&amp;synonyms=false">http://earthlifeconsortium.org/api_v1/misc/subtaxa?taxon=tyrannosauridae&amp;synonyms=false</a></p>
-<p>Check to see if there are any known synonyms of “Dorudon atrox”:</p>
+<p>Check to see if there are any known synonyms of <cite>Dorudon atrox</cite>:</p>
 <p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/misc/subtaxa?taxon=dorudon+atrox&amp;synonyms=true">http://earthlifeconsortium.org/api_v1/misc/subtaxa?taxon=dorudon+atrox&amp;synonyms=true</a></p>
 </div>
 </div>
@@ -498,7 +498,7 @@
 <p><strong>Parameters</strong></p>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">taxon=taxon_name|genus+species</span></code></dt>
-<dd>A single name at any taxonomic level or a two word pair refering to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
+<dd>A single name or comma-separated list of taxa at any taxonomic level or a 2-3 word pair refering to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">bbox=POLYGON((...))</span></code></dt>
@@ -607,7 +607,7 @@
 <p><strong>Examples</strong></p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p>Find all occurrences of the extant plant Borreria and the rodent Dasyprocta in Brazil:</p>
+<p>Find all occurrences of the extant plant <cite>Borreria</cite> and the rodent <cite>Dasyprocta</cite> in Brazil:</p>
 <p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/misc/mobile?taxon=Dasyprocta,Borreria&amp;bbox=POLYGON((-73.037109375%20-6.839169626342809%2C-64.423828125%202.635788574166611%2C-51.76757812500001%202.1088986592431382%2C-36.298828125000014%20-6.31529853833004%2C-52.29492187499999%20-32.546813173515154%2C-57.56835937500001%20-16.636191878397653%2C-73.037109375%20-6.839169626342809))">http://earthlifeconsortium.org/api_v1/misc/mobile?taxon=Dasyprocta,Borreria&amp;bbox=POLYGON((-73.037109375%20-6.839169626342809%2C-64.423828125%202.635788574166611%2C-51.76757812500001%202.1088986592431382%2C-36.298828125000014%20-6.31529853833004%2C-52.29492187499999%20-32.546813173515154%2C-57.56835937500001%20-16.636191878397653%2C-73.037109375%20-6.839169626342809))</a></p>
 </div>
 <dl class="docutils">
