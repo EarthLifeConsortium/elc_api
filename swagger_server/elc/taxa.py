@@ -19,12 +19,19 @@ def set_taxon(taxon, subtax, db):
 
         if '^' in item:
             parts = [x.strip() for x in item.split('^')]
+
             if len(parts) != 2:
                 msg = 'Incorrect usage of "not" caret: {0:s}'.format(item)
                 raise ValueError(400, msg)
-            else:
+
+            # NEW RESOURCE: Add to list below if DB supports not (^) notation
+            if db in ['pbdb']:
                 parts = [x.capitalize() for x in parts]
                 clean_list.append('^'.join(parts))
+
+            else:
+                # DB does not support caret so remove the "not" portion
+                clean_list.append(parts[0])
         else:
             clean_list.append(item)
 

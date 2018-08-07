@@ -117,21 +117,29 @@ def images_req(payload, options):
 def mobile_req(return_obj, url_path, payload, db):
     """Dispatch multi-part requests and assemble mobile response."""
     from geojson import Point
+    from time import time
 
     # Request occurrences from The Paleobiology Database
     if db == 'pbdb':
+        pbdb_t0= time()
 
-        import yaml
-        with open('swagger_server/lookup/iso_3166_alpha2.yaml') as f:
-            cc_map = yaml.safe_load(f)
+        #  import yaml
+        #  with open('swagger_server/lookup/iso_3166_alpha2.yaml') as f:
+        #      cc_map = yaml.safe_load(f)
 
         # Retrieve all occurrence data
         payload.update(show='methods,coords,paleoloc,loc,coll',
                        extids=False)
+
+        occ_t0 = time()
+        
         try:
             occs, url = trigger(url_path, payload, db)
         except ValueError as err:
             raise ValueError(err.args[0], err.args[1])
+
+        pbdb_occ_call = round(time() - occ_t0, 3)
+        print('PBDB Occ call = ' + str(pbdb_occ_call))
 
         # Return if no occurrences found for given parameters
         if 'records' not in occs.keys():
@@ -147,10 +155,16 @@ def mobile_req(return_obj, url_path, payload, db):
             tax_payload = {'show': 'full,img',
                            'extids': False,
                            'base_name': payload['base_name']}
+
+            taxa_t0 = time()
+
             try:
                 taxon_resp, url = trigger(tax_base, tax_payload, db)
             except ValueError as err:
                 raise ValueError(err.args[0], err.args[1])
+
+            pbdb_taxa_call = round(time() - taxa_t0, 3)
+            print('PBDB Taxa call = ' + str(pbdb_taxa_call))
 
             if 'records' not in taxon_resp.keys():
                 return return_obj
@@ -161,7 +175,7 @@ def mobile_req(return_obj, url_path, payload, db):
             for rec in taxon_resp['records']:
                 if rec.get('oid'):
                     taxa.add(rec['oid'])
-
+                    
         # Only geography named, parameterize taxa from occ response
         else:
             taxa = set()
@@ -218,11 +232,9 @@ def mobile_req(return_obj, url_path, payload, db):
 
             place = None
             if 'cc2' in rec.keys():
-                country = cc_map.get(rec['cc2'])
-                if country:
-                    place = country
-                else:
-                    place = ''
+                place = rec['cc2']
+            else:
+                place = ''
             if 'stp' in rec.keys():
                 place = '{0:s}, {1:s}'.format(rec['stp'], place)
             if 'cny' in rec.keys():
@@ -279,41 +291,52 @@ def mobile_req(return_obj, url_path, payload, db):
 
             return_obj.append(mob)
 
+        pbdb_time = round(time() - pbdb_t0, 3)
+        print('PBDB other processing = ' + str(round(pbdb_time - pbdb_occ_call - pbdb_taxa_call, 4)))
+        print('PBDB total runtime = ' + str(pbdb_time))
+
     # Request occurrences from the Neotoma Paleoecology Database
     elif db == 'neotoma':
+        neot_t0 = time()
 
-        import yaml
-        with open('swagger_server/lookup/neotoma_eco_groups.yaml') as f:
-            eco_map = yaml.safe_load(f)
-        with open('swagger_server/lookup/neotoma_taxa_groups.yaml') as f:
-            taxa_map = yaml.safe_load(f)
-        with open('swagger_server/lookup/neotoma_geopolunits.yaml') as f:
-            geo_map = yaml.safe_load(f)
+        #  import yaml
+        #  with open('swagger_server/lookup/neotoma_eco_groups.yaml') as f:
+        #      eco_map = yaml.safe_load(f)
+        #  with open('swagger_server/lookup/neotoma_taxa_groups.yaml') as f:
+        #      taxa_map = yaml.safe_load(f)
+        #  with open('swagger_server/lookup/neotoma_geopolunits.yaml') as f:
+        #      geo_map = yaml.safe_load(f)
 
-        # Build GeoPoliticalUnit index
-        base = 'http://api-dev.neotomadb.org/v2.0/data/'
-        route = 'dbtables/sitegeopolitical'
-        uri = ''.join([base, route])
-        params = ''
-        try:
-            site_gpu, url = trigger(uri, params, db)
-        except ValueError as err:
-            raise ValueError(err.args[0], err.args[1])
-        last_site = ''
-        geo_units = dict()
-        for rec in site_gpu['data']:
-            site = rec.get('siteid')
-            if site == last_site:
-                geo_units[site].append(rec.get('geopoliticalid'))
-            else:
-                geo_units[site] = [rec.get('geopoliticalid')]
-            last_site = site
+        #  # Build GeoPoliticalUnit index
+        #  base = 'http://api-dev.neotomadb.org/v2.0/data/'
+        #  route = 'dbtables/sitegeopolitical'
+        #  uri = ''.join([base, route])
+        #  params = ''
+        #  try:
+        #      site_gpu, url = trigger(uri, params, db)
+        #  except ValueError as err:
+        #      raise ValueError(err.args[0], err.args[1])
+        #  last_site = ''
+        #  geo_units = dict()
+        #  for rec in site_gpu['data']:
+        #      site = rec.get('siteid')
+        #      if site == last_site:
+        #          geo_units[site].append(rec.get('geopoliticalid'))
+        #      else:
+        #          geo_units[site] = [rec.get('geopoliticalid')]
+        #      last_site = site
 
         # Retrieve all occurrence data
+
+        occ_t0 = time()
+
         try:
             occs, url = trigger(url_path, payload, db)
         except ValueError as err:
             raise ValueError(err.args[0], err.args[1])
+
+        neot_occ_call = round(time() - occ_t0, 3)
+        print('Neotoma Occ call = ' + str(round(time() - occ_t0, 3)))
 
         # Return if no occurrences found for given parameters
         if 'data' not in occs:
@@ -327,10 +350,16 @@ def mobile_req(return_obj, url_path, payload, db):
             tax_payload = {'taxonname': payload['taxonname'],
                            'lower': 'true',
                            'limit': 999999}
+            
+            taxa_t0 = time()
+
             try:
                 taxon_resp, url = trigger(tax_base, tax_payload, db)
             except ValueError as err:
                 raise ValueError(err.args[0], err.args[1])
+
+            neot_taxa_call = round(time() - taxa_t0, 3)
+            print('Neotoma taxa call = ' + str(neot_taxa_call))
 
             if 'data' not in taxon_resp.keys():
                 return return_obj
@@ -396,14 +425,7 @@ def mobile_req(return_obj, url_path, payload, db):
                     mob['eco'].update(typ=rec['site']['datasettype'])
 
                 siteid = rec['site'].get('siteid')
-                if siteid:
-                    place = list()
-                    for gpu in reversed(geo_units[siteid]):
-                        loc_level = geo_map.get(gpu)
-                        if loc_level:
-                            place.append(loc_level)
-                    if place:
-                        mob['loc'].update(pla=', '.join(place))
+                mob['loc'].update(pla=None)
 
             if 'sample' in rec:
                 mob['org'].update(txn=rec['sample']['taxonname'])
@@ -424,12 +446,12 @@ def mobile_req(return_obj, url_path, payload, db):
 
             group = None
             if 'ecolgroup' in taxon_info.keys():
-                ecolgroup = eco_map.get(taxon_info['ecolgroup'])
+                ecolgroup = taxon_info['ecolgroup']
                 if ecolgroup:
                     group = ecolgroup
             if 'taxagroup' in taxon_info.keys():
                 if group:
-                    taxagroup = taxa_map.get(taxon_info['taxagroup'])
+                    taxagroup = taxon_info['taxagroup']
                     if taxagroup:
                         group = ', '.join([group, taxagroup])
             if group:
@@ -440,4 +462,7 @@ def mobile_req(return_obj, url_path, payload, db):
 
             return_obj.append(mob)
 
+        total_time = time() - neot_t0
+        print('Neotoma other processing = ' + str(round(total_time - neot_occ_call - neot_taxa_call, 4))) 
+        print('Neotoma runtime = ' + str(round(time() - neot_t0, 3)))
     return return_obj
