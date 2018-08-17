@@ -1,5 +1,10 @@
 # EarthLife Consortium API (api_v1)
 
+For the live version of this API visit [EarthLifeConsortium.org](http://earthlifeconsortium.org) and choose API Sandbox
+from the menu on the left. The full documentation is also available from this site to enable direct query of the operational data service.
+
+## Description
+
 The ELC API is a composite api which generates and dispaches queries for the Neotoma and Paleobiology (PBDB)  
 databases using a simplified, common resource retrival specification. Results are returned as aggregated JSON objects.
 
@@ -11,16 +16,16 @@ This project follows an "API first" development process where:
 * Changes to the API can be made in the schema during development and the changes pushed down through the code.
 * A Swagger HTML5 based user interface is also generated for browsing the API documentation and testing the parameter calls.
 
-This project is currently under development.  
 
 ## Contributers
 
 Development team:
-* [Julian Jenkins](http://github.com/jpjenk)
-* [Simon Goring](http://github.com/SimonGoring)
-* with Michael McClennen (PBDB), Mike Anderson (Neotoma), Mike Stryker (Neotoma)
+* Lead developer: [Julian Jenkins](http://github.com/jpjenk)
 
-For more infomation about the EarthLife Consortium and it's members visit [EarthLifeConsortium.org](http://earthlifeconsortium.org).
+* Neotoma support: [Simon Goring](http://github.com/SimonGoring) and Mike Stryker
+* PBDB support: [Michael McClennen](http://github.com/mmcclenn)
+
+* Principal Investigators: Mark D. Uhen, Jack Williams and Simon Goring
 
 
 ## Technical Description
@@ -45,12 +50,12 @@ python3 -m swagger_server
 ```
 The api documentation and user interface will be available at:
 ```
-http://127.0.0.1:8080/api_v1/ui
+http://127.0.0.1:8008/api_v1/ui
 ```
 The raw OpenAPI definition is at:
 
 ```
-http://127.0.0.1:8080/api_v1/swagger.json
+http://127.0.0.1:8008/api_v1/swagger.json
 ```
 To initially build the server and generate controller stubs we used [swagger-codegen](http://swagger.io/swagger-codegen). This is not required if you are simply cloning this repository.
 ```
