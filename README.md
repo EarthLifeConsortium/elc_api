@@ -23,7 +23,7 @@ Development team:
 * Lead developer: [Julian Jenkins](http://github.com/jpjenk)
 
 * Neotoma support: [Simon Goring](http://github.com/SimonGoring) and Mike Stryker
-* PBDB support: [Michael McClennen] (http://github.com/mmcclenn)
+* PBDB support: [Michael McClennen](http://github.com/mmcclenn)
 
 * Principal Investigators: Mark D. Uhen, Jack Williams and Simon Goring
 
