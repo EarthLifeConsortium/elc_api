@@ -6,7 +6,7 @@ Scientists and developers associated with the ELC project
 |uhen_pic|
 
 | **Mark D. Uhen**
-| PBDB Principle Investigator
+| PBDB Principal Investigator
 | George Mason University
 
 |jenkins_pic|
@@ -18,13 +18,13 @@ Scientists and developers associated with the ELC project
 |williams_pic|
 
 | **Jack Williams**
-| Neotoma Principle Investigator    
+| Neotoma Principal Investigator    
 | University of Wisconsin, Madison
 
 |peters_pic|
 
 | **Shanan Peters**
-| PBDB Principle Investigator
+| PBDB Principal Investigator
 | University of Wisconsin, Madison
 
 |goring_pic|
@@ -42,25 +42,25 @@ Scientists and developers associated with the ELC project
 |graham_pic|
 
 | **Russell Graham**
-| Neotoma Principle Investigator
+| Neotoma Principal Investigator
 | Pennsylvania State University
 
 |blois_pic|
 
 | **Jessica Blois**
-| Neotoma Principle Investigator
+| Neotoma Principal Investigator
 | Pennsylvania State University
 
 |smith_pic|
 
 | **Alison Smith**
-| Neotoma Principle Investigator
+| Neotoma Principal Investigator
 | Pennsylvania State University
 
 |davis_pic|
 
 | **Edward Davis**
-| Neotoma Principle Investigator
+| Neotoma Principal Investigator
 | University of Oregon
 
 
