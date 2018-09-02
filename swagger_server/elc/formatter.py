@@ -59,7 +59,7 @@ def type_ris(data):
                 ris.append('AU  - {0:s}\n'.format(author))
 
         if rec.get('year'):
-            ris.append('YR  - {0:s}///\n'.format(str(rec['year'])))
+            ris.append('YR  - {0:s}//\n'.format(str(rec['year'])))
 
         if rec.get('title'):
             ris.append('TI  - {0:s}\n'.format(rec['title']))
