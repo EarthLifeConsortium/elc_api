@@ -327,27 +327,58 @@ def references(resp_json, return_obj, options):
     for rec in pubs.get('result', []):
 
         # Available fields
-        data = {'title': rec.get('title'),
-                'year': rec.get('year'),
+        data = {'year': rec.get('year'),
                 'journal': rec.get('journal'),
                 'doi': rec.get('doi'),
                 'cite': rec.get('citation'),
                 'page_range': rec.get('pages'),
-                'kind': rec.get('pubtype')}
+                'kind': rec.get('publicationtype')}
+
+        # Reference title
+        data.update(title=rec.get('booktitle', rec.get('title')))
 
         # Reference number
         data.update(ref_id='neot:pub:{0:d}'
                     .format(choose(rec.get('publicationid'), 0)))
 
-        # Publication volume(number)
+        # Publisher information
+        if rec.get('city') and rec.get('country'):
+            data.update(place='{0:s}, {1:s}'.format(rec.get('city'),
+                                                    rec.get('country')))
+        else:
+            data.update(place=rec.get('country'))
+
+        # Publication volume(number) or edition
         if rec.get('issue') and rec.get('volume'):
             data.update(vol_no='{0:s} ({1:s})'.format(rec.get('volume'),
                                                       rec.get('issue')))
-        else:
+        elif rec.get('volume'):
             data.update(vol_no=rec.get('volume'))
 
+        else:
+            data.update(vol_no=rec.get('edition'))
+
+        # Publication authors (not always complete in Neotoma record)
+        if rec.get('authors'):
+            authors = set()
+            for author in rec.get('authors'):
+                if author.get('familyname'):
+                    surname = '{0:s},'.format(author['familyname'])
+                    if author.get('givennames'):
+                        names = author['givennames'].split()
+                        fi = '{0:s}.'.format(names[0][0])
+                        if len(names) > 1:
+                            mi = '{0:s}.'.format(names[1][0])
+                        else:
+                            mi = ''
+                    authors.add('{0:s} {1:s} {2:s}'.format(surname, fi, mi))
+            author_list = list(authors)
+        else:
+            author_list = []
+        data.update(authors=author_list)
+
         # Not currently available directly in Neotoma
-        data.update(publisher=None, place=None, editor=None, authors=[])
+        data.update(publisher=None, editor=None)
 
         return_obj.append(data)
 
