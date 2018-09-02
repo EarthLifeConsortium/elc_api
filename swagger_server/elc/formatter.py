@@ -80,10 +80,10 @@ def type_ris(data):
             ris.append('ED  - {0:s}\n'.format(rec['editor']))
 
         if rec.get('publisher'):
-            ris.append('PB  - {0:s}'.format(str(rec['publisher'])))
+            ris.append('PB  - {0:s}\n'.format(str(rec['publisher'])))
 
         if rec.get('place'):
-            ris.append('PP  - {0:s}'.format(str(rec['place'])))
+            ris.append('PP  - {0:s}\n'.format(str(rec['place'])))
 
         if rec.get('doi'):
             ris.append('DO  - {0:s}\n'.format(rec['doi']))
