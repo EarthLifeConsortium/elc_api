@@ -30,7 +30,7 @@ Development team:
 
 ## Technical Description
 
-The API is being developed with the following modern open source tools:
+The API has been developed with the following modern open source tools:
 * [Python](https://www.python.org)
 * [Flask](http://flask.pocoo.org) (Python micro web framework)
 * [Connexion](http://connexion.readthedocs.io/en/latest) (Flask based routing library that is complient with OpenAPI 2.0)

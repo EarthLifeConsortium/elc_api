@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Composite interface for paleontological databases. Currently supports the Neotoma Paleoecology Database and PBDB (The Paleobiology Database). See full <a href='http://earthlifeconsortium.org/api_v1/swagger.json'>OpenAPI Specification</a>. Read the <a href='http:///earthlifeconsortium.org/docs/api-docs.html'>full documentation</a> for more detailed instructions."
-  version: "1.1.4b"
+  version: "1.1.4"
   title: "API Sandbox"
   contact:
     url: "http://earthlifeconsortium.org"
@@ -418,57 +418,6 @@ paths:
       x-tags:
       - tag: "Timebound"
       x-swagger-router-controller: "swagger_server.controllers.misc_controller"
-  /misc/images:
-    get:
-      tags:
-      - "Images"
-      summary: "Retrieve URIs to specimen images"
-      description: "For a given taxon, retrieve references to image media\
-        \ from the specimen collections of various museums."
-      operationId: "images"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "taxon"
-        in: "query"
-        description: "Single taxonomic name"
-        required: true
-        type: "string"
-      - name: "service"
-        in: "query"
-        description: "API to use for image search. 'epandda' (default) or 'idigbio'."
-        required: false
-        type: "string"
-      - name: "limit"
-        in: "query"
-        description: "Limit the number of records in the response for large\
-          \ queries. Any whole number numerical value is accepted. Default is 200."
-        required: false
-        type: "integer"
-        format: "int32"
-      - name: "offset"
-        in: "query"
-        description: "Begin the response from a designated point within the\
-          \ larger query. In this way, <i>limit</i> and <i>offset</i> can be\
-          \ used to produce serial queries to the API to avoid issues with\
-          \ larger responses"
-        required: false
-        type: "integer"
-        format: "int32"
-      responses:
-        200:
-          description: "images response"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/images"
-        default:
-          description: "unexpected error"
-          schema:
-            $ref: "#/definitions/errorModel"
-      x-tags:
-      - tag: "Images"
-      x-swagger-router-controller: "swagger_server.controllers.misc_controller"
   /misc/subtaxa:
     get:
       tags:
@@ -545,14 +494,6 @@ paths:
       - tag: "Mobile"
       x-swagger-router-controller: "swagger_server.controllers.misc_controller"
 definitions:
-  images:
-    type: "object"
-    properties:
-      media:
-        type: "array"
-        items:
-          type: "string"
-        description: "List of media URIs for selected taxon"
   subtaxa:
     type: "object"
     properties:
