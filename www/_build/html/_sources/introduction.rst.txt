@@ -3,6 +3,12 @@ ELC: Introduction
 
 The Earth-Life Consortium (ELC) seeks to make all paleobiological data easily discoverable, accessible, and analyzable, with the larger goal of understanding the interactions between the Earth’s biological and geophysical systems across all timescales of the Earth’s history.
 
+
+.. raw:: html
+
+    <em>Please report issues on <a href='https://github.com/EarthLifeConsortium/elc_api/issues' target='_blank'>GitHub</a> or send email to <a href='mailto:earthlifeconsortium@gmail.com'>earthlifeconsortium@gmail.com</a></em>
+
+
 Overview
 --------
 
