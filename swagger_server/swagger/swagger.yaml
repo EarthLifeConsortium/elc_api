@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Composite interface for paleontological databases. Currently supports the Neotoma Paleoecology Database and PBDB (The Paleobiology Database). See full <a href='http://earthlifeconsortium.org/api_v1/swagger.json'>OpenAPI Specification</a> and read the <a href='http://earthlifeconsortium.org/docs/api-docs.html'>full documentation</a> for detailed instructions. Please report issues on <a href='https://github.com/EarthLifeConsortium/elc_api/issues'>GitHub</a> or by <a href='mailto:earthlifeconsortium@gmail.com'>email</a>."
-  version: "1.1.5"
+  version: "1.1.6"
   title: "API Sandbox"
   contact:
     url: "http://earthlifeconsortium.org"

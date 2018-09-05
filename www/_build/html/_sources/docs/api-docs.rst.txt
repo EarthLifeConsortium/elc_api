@@ -187,6 +187,12 @@ A custum route designed to return a combination of occurrence data with associat
 **Compact vocabulary**
 
 === ==========================
+src ELC formatted unique occurrence ID
+=== ==========================
+
+|
+
+=== ==========================
 loc Location parameter block
 === ==========================
 age Early, Late age (Ma)
