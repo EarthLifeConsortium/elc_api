@@ -299,8 +299,8 @@ paths:
       - name: "includelower"
         in: "query"
         description: "Retrieve lower taxa. All species and subspecies of a\
-          \ named genera will be included in the response. True (default) or\
-          \ False."
+          \ named genera will be included in the response. False (default) or\
+          \ True."
         required: false
         type: "boolean"
       # - name: "hierarchy"
