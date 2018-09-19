@@ -48,14 +48,14 @@ Scientists and developers associated with the ELC project
 |blois_pic|
 
 | **Jessica Blois**
-| Neotoma Principal Investigator
-| Pennsylvania State University
+| Neotoma Principle Investigator
+| University of California, Merced
 
 |smith_pic|
 
 | **Alison Smith**
-| Neotoma Principal Investigator
-| Pennsylvania State University
+| Neotoma Principle Investigator
+| Kent State University
 
 |davis_pic|
 

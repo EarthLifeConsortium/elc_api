@@ -139,7 +139,12 @@ def mobile_req(return_obj, url_path, payload, db):
             else:
                 continue
 
-            mob = {'src': 'https://paleobiodb.org',
+            if rec.get('oid'):
+                occ_id = 'pbdb:occ:{0:d}'.format(rec['oid'])
+            else:
+                occ_id = 'pbdb:occ:0'
+
+            mob = {'src': occ_id,
                    'loc': {},
                    'org': {},
                    'eco': {}}
@@ -338,7 +343,12 @@ def mobile_req(return_obj, url_path, payload, db):
             else:
                 continue
 
-            mob = {'src': 'https://neotomadb.org',
+            if rec.get('occid'):
+                occ_id = 'neot:occ:{0:d}'.format(rec['occid'])
+            else:
+                occ_id = 'neot:occ:0'
+
+            mob = {'src': occ_id,
                    'loc': {},
                    'org': {},
                    'eco': {}}
