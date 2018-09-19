@@ -1,2 +1,0 @@
-``offset=value``
-    Select a sequential record number to begin the return. Useful in conjunction with ``limit`` to chunk very large returns. For example, ``?limit=1000&offset=0`` would return the first 1000 records and ``?limit=1000&offset=1000`` the next 1000 records. Handling of this is secific to the resource database and has no relationship of any data record number, merely a database table row. If not included, the respose will always begin with the first record. Type: `int` 
