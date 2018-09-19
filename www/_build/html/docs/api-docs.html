@@ -108,7 +108,7 @@
 <h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">These instructions cover the programatic usage of the Earth-Life Consortium RESTful API version 1. All requests will include /api_v1 in the base path and use the HTTP GET protocol.</p>
+<p class="last">These instructions cover the programmatic usage of the EarthLife Consortium RESTful API version 1. All requests will include /api_v1 in the base path and use the HTTP GET protocol.</p>
 </div>
 <p>An interactive web-based <a class="reference external" href="http://earthlifeconsortium.org/api_v1/ui/">sandbox</a> is available for exploring the API. The API can, of course be called directly using a browser, cURL or using your favorite HTTP library such as Requests. The generated query URL is available in the sandbox for copying and editing.</p>
 <div class="section" id="occurrences">
@@ -121,7 +121,7 @@
 <p><strong>Parameters</strong></p>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">taxon=taxon_name|genus+species</span></code></dt>
-<dd>A single name or comma-separated list of taxa at any taxonomic level or a 2-3 word pair refering to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
+<dd>A single name or comma-separated list of taxa at any taxonomic level or a 2-3 word pair referring to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
 </dl>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -131,7 +131,7 @@
 </div>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">bbox=POLYGON((...))</span></code></dt>
-<dd>Geographic bounding box for constraining the response. Must be a strictly formated OGC WKT Polygon. The unaffiliated tool <a class="reference external" href="https://clydedacruz.github.io/openstreetmap-wkt-playground">OpenStreetMap WKT Playground</a> may be useful in graphically creating a polygon. Paste the generated WKT string into the <code class="docutils literal notranslate"><span class="pre">bbox</span></code> field of the ELC API. Type: <cite>str</cite></dd>
+<dd>Geographic bounding box for constraining the response. Must be a strictly formatted OGC WKT Polygon. The unaffiliated tool <a class="reference external" href="https://clydedacruz.github.io/openstreetmap-wkt-playground">OpenStreetMap WKT Playground</a> may be useful in graphically creating a polygon. Paste the generated WKT string into the <code class="docutils literal notranslate"><span class="pre">bbox</span></code> field of the ELC API. Type: <cite>str</cite></dd>
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">agerange=geologic_age,[value,value][geologic_age|value]</span></code></dt>
@@ -147,7 +147,7 @@
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">coordtype=modern|paleo</span></code></dt>
-<dd>Configure the type of cartesian coordinates to be included in the response. Most resource databases will store the geography of occurrences and other data objects using modern day coordinates. However, with some limitations (see <code class="docutils literal notranslate"><span class="pre">misc/paleocoordinates</span></code> route below) the API is able to convert the coodinates in to a historical projection. Type: <cite>str</cite>. Default: “modern”</dd>
+<dd>Configure the type of cartesian coordinates to be included in the response. Most resource databases will store the geography of occurrences and other data objects using modern day coordinates. However, with some limitations (see <code class="docutils literal notranslate"><span class="pre">misc/paleocoordinates</span></code> route below) the API is able to convert the coordinates in to a historical projection. Type: <cite>str</cite>. Default: “modern”</dd>
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">includelower=true|false</span></code></dt>
@@ -159,11 +159,11 @@
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">offset=value</span></code></dt>
-<dd>Select a sequential record number to begin the return. Useful in conjunction with <code class="docutils literal notranslate"><span class="pre">limit</span></code> to chunk very large returns. For example, <code class="docutils literal notranslate"><span class="pre">?limit=1000&amp;offset=0</span></code> would return the first 1000 records and <code class="docutils literal notranslate"><span class="pre">?limit=1000&amp;offset=1000</span></code> the next 1000 records. Handling of this is secific to the resource database and has no relationship of any data record number, merely a database table row. If not included, the respose will always begin with the first record. Type: <cite>int</cite></dd>
+<dd>Select a sequential record number to begin the return. Useful in conjunction with <code class="docutils literal notranslate"><span class="pre">limit</span></code> to chunk very large returns. For example, <code class="docutils literal notranslate"><span class="pre">?limit=1000&amp;offset=0</span></code> would return the first 1000 records and <code class="docutils literal notranslate"><span class="pre">?limit=1000&amp;offset=1000</span></code> the next 1000 records. Handling of this is specific to the resource database and has no relationship of any data record number, merely a database table row. If not included, the response will always begin with the first record. Type: <cite>int</cite></dd>
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">output=json|csv</span></code></dt>
-<dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortend MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “json”</dd>
+<dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortened MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “json”</dd>
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">show=all|poll|idx</span></code></dt>
@@ -179,7 +179,7 @@
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">run=all|database_name[,database_name,</span> <span class="pre">...]</span></code></dt>
-<dd>Single or comma separated list of resourse databases for the API to query. Type: <cite>str</cite>. Default: “all”</dd>
+<dd>Single or comma separated list of resource databases for the API to query. Type: <cite>str</cite>. Default: “all”</dd>
 </dl>
 <p><strong>Examples</strong></p>
 <div class="admonition seealso">
@@ -220,7 +220,7 @@
 </div>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">bbox=POLYGON((...))</span></code></dt>
-<dd>Geographic bounding box for constraining the response. Must be a strictly formated OGC WKT Polygon. The unaffiliated tool <a class="reference external" href="https://clydedacruz.github.io/openstreetmap-wkt-playground">OpenStreetMap WKT Playground</a> may be useful in graphically creating a polygon. Paste the generated WKT string into the <code class="docutils literal notranslate"><span class="pre">bbox</span></code> field of the ELC API. Type: <cite>str</cite></dd>
+<dd>Geographic bounding box for constraining the response. Must be a strictly formatted OGC WKT Polygon. The unaffiliated tool <a class="reference external" href="https://clydedacruz.github.io/openstreetmap-wkt-playground">OpenStreetMap WKT Playground</a> may be useful in graphically creating a polygon. Paste the generated WKT string into the <code class="docutils literal notranslate"><span class="pre">bbox</span></code> field of the ELC API. Type: <cite>str</cite></dd>
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">agerange=geologic_age,[value,value][geologic_age|value]</span></code></dt>
@@ -236,7 +236,7 @@
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">coordtype=modern|paleo</span></code></dt>
-<dd>Configure the type of cartesian coordinates to be included in the response. Most resource databases will store the geography of occurrences and other data objects using modern day coordinates. However, with some limitations (see <code class="docutils literal notranslate"><span class="pre">misc/paleocoordinates</span></code> route below) the API is able to convert the coodinates in to a historical projection. Type: <cite>str</cite>. Default: “modern”</dd>
+<dd>Configure the type of cartesian coordinates to be included in the response. Most resource databases will store the geography of occurrences and other data objects using modern day coordinates. However, with some limitations (see <code class="docutils literal notranslate"><span class="pre">misc/paleocoordinates</span></code> route below) the API is able to convert the coordinates in to a historical projection. Type: <cite>str</cite>. Default: “modern”</dd>
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">limit=value</span></code></dt>
@@ -244,11 +244,11 @@
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">offset=value</span></code></dt>
-<dd>Select a sequential record number to begin the return. Useful in conjunction with <code class="docutils literal notranslate"><span class="pre">limit</span></code> to chunk very large returns. For example, <code class="docutils literal notranslate"><span class="pre">?limit=1000&amp;offset=0</span></code> would return the first 1000 records and <code class="docutils literal notranslate"><span class="pre">?limit=1000&amp;offset=1000</span></code> the next 1000 records. Handling of this is secific to the resource database and has no relationship of any data record number, merely a database table row. If not included, the respose will always begin with the first record. Type: <cite>int</cite></dd>
+<dd>Select a sequential record number to begin the return. Useful in conjunction with <code class="docutils literal notranslate"><span class="pre">limit</span></code> to chunk very large returns. For example, <code class="docutils literal notranslate"><span class="pre">?limit=1000&amp;offset=0</span></code> would return the first 1000 records and <code class="docutils literal notranslate"><span class="pre">?limit=1000&amp;offset=1000</span></code> the next 1000 records. Handling of this is specific to the resource database and has no relationship of any data record number, merely a database table row. If not included, the response will always begin with the first record. Type: <cite>int</cite></dd>
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">output=json|csv</span></code></dt>
-<dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortend MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “json”</dd>
+<dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortened MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “json”</dd>
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">show=all|poll|idx</span></code></dt>
@@ -264,7 +264,7 @@
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">run=all|database_name[,database_name,</span> <span class="pre">...]</span></code></dt>
-<dd>Single or comma separated list of resourse databases for the API to query. Type: <cite>str</cite>. Default: “all”</dd>
+<dd>Single or comma separated list of resource databases for the API to query. Type: <cite>str</cite>. Default: “all”</dd>
 </dl>
 <p><strong>Examples</strong></p>
 <div class="admonition seealso">
@@ -303,7 +303,7 @@
 </div>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">output=json|csv|bibjson|ris</span></code></dt>
-<dd>File format of the data return. Serialized JSON, structured BibJSON, tabular CSV or RIS interchange formats. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortend MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “bibjson”</dd>
+<dd>File format of the data return. Serialized JSON, structured BibJSON, tabular CSV or RIS interchange formats. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortened MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “bibjson”</dd>
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">show=all|poll|idx</span></code></dt>
@@ -319,7 +319,7 @@
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">run=all|database_name[,database_name,</span> <span class="pre">...]</span></code></dt>
-<dd>Single or comma separated list of resourse databases for the API to query. Type: <cite>str</cite>. Default: “all”</dd>
+<dd>Single or comma separated list of resource databases for the API to query. Type: <cite>str</cite>. Default: “all”</dd>
 </dl>
 <p><strong>Examples</strong></p>
 <div class="admonition seealso">
@@ -338,7 +338,7 @@
 <p><strong>Parameters</strong></p>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">taxon=taxon_name|genus+species</span></code></dt>
-<dd>A single name or comma-separated list of taxa at any taxonomic level or a 2-3 word pair refering to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
+<dd>A single name or comma-separated list of taxa at any taxonomic level or a 2-3 word pair referring to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
 </dl>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -369,7 +369,7 @@
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">output=json|csv</span></code></dt>
-<dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortend MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “json”</dd>
+<dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortened MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “json”</dd>
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">show=all|poll|idx</span></code></dt>
@@ -385,7 +385,7 @@
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">run=all|database_name[,database_name,</span> <span class="pre">...]</span></code></dt>
-<dd>Single or comma separated list of resourse databases for the API to query. Type: <cite>str</cite>. Default: “all”</dd>
+<dd>Single or comma separated list of resource databases for the API to query. Type: <cite>str</cite>. Default: “all”</dd>
 </dl>
 <p><strong>Examples</strong></p>
 <div class="admonition seealso">
@@ -407,7 +407,7 @@
 <p><strong>Parameters</strong></p>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">coords=latitude,longitude</span></code></dt>
-<dd>Modern day coordinates ranging from latitude -90 to 90 (southern latitudes are negative) and longitude -180 to 180 (western longitudes are negative) decimal degrees of arbritary precision. Type: <cite>float</cite></dd>
+<dd>Modern day coordinates ranging from latitude -90 to 90 (southern latitudes are negative) and longitude -180 to 180 (western longitudes are negative) decimal degrees of arbitrary precision. Type: <cite>float</cite></dd>
 </dl>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -415,7 +415,7 @@
 </div>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">age=value</span></code></dt>
-<dd>Historical age of desired paleocoodinates where <code class="docutils literal notranslate"><span class="pre">value</span></code> is an integer from 1 to 580 Ma or a named geologic age. If a numerical age is specified, it may be in the units of the ageunits parameter. Type: <cite>str</cite> or <cite>int</cite></dd>
+<dd>Historical age of desired paleocoordinates where <code class="docutils literal notranslate"><span class="pre">value</span></code> is an integer from 1 to 580 Ma or a named geologic age. If a numerical age is specified, it may be in the units of the ageunits parameter. Type: <cite>str</cite> or <cite>int</cite></dd>
 </dl>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -461,7 +461,7 @@
 </div>
 <div class="section" id="subtaxa">
 <h3>Subtaxa<a class="headerlink" href="#subtaxa" title="Permalink to this headline">¶</a></h3>
-<p>Return a list of all taxonomic names hierarchically below the specified taxon, optionaly including synonyms.</p>
+<p>Return a list of all taxonomic names hierarchically below the specified taxon, optionally including synonyms.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">This tool leverages the Paleobiology Database taxonomy system and, while comprehensive for many classes, may lack taxa for species that are not the historical focus of the database.</p>
@@ -473,11 +473,11 @@
 <p><strong>Parameters</strong></p>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">taxon=taxon_name|genus+species</span></code></dt>
-<dd>A single name or comma-separated list of taxa at any taxonomic level or a 2-3 word pair refering to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
+<dd>A single name or comma-separated list of taxa at any taxonomic level or a 2-3 word pair referring to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">synonyms=true|false</span></code></dt>
-<dd>Include known synonomous names for the children of the specified parent taxon together with recognized names. If “False” only the primary sub taxa will be retrieved. Type: <cite>Boolean</cite>. Default: “true”</dd>
+<dd>Include known synonymous names for the children of the specified parent taxon together with recognized names. If “False” only the primary sub taxa will be retrieved. Type: <cite>Boolean</cite>. Default: “true”</dd>
 </dl>
 <p><strong>Examples</strong></p>
 <div class="admonition seealso">
@@ -490,7 +490,7 @@
 </div>
 <div class="section" id="mobile">
 <h3>Mobile<a class="headerlink" href="#mobile" title="Permalink to this headline">¶</a></h3>
-<p>A custum route designed to return a combination of occurrence data with associated taxonomic and select environmental details. The response is nested JSON with a highly compact vocabulary.</p>
+<p>A custom route designed to return a combination of occurrence data with associated taxonomic and select environmental details. The response is nested JSON with a highly compact vocabulary.</p>
 <dl class="docutils">
 <dt><strong>Base path</strong></dt>
 <dd><code class="docutils literal notranslate"><span class="pre">http://earthlifeconsortium.org/api_v1/misc/mobile?</span></code></dd>
@@ -498,11 +498,11 @@
 <p><strong>Parameters</strong></p>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">taxon=taxon_name|genus+species</span></code></dt>
-<dd>A single name or comma-separated list of taxa at any taxonomic level or a 2-3 word pair refering to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
+<dd>A single name or comma-separated list of taxa at any taxonomic level or a 2-3 word pair referring to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
 </dl>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">bbox=POLYGON((...))</span></code></dt>
-<dd>Geographic bounding box for constraining the response. Must be a strictly formated OGC WKT Polygon. The unaffiliated tool <a class="reference external" href="https://clydedacruz.github.io/openstreetmap-wkt-playground">OpenStreetMap WKT Playground</a> may be useful in graphically creating a polygon. Paste the generated WKT string into the <code class="docutils literal notranslate"><span class="pre">bbox</span></code> field of the ELC API. Type: <cite>str</cite></dd>
+<dd>Geographic bounding box for constraining the response. Must be a strictly formatted OGC WKT Polygon. The unaffiliated tool <a class="reference external" href="https://clydedacruz.github.io/openstreetmap-wkt-playground">OpenStreetMap WKT Playground</a> may be useful in graphically creating a polygon. Paste the generated WKT string into the <code class="docutils literal notranslate"><span class="pre">bbox</span></code> field of the ELC API. Type: <cite>str</cite></dd>
 </dl>
 <p><strong>Compact vocabulary</strong></p>
 <table border="1" class="docutils">

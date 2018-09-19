@@ -1,7 +1,7 @@
 ELC: Introduction
 =================
 
-The Earth-Life Consortium (ELC) seeks to make all paleobiological data easily discoverable, accessible, and analyzable, with the larger goal of understanding the interactions between the Earth’s biological and geophysical systems across all timescales of the Earth’s history.
+The EarthLife Consortium (ELC) seeks to make all paleobiological data easily discoverable, accessible, and analyzable, with the larger goal of understanding the interactions between the Earth’s biological and geophysical systems across all timescales of the Earth’s history.
 
 
 .. raw:: html
@@ -43,7 +43,7 @@ Benefit to scientists
 Project Deliverables
 --------------------
 **Data API**
-    A core mission of the Earth Life Consortium is the development of an application programming interface (API) which will simultaneously query the Paleobiology Database (PBDB) and the Neotoma Paleoecology database. Resulting subqueries to these databases are processed and reformatted by the ELC API to provide the end user with comparable data objects. The goal of this composite API is to bridge the differences in time resolution and nature of holdings between the databases. Click below to explore the API, select each endpoint for documentation and an interactive interface.
+    A core mission of the EarthLife Consortium is the development of an application programming interface (API) which will simultaneously query the Paleobiology Database (PBDB) and the Neotoma Paleoecology database. Resulting subqueries to these databases are processed and reformatted by the ELC API to provide the end user with comparable data objects. The goal of this composite API is to bridge the differences in time resolution and nature of holdings between the databases. Click below to explore the API, select each endpoint for documentation and an interactive interface.
 
 **Extensibility**
     Establish harmonized Web Application Programming Interfaces (APIs) and Web services between Neotoma and PBDB, with capability for extension to other related databases.

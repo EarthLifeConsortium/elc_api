@@ -3,7 +3,7 @@ Extending the API
 
 The strength of the ELC API grows with the addition of other paleoecological and biological databases. Research groups and developers are strongly encouraged to fork the ELC framework and follow the steps described below to add a new database as an ELC resource.
 
-The ELC API is denoted by major version within the base path itself and all sub-versions of the API will not break parameter, route or response compatibility. If, in the future, the API is expanded or modified in such a was that this compatability in untenable, a new major version will be launched. Earlier versions will, however, remain available.
+The ELC API is denoted by major version within the base path itself and all sub-versions of the API will not break parameter, route or response compatibility. If, in the future, the API is expanded or modified in such a was that this compatibility in untenable, a new major version will be launched. Earlier versions will, however, remain available.
 
 .. note::
     This section contains technical information relevant to a developer audience.

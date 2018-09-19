@@ -2,7 +2,7 @@ API Documentation
 =================
 
 .. note::
-    These instructions cover the programatic usage of the Earth-Life Consortium RESTful API version 1. All requests will include /api_v1 in the base path and use the HTTP GET protocol.
+    These instructions cover the programmatic usage of the EarthLife Consortium RESTful API version 1. All requests will include /api_v1 in the base path and use the HTTP GET protocol.
 
 An interactive web-based `sandbox <http://earthlifeconsortium.org/api_v1/ui/>`_ is available for exploring the API. The API can, of course be called directly using a browser, cURL or using your favorite HTTP library such as Requests. The generated query URL is available in the sandbox for copying and editing.
 
@@ -155,7 +155,7 @@ Return the oldest and youngest ages (bounds) spanning the specified range. Geolo
 
 Subtaxa
 ^^^^^^^
-Return a list of all taxonomic names hierarchically below the specified taxon, optionaly including synonyms.
+Return a list of all taxonomic names hierarchically below the specified taxon, optionally including synonyms.
 
 .. warning::
     This tool leverages the Paleobiology Database taxonomy system and, while comprehensive for many classes, may lack taxa for species that are not the historical focus of the database.
@@ -174,7 +174,7 @@ Return a list of all taxonomic names hierarchically below the specified taxon, o
 
 Mobile
 ^^^^^^
-A custum route designed to return a combination of occurrence data with associated taxonomic and select environmental details. The response is nested JSON with a highly compact vocabulary.
+A custom route designed to return a combination of occurrence data with associated taxonomic and select environmental details. The response is nested JSON with a highly compact vocabulary.
 
 **Base path**
     ``http://earthlifeconsortium.org/api_v1/misc/mobile?``
