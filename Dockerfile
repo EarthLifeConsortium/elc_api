@@ -1,13 +1,18 @@
-FROM python:3-alpine
+#
+# Earthlifeconsortium API
+
+FROM python:3-alpine AS paleobiodb_earthlife_preload
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-COPY requirements.txt /usr/src/app/
+COPY earthlife/requirements.txt /usr/src/app/
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-COPY . /usr/src/app
+FROM paleobiodb_earthlife_preload
+
+COPY earthlife /usr/src/app
 
 EXPOSE 8008
 
