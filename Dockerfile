@@ -1,14 +1,8 @@
 #
-# Earthlifeconsortium API
-
-FROM python:3-alpine AS paleobiodb_earthlife_preload
-
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-
-COPY earthlife/requirements.txt /usr/src/app/
-
-RUN pip3 install --no-cache-dir -r requirements.txt
+# Earthlifeconsortium API image
+# 
+# The image 'paleobiodb_earthlife_preload' can be built using the file 'Dockerfile-preload'.
+# See that file for more information.
 
 FROM paleobiodb_earthlife_preload
 
