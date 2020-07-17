@@ -6,7 +6,7 @@
 # the final image by copying in the source code and other local content.
 
 
-FROM python:3-alpine AS paleobiodb_earthlife_preload
+FROM python:3-alpine AS paleomacro_earthlife_preload
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app

@@ -4,7 +4,7 @@
 # The image 'paleobiodb_earthlife_preload' can be built using the file 'Dockerfile-preload'.
 # See that file for more information.
 
-FROM paleobiodb_earthlife_preload
+FROM paleomacro_earthlife_preload
 
 COPY earthlife /usr/src/app
 
