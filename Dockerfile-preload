@@ -6,9 +6,14 @@
 # the final image by copying in the source code and other local content.
 
 
-FROM python:3-alpine AS paleomacro_earthlife_preload
+FROM alpine:latest AS paleomacro_earthlife_preload
+
+RUN apk add --no-cache uwsgi-python3
+
+RUN apk add --no-cache py-pip
 
 RUN mkdir -p /usr/src/app
+
 WORKDIR /usr/src/app
 
 COPY earthlife/requirements.txt /usr/src/app/

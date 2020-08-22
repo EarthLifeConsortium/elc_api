@@ -10,6 +10,5 @@ COPY earthlife /usr/src/app
 
 EXPOSE 8008
 
-ENTRYPOINT ["python3"]
+CMD ["uwsgi", "elc-api.uwsgi.ini"]
 
-CMD ["-m", "swagger_server"]

@@ -1,4 +1,5 @@
-connexion == 1.4
+wheel >= 0.35
+connexion >= 2.6.0
 python_dateutil == 2.6.1
 setuptools >= 21.0.0
 requests >= 2.13.0
