@@ -8,13 +8,16 @@
 
 FROM alpine:latest AS paleomacro_earthlife_preload
 
-RUN apk add --no-cache uwsgi-python3
-
-RUN apk add --no-cache py-pip
+RUN apk add --no-cache uwsgi-python3 && \
+    apk add --no-cache uwsgi-logfile && \
+    apk add --no-cache py-pip && \
+    apk add --no-cache tzdata
 
 RUN mkdir -p /usr/src/app
 
 WORKDIR /usr/src/app
+
+RUN pip3 install --no-cache-dir connexion[swagger-ui]
 
 COPY earthlife/requirements.txt /usr/src/app/
 

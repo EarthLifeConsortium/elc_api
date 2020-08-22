@@ -119,8 +119,8 @@ html_sidebars = {
 
 # Related sites
 html_theme_options['extra_nav_links'] = {
-    #  'PBDB': 'http://paleobiodb.org',
-    #  'Neotoma': 'http://neotomadb.org',
+	'PBDB': 'http://paleobiodb.org/',
+    'Neotoma': 'http://neotomadb.org/',
     #  '<img src="_static/api-32.png">ELC API Sandbox': 'http://earthlifeconsortium.org/api_v1/ui'
-    'API Sandbox': 'http://earthlifeconsortium.org/api_v1/ui'
+    'API Sandbox': '/api_v1/ui'
 }
