@@ -1,0 +1,694 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>API Documentation &#8212; EarthLife Consortium 0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Extending the API" href="api-extend.html" />
+    <link rel="prev" title="Personnel" href="../personnel.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+    <link rel="apple-touch-icon" href="../_static/ELC-logo-iOS.png" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/ELC-logo-200w.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Bridging paleontological and paleoecological databases with a common HTTP API interface and shared vocabulary.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=EarthLifeConsortium&repo=elc_api&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">ELC: Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../personnel.html">Personnel</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#occurrences">Occurrences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#locales">Locales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#taxonomy">Taxonomy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#miscellaneous-route">Miscellaneous route</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api-extend.html">Extending the API</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="http://earthlifeconsortium.org/api_v1/ui">API Sandbox</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../personnel.html" title="previous chapter">Personnel</a></li>
+      <li>Next: <a href="api-extend.html" title="next chapter">Extending the API</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="api-documentation">
+<h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">These instructions cover the programmatic usage of the EarthLife Consortium RESTful API version 1. All requests will include /api_v1 in the base path and use the HTTP GET protocol.</p>
+</div>
+<p>An interactive web-based <a class="reference external" href="http://earthlifeconsortium.org/api_v1/ui/">sandbox</a> is available for exploring the API. The API can, of course be called directly using a browser, cURL or using your favorite HTTP library such as Requests. The generated query URL is available in the sandbox for copying and editing.</p>
+<div class="section" id="occurrences">
+<h2>Occurrences<a class="headerlink" href="#occurrences" title="Permalink to this headline">¶</a></h2>
+<p>Occurrences are the individual instances of fossils in time and space. Occurrences of taxa can be specified at any taxonomic level bound by any units of time and spatial delimitation.</p>
+<dl class="docutils">
+<dt><strong>Base path</strong></dt>
+<dd><code class="docutils literal"><span class="pre">http://earthlifeconsortium.org/api_v1/occ?</span></code></dd>
+</dl>
+<p><strong>Parameters</strong></p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">taxon=taxon_name|genus+species</span></code></dt>
+<dd>A single name or comma-separated list of taxa at any taxonomic level or a 2-3 word pair referring to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Paleobiology Database: Taxonomic names returned by the Paleobiology Database reflect synonymies as entered from the published scientific literature and are dynamically updated. Documentation of the Paleobiology Database data model is provided by Peters, S.E. and McClennen, M., 2016. The Paleobiology Database application programming interface. Paleobiology, 42(1), pp.1-7.</p>
+<p>Neotoma: Taxonomic names returned by the Neotoma databases reflect a static taxonomy as determined by taxonomic experts. Details of these determinations can be found <a class="reference external" href="http://neotoma-manual.readthedocs.io/en/latest/db_design_concepts.html#taxonomy-and-synonymy">here</a>.</p>
+<p class="last">ELC API returns for any given taxon will include each database’s understanding of what is contained in the given taxon. If the taxonomic name does NOT occur in the given database, the ELC API will not return any data from that database. These two taxonomic concepts may not be the same in each included database.</p>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">bbox=POLYGON((...))</span></code></dt>
+<dd>Geographic bounding box for constraining the response. Must be a strictly formatted OGC WKT Polygon. The unaffiliated tool <a class="reference external" href="https://clydedacruz.github.io/openstreetmap-wkt-playground">OpenStreetMap WKT Playground</a> may be useful in graphically creating a polygon. Paste the generated WKT string into the <code class="docutils literal"><span class="pre">bbox</span></code> field of the ELC API. Type: <cite>str</cite></dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">agerange=geologic_age,[value,value][geologic_age|value]</span></code></dt>
+<dd>A single named geologic age or a comma-separated pair of numerical ages, geologic ages or a combination of the two. Order does not matter, returned ages will always reflect the minimum and maximum from the pairwise set. Type: <cite>str</cite> or <cite>float</cite></dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">At a minimum, a <code class="docutils literal"><span class="pre">taxon</span></code>, <code class="docutils literal"><span class="pre">bbox</span></code> or <code class="docutils literal"><span class="pre">agerange</span></code> parameter must be specified, however more than one of these may be used together to further constrain the query.’</p>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">ageunits=ybp|ka|ma</span></code></dt>
+<dd>Units of geologic age to be used in the query. Age values passed to the API will be interpreted in the context of this parameter. All time specific returned values will also be converted to match this parameter. Type: <cite>str</cite>. Default: “Ma”</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">coordtype=modern|paleo</span></code></dt>
+<dd>Configure the type of cartesian coordinates to be included in the response. Most resource databases will store the geography of occurrences and other data objects using modern day coordinates. However, with some limitations (see <code class="docutils literal"><span class="pre">misc/paleocoordinates</span></code> route below) the API is able to convert the coordinates in to a historical projection. Type: <cite>str</cite>. Default: “modern”</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">includelower=true|false</span></code></dt>
+<dd>Include all species and subspecies of a named genera in the response. For PBDB the taxonomy system is used, for other databases, this flag triggers wildcard completion. This works well for species epithets but not for higher level taxa. Type: <cite>boolean</cite>. Default: “true”</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">limit=value</span></code></dt>
+<dd>Impose a limit on the number of records returned from each database. Useful for testing or in conjuction with the <code class="docutils literal"><span class="pre">offset</span></code> parameter. Set to a very large number to negate any default limits set on any of the subqueried database resources. Type: <cite>int</cite>. Default: “999999”</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">offset=value</span></code></dt>
+<dd>Select a sequential record number to begin the return. Useful in conjunction with <code class="docutils literal"><span class="pre">limit</span></code> to chunk very large returns. For example, <code class="docutils literal"><span class="pre">?limit=1000&amp;offset=0</span></code> would return the first 1000 records and <code class="docutils literal"><span class="pre">?limit=1000&amp;offset=1000</span></code> the next 1000 records. Handling of this is specific to the resource database and has no relationship of any data record number, merely a database table row. If not included, the response will always begin with the first record. Type: <cite>int</cite></dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">output=json|csv</span></code></dt>
+<dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortened MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “json”</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">show=all|poll|idx</span></code></dt>
+<dd><p class="first">Configure the objects to be included in the return. This parameter is ignored if the selected output format is “csv”. Type: <cite>str</cite>. Default: “all”</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">all</span></code>: All data records and meta-data</li>
+<li><code class="docutils literal"><span class="pre">poll</span></code>: Only the meta-data block with summary statistics</li>
+<li><code class="docutils literal"><span class="pre">idx</span></code>: A list of the endpoints primary data indicies</li>
+</ul>
+</div></blockquote>
+</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">run=all|database_name[,database_name,</span> <span class="pre">...]</span></code></dt>
+<dd>Single or comma separated list of resource databases for the API to query. Type: <cite>str</cite>. Default: “all”</dd>
+</dl>
+<p><strong>Examples</strong></p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>Find number of occurrences of the paleo-programmer’s best friend in each resource database:</p>
+<p><a class="reference external" href="http://earthlifeconsortium.org/api_v1/occ?taxon=canis+dirus">http://earthlifeconsortium.org/api_v1/occ?taxon=canis+dirus</a></p>
+<p>Retrieve first 10 occurrences of <cite>Pinus</cite> with ages reported as years before present:</p>
+<p><a class="reference external" href="http://earthlifeconsortium.org/api_v1/occ?taxon=pinus&amp;limit=10&amp;ageunits=ybp&amp;includelower=false">http://earthlifeconsortium.org/api_v1/occ?taxon=pinus&amp;limit=10&amp;ageunits=ybp&amp;includelower=false</a></p>
+<p>Download all of the whales as tabular data:</p>
+<p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/occ?taxon=cetacea&amp;output=csv">http://earthlifeconsortium.org/api_v1/occ?taxon=cetacea&amp;output=csv</a></p>
+</div>
+</div>
+<div class="section" id="locales">
+<h2>Locales<a class="headerlink" href="#locales" title="Permalink to this headline">¶</a></h2>
+<p>A locale is a cube of time-space delimited with geographic units and geologic time bounds.</p>
+<dl class="docutils">
+<dt><strong>Base path</strong></dt>
+<dd><code class="docutils literal"><span class="pre">http://earthlifeconsortium.org/api_v1/loc?</span></code></dd>
+</dl>
+<p><strong>Parameters</strong></p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">idlist=database:datatype:id_number,[...]</span></code></dt>
+<dd><dl class="first last docutils">
+<dt>Comma separated list of database specific ID numbers in the ELC extended format:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">database</span></code>: Subquery database name. Only first four characters are read so, for example, either “neot” or “neotoma” may be used</li>
+<li><code class="docutils literal"><span class="pre">datatype</span></code>: Short name for the data object to be returned. This is relative to both the database and the endpoint in question</li>
+<li><code class="docutils literal"><span class="pre">id_number</span></code>: A database specific numerical identifier</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>ELC extended identifiers are both consumed and produced by various API routes. They consist of a three parameter, colon separated string which provides a universally unique identifier of a data resource object.</p>
+<p class="last">Examples of ELC IDs for the locale (<code class="docutils literal"><span class="pre">/loc</span></code>) route would be <code class="docutils literal"><span class="pre">neot:dst:998</span></code> or <code class="docutils literal"><span class="pre">pbdb:col:9191</span></code>. Because of the database specific names for locale data objects, neotoma will only use <code class="docutils literal"><span class="pre">dst</span></code> (dataset) and PBDB will only use <code class="docutils literal"><span class="pre">col</span></code> (collection).</p>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">bbox=POLYGON((...))</span></code></dt>
+<dd>Geographic bounding box for constraining the response. Must be a strictly formatted OGC WKT Polygon. The unaffiliated tool <a class="reference external" href="https://clydedacruz.github.io/openstreetmap-wkt-playground">OpenStreetMap WKT Playground</a> may be useful in graphically creating a polygon. Paste the generated WKT string into the <code class="docutils literal"><span class="pre">bbox</span></code> field of the ELC API. Type: <cite>str</cite></dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">agerange=geologic_age,[value,value][geologic_age|value]</span></code></dt>
+<dd>A single named geologic age or a comma-separated pair of numerical ages, geologic ages or a combination of the two. Order does not matter, returned ages will always reflect the minimum and maximum from the pairwise set. Type: <cite>str</cite> or <cite>float</cite></dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If a list of ELC universal identifiers, <code class="docutils literal"><span class="pre">idlist</span></code>, is not provided, then either <code class="docutils literal"><span class="pre">bbox</span></code> or <code class="docutils literal"><span class="pre">agerange</span></code> must be specified.</p>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">ageunits=ybp|ka|ma</span></code></dt>
+<dd>Units of geologic age to be used in the query. Age values passed to the API will be interpreted in the context of this parameter. All time specific returned values will also be converted to match this parameter. Type: <cite>str</cite>. Default: “Ma”</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">coordtype=modern|paleo</span></code></dt>
+<dd>Configure the type of cartesian coordinates to be included in the response. Most resource databases will store the geography of occurrences and other data objects using modern day coordinates. However, with some limitations (see <code class="docutils literal"><span class="pre">misc/paleocoordinates</span></code> route below) the API is able to convert the coordinates in to a historical projection. Type: <cite>str</cite>. Default: “modern”</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">limit=value</span></code></dt>
+<dd>Impose a limit on the number of records returned from each database. Useful for testing or in conjuction with the <code class="docutils literal"><span class="pre">offset</span></code> parameter. Set to a very large number to negate any default limits set on any of the subqueried database resources. Type: <cite>int</cite>. Default: “999999”</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">offset=value</span></code></dt>
+<dd>Select a sequential record number to begin the return. Useful in conjunction with <code class="docutils literal"><span class="pre">limit</span></code> to chunk very large returns. For example, <code class="docutils literal"><span class="pre">?limit=1000&amp;offset=0</span></code> would return the first 1000 records and <code class="docutils literal"><span class="pre">?limit=1000&amp;offset=1000</span></code> the next 1000 records. Handling of this is specific to the resource database and has no relationship of any data record number, merely a database table row. If not included, the response will always begin with the first record. Type: <cite>int</cite></dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">output=json|csv</span></code></dt>
+<dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortened MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “json”</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">show=all|poll|idx</span></code></dt>
+<dd><p class="first">Configure the objects to be included in the return. This parameter is ignored if the selected output format is “csv”. Type: <cite>str</cite>. Default: “all”</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">all</span></code>: All data records and meta-data</li>
+<li><code class="docutils literal"><span class="pre">poll</span></code>: Only the meta-data block with summary statistics</li>
+<li><code class="docutils literal"><span class="pre">idx</span></code>: A list of the endpoints primary data indicies</li>
+</ul>
+</div></blockquote>
+</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">run=all|database_name[,database_name,</span> <span class="pre">...]</span></code></dt>
+<dd>Single or comma separated list of resource databases for the API to query. Type: <cite>str</cite>. Default: “all”</dd>
+</dl>
+<p><strong>Examples</strong></p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>Query based on known identification numbers obtained from a different endpoint or elsewhere:</p>
+<p><a class="reference external" href="http://earthlifeconsortium.org/api_v1/loc?idlist=pbdb:col:9191,neot:dst:713,pbdb:col:100,pbdb:col:28983">http://earthlifeconsortium.org/api_v1/loc?idlist=pbdb:col:9191,neot:dst:713,pbdb:col:100,pbdb:col:28983</a></p>
+<p>Find locales within a geographic bound roughly covering the Australian state of Victoria:</p>
+<p><a class="reference external" href="http://earthlifeconsortium.org/api_v1/loc?bbox=POLYGON((139.8%20-33.7,%20150.1%20-33.7,%20150.1%20-39.1,%20139.8%20-39.1,%20139.8%20-33.7))">http://earthlifeconsortium.org/api_v1/loc?bbox=POLYGON((139.8%20-33.7,%20150.1%20-33.7,%20150.1%20-39.1,%20139.8%20-39.1,%20139.8%20-33.7))</a></p>
+<p class="last">Note: The WKT format incudes spaces and the “%20”s in string above indicate these spaces (aka. an escape code). These should be automatically inserted if you paste in a WKT polygon string from a site like <a class="reference external" href="http://boundingbox.klokantech.com">BoundingBox</a>.</p>
+</div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p>References returns bibliographic information on the publications from which other data are derived.</p>
+<dl class="docutils">
+<dt><strong>Base path</strong></dt>
+<dd><code class="docutils literal"><span class="pre">http://earthlifeconsortium.org/api_v1/ref?</span></code></dd>
+</dl>
+<p><strong>Parameters</strong></p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">idlist=database:datatype:id_number,[...]</span></code></dt>
+<dd><dl class="first last docutils">
+<dt>Comma separated list of database specific ID numbers in the ELC extended format:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">database</span></code>: Subquery database name. Only first four characters are read so, for example, either “neot” or “neotoma” may be used</li>
+<li><code class="docutils literal"><span class="pre">datatype</span></code>: Short name for the data object to be returned. This is relative to both the database and the endpoint in question</li>
+<li><code class="docutils literal"><span class="pre">id_number</span></code>: A database specific numerical identifier</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Examples of valid ELC IDs for the references (<code class="docutils literal"><span class="pre">/ref</span></code>) route include <code class="docutils literal"><span class="pre">pbdb:ref:100</span></code> and <code class="docutils literal"><span class="pre">neot:pub:234</span></code>. Database specific datatype names are again used in the ID construct, the ELC API route happens to be called <code class="docutils literal"><span class="pre">/ref</span></code> merely because there can only be one name.</p>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">output=json|csv|bibjson|ris</span></code></dt>
+<dd>File format of the data return. Serialized JSON, structured BibJSON, tabular CSV or RIS interchange formats. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortened MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “bibjson”</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">show=all|poll|idx</span></code></dt>
+<dd><p class="first">Configure the objects to be included in the return. This parameter is ignored if the selected output format is “csv”. Type: <cite>str</cite>. Default: “all”</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">all</span></code>: All data records and meta-data</li>
+<li><code class="docutils literal"><span class="pre">poll</span></code>: Only the meta-data block with summary statistics</li>
+<li><code class="docutils literal"><span class="pre">idx</span></code>: A list of the endpoints primary data indicies</li>
+</ul>
+</div></blockquote>
+</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">run=all|database_name[,database_name,</span> <span class="pre">...]</span></code></dt>
+<dd>Single or comma separated list of resource databases for the API to query. Type: <cite>str</cite>. Default: “all”</dd>
+</dl>
+<p><strong>Examples</strong></p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>Specify a list of references and use the default output format of BibJSON <a class="footnote-reference" href="#id9" id="id2">[1]</a></p>
+<p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/ref?idlist=pbdb:col:60676,neot:dst:5664,neot:dst:5562,pbdb:col:105101">http://earthlifeconsortium.org/api_v1/ref?idlist=pbdb:col:60676,neot:dst:5664,neot:dst:5562,pbdb:col:105101</a></p>
+</div>
+</div>
+<div class="section" id="taxonomy">
+<h2>Taxonomy<a class="headerlink" href="#taxonomy" title="Permalink to this headline">¶</a></h2>
+<p>Taxonomy returns the classification of a given taxon.</p>
+<dl class="docutils">
+<dt><strong>Base path</strong></dt>
+<dd><code class="docutils literal"><span class="pre">http://earthlifeconsortium.org/api_v1/tax?</span></code></dd>
+</dl>
+<p><strong>Parameters</strong></p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">taxon=taxon_name|genus+species</span></code></dt>
+<dd>A single name or comma-separated list of taxa at any taxonomic level or a 2-3 word pair referring to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Paleobiology Database: Taxonomic names returned by the Paleobiology Database reflect synonymies as entered from the published scientific literature and are dynamically updated. Documentation of the Paleobiology Database data model is provided by Peters, S.E. and McClennen, M., 2016. The Paleobiology Database application programming interface. Paleobiology, 42(1), pp.1-7.</p>
+<p>Neotoma: Taxonomic names returned by the Neotoma databases reflect a static taxonomy as determined by taxonomic experts. Details of these determinations can be found <a class="reference external" href="http://neotoma-manual.readthedocs.io/en/latest/db_design_concepts.html#taxonomy-and-synonymy">here</a>.</p>
+<p class="last">ELC API returns for any given taxon will include each database’s understanding of what is contained in the given taxon. If the taxonomic name does NOT occur in the given database, the ELC API will not return any data from that database. These two taxonomic concepts may not be the same in each included database.</p>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">idlist=database:datatype:id_number,[...]</span></code></dt>
+<dd><dl class="first last docutils">
+<dt>Comma separated list of database specific ID numbers in the ELC extended format:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">database</span></code>: Subquery database name. Only first four characters are read so, for example, either “neot” or “neotoma” may be used</li>
+<li><code class="docutils literal"><span class="pre">datatype</span></code>: Short name for the data object to be returned. This is relative to both the database and the endpoint in question</li>
+<li><code class="docutils literal"><span class="pre">id_number</span></code>: A database specific numerical identifier</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Either a taxon name or a list of ELC formatted taxonomic IDs must be provided. Examples of valid ELC IDs for the taxonomy (<code class="docutils literal"><span class="pre">/tax</span></code>) route include <code class="docutils literal"><span class="pre">pbdb:txn:929</span></code> and <code class="docutils literal"><span class="pre">neot:txn:34</span></code>.</p>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">includelower=true|false</span></code></dt>
+<dd>Include all species and subspecies of a named genera in the response. For PBDB the taxonomy system is used, for other databases, this flag triggers wildcard completion. This works well for species epithets but not for higher level taxa. Type: <cite>boolean</cite>. Default: “false”</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">output=json|csv</span></code></dt>
+<dd>File format of the data return. Serialized JSON or tabular CSV. The meta-data block is a separate JSON object and thus is not included in the CSV file. The file name of the CSV file will include a shortened MD5 hash of the response data for identification purposes. Type: <cite>str</cite>. Default: “json”</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">show=all|poll|idx</span></code></dt>
+<dd><p class="first">Configure the objects to be included in the return. This parameter is ignored if the selected output format is “csv”. Type: <cite>str</cite>. Default: “all”</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">all</span></code>: All data records and meta-data</li>
+<li><code class="docutils literal"><span class="pre">poll</span></code>: Only the meta-data block with summary statistics</li>
+<li><code class="docutils literal"><span class="pre">idx</span></code>: A list of the endpoints primary data indicies</li>
+</ul>
+</div></blockquote>
+</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">run=all|database_name[,database_name,</span> <span class="pre">...]</span></code></dt>
+<dd>Single or comma separated list of resource databases for the API to query. Type: <cite>str</cite>. Default: “all”</dd>
+</dl>
+<p><strong>Examples</strong></p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>Search all subtaxa of order <cite>Carcharocles</cite>, making sure that megalodon is where it should be:</p>
+<p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/tax?taxon=Carcharocles&amp;includelower=true">http://earthlifeconsortium.org/api_v1/tax?taxon=Carcharocles&amp;includelower=true</a></p>
+</div>
+</div>
+<div class="section" id="miscellaneous-route">
+<h2>Miscellaneous route<a class="headerlink" href="#miscellaneous-route" title="Permalink to this headline">¶</a></h2>
+<p>ELC utilities ancillary to core data retrieval are collected in the <code class="docutils literal"><span class="pre">misc</span></code> controller and are accessible by appending the desired route to the base path.</p>
+<div class="section" id="paleocoordinates">
+<h3>Paleocoordinates<a class="headerlink" href="#paleocoordinates" title="Permalink to this headline">¶</a></h3>
+<p>Convert modern day cartesian coordinates into paleocoordinates using the GPlates <a class="footnote-reference" href="#id10" id="id4">[2]</a> tectonics reconstruction model. Operationally this model is hosted by the Macrostrat Project <a class="footnote-reference" href="#id11" id="id5">[3]</a> at the University of Wisconsin.</p>
+<dl class="docutils">
+<dt><strong>Base path</strong></dt>
+<dd><code class="docutils literal"><span class="pre">http://earthlifeconsortium.org/api_v1/misc/paleocoords?</span></code></dd>
+</dl>
+<p><strong>Parameters</strong></p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">coords=latitude,longitude</span></code></dt>
+<dd>Modern day coordinates ranging from latitude -90 to 90 (southern latitudes are negative) and longitude -180 to 180 (western longitudes are negative) decimal degrees of arbitrary precision. Type: <cite>float</cite></dd>
+</dl>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Due to restriction in GPlates, some coordinates are not rotatable. In this case, an error message will be returned.</p>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">age=value</span></code></dt>
+<dd>Historical age of desired paleocoordinates where <code class="docutils literal"><span class="pre">value</span></code> is an integer from 1 to 580 Ma or a named geologic age. If a numerical age is specified, it may be in the units of the ageunits parameter. Type: <cite>str</cite> or <cite>int</cite></dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The Ma 580 limit <strong>only</strong> applies to the paleocoordinates calculation. <code class="docutils literal"><span class="pre">agerange</span></code> searches in other API routes refer to the actual ages of the paleobiological records and have no limits.</p>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">ageunits=ybp|ka|ma</span></code></dt>
+<dd>Units of geologic age to be used in the query. Age values passed to the API will be interpreted in the context of this parameter. All time specific returned values will also be converted to match this parameter. Type: <cite>str</cite>. Default: “Ma”</dd>
+</dl>
+<p><strong>Examples</strong></p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>Determine the paleocoordinates of Washington D.C. in the middle of the Eocene:</p>
+<p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/misc/paleocoords?coords=38.9,-77.02&amp;age=eocene">http://earthlifeconsortium.org/api_v1/misc/paleocoords?coords=38.9,-77.02&amp;age=eocene</a></p>
+</div>
+</div>
+<div class="section" id="timebounds">
+<h3>Timebounds<a class="headerlink" href="#timebounds" title="Permalink to this headline">¶</a></h3>
+<p>Return the oldest and youngest ages (bounds) spanning the specified range. Geologic ages are resolved according to ICS definitions <a class="footnote-reference" href="#id12" id="id6">[4]</a>.</p>
+<dl class="docutils">
+<dt><strong>Base path</strong></dt>
+<dd><code class="docutils literal"><span class="pre">http://earthlifeconsortium.org/api_v1/misc/timebound?</span></code></dd>
+</dl>
+<p><strong>Parameters</strong></p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">agerange=geologic_age,[value,value][geologic_age|value]</span></code></dt>
+<dd>A single named geologic age or a comma-separated pair of numerical ages, geologic ages or a combination of the two. Order does not matter, returned ages will always reflect the minimum and maximum from the pairwise set. Type: <cite>str</cite> or <cite>float</cite></dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">ageunits=ybp|ka|ma</span></code></dt>
+<dd>Units of geologic age to be used in the query. Age values passed to the API will be interpreted in the context of this parameter. All time specific returned values will also be converted to match this parameter. Type: <cite>str</cite>. Default: “Ma”</dd>
+</dl>
+<p><strong>Examples</strong></p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>Determine the earliest and latest age from the Late Cretaceous epoch through the Selandian stage of the Paleocene:</p>
+<p><a class="reference external" href="http://earthlifeconsortium.org/api_v1/misc/timebound?agerange=late+cretaceous,selandian">http://earthlifeconsortium.org/api_v1/misc/timebound?agerange=late+cretaceous,selandian</a></p>
+<p>Time bound of just the Triassic in units of years before present:</p>
+<p><a class="reference external" href="http://earthlifeconsortium.org/api_v1/misc/timebound?agerange=triassic&amp;ageunits=ybp">http://earthlifeconsortium.org/api_v1/misc/timebound?agerange=triassic&amp;ageunits=ybp</a></p>
+<p>Time range of the Miocene through a selected age of 2 Ma:</p>
+<p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/misc/timebound?agerange=2,miocene">http://earthlifeconsortium.org/api_v1/misc/timebound?agerange=2,miocene</a></p>
+</div>
+</div>
+<div class="section" id="subtaxa">
+<h3>Subtaxa<a class="headerlink" href="#subtaxa" title="Permalink to this headline">¶</a></h3>
+<p>Return a list of all taxonomic names hierarchically below the specified taxon, optionally including synonyms.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This tool leverages the Paleobiology Database taxonomy system and, while comprehensive for many classes, may lack taxa for species that are not the historical focus of the database.</p>
+</div>
+<dl class="docutils">
+<dt><strong>Base path</strong></dt>
+<dd><code class="docutils literal"><span class="pre">http://earthlifeconsortium.org/api_v1/misc/subtaxa?</span></code></dd>
+</dl>
+<p><strong>Parameters</strong></p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">taxon=taxon_name|genus+species</span></code></dt>
+<dd>A single name or comma-separated list of taxa at any taxonomic level or a 2-3 word pair referring to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">synonyms=true|false</span></code></dt>
+<dd>Include known synonymous names for the children of the specified parent taxon together with recognized names. If “False” only the primary sub taxa will be retrieved. Type: <cite>Boolean</cite>. Default: “true”</dd>
+</dl>
+<p><strong>Examples</strong></p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>Retrieve all lower taxa of the family <cite>Tyrannosauridae</cite> excluding synonyms:</p>
+<p><a class="reference external" href="http://earthlifeconsortium.org/api_v1/misc/subtaxa?taxon=tyrannosauridae&amp;synonyms=false">http://earthlifeconsortium.org/api_v1/misc/subtaxa?taxon=tyrannosauridae&amp;synonyms=false</a></p>
+<p>Check to see if there are any known synonyms of <cite>Dorudon atrox</cite>:</p>
+<p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/misc/subtaxa?taxon=dorudon+atrox&amp;synonyms=true">http://earthlifeconsortium.org/api_v1/misc/subtaxa?taxon=dorudon+atrox&amp;synonyms=true</a></p>
+</div>
+</div>
+<div class="section" id="mobile">
+<h3>Mobile<a class="headerlink" href="#mobile" title="Permalink to this headline">¶</a></h3>
+<p>A custom route designed to return a combination of occurrence data with associated taxonomic and select environmental details. The response is nested JSON with a highly compact vocabulary.</p>
+<dl class="docutils">
+<dt><strong>Base path</strong></dt>
+<dd><code class="docutils literal"><span class="pre">http://earthlifeconsortium.org/api_v1/misc/mobile?</span></code></dd>
+</dl>
+<p><strong>Parameters</strong></p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">taxon=taxon_name|genus+species</span></code></dt>
+<dd>A single name or comma-separated list of taxa at any taxonomic level or a 2-3 word pair referring to a single species. As spaces are not allowed in HTTP URLs, the taxon names must be connected by a “+” symbol or a “%20” escape sequence. Type: <cite>str</cite>.</dd>
+</dl>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">bbox=POLYGON((...))</span></code></dt>
+<dd>Geographic bounding box for constraining the response. Must be a strictly formatted OGC WKT Polygon. The unaffiliated tool <a class="reference external" href="https://clydedacruz.github.io/openstreetmap-wkt-playground">OpenStreetMap WKT Playground</a> may be useful in graphically creating a polygon. Paste the generated WKT string into the <code class="docutils literal"><span class="pre">bbox</span></code> field of the ELC API. Type: <cite>str</cite></dd>
+</dl>
+<p><strong>Compact vocabulary</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="92%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>src</td>
+<td>ELC formatted unique occurrence ID</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="94%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">loc</th>
+<th class="head">Location parameter block</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>age</td>
+<td>Early, Late age (Ma)</td>
+</tr>
+<tr class="row-odd"><td>crd</td>
+<td>Coordinates (GeoJSON)</td>
+</tr>
+<tr class="row-even"><td>pla</td>
+<td>Place (county/district, state/province, country)</td>
+</tr>
+<tr class="row-odd"><td>ste</td>
+<td>Site/Collection description</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="93%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">org</th>
+<th class="head">Organism parameter block</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>img</td>
+<td>Phylopic image URI</td>
+</tr>
+<tr class="row-odd"><td>itv</td>
+<td>Early, Late geologic existence interval</td>
+</tr>
+<tr class="row-even"><td>nam</td>
+<td>Common name</td>
+</tr>
+<tr class="row-odd"><td>sts</td>
+<td>Status of modern existence</td>
+</tr>
+<tr class="row-even"><td>txn</td>
+<td>Taxonomic name</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="93%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">eco</th>
+<th class="head">Ecology parameter block</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dte</td>
+<td>Diet/Feeding mode</td>
+</tr>
+<tr class="row-odd"><td>env</td>
+<td>Environmental description</td>
+</tr>
+<tr class="row-even"><td>grp</td>
+<td>Ecological/Taxonomic grouping/env basis</td>
+</tr>
+<tr class="row-odd"><td>hab</td>
+<td>Life habitat, grouping or depth</td>
+</tr>
+<tr class="row-even"><td>mot</td>
+<td>Motility and/or attachment</td>
+</tr>
+<tr class="row-odd"><td>ont</td>
+<td>Ontology</td>
+</tr>
+<tr class="row-even"><td>rep</td>
+<td>Mode of reproduction</td>
+</tr>
+<tr class="row-odd"><td>typ</td>
+<td>Collection/Dataset type</td>
+</tr>
+<tr class="row-even"><td>vis</td>
+<td>Vision capability</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples</strong></p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>Find all occurrences of the extant plant <cite>Borreria</cite> and the rodent <cite>Dasyprocta</cite> in Brazil:</p>
+<p class="last"><a class="reference external" href="http://earthlifeconsortium.org/api_v1/misc/mobile?taxon=Dasyprocta,Borreria&amp;bbox=POLYGON((-73.037109375%20-6.839169626342809%2C-64.423828125%202.635788574166611%2C-51.76757812500001%202.1088986592431382%2C-36.298828125000014%20-6.31529853833004%2C-52.29492187499999%20-32.546813173515154%2C-57.56835937500001%20-16.636191878397653%2C-73.037109375%20-6.839169626342809))">http://earthlifeconsortium.org/api_v1/misc/mobile?taxon=Dasyprocta,Borreria&amp;bbox=POLYGON((-73.037109375%20-6.839169626342809%2C-64.423828125%202.635788574166611%2C-51.76757812500001%202.1088986592431382%2C-36.298828125000014%20-6.31529853833004%2C-52.29492187499999%20-32.546813173515154%2C-57.56835937500001%20-16.636191878397653%2C-73.037109375%20-6.839169626342809))</a></p>
+</div>
+<dl class="docutils">
+<dt><cite>Metadata</cite></dt>
+<dd>All <code class="docutils literal"><span class="pre">full</span></code> or <code class="docutils literal"><span class="pre">poll</span></code> JSON responses include a metadata block which importantly indicates the URLs composed for the resource databases in addition to a timestamp, the age units and the type of geographic coordinates retrieved. If desired, the subquery URL may be used to delve deeper into each individual database.</dd>
+<dt><cite>Error handling</cite></dt>
+<dd>API errors are reported according to IETF <a class="footnote-reference" href="#id13" id="id8">[5]</a> standards including both server level 500 series and client level 400 series HTTP errors. As the ELC API leverages remote data service resources for much of it’s functionality, bad requests to or lack of availability of these remote services may result in the propogation of a 400 level error as ELC is the client in this circumstance.</dd>
+</dl>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id9" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>BibJSON: Representing bibliographic metadata in JSON. <a class="reference external" href="http://okfnlabs.org/bibjson/">http://okfnlabs.org/bibjson/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id10" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[2]</a></td><td>Wright, N., S. Zahirovic, R. D. Müller, and M. Seton (2013), Towards community-driven, open-access paleogeographic reconstructions: integrating open-access paleogeographic and paleobiology data with plate tectonics, Biogeosciences, 10, 1529-1541. DOI: <a class="reference external" href="https://www.researchgate.net/publication/235789001_Towards_community-driven_paleogeographic_reconstructions_Integrating_open-access_paleogeographic_and_paleobiology_data_with_plate_tectonics">10.5194/bg-10-1529-2013</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id11" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[3]</a></td><td>Macrostrat public API. <a class="reference external" href="https://macrostrat.org/#api">https://macrostrat.org/#api</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id12" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[4]</a></td><td>Gradstein, F. M., J. G. Ogg, M. D. Schmitz, and G. M. Ogg. 2012. <a class="reference external" href="https://www.elsevier.com/books/the-geologic-time-scale-2012/gradstein/978-0-444-59425-9">A Geologic Time Scale 2012</a>, Volume 2. Elsevier, Amsterdam, 1144 pp.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id13" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id8">[5]</a></td><td>Internet Engineering Task Force: Problem Details for HTTP APIs. <a class="reference external" href="https://tools.ietf.org/html/draft-ietf-appsawg-http-problem-00">https://tools.ietf.org/html/draft-ietf-appsawg-http-problem-00</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2018, ELC Working Group.
+      
+      |
+      <a href="../_sources/docs/api-docs.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/EarthLifeConsortium/elc_api" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>
