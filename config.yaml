@@ -5,7 +5,7 @@ run_list:
   # - sead
   # - idig
 resource_api:
-  neotoma: 'http://api-dev.neotomadb.org/v2.0/data/'
+  neotoma: 'http://api.neotomadb.org/v2.0/data/'
   pbdb: 'https://paleobiodb.org/data1.2/'
   sead: 'http://snares.humlab.umu.se:3009/'
 native_ageunits:
