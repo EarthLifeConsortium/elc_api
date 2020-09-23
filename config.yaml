@@ -17,7 +17,7 @@ db_occ_endpt:
   pbdb: 'occs/list.json'
   sead: 'site_sample_taxon_abundance'
 db_loc_endpt:
-  neotoma: 'datasets'
+  neotoma: 'datasets_elc'
   pbdb: 'colls/list.json'
 db_tax_endpt:
   neotoma: 'taxa'

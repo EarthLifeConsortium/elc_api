@@ -52,7 +52,7 @@ def mobile_req(return_obj, url_path, payload, db):
 
     # Request occurrences from The Paleobiology Database
     if db == 'pbdb':
-        pbdb_t0= time()
+        pbdb_t0 = time()
 
         #  import yaml
         #  with open('swagger_server/lookup/iso_3166_alpha2.yaml') as f:
@@ -63,7 +63,7 @@ def mobile_req(return_obj, url_path, payload, db):
                        extids=False)
 
         occ_t0 = time()
-        
+
         try:
             occs, url = trigger(url_path, payload, db)
         except ValueError as err:
@@ -106,7 +106,7 @@ def mobile_req(return_obj, url_path, payload, db):
             for rec in taxon_resp['records']:
                 if rec.get('oid'):
                     taxa.add(rec['oid'])
-                    
+
         # Only geography named, parameterize taxa from occ response
         else:
             taxa = set()
@@ -228,7 +228,8 @@ def mobile_req(return_obj, url_path, payload, db):
             return_obj.append(mob)
 
         pbdb_time = round(time() - pbdb_t0, 3)
-        print('PBDB other processing = ' + str(round(pbdb_time - pbdb_occ_call - pbdb_taxa_call, 4)))
+        print('PBDB other processing = ' +
+              str(round(pbdb_time - pbdb_occ_call - pbdb_taxa_call, 4)))
         print('PBDB total runtime = ' + str(pbdb_time))
 
     # Request occurrences from the Neotoma Paleoecology Database
@@ -244,7 +245,7 @@ def mobile_req(return_obj, url_path, payload, db):
         #      geo_map = yaml.safe_load(f)
 
         #  # Build GeoPoliticalUnit index
-        #  base = 'http://api-dev.neotomadb.org/v2.0/data/'
+        #  base = 'http://api.neotomadb.org/v2.0/data/'
         #  route = 'dbtables/sitegeopolitical'
         #  uri = ''.join([base, route])
         #  params = ''
@@ -279,14 +280,14 @@ def mobile_req(return_obj, url_path, payload, db):
             return return_obj
 
         # Build taxa lookup dictionary
-        tax_base = 'http://api-dev.neotomadb.org/v2.0/data/taxa'
+        tax_base = 'http://api.neotomadb.org/v2.0/data/taxa/'
 
         # Taxa named, perform recursive search on DB to get details
         if payload.get('taxonname'):
             tax_payload = {'taxonname': payload['taxonname'],
                            'lower': 'true',
                            'limit': 999999}
-            
+
             taxa_t0 = time()
 
             try:
@@ -377,8 +378,8 @@ def mobile_req(return_obj, url_path, payload, db):
                                            str(rec['age']['age'])])
                     mob['loc'].update(age=age_range)
 
-                elif (rec['age'].get('ageolder') and
-                      rec['age'].get('ageyounger')):
+                elif ((rec['age'].get('ageolder')
+                      and rec['age'].get('ageyounger'))):
                     age_range = ', '.join([str(rec['age']['ageolder']),
                                            str(rec['age']['ageyounger'])])
                     mob['loc'].update(age=age_range)
@@ -404,6 +405,7 @@ def mobile_req(return_obj, url_path, payload, db):
             return_obj.append(mob)
 
         total_time = time() - neot_t0
-        print('Neotoma other processing = ' + str(round(total_time - neot_occ_call - neot_taxa_call, 4))) 
+        print('Neotoma other processing = '
+              + str(round(total_time - neot_occ_call - neot_taxa_call, 4)))
         print('Neotoma runtime = ' + str(round(time() - neot_t0, 3)))
     return return_obj
