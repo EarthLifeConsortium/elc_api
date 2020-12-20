@@ -6,7 +6,7 @@
 
 FROM paleomacro_earthlife_preload
 
-EXPOSE 8008
+EXPOSE 8008 8003
 
 # To build this container with the proper timezone setting, use --build-arg TZ=xxx
 # where xxx specifies the timezone in which the server is located, for example
