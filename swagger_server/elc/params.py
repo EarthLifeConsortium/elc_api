@@ -1,5 +1,7 @@
 """Common parameter parsing functions for the API controllers."""
 
+import re
+
 
 def set_options(req_args, endpoint):
     """Return a dictionary with runtime options and config."""
@@ -103,7 +105,7 @@ def id_parse(ids, db, id_type):
     import re
 
     # NEW RESOURCE: Add additional database names and datatypes below
-    spec = {'dbase': ['pbdb', 'neot'],
+    spec = {'dbase': ['pbdb', 'neot', 'sead'],
             'dtype': ['occ', 'sit', 'dst', 'col', 'ref', 'pub', 'txn']}
 
     numeric_ids = list()
@@ -117,10 +119,11 @@ def id_parse(ids, db, id_type):
         try:
             database = re.search('^\w+(?=:)', id).group(0)
             database = database[:4]
-            datatype = re.search('(?<=:).+(?=:)', id).group(0)
-            id_num = re.search('(?:.*?:){2}(.*)', id).group(1)
+            datatype = re.search('(?<=:)[^:]+', id).group(0)
+            fulltype = re.search('(?<=:).+(?=:)', id).group(0)
+            id_num = re.search('\d+$', id).group(0)
         except AttributeError as err:
-            msg = 'Incorrectly formatted ID: {0:s}'.format(id)
+            msg = 'Incorrectly formatted Identifier: {0:s}'.format(id)
             raise ValueError(400, msg)
 
         if database.lower() not in spec['dbase']:
@@ -131,12 +134,15 @@ def id_parse(ids, db, id_type):
             msg = 'Unknown data type: {0:s}'.format(id)
             raise ValueError(400, msg)
 
-        if not id_num.isnumeric():
-            msg = 'Invalid numerical ID: {0:s}'.format(id)
+        if not id_num:
+            msg = 'Identifier does not end in a number: {0:s}'.format(id)
             raise ValueError(400, msg)
 
         if database.lower() == db_tag and datatype.lower() == id_type:
-            numeric_ids.append(int(id_num))
+            if db_tag == 'sead' and id_type == 'txn':
+                numeric_ids.append(id)
+            else:
+                numeric_ids.append(id_num)
 
     return numeric_ids
 
@@ -146,13 +152,20 @@ def set_id(ids, db, endpoint, options):
     # NEW RESOURCE: Add additional database-to-datatype mappings below
     if endpoint in ['loc', 'ref']:
         xmap = {'pbdb': ['col', 'coll_id'],
-                'neotoma': ['dst', 'datasetid']}
+                'neotoma': ['dst', 'datasetid'],
+                'sead': ['sit', 'site_id']}
     #  elif endpoint == 'ref':
     #      xmap = {'pbdb': ['ref', 'ref_id'],
     #              'neotoma': ['pub', 'pubid']}
+    elif endpoint == 'occ':
+        xmap = {'pbdb': ['occ', 'occ_id'],
+                'neotoma': ['occ', 'occurrenceid'],
+                'sead': ['occ', 'occ_id']}
+
     elif endpoint == 'tax':
         xmap = {'pbdb': ['txn', 'taxon_id'],
-                'neotoma': ['txn', 'taxonid']}
+                'neotoma': ['txn', 'taxonid'],
+                'sead': ['txn', 'taxon_id']}
     else:
         return {}
 
@@ -164,10 +177,55 @@ def set_id(ids, db, endpoint, options):
     # Set dispacher to skip the requested DB, no IDs in the query
     if not id_numbers:
         options.update(skip=True)
+        print("Skip database " + db)
 
-    id_string = ','.join(str(x) for x in id_numbers)
+    # For SEAD, we need to set a different parameter for each taxonomic rank
 
-    return {xmap[db][1]: id_string}
+    if db == 'sead':
+        if endpoint == 'tax':
+            return_obj = dict()
+            spc_list = list()
+            gen_list = list()
+            fam_list = list()
+            ord_list = list()
+            
+            for ident in id_numbers:
+                id_num = re.search('\d+$', ident).group(0)
+                id_type = re.search('^.+(?=:)', ident).group(0)
+                if id_type == 'sead:txn:spc':
+                    spc_list.append(id_num)
+                elif id_type == 'sead:txn:gen':
+                    gen_list.append(id_num)
+                elif id_type == 'sead:txn:fam':
+                    fam_list.append(id_num)
+                elif id_type == 'sead:txn:ord':
+                    ord_list.append(id_num)
+                    
+            if spc_list:
+                return_obj.update(taxon_id=','.join(spc_list))
+                return_obj.update(sead_id=1)
+            
+            if gen_list:
+                return_obj.update(genus_id=','.join(gen_list))
+                return_obj.update(sead_id=1)
+            
+            if fam_list:
+                return_obj.update(family_id=','.join(fam_list))
+                return_obj.update(sead_id=1)
+            
+            if ord_list:
+                return_obj.update(order_id=','.join(ord_list))
+                return_obj.update(sead_id=1)
+            
+            return return_obj
+
+        else:
+            return {xmap[db][1]: 'in.(' + ','.join(id_numbers) + ')'}
+
+    # For everything else, we just set a single parameter.
+
+    else:
+        return {xmap[db][1]: ','.join(id_numbers)}
 
 
 def parse(req_args, options, db, endpoint):
@@ -177,7 +235,7 @@ def parse(req_args, options, db, endpoint):
     # Alowable endpoint parameters
 
     spec = dict()
-    spec.update(occ=['bbox', 'agerange', 'ageunits', 'timerule', 'taxon',
+    spec.update(occ=['idlist', 'bbox', 'agerange', 'ageunits', 'timerule', 'taxon',
                      'includelower', 'coordtype', 'limit', 'offset',
                      'show', 'output', 'run'])
     spec.update(loc=['idlist', 'bbox', 'agerange', 'ageunits', 'timerule',
@@ -202,13 +260,14 @@ def parse(req_args, options, db, endpoint):
             raise ValueError(400, msg)
 
     # NEW RESOURCE: Add to the list if database support exits
+
     # Using the 'run=' parameter, default runtime list may be overridden
     if db not in ['pbdb', 'neotoma', 'sead']:
         msg = 'Database support lacking: {0:s}'.format(db)
         raise ValueError(501, msg)
 
     # Generate sub-query api payload
-
+    
     payload = dict()
 
     if 'taxon' in req_args.keys():
@@ -216,14 +275,15 @@ def parse(req_args, options, db, endpoint):
         try:
             payload = taxa.set_taxon(taxon=req_args.get('taxon'),
                                      subtax=options.get('includelower'),
-                                     db=db)
+                                     db=db,
+                                     endpoint=endpoint)
         except ValueError as err:
             raise ValueError(err.args[0], err.args[1])
 
     payload.update(aux.set_db_special(db, endpoint))
 
     # NEW RESOURCE: Add to the list if database supports limiting
-    if db in ['pbdb', 'neotoma']:
+    if db in ['pbdb', 'neotoma', 'sead']:
         payload.update(limit=options.get('limit'))
 
     if 'idlist' in req_args.keys():
@@ -261,5 +321,5 @@ def parse(req_args, options, db, endpoint):
             payload.update(geog.set_location(wkt=req_args.get('bbox'), db=db))
         except ValueError as err:
             raise ValueError(err.args[0], err.args[1])
-
+    
     return payload

@@ -45,7 +45,8 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
     for db in run_list:
 
         t0 = time()
-
+        options.update(skip=False)
+        
         # Configure parameter payload for api subquery
 
         try:
@@ -60,6 +61,11 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
                                      detail=err.args[1],
                                      type='about:blank')
 
+        # skip this database if no ids specified
+
+        if options.get('skip'):
+            continue
+        
         url_path = ''.join([config.get('resource_api', db),
                             config.get('db_occ_endpt', db)])
 

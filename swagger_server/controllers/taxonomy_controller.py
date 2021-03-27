@@ -6,7 +6,7 @@ Endpoint for miscelaneous queries on specific species taxonomy.
 
 import connexion
 from ..elc import config, params, aux, subreq, formatter
-from ..handlers import router
+from ..handlers import router, sead
 from http_status import Status
 from time import time
 from flask import jsonify, Response
@@ -56,21 +56,51 @@ def tax(taxon=None, idlist=None, includelower=None, hierarchy=None, run=None):
 
         if options.get('skip'):
             continue
+        
+        # For SEAD, we must call a method that will do a complex lookup.
 
-        # Database API call
+        if db == 'sead':
+            if payload.get('sead_id'):
+                try:
+                    resp_json, api_call = sead.taxon_id_lookup(payload)
+                    
+                except ValueError as err:
+                    return connexion.problem(status=err.args[0],
+                                            title=Status(err.args[0]).name,
+                                            detail=err.args[1],
+                                            type='about:blank')
+                
+            elif taxon:
+                try:
+                    resp_json, api_call = sead.taxon_lookup(taxon)
+                
+                except ValueError as err:
+                    return connexion.problem(status=err.args[0],
+                                            title=Status(err.args[0]).name,
+                                            detail=err.args[1],
+                                            type='about:blank')
 
-        url_path = ''.join([config.get('resource_api', db),
-                            config.get('db_tax_endpt', db)])
+            else:
+                return connexion.problem(status='500',
+                                        title='Bad parameters',
+                                        detail='You must specify either taxon or idlist',
+                                        type='about:blank')
 
-        try:
-            resp_json, api_call = subreq.trigger(url_path, payload, db)
+        # Otherwise, we use the api call specified in the configuration file.
 
-        except ValueError as err:
-            return connexion.problem(status=err.args[0],
-                                     title=Status(err.args[0]).name,
-                                     detail=err.args[1],
-                                     type='about:blank')
-
+        else:
+            url_path = ''.join([config.get('resource_api', db),
+                                config.get('db_tax_endpt', db)])
+            
+            try:
+                resp_json, api_call = subreq.trigger(url_path, payload, db)
+                
+            except ValueError as err:
+                return connexion.problem(status=err.args[0],
+                                        title=Status(err.args[0]).name,
+                                        detail=err.args[1],
+                                        type='about:blank')
+            
         # Parse database response
 
         return_obj = router.response_decode(resp_json=resp_json,

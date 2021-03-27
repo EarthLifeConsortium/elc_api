@@ -5,7 +5,10 @@ def trigger(url_path, payload, db):
     """Primary safe requester method for external database resources."""
     import requests
     from ..elc import config
-
+    
+    print("Subrequest: " + url_path)
+    print("Parameters: ", payload)
+    
     try:
         resp = requests.get(url_path,
                             params=payload,
@@ -30,8 +33,9 @@ def trigger(url_path, payload, db):
     # Check the Content-Type of the return and decode the JSON object
 
     if 'application/json' not in resp.headers.get('content-type'):
-        msg = '{0:s} response is not of type application/json'.format(db)
-        raise ValueError(417, msg)
+        return dict(), resp.url
+        # msg = '{0:s} response is not of type application/json'.format(db)
+        # raise ValueError(417, msg)
 
     # Check that serialized JSON object is decodable
 
@@ -70,7 +74,7 @@ def mobile_req(return_obj, url_path, payload, db):
             raise ValueError(err.args[0], err.args[1])
 
         pbdb_occ_call = round(time() - occ_t0, 3)
-        print('PBDB Occ call = ' + str(pbdb_occ_call))
+        # print('PBDB Occ call = ' + str(pbdb_occ_call))
 
         # Return if no occurrences found for given parameters
         if 'records' not in occs.keys():
@@ -95,7 +99,7 @@ def mobile_req(return_obj, url_path, payload, db):
                 raise ValueError(err.args[0], err.args[1])
 
             pbdb_taxa_call = round(time() - taxa_t0, 3)
-            print('PBDB Taxa call = ' + str(pbdb_taxa_call))
+            # print('PBDB Taxa call = ' + str(pbdb_taxa_call))
 
             if 'records' not in taxon_resp.keys():
                 return return_obj
@@ -228,9 +232,9 @@ def mobile_req(return_obj, url_path, payload, db):
             return_obj.append(mob)
 
         pbdb_time = round(time() - pbdb_t0, 3)
-        print('PBDB other processing = ' +
-              str(round(pbdb_time - pbdb_occ_call - pbdb_taxa_call, 4)))
-        print('PBDB total runtime = ' + str(pbdb_time))
+        # print('PBDB other processing = ' +
+        #       str(round(pbdb_time - pbdb_occ_call - pbdb_taxa_call, 4)))
+        # print('PBDB total runtime = ' + str(pbdb_time))
 
     # Request occurrences from the Neotoma Paleoecology Database
     elif db == 'neotoma':
@@ -273,7 +277,7 @@ def mobile_req(return_obj, url_path, payload, db):
             raise ValueError(err.args[0], err.args[1])
 
         neot_occ_call = round(time() - occ_t0, 3)
-        print('Neotoma Occ call = ' + str(round(time() - occ_t0, 3)))
+        # print('Neotoma Occ call = ' + str(round(time() - occ_t0, 3)))
 
         # Return if no occurrences found for given parameters
         if 'data' not in occs:
@@ -296,7 +300,7 @@ def mobile_req(return_obj, url_path, payload, db):
                 raise ValueError(err.args[0], err.args[1])
 
             neot_taxa_call = round(time() - taxa_t0, 3)
-            print('Neotoma taxa call = ' + str(neot_taxa_call))
+            # print('Neotoma taxa call = ' + str(neot_taxa_call))
 
             if 'data' not in taxon_resp.keys():
                 return return_obj
@@ -405,7 +409,7 @@ def mobile_req(return_obj, url_path, payload, db):
             return_obj.append(mob)
 
         total_time = time() - neot_t0
-        print('Neotoma other processing = '
-              + str(round(total_time - neot_occ_call - neot_taxa_call, 4)))
-        print('Neotoma runtime = ' + str(round(time() - neot_t0, 3)))
+        # print('Neotoma other processing = '
+        # + str(round(total_time - neot_occ_call - neot_taxa_call, 4)))
+        # print('Neotoma runtime = ' + str(round(time() - neot_t0, 3)))
     return return_obj
