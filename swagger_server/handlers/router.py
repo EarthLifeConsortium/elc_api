@@ -45,6 +45,8 @@ def response_decode(resp_json, return_obj, options, db, endpoint):
             return sead.occurrences(resp_json, return_obj, options)
         if endpoint == 'tax':
             return sead.taxonomy(resp_json, return_obj, options)
+        if endpoint == 'loc':
+            return sead.locales(resp_json, return_obj, options)
     
     # NEW RESOURCE: Additional custom database handler calls here
 

@@ -106,7 +106,7 @@ def id_parse(ids, db, id_type):
 
     # NEW RESOURCE: Add additional database names and datatypes below
     spec = {'dbase': ['pbdb', 'neot', 'sead'],
-            'dtype': ['occ', 'sit', 'dst', 'col', 'ref', 'pub', 'txn']}
+            'dtype': ['occ', 'sit', 'dst', 'loc', 'col', 'ref', 'pub', 'txn']}
 
     numeric_ids = list()
     db_tag = db[:4]
@@ -153,7 +153,7 @@ def set_id(ids, db, endpoint, options):
     if endpoint in ['loc', 'ref']:
         xmap = {'pbdb': ['col', 'coll_id'],
                 'neotoma': ['dst', 'datasetid'],
-                'sead': ['sit', 'site_id']}
+                'sead': ['loc', 'locale_id']}
     #  elif endpoint == 'ref':
     #      xmap = {'pbdb': ['ref', 'ref_id'],
     #              'neotoma': ['pub', 'pubid']}
@@ -202,19 +202,19 @@ def set_id(ids, db, endpoint, options):
                     ord_list.append(id_num)
                     
             if spc_list:
-                return_obj.update(taxon_id=','.join(spc_list))
+                return_obj.update(taxon_id='in.(' + ','.join(spc_list) + ')')
                 return_obj.update(sead_id=1)
             
             if gen_list:
-                return_obj.update(genus_id=','.join(gen_list))
+                return_obj.update(genus_id='in.(' + ','.join(gen_list) + ')')
                 return_obj.update(sead_id=1)
             
             if fam_list:
-                return_obj.update(family_id=','.join(fam_list))
+                return_obj.update(family_id='in.(' + ','.join(fam_list) + ')')
                 return_obj.update(sead_id=1)
             
             if ord_list:
-                return_obj.update(order_id=','.join(ord_list))
+                return_obj.update(order_id='in.(' + ','.join(ord_list) + ')')
                 return_obj.update(sead_id=1)
             
             return return_obj

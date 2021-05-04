@@ -66,7 +66,7 @@ def occurrences(resp_json, return_obj, options):
         
         data.update(occ_id='sead:occ:{0:d}'.format(rec.get('occ_id')))
         data.update(taxon_id='sead:txn:spc:{0:d}'.format(rec.get('taxon_id')))
-        data.update(locale_id='sead:dst:{0:d}'.format(rec.get('locale_id')))
+        data.update(locale_id='sead:loc:{0:d}'.format(rec.get('locale_id')))
         
         # Family, Genus or Species name
         if rec.get('taxon'):
@@ -104,6 +104,42 @@ def occurrences(resp_json, return_obj, options):
     return return_obj
 
 
+def locales(resp_json, return_obj, options):
+    """Locations in space and time at which data was collected."""
+
+    for rec in resp_json:
+
+        data = dict()
+
+        data.update(locale_id='sead:loc:{0:d}'.format(rec.get('locale_id')))
+        
+        if rec.get('doi'):
+            data.update(doi=rec.get('doi'))
+        if rec.get('locale_name'):
+            data.update(locale_name=rec.get('locale_name'))
+        if rec.get('data_type'):
+            data.update(data_type=rec.get('data_type'))
+        if rec.get('occurrences_count'):
+            data.update(occurrences_count=rec.get('occurrences_count'))
+        if rec.get('site_id'):
+            data.update(site_id='sead:sit:{0:d}'.format(rec.get('site_id')))
+        
+        if rec.get('max_age'):
+            data.update(max_age=rec.get('max_age'))
+        if rec.get('min_age'):
+            data.update(min_age=rec.get('min_age'))
+        
+        if rec.get('lat'):
+            data.update(lat=rec.get('lat'))
+        if rec.get('lon'):
+            data.update(lon=rec.get('lon'))
+        if rec.get('elevation'):
+            data.update(elevation=rec.get('elevation'))
+        
+        return_obj.append(data)
+
+    return return_obj
+
 
 def taxon_lookup(taxon_name):
     """Given a taxon name, return its record if it is present in the SEAD database at any rank."""
@@ -133,7 +169,7 @@ def taxon_lookup(taxon_name):
             return_list.extend(resp_json)
             continue
         
-        # Otherwise, we look for it in the othe r taxonomy tables. We start by checking the genera
+        # Otherwise, we look for it in the other taxonomy tables. We start by checking the genera
         # because a single component name is more likely to be a genus than anything else.
         
         lookup = dict(genus_name='ilike.' + item)
@@ -269,7 +305,7 @@ def occ_taxon_filter(taxon_name):
     # If the list is empty, return something that will select nothing
 
     if len(or_list) == 0:
-        return {'taxon_id': "-1"}
+        return {'taxon_id': "eq.-1"}
     
     # Otherwise, return an or-expression
     

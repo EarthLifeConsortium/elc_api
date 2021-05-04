@@ -19,6 +19,7 @@ db_occ_endpt:
 db_loc_endpt:
   neotoma: 'datasets_elc'
   pbdb: 'colls/list.json'
+  sead: 'loc'
 db_tax_endpt:
   neotoma: 'taxa'
   pbdb: 'taxa/list.json'
