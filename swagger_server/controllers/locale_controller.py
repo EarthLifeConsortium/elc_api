@@ -26,6 +26,11 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
     return_obj = list()
     desc_obj = dict()
 
+    # Log this request
+    
+    print("Request: " + connexion.request.method + " " + connexion.request.base_url,
+          connexion.request.args.to_dict() )
+    
     # Set runtime options
 
     try:

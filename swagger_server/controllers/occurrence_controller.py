@@ -25,7 +25,12 @@ def occ(bbox=None, agerange=None, ageuits=None, timerule=None, taxon=None,
     """Paleobiological occurrences in a specific place and time."""
     return_obj = list()
     desc_obj = dict()
-
+    
+    # Log this request
+    
+    print("Request: " + connexion.request.method + " " + connexion.request.base_url,
+          connexion.request.args.to_dict() )
+    
     # Set runtime options
 
     try:

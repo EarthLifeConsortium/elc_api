@@ -27,6 +27,11 @@ def mobile(taxon=None, bbox=None):
 
     return_obj = list()
 
+    # Log this request
+    
+    print("Request: " + connexion.request.method + " " + connexion.request.base_url,
+          connexion.request.args.to_dict() )
+    
     # Set runtime options
 
     try:
@@ -94,6 +99,11 @@ def subtaxa(taxon=None, synonyms=True):
     sub_query = '{0:s} {1:s} synonyms (PBDB systematics)'.format(
         taxon.capitalize(), 'including' if synonyms else 'excluding')
 
+    # Log this request
+    
+    print("Request: " + connexion.request.method + " " + connexion.request.base_url,
+          connexion.request.args.to_dict() )
+    
     # Set runtime options
 
     try:
@@ -161,6 +171,11 @@ def paleocoords(coords=None, age=None, ageunits=None):
     t0 = time()
     desc_obj = dict()
 
+    # Log this request
+    
+    print("Request: " + connexion.request.method + " " + connexion.request.base_url,
+          connexion.request.args.to_dict() )
+    
     # Set runtime options
 
     try:
@@ -233,6 +248,11 @@ def timebound(agerange=None, ageunits=None):
     t0 = time()
     desc_obj = dict()
 
+    # Log this request
+    
+    print("Request: " + connexion.request.method + " " + connexion.request.base_url,
+          connexion.request.args.to_dict() )
+    
     # Set runtime options
 
     try:

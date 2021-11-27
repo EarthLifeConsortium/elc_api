@@ -228,6 +228,19 @@ def set_id(ids, db, endpoint, options):
         return {xmap[db][1]: ','.join(id_numbers)}
 
 
+def malicious_payload (argstring):
+    """
+    Return true if the given argument string contains suspicious strings, indicating
+    that it may be an attempt to attack the server by SQL injection.
+    """
+
+    if re.search( ";|'|\"|--|=|\d[(]|chr[(]|[|][|]|order by|union all", argstring, re.IGNORECASE ):
+        return True
+
+    else:
+        return False
+
+
 def parse(req_args, options, db, endpoint):
     """Return a Requests payload specific to resource target."""
     from ..elc import aux, ages, taxa, geog
@@ -271,6 +284,9 @@ def parse(req_args, options, db, endpoint):
     payload = dict()
 
     if 'taxon' in req_args.keys():
+
+        if malicious_payload(req_args.get('taxon')):
+            raise ValueError(400, "bad request")
 
         try:
             payload = taxa.set_taxon(taxon=req_args.get('taxon'),
@@ -323,3 +339,5 @@ def parse(req_args, options, db, endpoint):
             raise ValueError(err.args[0], err.args[1])
     
     return payload
+
+

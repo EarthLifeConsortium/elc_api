@@ -6,8 +6,7 @@ def trigger(url_path, payload, db):
     import requests
     from ..elc import config
     
-    print("Subrequest: " + url_path)
-    print("Parameters: ", payload)
+    print("Subrequest: " + url_path, payload)
     
     try:
         resp = requests.get(url_path,

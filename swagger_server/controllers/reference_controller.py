@@ -25,6 +25,11 @@ def ref(idlist=None, show=None, output=None, run=None):
     return_obj = list()
     desc_obj = dict()
 
+    # Log this request
+    
+    print("Request: " + connexion.request.method + " " + connexion.request.base_url,
+          connexion.request.args.to_dict() )
+    
     # Set runtime options
 
     try:
