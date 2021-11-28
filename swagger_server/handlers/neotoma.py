@@ -12,7 +12,9 @@ def taxonomy(resp_json, return_obj, options):
     for rec in resp_json.get('data', []):
 
         data = dict()
-
+        
+        data.update(db='neotoma')
+        
         # Core return
 
         if rec.get('taxonid'):
@@ -81,7 +83,9 @@ def locales(resp_json, return_obj, options):
 
         for dataset in rec.get('dataset'):
             data = dict()
-
+            
+            data.update(db='neotoma')
+            
             # Dataset level information
             data.update(locale_id='neot:dst:{0:d}'
                         .format(choose(dataset.get('datasetid'), 0)))
@@ -162,8 +166,9 @@ def mobile(resp_json, return_obj, options):
 
         data = dict()
 
+        data.update(db='neotoma')
         data.update(occ_id='neot:occ:{0:d}'.format(rec.get('sampleid', 0)))
-
+        
         # Taxonomic information
         if rec.get('sample'):
 
@@ -244,10 +249,10 @@ def occurrences(resp_json, return_obj, options):
     for rec in resp_json.get('data', []):
 
         data = dict()
-
-        data.update(occ_id='neot:occ:{0:d}'
-                    .format(choose(rec.get('occid'), 0)))
-
+        
+        data.update(db='neotoma')
+        data.update(occ_id='neot:occ:{0:d}'.format(choose(rec.get('occid'), 0)))
+        
         # Taxonomic information
         if rec.get('sample'):
             sample = rec.get('sample')
@@ -327,7 +332,8 @@ def references(resp_json, return_obj, options):
     for rec in pubs.get('result', []):
 
         # Available fields
-        data = {'year': rec.get('year'),
+        data = {'db': 'neotoma',
+                'year': rec.get('year'),
                 'journal': rec.get('journal'),
                 'doi': rec.get('doi'),
                 'cite': rec.get('citation'),
@@ -383,3 +389,22 @@ def references(resp_json, return_obj, options):
         return_obj.append(data)
 
     return return_obj
+
+
+def bbox_filter ( wkt_string, lonmin, latmin, lonmax, latmax ):
+    """
+    Return a string that will select records from the geographic range
+    given in WKT. If four bounding coordinates are given instead, a
+    POLYGON() is constructed from them.
+    """
+    
+    if wkt_string:
+        return {'loc': wkt_string}
+
+    elif lonmin or latmin or lonmax or latmax:
+        pattern = 'POLYGON(({0} {1},{2} {1},{2} {3},{0} {3},{0} {1}))'
+        return {'loc': pattern.format(lonmin, latmin, lonmax, latmax)}
+
+    else:
+        return {}
+

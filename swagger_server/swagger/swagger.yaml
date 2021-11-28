@@ -37,8 +37,8 @@ paths:
         type: "string"
       - name: "bbox"
         in: "query"
-        description: "WKT bounding box definition. Accepts standard\
-          \ POLYGON((...)) format. Use <a href=\
+        description: "Either a POLYGON((...)) in WKT format or else a comma separated list of \
+         \ bounds: lonmin, latmin, lonmax, latmax. You can use <a href= \
           \ 'https://clydedacruz.github.io/openstreetmap-wkt-playground/' target='_blank'>this external\
           \ tool</a> to craft a correctly formated WKT descriptor"
         required: false
@@ -193,8 +193,8 @@ paths:
         type: "string"
       - name: "bbox"
         in: "query"
-        description: "WKT bounding box definition. Accepts standard\
-          \ POLYGON((...)) format. Use <a href=\
+        description: "Either a POLYGON((...)) in WKT format or else a comma separated list of \
+         \ bounds: lonmin, latmin, lonmax, latmax. You can use <a href= \
           \ 'https://clydedacruz.github.io/openstreetmap-wkt-playground/' target='_blank'>this external\
           \ tool</a> to craft a correctly formated WKT descriptor"
         required: false
@@ -473,8 +473,8 @@ paths:
         type: "string"
       - name: "bbox"
         in: "query"
-        description: "WKT bounding box definition. Accepts standard\
-          \ POLYGON((...)) format. Use <a href=\
+        description: "Either a POLYGON((...)) in WKT format or else a comma separated list of \
+         \ bounds: lonmin, latmin, lonmax, latmax. You can use <a href= \
           \ 'https://clydedacruz.github.io/openstreetmap-wkt-playground/' target='_blank'>this external\
           \ tool</a> to craft a correctly formated WKT descriptor"
         required: false

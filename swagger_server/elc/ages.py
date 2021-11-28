@@ -34,6 +34,12 @@ def set_age(age_range, options, db):
         return {'max_ma': round((early_age * factor), 4),
                 'min_ma': round((late_age * factor), 4)}
 
+    # SEAD does not currently accept age filters
+    
+    # elif db == 'sead':
+    #     return {'max_age': 'gt.' + str(round((early_age * factor), 4)),
+    #             'min_age': 'lt.' + str(round((late_age * factor), 4))}
+    
     # NEW RESOURCE: Add databse specific age vocabulary here
 
     else:

@@ -27,6 +27,7 @@ def ref(idlist=None, show=None, output=None, run=None):
 
     # Log this request
     
+    print(datetime.datetime.now(), " [", str(os.getpid()), "]")
     print("Request: " + connexion.request.method + " " + connexion.request.base_url,
           connexion.request.args.to_dict() )
     
@@ -102,6 +103,10 @@ def ref(idlist=None, show=None, output=None, run=None):
                                            sub_tag=db,
                                            options=options))
 
+    # Log that the request is complete
+    
+    print("Request complete.")
+    
     # Return composite data structure to client
 
     if options.get('output') in ['json', 'bibjson']:

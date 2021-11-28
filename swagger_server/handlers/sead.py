@@ -12,6 +12,8 @@ def taxonomy(resp_json, return_obj, options):
 
         data = dict()
         
+        data.update(db='sead')
+        
         # Determine the taxon rank and fill in the appropriate fields
 
         if "species" in rec:
@@ -64,6 +66,7 @@ def occurrences(resp_json, return_obj, options):
 
         data = dict()
         
+        data.update(db='sead')        
         data.update(occ_id='sead:occ:{0:d}'.format(rec.get('occ_id')))
         data.update(taxon_id='sead:txn:spc:{0:d}'.format(rec.get('taxon_id')))
         data.update(locale_id='sead:loc:{0:d}'.format(rec.get('locale_id')))
@@ -89,9 +92,11 @@ def occurrences(resp_json, return_obj, options):
         data.update(source=source)
 
         # Ages not yet available from SEAD
-        data.update(max_age=None)
-        data.update(min_age=None)
-
+        if rec.get('max_age'):
+            data.update(max_age=rec.get('max_age'))
+        if rec.get('min_age'):
+            data.update(min_age=rec.get('min_age'))
+        
         # Geography (modern coordinates)
         data.update(lat=rec.get('lat'))
         data.update(lon=rec.get('lon'))
@@ -111,6 +116,7 @@ def locales(resp_json, return_obj, options):
 
         data = dict()
 
+        data.update(db='sead')        
         data.update(locale_id='sead:loc:{0:d}'.format(rec.get('locale_id')))
         
         if rec.get('doi'):
@@ -311,3 +317,42 @@ def occ_taxon_filter(taxon_name):
     
     else:
         return {'or': '(' + ','.join(or_list) + ')'}
+
+
+
+def bbox_filter ( wkt_string, lonmin, latmin, lonmax, latmax ):
+    """
+    Return a string that will select records from the given longitude and
+    latitude range. If wkt_string is given, the coordinate bounds must be
+    extracted from it.
+    """
+    
+    if wkt_string:
+        
+        lonmin=999.0
+        latmin=999.0
+        lonmax=-999.0
+        latmax=-999.0
+        
+        pairs = re.findall('-?[\d.]+ -?[\d.]+', wkt_string)
+        
+        for pair in pairs:
+            
+            lon, lat = pair.split(' ')
+            
+            if float(lon) < lonmin:
+                lonmin = float(lon)
+            
+            if float(lon) > lonmax:
+                lonmax = float(lon)
+
+            if float(lat) < latmin:
+                latmin = float(lat)
+
+            if float(lat) > latmax:
+                latmax = float(lat)
+    
+    return { 'lon': ['gte.' + str(lonmin), 'lte.' + str(lonmax)],
+             'lat': ['gte.' + str(latmin), 'lte.' + str(latmax)] }
+
+

@@ -334,7 +334,7 @@ def parse(req_args, options, db, endpoint):
     if 'bbox' in req_args.keys():
 
         try:
-            payload.update(geog.set_location(wkt=req_args.get('bbox'), db=db))
+            payload.update(geog.set_location(loc=req_args.get('bbox'), db=db))
         except ValueError as err:
             raise ValueError(err.args[0], err.args[1])
     

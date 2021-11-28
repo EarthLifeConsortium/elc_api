@@ -17,6 +17,8 @@ from ..handlers import router
 from http_status import Status
 from time import time
 from flask import jsonify, Response
+import datetime
+import os
 
 
 def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
@@ -27,7 +29,8 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
     desc_obj = dict()
 
     # Log this request
-    
+
+    print(datetime.datetime.now(), " [", str(os.getpid()), "]")
     print("Request: " + connexion.request.method + " " + connexion.request.base_url,
           connexion.request.args.to_dict() )
     
@@ -102,7 +105,11 @@ def loc(idlist=None, bbox=None, agerange=None, ageunits=None, timerule=None,
                                            t0=t0,
                                            sub_tag=db,
                                            options=options))
-
+    
+    # Log that the request is complete
+    
+    print("Request complete.")
+    
     # Return composite data structure to client
 
     if options.get('output') == 'json':

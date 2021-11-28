@@ -15,10 +15,11 @@ def taxonomy(resp_json, return_obj, options):
 
         # Core return
 
+        data.update(db='pbdb')
         data.update(taxon_id='pbdb:{0:s}'.format(rec.get('oid', 'txn:0')))
         data.update(taxon=rec.get('nam'))
         data.update(parent_id='pbdb:{0:s}'.format(rec.get('par', 'txn:0')))
-
+        
         try:
             status = 'extant' if bool(int(rec.get('ext'))) else 'extinct'
             data.update(status=status)
@@ -60,7 +61,8 @@ def locales(resp_json, return_obj, options):
     for rec in resp_json.get('records', []):
 
         data = dict()
-
+        
+        data.update(db='pbdb')        
         data.update(locale_id='pbdb:{0:s}'.format(rec.get('oid', 'col:0')))
         data.update(doi=None)
 
@@ -98,6 +100,7 @@ def mobile(resp_json, return_obj, options):
 
         data = dict()
 
+        data.update(db='pbdb')        
         data.update(occ_id='pbdb:{0:s}'.format(rec.get('oid', 'occ:0')))
 
         data.update(taxon=rec.get('tna'))
@@ -135,6 +138,7 @@ def occurrences(resp_json, return_obj, options):
 
         data = dict()
 
+        data.update(db='pbdb')        
         data.update(occ_id='pbdb:{0:s}'.format(rec.get('oid', 'occ:0')))
 
         data.update(taxon=rec.get('tna'))
@@ -167,7 +171,8 @@ def references(resp_json, return_obj, options):
     for rec in resp_json.get('records', []):
 
         # Directly mapped bibliographic data
-        data = {'title': rec.get('tit'),
+        data = {'db': 'pbdb',
+                'title': rec.get('tit'),
                 'kind': rec.get('pty'),
                 'year': rec.get('pby'),
                 'journal': rec.get('pbt'),
@@ -225,3 +230,18 @@ def references(resp_json, return_obj, options):
         return_obj.append(data)
 
     return return_obj
+
+
+def bbox_filter ( wkt_string, lonmin, latmin, lonmax, latmax ):
+    
+    if wkt_string:
+        return {'loc': wkt_string}
+    
+    elif lonmin or latmin or lonmax or latmax:
+        return {'lngmin': lonmin, 'lngmax': lonmax,
+                'latmin': latmin, 'latmax': latmax}
+
+    else:
+        return {}
+
+

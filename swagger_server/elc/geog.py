@@ -1,5 +1,8 @@
 """Functions related to geographic coordinates and paleo conversions."""
 
+from ..handlers import sead, pbdb, neotoma
+import re
+
 
 def get_geog(coords, age, options):
     """Parse paleo geography parameters."""
@@ -71,18 +74,58 @@ def resolve_geog(lat, lon, mean_age):
         raise ValueError(400, msg)
 
 
-def set_location(wkt, db):
+def set_location(loc, db):
     """Return location constraint payload parameter."""
-    if 'POLYGON((' not in wkt:
-        msg = 'WKT bounding box must be in POLYGON((...)) format'
-        raise ValueError(400, msg)
-
-    if db == 'neotoma':
-        return {'loc': wkt}
-
-    elif db == 'pbdb':
-        return {'loc': wkt}
-
+    
+    # If the location string contains only numbers, commas, and whitespace, check to see if it is
+    # a valid bounding box.
+    
+    if re.match('^\d[-\d.,\s]+$', loc):
+        
+        coords = re.split('\s*,\s*', loc)
+        
+        if len(coords) != 4:
+            raise ValueError(400, "The value of 'bbox' must be four coordinates: lonmin,latmin,lonmax,latmax")
+        
+        for value in coords:
+            if not re.match('^ -? (?: \d+ | \d+[.]\d* | [.]\d+ ) $', value, re.X):
+                raise ValueError(400, "Bad coordinate '" + str(value) + "' in 'bbox'")
+        
+        lonmin, latmin, lonmax, latmax = coords
+        wkt_string = None
+    
+    # If the location string contains 'POLYGON((', assume it is a valid WKT string. Chop off
+    # anything more than 3 digits after the decimal point in all coordinates, because we are
+    # dealing with latitudes and longitures that are often approximate or even deliberately
+    # incorrect. Any difference smaller than 1/16 minute of arc is meaningless.
+    
+    elif 'POLYGON((' in loc:
+        wkt_string = re.sub(r'(\d[.]\d\d\d)\d+', r'\1', loc)
+        lonmin = None
+        lonmax = None
+        latmin = None
+        latmax = None
+    
+    else:
+        raise ValueError(400, "The value of 'bbox' must be either four coordinates or 'POLYGON((...))'")
+    
+    # PBDB can take either a WKT or a bounding box.
+    
+    if db == 'pbdb':
+        return pbdb.bbox_filter(wkt_string, lonmin, latmin, lonmax, latmax)
+    
+    # Neotoma can only take a WKT. If four coordinates are given, they must be converted
+    # into WKT.
+    
+    elif db == 'neotoma':
+        return neotoma.bbox_filter(wkt_string, lonmin, latmin, lonmax, latmax)
+        
+    # SEAD can only deal with bounding boxes. If we are given a polygon, we must compute the
+    # bounding coordinates.
+    
+    elif db == 'sead':
+        return sead.bbox_filter(wkt_string, lonmin, latmin, lonmax, latmax)
+    
     # NEW RESOURCE: Add databse specific WKT bounding box vocabulary here
 
     else:

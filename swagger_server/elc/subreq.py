@@ -1,34 +1,39 @@
 """Use the Requests HTTP library with pervasive error handling."""
 
+import re
 
 def trigger(url_path, payload, db):
     """Primary safe requester method for external database resources."""
     import requests
     from ..elc import config
     
-    print("Subrequest: " + url_path, payload)
-    
     try:
         resp = requests.get(url_path,
                             params=payload,
                             timeout=config.get('default', 'timeout'))
+        print("Subrequest [" + db + '] ' + clean_url(resp.url))
         resp.raise_for_status()
-
+    
     except requests.exceptions.HTTPError as err:
+        print("  HTTP Error: ", str(err.args[0]))
         raise ValueError(resp.status_code, str(err.args[0]))
-
+    
     except requests.exceptions.SSLError as err:
+        print("  SSL Error: ", str(err.args[0]))
         raise ValueError(495, str(err.args[0]))
-
+    
     except requests.exceptions.ConnectionError as err:
+        print("  Connection Error: ", str(err.args[0]))
         raise ValueError(502, str(err.args[0]))
-
+    
     except requests.exceptions.Timeout as err:
+        print("  Timeout: ", str(err.args[0]))
         raise ValueError(504, str(err.args[0]))
-
+    
     except requests.exceptions.RequestException as err:
+        print("  Request Error: ", str(err.args[0]))
         raise ValueError(500, str(err.args[0]))
-
+    
     # Check the Content-Type of the return and decode the JSON object
 
     if 'application/json' not in resp.headers.get('content-type'):
@@ -46,6 +51,26 @@ def trigger(url_path, payload, db):
         raise ValueError(500, msg)
 
     return resp_json, resp.url
+
+
+def clean_url ( url ):
+    
+    return re.sub('%[0-9A-F][0-9A-F]', substitute_codes, url)
+
+
+def substitute_codes ( match ):
+
+    if match.group() == '%28':
+        return '('
+
+    elif match.group() == '%29':
+        return ')'
+
+    elif match.group() == '%2C':
+        return ','
+
+    else:
+        return match.group()
 
 
 def mobile_req(return_obj, url_path, payload, db):
